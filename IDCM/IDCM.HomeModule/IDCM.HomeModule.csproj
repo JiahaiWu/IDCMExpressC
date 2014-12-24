@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{849783C9-73F2-46C0-9C56-6F88B39CDA58}</ProjectGuid>
+    <ProjectGuid>{3459B17F-DED5-404B-8EF1-AF61FC51279D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IDCM</RootNamespace>
-    <AssemblyName>IDCM</AssemblyName>
+    <RootNamespace>IDCM.HomeModule</RootNamespace>
+    <AssemblyName>IDCM.HomeModule</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -72,17 +72,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IDCM.GCMModule\IDCM.GCMModule.csproj">
-      <Project>{1e1dfbe9-875c-414a-85f7-4b92972cffa1}</Project>
-      <Name>IDCM.GCMModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IDCM.HomeModule\IDCM.HomeModule.csproj">
-      <Project>{3459b17f-ded5-404b-8ef1-af61fc51279d}</Project>
-      <Name>IDCM.HomeModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IDCM.Service.Common\IDCM.Service.Common.csproj">
-      <Project>{a048e804-8090-4395-8aa3-4aefcd90f88e}</Project>
-      <Name>IDCM.Service.Common</Name>
+    <ProjectReference Include="..\IDCM.Service\IDCM.Service.csproj">
+      <Project>{7bdb8e9c-7f62-4154-a9c8-250eafb940cd}</Project>
+      <Name>IDCM.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

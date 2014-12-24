@@ -3,6 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM", "IDCM\IDCM.csproj", "{849783C9-73F2-46C0-9C56-6F88B39CDA58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.HomeModule", "IDCM.HomeModule\IDCM.HomeModule.csproj", "{3459B17F-DED5-404B-8EF1-AF61FC51279D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.GCMModule", "IDCM.GCMModule\IDCM.GCMModule.csproj", "{1E1DFBE9-875C-414A-85F7-4B92972CFFA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Service", "IDCM.Service\IDCM.Service.csproj", "{7BDB8E9C-7F62-4154-A9C8-250EAFB940CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Service.Common", "IDCM.Service.Common\IDCM.Service.Common.csproj", "{A048E804-8090-4395-8AA3-4AEFCD90F88E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Data", "IDCM.Data\IDCM.Data.csproj", "{752162EF-640A-488D-BC00-0B264FAEF9F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{A8C0DF1F-946A-488A-BFF5-CE6D84C098B5}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\科学院学习\微生物所\微生物信息资源管理软件\IDCM_DesignE.png = ..\..\..\科学院学习\微生物所\微生物信息资源管理软件\IDCM_DesignE.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +28,26 @@ Global
 		{849783C9-73F2-46C0-9C56-6F88B39CDA58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{849783C9-73F2-46C0-9C56-6F88B39CDA58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{849783C9-73F2-46C0-9C56-6F88B39CDA58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3459B17F-DED5-404B-8EF1-AF61FC51279D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3459B17F-DED5-404B-8EF1-AF61FC51279D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3459B17F-DED5-404B-8EF1-AF61FC51279D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3459B17F-DED5-404B-8EF1-AF61FC51279D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E1DFBE9-875C-414A-85F7-4B92972CFFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1DFBE9-875C-414A-85F7-4B92972CFFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1DFBE9-875C-414A-85F7-4B92972CFFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1DFBE9-875C-414A-85F7-4B92972CFFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BDB8E9C-7F62-4154-A9C8-250EAFB940CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BDB8E9C-7F62-4154-A9C8-250EAFB940CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BDB8E9C-7F62-4154-A9C8-250EAFB940CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BDB8E9C-7F62-4154-A9C8-250EAFB940CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A048E804-8090-4395-8AA3-4AEFCD90F88E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A048E804-8090-4395-8AA3-4AEFCD90F88E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A048E804-8090-4395-8AA3-4AEFCD90F88E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A048E804-8090-4395-8AA3-4AEFCD90F88E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{752162EF-640A-488D-BC00-0B264FAEF9F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{752162EF-640A-488D-BC00-0B264FAEF9F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{752162EF-640A-488D-BC00-0B264FAEF9F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{752162EF-640A-488D-BC00-0B264FAEF9F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
