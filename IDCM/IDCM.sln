@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Service.Common", "IDCM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Data", "IDCM.Data\IDCM.Data.csproj", "{752162EF-640A-488D-BC00-0B264FAEF9F2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{A8C0DF1F-946A-488A-BFF5-CE6D84C098B5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{A8C0DF1F-946A-488A-BFF5-CE6D84C098B5}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\..\科学院学习\微生物所\微生物信息资源管理软件\IDCM_DesignE.png = ..\..\..\科学院学习\微生物所\微生物信息资源管理软件\IDCM_DesignE.png
 	EndProjectSection
