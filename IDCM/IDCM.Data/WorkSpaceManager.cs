@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
+using System.Data.Common;
+using System.Data.SQLite;
+using Dapper;
 
 namespace IDCM.Data
 {
@@ -10,7 +14,7 @@ namespace IDCM.Data
         public static bool connect()
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.Idle), "illegal status of work space to connect! @getStatus()="+getStatus());
+            System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.Idle), "illegal status to connect DataSource! @getStatus()="+getStatus());
 #endif
             //checkWorkSpaceSingleton
             //startDBInstance      
@@ -28,22 +32,57 @@ namespace IDCM.Data
         {
             return _status;
         }
-        public static dynamic[] SQLQuery(params string[] sqlExpression)
+        /// <summary>
+        /// 执行SQL非查询命令，返回查询结果集
+        /// </summary>
+        /// <param name="sqlExpressions"></param>
+        /// <returns></returns>
+        public static dynamic[] SQLQuery(params string[] sqlExpressions)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(sqlExpression != null, "sqlExpression should not be null.");
+            System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.InWorking), "illegal status to Query Data! @getStatus()=" + getStatus());
+            System.Diagnostics.Debug.Assert(sqlExpressions != null, "sqlExpressions should not be null.");
 #endif
+            List<dynamic> res = new List<dynamic>(sqlExpressions.Count());
+            foreach (string sql in sqlExpressions)
+            {
+                using (SQLiteConnPicker picker = new SQLiteConnPicker(WorkSpaceHolder.ConnectStr))
+                {
+                    using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                    {
+                        dynamic result = picker.getConnection().Query(sql);
+                        res.Add(result);
+                    }
+                }
+            }
+            return res.ToArray();
+        }
+        /// <summary>
+        /// 执行SQL查询命令，返回查询结果集
+        /// </summary>
+        /// <param name="commands"></param>
+        /// <returns></returns>
+        public static int[] executeSQL(params string[] commands)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.InWorking), "illegal status to Execute SQL commands! @getStatus()=" + getStatus());
+            System.Diagnostics.Debug.Assert(commands != null, "commands should not be null.");
+#endif
+            List<int> res = new List<int>(commands.Count());
+            SQLiteCommand cmd = new SQLiteCommand();
             using (SQLiteConnPicker picker = new SQLiteConnPicker(WorkSpaceHolder.ConnectStr))
             {
-                picker.getConnection().Execute(strBuilder.ToString());
+                using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                {
+                    foreach (string execmd in commands)
+                    {
+                        int result = picker.getConnection().Execute(execmd);
+                        res.Add(result);
+                    }
+                    transaction.Commit();
+                }
             }
-        }
-        public static dynamic[] executeSQL(params string[] command)
-        {
-            using (SQLiteConnPicker picker = new SQLiteConnPicker(ConnectStr))
-            {
-                lastAuthInfo = picker.getConnection().Query<AuthInfo>(cmd).FirstOrDefault<AuthInfo>();
-            }
+            return res.ToArray();
         }
 
         #region 实例对象保持部分
