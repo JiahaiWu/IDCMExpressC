@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Data", "IDCM.Data\IDCM
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{A8C0DF1F-946A-488A-BFF5-CE6D84C098B5}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\科学院学习\微生物所\微生物信息资源管理软件\IDCM_DesignE.png = ..\..\..\科学院学习\微生物所\微生物信息资源管理软件\IDCM_DesignE.png
+		IDCM_DesignE.png = IDCM_DesignE.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DAF17B5E-1BF3-4457-852E-FFB2F6B0483E}"
