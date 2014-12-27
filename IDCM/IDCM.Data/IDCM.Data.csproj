@@ -84,7 +84,7 @@
     <Compile Include="SQLiteConnPicker.cs" />
     <Compile Include="WorkSpaceHolder.cs" />
     <Compile Include="WorkSpaceManager.cs" />
-    <Compile Include="WorkSpaceManagerI.cs" />
+    <Compile Include="WorkSpaceManagerA.cs" />
     <Compile Include="WSStatus.cs" />
   </ItemGroup>
   <ItemGroup>

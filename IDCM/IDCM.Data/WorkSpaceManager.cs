@@ -6,11 +6,20 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using Dapper;
+using System.IO;
 
 namespace IDCM.Data
 {
-    public class WorkSpaceManager : WorkSpaceManagerI
+    public class WorkSpaceManager : WorkSpaceManagerA
     {
+        /// <summary>
+        /// 工作空间管理器构造方法，要求指定标准格式的连接句柄
+        /// </summary>
+        /// <param name="connectStr">SQL连接句柄</param>
+        public WorkSpaceManager(Path workspace,string connectStr):base(connectStr)
+        {
+
+        }
         public static bool connect()
         {
 #if DEBUG
