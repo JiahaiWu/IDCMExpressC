@@ -12,66 +12,144 @@ namespace IDCM.Data.Base
 {
     class DAMBase
     {
-        public static int rebuildCustomTColDef()
-        {
-            string cmd = @"drop table if exists " + typeof(CustomTColDef).Name + ";";
-            cmd += "Create Table if Not Exists " + typeof(CustomTColDef).Name + "("
-                + "Attr TEXT primary key,"
-                + "AttrType TEXT default " + "string" + ","
-                + "Comments TEXT,"
-                + "Restrict TEXT,"
-                + "IsUnique TEXT default '" + false.ToString() + "',"
-                + "IsRequire TEXT default '" + false.ToString() + "',"
-                + "DefaultVal TEXT default NULL,"
-                + "Corder INTEGER default 0,"
-                + "IsInter TEXT default '" + false.ToString() + "');";
-            using (SQLiteConnPicker picker = ConnectPicker())
-            {
-                int res = picker.getConnection().Execute(cmd);
-                return res;
-            }
-        }
         /// <summary>
-        /// 启动数据库实例,返回数据库连接串，如失效则返回null
+        /// 启动数据库实例,返回数据库连接串，如失效则返回null.
+        /// 异常:
+        /// System.Data.Exception  文件创建或访问异常
+        /// System.Data.SQLite.SQLiteException  文件创建或访问异常
         /// </summary>
         /// <param name="dbFilePath"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
-        public static string startDBInstance()
+        public static string startDBInstance(string dbFilePath,string password)
         {
-            string dbFilePath = IDCMEnvironment.CURRENT_WORKSPACE + "\\" + IDCMEnvironment.LUID;
-            if (!File.Exists(dbFilePath))
-            {
-                SQLiteConnection.CreateFile(dbFilePath);
-            }
+#if DEBUG
+            System.Diagnostics.Debug.Assert(dbFilePath != null);
+            System.Diagnostics.Debug.Assert(password != null);
+#endif 
             try
             {
                 SQLiteConnectionStringBuilder sqlCSB = new SQLiteConnectionStringBuilder();
                 sqlCSB.DataSource = dbFilePath;
-                sqlCSB.Password = "admin";//设置密码，SQLite ADO.NET实现了数据库密码保护
-                connectStr = sqlCSB.ToString();
-                using (SQLiteConnPicker picker = ConnectPicker())
+                sqlCSB.Password = password;//设置密码
+                string connectStr = sqlCSB.ToString();
+                if (!File.Exists(dbFilePath))
                 {
-                    picker.getConnection().Execute("PRAGMA synchronous = OFF;");
-                    picker.getConnection().Execute(getBasicTableCmds());
-                    return connectStr;
+                    SQLiteConnection.CreateFile(dbFilePath);
+                    using (SQLiteConnPicker picker = new SQLiteConnPicker(connectStr))
+                    {
+                        picker.getConnection().Execute("PRAGMA application_id = " + IDCM_DATA_BIND_Code + ";"); //Refer:http://www.sqlite.org/src/artifact?ci=trunk&filename=magic.txt
+                    }
+                }
+                using (SQLiteConnPicker picker = new SQLiteConnPicker(connectStr))
+                {
+                    int bindcode=picker.getConnection().Execute("PRAGMA application_id");
+                    if (bindcode == IDCM_DATA_BIND_Code)
+                    {
+                        picker.getConnection().Execute("PRAGMA synchronous = OFF;"); //启用异步存储模式
+                        //picker.getConnection().Execute("PRAGMA case_sensitive_like = 0;"); //设置Like查询大小写敏感与否设置
+                        //picker.getConnection().Execute("PRAGMA auto_vacuum = INCREMENTAL;");  //设置索引增量存储模式
+                        return connectStr;
+                    }
+                    else
+                    {
+                        throw new System.Data.DataException("Invalid database file for IDCM.Data Module!");
+                    }
                 }
             }
-            catch (Exception ex)
+            catch (SQLiteException ex)
             {
-                Console.WriteLine("Error: " + ex.Message + " \r\n[StackTrace]=" + ex.StackTrace);
-                return null;
+                log.Error("Error in IDCM.Data.startDBInstance(): " + ex.Message,ex);
+                throw ex;
             }
         }
         /// <summary>
-        /// 关闭数据库实例,返回数据库连接串，如失效则返回null
+        /// 关闭数据库实例
+        /// 说明：
+        /// 1.可重入
         /// </summary>
         /// <returns></returns>
         public static void stopDBInstance()
         {
             SQLiteConnPicker.closeAll();
-            ////SQLiteConnection.ClearAllPools();
-            ////SQLiteConnection.Shutdown(true, true);
         }
+
+       /// <summary>
+        /// 结构化的静态数据表单初始化定义
+        /// 说明：
+        /// 1.可重入
+        /// </summary>
+        /// <returns>初始化操作完成与否</returns>
+        public static bool prepareTables(SQLiteConnPicker picker)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.Assert(picker != null);
+#endif 
+            int rescode = -1;
+            using (picker)
+            {
+                using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                {
+                    rescode=picker.getConnection().Execute(getBasicTableCmds());
+                }
+            }
+            return rescode > -1;
+        }
+        /// <summary>
+        /// 执行SQL非查询命令，返回查询结果集
+        /// </summary>
+        /// <param name="picker"></param>
+        /// <param name="sqlExpressions"></param>
+        /// <returns></returns>
+        public static dynamic[] SQLQuery(SQLiteConnPicker picker,params string[] sqlExpressions)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.Assert(picker != null);
+            System.Diagnostics.Debug.Assert(sqlExpressions != null);
+#endif 
+            List<dynamic> res = new List<dynamic>(sqlExpressions.Count());
+            foreach (string sql in sqlExpressions)
+            {
+                using (picker)
+                {
+                    using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                    {
+                        dynamic result = picker.getConnection().Query(sql);
+                        res.Add(result);
+                    }
+                }
+            }
+            return res.ToArray();
+        }
+        /// <summary>
+        /// 执行SQL查询命令，返回查询结果集
+        /// </summary>
+        /// <param name="picker"></param>
+        /// <param name="commands"></param>
+        /// <returns></returns>
+        public static int[] executeSQL(SQLiteConnPicker picker,params string[] commands)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.Assert(picker != null);
+            System.Diagnostics.Debug.Assert(commands != null);
+#endif 
+            List<int> res = new List<int>(commands.Count());
+            SQLiteCommand cmd = new SQLiteCommand();
+            using (picker)
+            {
+                using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                {
+                    foreach (string execmd in commands)
+                    {
+                        int result = picker.getConnection().Execute(execmd);
+                        res.Add(result);
+                    }
+                    transaction.Commit();
+                }
+            }
+            return res.ToArray();
+        }
+
         #region 基础数据库表定义
         protected static string getBasicTableCmds()
         {
@@ -133,21 +211,12 @@ namespace IDCM.Data.Base
             strbuilder.Append(cmd).Append("\n");
             return strbuilder.ToString();
         }
-
         #endregion
 
-        protected static SQLiteConnPicker ConnectPicker()
-        {
-            return new SQLiteConnPicker(connectStr);
-        }
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         /// <summary>
-        /// 数据库连接字符串
+        /// IDCM.Data数据库文档特征标识码设定
         /// </summary>
-        private static string connectStr;
-
-        internal static string ConnectStr
-        {
-            get { return connectStr; }
-        }
+        private const UInt32 IDCM_DATA_BIND_Code = 1415926535;
     }
 }

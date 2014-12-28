@@ -66,13 +66,21 @@
   <ItemGroup>
     <Compile Include="Base\ConfigurationHelper.cs" />
     <Compile Include="Base\DAMBase.cs" />
-    <Compile Include="Base\IDCMEnvironment.cs" />
+    <Compile Include="Base\ErrorNote.cs" />
+    <Compile Include="Common\ColumnMapping.cs" />
+    <Compile Include="Common\CVNameConverter.cs" />
     <Compile Include="Common\FileUtil.cs" />
     <Compile Include="Common\Generator\Base64CShared.cs" />
     <Compile Include="Common\Generator\Base64Shared.cs" />
     <Compile Include="Common\Generator\Base64SharedI.cs" />
     <Compile Include="Common\Generator\CUIDGenerator.cs" />
+    <Compile Include="Common\ObjectPair.cs" />
     <Compile Include="Common\StringUtil.cs" />
+    <Compile Include="Base\ColumnMappingHolder.cs" />
+    <Compile Include="DAM\BaseInfoNoteDAM.cs" />
+    <Compile Include="DAM\CustomTColDefDAM.cs" />
+    <Compile Include="DAM\CustomTColMapDAM.cs" />
+    <Compile Include="DataTransfer.cs" />
     <Compile Include="POO\AuthInfo.cs" />
     <Compile Include="POO\CustomTColDef.cs" />
     <Compile Include="POO\CustomTColMap.cs" />
@@ -81,8 +89,8 @@
     <Compile Include="POO\LibraryNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Base\ShareSyncLockers.cs" />
-    <Compile Include="SQLiteConnPicker.cs" />
-    <Compile Include="WorkSpaceHolder.cs" />
+    <Compile Include="Base\SQLiteConnPicker.cs" />
+    <Compile Include="Base\WorkSpaceHelper.cs" />
     <Compile Include="WorkSpaceManager.cs" />
     <Compile Include="WorkSpaceManagerA.cs" />
     <Compile Include="WSStatus.cs" />

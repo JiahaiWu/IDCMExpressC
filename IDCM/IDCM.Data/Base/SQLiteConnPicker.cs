@@ -8,11 +8,13 @@ using System.Data.SQLite;
 using System.Threading;
 using System.Collections.Concurrent;
 
-namespace IDCM.Data
+namespace IDCM.Data.Base
 {
     /// <summary>
     /// 单点数据库连接访问的串行保护类,封装SQLiteConnection用于多线程串行共享。
-    /// 内置全局多点数据库连接的连接池,对多数据库实例提供支持。
+    /// 说明：
+    /// 1.内置全局多点数据库连接的连接池,对多数据库实例提供支持。
+    /// 2.本类允许多实例化及单实例复用策略，但外部获取SQLiteConnection句柄后不得长时占用及缓存复用。
     /// @author JiahaiWu 2014-11-06
     /// </summary>
     class SQLiteConnPicker : IDisposable
@@ -41,8 +43,6 @@ namespace IDCM.Data
 #endif
                 }
             }
-            //尝试获取并打开数据库连接
-            holder.tryOpen(connectionStr);//打开数据库连接
         }
         /// <summary>
         /// 销毁连接资源
@@ -61,31 +61,24 @@ namespace IDCM.Data
         }
         /// <summary>
         /// 解开对象封装获得SQLite连接对象。
-        /// 请注意该方法仅用于一次性SQL事务处理流程，且不需要外部的连接释放管理操作。
+        /// 注意
+        /// 1.该方法仅用于一次性SQL事务处理流程，且不需要外部的连接释放管理操作。
+        /// 2.请注意安全使用本方法获取的连接实例，外部获取SQLiteConnection句柄后不得长时占用及缓存复用，更进一步的全封装实现尚未实现。
         /// @author JiahaiWu 2014-11-06
-        /// @Note 请注意安全使用本方法获取的连接实例，更进一步的全封装实现尚未实现。
         /// </summary>
-        /// <returns></returns>
+        /// <returns>SQLiteConnection (null able)</returns>
         public SQLiteConnection getConnection()
         {
             SQLiteConnHolder holder = null;
             connectPool.TryGetValue(connectionStr, out holder);
-            return holder != null ? holder.Sconn : null;
-        }
-        /// <summary>
-        /// 开启数据库连接
-        /// </summary>
-        /// <returns></returns>
-        public bool open()
-        {
-            SQLiteConnHolder holder = null;
-            connectPool.TryGetValue(connectionStr, out holder);
-            if (holder != null)
+            if(holder != null)
             {
-                return holder.tryOpen(connectionStr);
+                if(holder.tryOpen(connectionStr))
+                    return holder.Sconn;
             }
-            return false;
+            return null;
         }
+
         /// <summary>
         /// 销毁连接资源
         /// </summary>
@@ -100,11 +93,13 @@ namespace IDCM.Data
                 connectPool.Clear();
             }
         }
+
+        #region 内置实例对象保持部分
         /// <summary>
         /// 数据库连接串
         /// </summary>
         private volatile string connectionStr = null;
-        #region 静态持有域
+
         /// <summary>
         /// 多点数据库连接的连接池缓存对象
         /// </summary>
@@ -114,6 +109,9 @@ namespace IDCM.Data
         /// </summary>
         protected static int MAX_WAIT_TIME_OUT = 5000;
         #endregion
+
+
+        #region SQLiteConnHolder
         /// <summary>
         /// Inner Class for Connection Holding Obeject Definition
         /// 单点数据库连接访问保持句柄类
@@ -141,20 +139,21 @@ namespace IDCM.Data
             /// </summary>
             private Semaphore semaphore;
             /// <summary>
-            /// 尝试打开单点数据库连接，
-            /// 借助于信号量机制实现串行获取连接过程。
+            /// 尝试打开单点数据库连接
+            /// 说明：
+            /// 1.借助于信号量机制实现串行获取连接过程。
             /// </summary>
             /// <param name="connectionStr"></param>
             /// <returns></returns>
             internal bool tryOpen(string connectionStr = null)
             {
-                if (semaphore.WaitOne(MAX_WAIT_TIME_OUT, true))
+                if (semaphore.WaitOne(MAX_WAIT_TIME_OUT, false))
                 {
                     try
                     {
                         if (sconn != null)//如果链接不为空
                         {
-                            //链接处于打开状态，且链接没有关闭
+                            //链接处于打开状态，且连接接没有关闭
                             if (!sconn.State.Equals(ConnectionState.Open) && !sconn.State.Equals(ConnectionState.Closed))
                             {
                                 sconn.Close();//关闭连接
@@ -174,6 +173,27 @@ namespace IDCM.Data
                         throw new SQLiteException(ex.Message, ex);
                     }
                 }
+                //信号量等待超时！！
+                //则试图阻断长时占用的SQLiteConnect连接实例
+                try
+                {
+                    if (sconn != null)//如果链接不为空
+                    {
+                        //链接处于打开状态，且链接没有关闭
+                        if (!sconn.State.Equals(ConnectionState.Open) && !sconn.State.Equals(ConnectionState.Closed))
+                        {
+                            sconn.Close();//关闭连接
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new SQLiteException(ex.Message, ex);
+                }
+                finally
+                {
+                    semaphore.Release();  //释放被阻塞的信号量计数值
+                }
                 return false;
             }
             /// <summary>
@@ -187,6 +207,7 @@ namespace IDCM.Data
                         sconn.Close();
                 }
                 //释放信号量控制
+                //如果 Release 方法引发了 SemaphoreFullException，不一定表示调用线程有问题。 另一个线程中的编程错误可能导致该线程退出信号量的次数超过它进入的次数。
                 semaphore.Release();
             }
             /// <summary>
@@ -204,5 +225,6 @@ namespace IDCM.Data
                 semaphore.Dispose();
             }
         }
+        #endregion 
     }
 }

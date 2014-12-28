@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace IDCM.Data.Common
 {
@@ -32,28 +33,10 @@ namespace IDCM.Data.Common
             return new UTF8Encoding(true).GetString(info, 0, len);
         }
 
-        //public static bool simpleLogLine(string outputStr, string filepath = "./error.log")
-        //{
-        //    try
-        //    {
-        //        FileStream fs = new FileStream(filepath, FileMode.Append);
-        //        Console.WriteLine(outputStr);
-        //        Byte[] info = new UTF8Encoding(true).GetBytes(outputStr + "\t[" + DateTime.Now.ToString() + "]\r\n");
-        //        BinaryWriter bw = new BinaryWriter(fs);
-        //        fs.Write(info, 0, info.Length);
-        //        bw.Close();
-        //        fs.Close();
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error:" + outputStr + "\r\nException:\r\n" + ex.Message + "\n" + ex.StackTrace);
-        //        Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-        //    }
-        //    return false;
-        //}
         /// <summary>
         /// 判断文件是否正在被占用  
+        /// 说明：
+        /// 1. 文件不存在则一定没有被使用，返回false
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -81,10 +64,7 @@ namespace IDCM.Data.Common
                 }
                 return inUse;           //true表示正在使用,false没有使用
             }
-            else
-            {
-                return false;           //文件不存在则一定没有被使用
-            }
+            return false;           //文件不存在则一定没有被使用
         }
         /// <summary>
         /// 判断指定文件夹归属下的文件是否被占用
