@@ -2,15 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
-using IDCM.Data.Base;
-using System.IO;
 using Dapper;
+using IDCM.Data.Base;
+using IDCM.Data.Core;
 
+/********************************
+ * Individual Data Center of Microbial resources (IDCM)
+ * A desktop software package for microbial resources researchers.
+ * 
+ * Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+ * 
+ * @Contact NO.1 Beichen West Road, Chaoyang District, Beijing 100101, Email: office@im.ac.cn
+ */
 namespace IDCM.Data
 {
+    /// <summary>
+    /// 基于特定数据存储引擎的工作空间管理器的具体实现类
+    /// @author JiahaiWu 2014-12-26
+    /// </summary>
     public class WorkSpaceManager : WorkSpaceManagerA
     {
         /// <summary>
@@ -60,9 +73,11 @@ namespace IDCM.Data
             return false;    
         }
         /// <summary>
-        /// 数据源初始结构化及结构完整性校验
+        /// 预备启动前准备请求，依赖数据项载入请求方法
+        /// 说明：
+        /// 1.主要包含数据源初始结构化及结构完整性校验
         /// </summary>
-        /// <returns></returns>
+        /// <returns>预备启动成功与否状态</returns>
         public bool prepare()
         {
             if (DAMBase.prepareTables(picker)) ////定义静态表结构
@@ -102,7 +117,7 @@ namespace IDCM.Data
 #endif
             try
             {
-                return DAMBase.SQLQuery(_connectStr, sqlExpressions);
+                return DAMBase.SQLQuery(picker, sqlExpressions);
             }
             catch (Exception ex)
             {
@@ -123,7 +138,7 @@ namespace IDCM.Data
 #endif
             try
             {
-                return DAMBase.executeSQL(_connectStr, commands);
+                return DAMBase.executeSQL(picker, commands);
             }
             catch (Exception ex)
             {

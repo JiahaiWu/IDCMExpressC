@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using IDCM.Data.Base;
 
-namespace IDCM.Data
+namespace IDCM.Data.Core
 {
     /// <summary>
     /// 基于特定数据存储引擎的工作空间管理器的抽象类定义

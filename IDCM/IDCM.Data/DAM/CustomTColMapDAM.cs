@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IDCM.Data.POO;
+using IDCM.Data.Base;
+using IDCM.Data.Common;
+using Dapper;
 
 namespace IDCM.Data.DAM
 {
@@ -10,9 +14,9 @@ namespace IDCM.Data.DAM
         /// <summary>
         /// 创建自定义表实例
         /// </summary>
-        public static void buildCustomTable()
+        public static void buildCustomTable(SQLiteConnPicker picker)
         {
-            List<CustomTColDef> ctcds = CustomTColDefDAM.loadAll();
+            List<CustomTColDef> ctcds = CustomTColDefDAM.loadAll(picker);
             StringBuilder cmdBuilder = new StringBuilder();
             cmdBuilder.Append("Create Table if Not Exists " + CTDRecordDAM.table_name + " (" + CTDRecordDAM.CTD_RID + " Integer unique primary key ");
             int index = 1;
@@ -23,8 +27,7 @@ namespace IDCM.Data.DAM
                 noteCmds.TryGetValue(ctcd.Attr, out cmdstr);
                 if (cmdstr != null)
                 {
-                    MessageBox.Show("WARN:duplicate column name:\r\n" + ctcd.Attr);
-                    Console.WriteLine("WARN:duplicate column name:\r\n" + ctcd.Attr);
+                    log.Warn("Duplicate column name: " + ctcd.Attr);
                     continue;
                 }
                 if (ctcd.Attr.Equals(CTDRecordDAM.CTD_RID))
@@ -38,7 +41,7 @@ namespace IDCM.Data.DAM
                 }
                 else
                 {
-                    int viewOrder = 2 + (ctcd.IsRequire ? index : ColumnMappingHolder.MaxMainViewCount + index);
+                    int viewOrder = 2 + (ctcd.IsRequire ? index : MaxMainViewCount + index);
                     noteCmds.Add(ctcd.Attr, "insert into " + typeof(CustomTColMap).Name + "(attr,mapOrder,viewOrder) values('" + ctcd.Attr + "'," + index + "," + viewOrder + ")");
                 }
                 //////////////////////////////////////////////
@@ -63,8 +66,8 @@ namespace IDCM.Data.DAM
                 ++index;
             }
             cmdBuilder.Append(")");
-            SQLiteHelper.ExecuteNonQuery(ConnectStr, cmdBuilder.ToString());
-            ColumnMappingHolder.noteDefaultColMap(noteCmds.Values.ToList<string>());
+            DAMBase.executeSQL(picker, cmdBuilder.ToString());
+            DAMBase.executeSQL(picker, noteCmds.Values.ToArray()); //noteDefaultColMap
         }
 
         public static void alterCustomTable_add(CustomTColDef ctcd)
@@ -102,14 +105,20 @@ namespace IDCM.Data.DAM
             string cmd = "delete from " + typeof(CustomTColMap).Name + "";
             return SQLiteHelper.ExecuteNonQuery(DAMBase.ConnectStr, cmd);
         }
-        public static List<CustomTColMap> findAllByOrder()
+        /// <summary>
+        /// find All CustomTColMap By viewOrder
+        /// </summary>
+        /// <param name="picker"></param>
+        /// <returns></returns>
+        public static List<CustomTColMap> findAllByOrder(SQLiteConnPicker picker)
         {
             string cmd = "select * from " + typeof(CustomTColMap).Name + " order by viewOrder";
-            using (SQLiteConnPicker picker = new SQLiteConnPicker(ConnectStr))
+            using (picker)
             {
                 return picker.getConnection().Query<CustomTColMap>(cmd).ToList<CustomTColMap>();
             }
         }
+
         public static int updateViewOrder(string attr, int viewOrder)
         {
             string cmd = "update " + typeof(CustomTColMap).Name + " set viewOrder=" + viewOrder + " where attr='" + attr + "'";
@@ -128,5 +137,10 @@ namespace IDCM.Data.DAM
             SQLiteHelper.ExecuteNonQuery(ConnectStr, cmd);
             return suffix;
         }
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+        /// <summary>
+        /// 主表域最大显示字段数
+        /// </summary>
+        public const int MaxMainViewCount = 1000;
     }
 }

@@ -46,67 +46,112 @@ namespace IDCM.Data.DAM
         }
 
         /// <summary>
-        /// 检查数据表配置存在与否，如不存在则创建默认表属性设定
+        /// 读取并创建默认的动态表单定义
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static bool checkTableSetting(SQLiteConnPicker picker)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.Assert(picker != null);
-#endif 
-            string cmd = "SELECT count(*) FROM " + typeof(CustomTColDef).Name;
-            using (picker)
-            {
-                long ctcdCount = picker.getConnection().Query<long>(cmd).Single<long>();
-                if (ctcdCount > 0)
-                {
-                    ColumnMappingHolder.queryCacheAttrDBMap();
-                    return true;
-                }
-                else
-                {
-                    buildDefaultSetting();
-                    ctcdCount = picker.getConnection().Query<long>(cmd).Single<long>();
-                    if (ctcdCount > 0)
-                    {
-                        CustomTColMapDAM.buildCustomTable();
-                    }
-                }
-            }
-            return false;
-        }
-
-        public static bool buildDefaultSetting()
+        public static bool buildDefaultSetting(SQLiteConnPicker picker)
         {
             try
             {
                 string cTableDefpath = ConfigurationManager.AppSettings["CTableDef"];
                 List<CustomTColDef> ctcds = getCustomTableDef(cTableDefpath);
-                overwriteAllCustomTColDef(ctcds);
+                return overwriteAllCustomTColDef(picker,ctcds);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception:\r\n" + ex.Message + "\n" + ex.StackTrace);
+                log.Fatal("无法读取并创建默认的动态表单定义，请检查CTableDef参数配置。",ex);
             }
             return false;
         }
         /// <summary>
         /// 重写用户自定义数据表的字段集定义
         /// </summary>
+        /// <param name="picker"></param>
         /// <param name="ctcds"></param>
         /// <returns></returns>
-        public static bool overwriteAllCustomTColDef(List<CustomTColDef> ctcds)
+        public static bool overwriteAllCustomTColDef(SQLiteConnPicker picker,List<CustomTColDef> ctcds)
         {
             if (ctcds != null)
             {
                 List<CustomTColDef> ictcds = getEmbeddedTableDef();
                 ctcds.AddRange(ictcds);
-                rebuildCustomTColDef();
-                CustomTColDefDAM.save(ctcds.ToArray());
+                rebuildCustomTColDef(picker);
+                CustomTColDefDAM.save(picker,ctcds.ToArray());
                 return true;
             }
             return false;
+        }
+        /// <summary>
+        /// 保存新列属性定义记录集
+        /// </summary>
+        /// <param name="ctcd"></param>
+        /// <returns></returns>
+        public static int save(SQLiteConnPicker picker, params CustomTColDef[] ctcds)
+        {
+            List<string> cmds = new List<string>();
+            foreach (CustomTColDef ctcd in ctcds)
+            {
+                StringBuilder cmdBuilder = new StringBuilder();
+                cmdBuilder.Append("insert Or Replace into " + typeof(CustomTColDef).Name
+                    + "(attr,attrType,comments,defaultVal,corder,isInter,isRequire,isUnique,restrict) values(");
+                cmdBuilder.Append("'").Append(ctcd.Attr).Append("',");
+                if (ctcd.AttrType == null)
+                    cmdBuilder.Append("null,");
+                else
+                    cmdBuilder.Append("'").Append(ctcd.AttrType).Append("',");
+                if (ctcd.Comments == null)
+                    cmdBuilder.Append("null,");
+                else
+                    cmdBuilder.Append("'").Append(ctcd.Comments).Append("',");
+                if (ctcd.DefaultVal == null)
+                    cmdBuilder.Append("null,");
+                else
+                    cmdBuilder.Append("'").Append(ctcd.DefaultVal).Append("',");
+                cmdBuilder.Append(ctcd.Corder).Append(",");
+                cmdBuilder.Append("'").Append(ctcd.IsInter).Append("',");
+                cmdBuilder.Append("'").Append(ctcd.IsRequire).Append("',");
+                cmdBuilder.Append("'").Append(ctcd.IsUnique).Append("',");
+                if (ctcd.Restrict == null)
+                    cmdBuilder.Append("null");
+                else
+                    cmdBuilder.Append("'").Append(ctcd.Restrict).Append("'");
+                cmdBuilder.Append(");");
+                cmds.Add(cmdBuilder.ToString());
+            }
+            if (cmds.Count > 0)
+            {
+                int[] res = DAMBase.executeSQL(picker, cmds.ToArray());
+                return res.Length;
+            }
+            return -1;
+        }
+        /// <summary>
+        /// 查询所有数据表属性定义对象
+        /// </summary>
+        /// <param name="picker"></param>
+        /// <param name="refresh"></param>
+        /// <returns></returns>
+        public static List<CustomTColDef> loadAll(SQLiteConnPicker picker, bool refresh = true)
+        {
+            if (refresh)
+            {
+                lock (ctcdCache)
+                {
+                    ctcdCache.Clear();
+                    string cmd = "SELECT * FROM CustomTColDef order by corder";
+                    using (picker)
+                    {
+                        List<CustomTColDef> ctcds = picker.getConnection().Query<CustomTColDef>(cmd).ToList<CustomTColDef>();
+                        foreach (CustomTColDef ctcd in ctcds)
+                        {
+                            ctcdCache[ctcd.Attr]= ctcd;
+                        }
+                        return ctcds;
+                    }
+                }
+            }
+            return ctcdCache.Values.ToList<CustomTColDef>();
         }
         public static Dictionary<string, List<CustomTColDef>> getTableTemplateDef(string settingPath)
         {
@@ -222,6 +267,11 @@ namespace IDCM.Data.DAM
 
             return ctcds;
         }
+
+        /// <summary>
+        /// 用户自定义表字段声明缓冲池
+        /// </summary>
+        protected static Dictionary<string, CustomTColDef> ctcdCache = new Dictionary<string, CustomTColDef>();
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
     }

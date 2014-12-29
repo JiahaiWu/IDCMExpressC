@@ -11,10 +11,11 @@ using System.Collections.Concurrent;
 namespace IDCM.Data.Base
 {
     /// <summary>
-    /// 单点数据库连接访问的串行保护类,封装SQLiteConnection用于多线程串行共享。
+    /// 数据库连接池，获取连接选择器。
     /// 说明：
-    /// 1.内置全局多点数据库连接的连接池,对多数据库实例提供支持。
-    /// 2.本类允许多实例化及单实例复用策略，但外部获取SQLiteConnection句柄后不得长时占用及缓存复用。
+    /// 1.单点数据库连接访问的串行保护类,封装SQLiteConnection用于多线程串行共享。
+    /// 2.内置全局多点数据库连接的连接池,对多数据库实例提供支持。
+    /// 3.本类允许多实例化及单实例复用策略，但外部获取SQLiteConnection句柄后不得长时占用及缓存复用。
     /// @author JiahaiWu 2014-11-06
     /// </summary>
     class SQLiteConnPicker : IDisposable
@@ -45,7 +46,7 @@ namespace IDCM.Data.Base
             }
         }
         /// <summary>
-        /// 销毁连接资源
+        /// 实现IDisposable中的接口定义，销毁当前连接资源
         /// </summary>
         public void Dispose()
         {
@@ -61,9 +62,12 @@ namespace IDCM.Data.Base
         }
         /// <summary>
         /// 解开对象封装获得SQLite连接对象。
+        /// 说明:
+        /// 1.该方法可重入，可并用。
         /// 注意
         /// 1.该方法仅用于一次性SQL事务处理流程，且不需要外部的连接释放管理操作。
-        /// 2.请注意安全使用本方法获取的连接实例，外部获取SQLiteConnection句柄后不得长时占用及缓存复用，更进一步的全封装实现尚未实现。
+        /// 2.请注意安全使用本方法获取的连接实例，SQLiteConnPicker对象实例可重用。
+        /// 3.但外部对于获取到的SQLiteConnection句柄不得长时（$time > MAX_WAIT_TIME_OUT）占用及再次缓存利用，对此更进一步的全封装实现尚未实现。
         /// @author JiahaiWu 2014-11-06
         /// </summary>
         /// <returns>SQLiteConnection (null able)</returns>
@@ -153,7 +157,7 @@ namespace IDCM.Data.Base
                     {
                         if (sconn != null)//如果链接不为空
                         {
-                            //链接处于打开状态，且连接接没有关闭
+                            //链接处于非打开状态，且连接接没有关闭
                             if (!sconn.State.Equals(ConnectionState.Open) && !sconn.State.Equals(ConnectionState.Closed))
                             {
                                 sconn.Close();//关闭连接
