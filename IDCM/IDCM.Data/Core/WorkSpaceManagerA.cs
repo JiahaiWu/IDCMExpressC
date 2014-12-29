@@ -10,7 +10,7 @@ namespace IDCM.Data.Core
     /// 基于特定数据存储引擎的工作空间管理器的抽象类定义
     /// @author JiahaiWu 2014-12-26
     /// </summary>
-    abstract class WorkSpaceManagerA
+    public abstract class WorkSpaceManagerA
     {
         #region 默认实现部分
         /// <summary>

@@ -67,6 +67,7 @@
     <Compile Include="Base\ConfigurationHelper.cs" />
     <Compile Include="Base\DAMBase.cs" />
     <Compile Include="Base\ErrorNote.cs" />
+    <Compile Include="Base\SQLiteConnBridge.cs" />
     <Compile Include="Common\AttrTypeConverter.cs" />
     <Compile Include="Common\ColumnMapping.cs" />
     <Compile Include="Common\CVNameConverter.cs" />

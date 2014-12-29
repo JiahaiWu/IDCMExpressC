@@ -7,6 +7,7 @@ using System.IO;
 using System.Data.SQLite;
 using System.Data.SQLite.Generic;
 using Dapper;
+using System.Threading;
 
 namespace IDCM.Data.Base
 {
@@ -64,14 +65,14 @@ namespace IDCM.Data.Base
             }
         }
         /// <summary>
-        /// 关闭数据库实例
+        /// 关闭目标数据库，停止所有未完成的连接过程
         /// 说明：
-        /// 1.可重入
+        /// 1.Passes a shutdown request to the SQLite core library. Does not throw an exception if the shutdown request fails.
         /// </summary>
         /// <returns></returns>
-        public static void stopDBInstance()
+        public static void stopDBInstance(SQLiteConnPicker picker)
         {
-            SQLiteConnPicker.closeAll();
+            picker.shutdown();
         }
 
        /// <summary>

@@ -80,10 +80,15 @@ namespace IDCM.Data
         /// <returns>预备启动成功与否状态</returns>
         public bool prepare()
         {
+#if DEBUG
+            System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.Connected), "illegal status to connect DataSource! @getStatus()=" + getStatus());
+#endif
+            _status = WSStatus.Preparing;
             if (DAMBase.prepareTables(picker)) ////定义静态表结构
             {
                 if (ColumnMappingHolder.prepareForLoad(picker)) //检视基本动态表单数据
                 {
+                    _status = WSStatus.InWorking;
                     return true;
                 }
                 else
@@ -95,17 +100,32 @@ namespace IDCM.Data
             {
                 _lastError = new ErrorNote(typeof(WorkSpaceManager), "Prepare Tables for database init failed!");
             }
+            _status = WSStatus.FATAL;
             return false;
         }
-
+        /// <summary>
+        /// 断开数据库连接，释放访问连接池资源占用。
+        /// 说明：
+        /// 1.可重入，可并入。
+        /// 2.断开数据库连接后，任何后续的数据访问请求都必须重新建立。
+        /// </summary>
+        /// <returns>断开连接成功与否</returns>
         public bool disconnect()
         {
             //关闭用户工作空间
-            WorkSpaceHolder.close();
+            if (!_status.Equals(WSStatus.Idle))
+            {
+                picker.shutdown();
+                _status = WSStatus.Idle;
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
         /// 执行SQL非查询命令，返回查询结果集
+        /// 说明：
+        /// 1.可重入，可并入。
         /// </summary>
         /// <param name="sqlExpressions"></param>
         /// <returns></returns>
@@ -127,6 +147,8 @@ namespace IDCM.Data
         }
         /// <summary>
         /// 执行SQL查询命令，返回查询结果集
+        /// 说明：
+        /// 1.可重入，可并入。
         /// </summary>
         /// <param name="commands"></param>
         /// <returns></returns>

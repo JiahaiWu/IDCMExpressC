@@ -67,11 +67,11 @@ namespace IDCM.Data.Base
         /// 注意
         /// 1.该方法仅用于一次性SQL事务处理流程，且不需要外部的连接释放管理操作。
         /// 2.请注意安全使用本方法获取的连接实例，SQLiteConnPicker对象实例可重用。
-        /// 3.但外部对于获取到的SQLiteConnection句柄不得长时（$time > MAX_WAIT_TIME_OUT）占用及再次缓存利用，对此更进一步的全封装实现尚未实现。
+        /// 3.但当前程序集内对于获取到的SQLiteConnBridge句柄不得长时（$time > MAX_WAIT_TIME_OUT）占用及再次缓存利用，SQLiteConnBridge的封装实现对外部程序集有效。
         /// @author JiahaiWu 2014-11-06
         /// </summary>
-        /// <returns>SQLiteConnection (null able)</returns>
-        public SQLiteConnection getConnection()
+        /// <returns>SQLiteConnBridge (null able)</returns>
+        public SQLiteConnBridge getConnection()
         {
             SQLiteConnHolder holder = null;
             connectPool.TryGetValue(connectionStr, out holder);
@@ -82,11 +82,26 @@ namespace IDCM.Data.Base
             }
             return null;
         }
-
         /// <summary>
-        /// 销毁连接资源
+        /// 销毁数据库资源连接<br/>
+        /// 说明：
+        /// 1.Passes a shutdown request to the SQLite core library. Does not throw an exception if the shutdown request fails.
         /// </summary>
-        internal static void closeAll()
+        internal void shutdown()
+        {
+            SQLiteConnHolder holder = null;
+            connectPool.TryRemove(connectionStr, out holder);
+            if (holder != null)
+            {
+                holder.kill();
+            }
+        }
+        /// <summary>
+        /// 销毁所有库的所有连接资源
+        /// 注意：
+        /// 1.正常情况下无需使用全局销毁方法
+        /// </summary>
+        internal static void shutdownAll()
         {
             lock (ShareSyncLockers.SQLiteConnPicker_Lock)
             {
@@ -125,16 +140,15 @@ namespace IDCM.Data.Base
         {
             public SQLiteConnHolder(string connString)
             {
-                sconn = new SQLiteConnection();
-                sconn.ConnectionString = connString;
+                sconn = new SQLiteConnBridge(connString);
                 semaphore = new Semaphore(1, 1);
             }
             /// <summary>
             /// 数据库连接句柄
             /// </summary>
-            private SQLiteConnection sconn = null;
+            private SQLiteConnBridge sconn = null;
 
-            public SQLiteConnection Sconn
+            public SQLiteConnBridge Sconn
             {
                 get { return sconn; }
             }
@@ -165,8 +179,7 @@ namespace IDCM.Data.Base
                         }
                         else
                         {
-                            sconn = new SQLiteConnection();//如果链接为空
-                            sconn.ConnectionString = connectionStr;
+                            sconn = new SQLiteConnBridge(connectionStr);//如果链接为空
                         }
                         if (!sconn.State.Equals(ConnectionState.Open))//如果链接没有打开           
                             sconn.Open();//打开链接
@@ -175,6 +188,10 @@ namespace IDCM.Data.Base
                     catch (Exception ex)
                     {
                         throw new SQLiteException(ex.Message, ex);
+                    }
+                    finally
+                    {
+                        semaphore.Release();  //释放被阻塞的信号量计数值
                     }
                 }
                 //信号量等待超时！！
@@ -219,12 +236,16 @@ namespace IDCM.Data.Base
             /// </summary>
             internal void kill()
             {
-                if (sconn != null && sconn.State != ConnectionState.Closed)
+                if (semaphore.WaitOne(MAX_WAIT_TIME_OUT, true))
                 {
-                    sconn.Close();
+                    if (sconn != null && sconn.State != ConnectionState.Closed)
+                    {
+                        sconn.Close();
+                    }
+                    sconn.Dispose();
+                    sconn.Shutdown();
+                    sconn = null;
                 }
-                sconn.Dispose();
-                sconn = null;
                 semaphore.Close();
                 semaphore.Dispose();
             }
