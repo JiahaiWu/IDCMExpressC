@@ -70,41 +70,7 @@ namespace IDCM.Data.DAM
             DAMBase.executeSQL(picker, noteCmds.Values.ToArray()); //noteDefaultColMap
         }
 
-        public static void alterCustomTable_add(CustomTColDef ctcd)
-        {
-            StringBuilder cmdBuilder = new StringBuilder();
-            cmdBuilder.Append("Alter Table " + CTDRecordDAM.table_name + " add column ");
-            string sqliteType = AttrTypeConverter.getSQLiteType(ctcd.AttrType);
-            cmdBuilder.Append(ctcd.Attr).Append(" ").Append(sqliteType);
-            if (ctcd.IsUnique)
-            {
-                cmdBuilder.Append(" UNIQUE ");
-            }
-            if (ctcd.DefaultVal != null && ctcd.DefaultVal.Length > 0)
-            {
-                if (sqliteType.Equals("Text", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    cmdBuilder.Append(" Default '").Append(ctcd.DefaultVal).Append("'");
-                }
-                else
-                {
-                    cmdBuilder.Append(" Default ").Append(ctcd.DefaultVal);
-                }
-            }
-            int viewOrder = (ctcd.IsRequire ? ctcd.Corder : ColumnMappingHolder.MaxMainViewCount + ctcd.Corder);
-            SQLiteHelper.ExecuteNonQuery(ConnectStr, cmdBuilder.ToString());
-            ColumnMappingHolder.noteDefaultColMap(ctcd.Attr, ctcd.Corder, viewOrder);
-        }
-        public static int noteDefaultColMap(string attr, int dbOrder, int viewOrder)
-        {
-            string cmd = "Replace or insert into " + typeof(CustomTColMap).Name + "(attr,mapOrder,viewOrder) values('" + attr + "'," + dbOrder + "," + viewOrder + ")";
-            return SQLiteHelper.ExecuteNonQuery(DAMBase.ConnectStr, cmd);
-        }
-        public static int clearColMap()
-        {
-            string cmd = "delete from " + typeof(CustomTColMap).Name + "";
-            return SQLiteHelper.ExecuteNonQuery(DAMBase.ConnectStr, cmd);
-        }
+        
         /// <summary>
         /// find All CustomTColMap By viewOrder
         /// </summary>
@@ -127,16 +93,7 @@ namespace IDCM.Data.DAM
                 return picker.getConnection().Execute(cmd);
             }
         }
-        public static string renameCustomTColDefAll()
-        {
-            string suffix = "_" + BaseInfoNoteDAM.nextSeqID();
-            string cmd = "Alter Table " + CTDRecordDAM.table_name + " Rename to " + CTDRecordDAM.table_name + suffix;
-            SQLiteHelper.ExecuteNonQuery(ConnectStr, cmd);
-            ColumnMappingHolder.clearColMap();
-            cmd = "Alter Table " + typeof(CustomTColDef).Name + " Rename to " + typeof(CustomTColDef).Name + suffix;
-            SQLiteHelper.ExecuteNonQuery(ConnectStr, cmd);
-            return suffix;
-        }
+      
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 主表域最大显示字段数

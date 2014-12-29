@@ -67,11 +67,11 @@ namespace IDCM.Data.Base
         /// 注意
         /// 1.该方法仅用于一次性SQL事务处理流程，且不需要外部的连接释放管理操作。
         /// 2.请注意安全使用本方法获取的连接实例，SQLiteConnPicker对象实例可重用。
-        /// 3.但当前程序集内对于获取到的SQLiteConnBridge句柄不得长时（$time > MAX_WAIT_TIME_OUT）占用及再次缓存利用，SQLiteConnBridge的封装实现对外部程序集有效。
+        /// 3.但外部对于获取到的SQLiteConnection句柄不得长时（$time > MAX_WAIT_TIME_OUT）占用及再次缓存利用，对此更进一步的封装未能有效实现。
         /// @author JiahaiWu 2014-11-06
         /// </summary>
-        /// <returns>SQLiteConnBridge (null able)</returns>
-        public SQLiteConnBridge getConnection()
+        /// <returns>SQLiteConnection (null able)</returns>
+        public SQLiteConnection getConnection()
         {
             SQLiteConnHolder holder = null;
             connectPool.TryGetValue(connectionStr, out holder);
@@ -140,15 +140,15 @@ namespace IDCM.Data.Base
         {
             public SQLiteConnHolder(string connString)
             {
-                sconn = new SQLiteConnBridge(connString);
+                sconn = new SQLiteConnection(connString);
                 semaphore = new Semaphore(1, 1);
             }
             /// <summary>
             /// 数据库连接句柄
             /// </summary>
-            private SQLiteConnBridge sconn = null;
+            private SQLiteConnection sconn = null;
 
-            public SQLiteConnBridge Sconn
+            public SQLiteConnection Sconn
             {
                 get { return sconn; }
             }
@@ -179,7 +179,7 @@ namespace IDCM.Data.Base
                         }
                         else
                         {
-                            sconn = new SQLiteConnBridge(connectionStr);//如果链接为空
+                            sconn = new SQLiteConnection(connectionStr);//如果链接为空
                         }
                         if (!sconn.State.Equals(ConnectionState.Open))//如果链接没有打开           
                             sconn.Open();//打开链接
