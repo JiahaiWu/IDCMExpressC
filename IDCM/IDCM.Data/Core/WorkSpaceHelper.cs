@@ -6,9 +6,8 @@ using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using IDCM.Data.Common;
-using IDCM.Data.Base;
 
-namespace IDCM.Data.Base
+namespace IDCM.Data.Core
 {
     /// <summary>
     /// 工作空间保持及验证工具类

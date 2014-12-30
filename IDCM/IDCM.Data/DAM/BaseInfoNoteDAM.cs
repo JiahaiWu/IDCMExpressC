@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IDCM.Data.Base;
 using IDCM.Data.POO;
 using Dapper;
+using IDCM.Data.DHCP;
 
 namespace IDCM.Data.DAM
 {
@@ -21,7 +21,7 @@ namespace IDCM.Data.DAM
         /// <returns>新序列值</returns>
         public static long nextSeqID(SQLiteConnPicker picker)
         {
-            lock (ShareSyncLockers.IncrementKey_Lock)
+            lock (IncrementKey_Lock)
             {
                 ++autoIncrementNum;
                 if (autoIncrementNum % 10 == 0)//如果是10的整数
@@ -67,5 +67,9 @@ namespace IDCM.Data.DAM
         /// 自动增长ID计数值
         /// </summary>
         private static long autoIncrementNum = 0;
+        /// <summary>
+        /// 用于全局数据序号生成自增长对象锁
+        /// </summary>
+        public static object IncrementKey_Lock = new object();
     }
 }

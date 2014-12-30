@@ -7,8 +7,9 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using Dapper;
-using IDCM.Data.Base;
 using IDCM.Data.Core;
+using IDCM.Data.Common;
+using IDCM.Data.DAM;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -38,7 +39,7 @@ namespace IDCM.Data
         /// 请求数据源连接操作
         /// </summary>
         /// <returns>连接成功与否状态</returns>
-        public bool connect()
+        public override bool connect()
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.Idle), "illegal status to connect DataSource! @getStatus()="+getStatus());
@@ -78,7 +79,7 @@ namespace IDCM.Data
         /// 1.主要包含数据源初始结构化及结构完整性校验
         /// </summary>
         /// <returns>预备启动成功与否状态</returns>
-        public bool prepare()
+        public override bool prepare()
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.Connected), "illegal status to connect DataSource! @getStatus()=" + getStatus());
@@ -110,7 +111,7 @@ namespace IDCM.Data
         /// 2.断开数据库连接后，任何后续的数据访问请求都必须重新建立。
         /// </summary>
         /// <returns>断开连接成功与否</returns>
-        public bool disconnect()
+        public override bool disconnect()
         {
             //关闭用户工作空间
             if (!_status.Equals(WSStatus.Idle))
@@ -129,7 +130,7 @@ namespace IDCM.Data
         /// </summary>
         /// <param name="sqlExpressions"></param>
         /// <returns></returns>
-        public dynamic[] SQLQuery(params string[] sqlExpressions)
+        public override dynamic[] SQLQuery(params string[] sqlExpressions)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.InWorking), "illegal status to Query Data! @getStatus()=" + getStatus());
@@ -152,7 +153,7 @@ namespace IDCM.Data
         /// </summary>
         /// <param name="commands"></param>
         /// <returns></returns>
-        public int[] executeSQL(params string[] commands)
+        public override int[] executeSQL(params string[] commands)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.InWorking), "illegal status to Execute SQL commands! @getStatus()=" + getStatus());

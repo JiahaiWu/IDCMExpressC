@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IDCM.Data.Core;
 using IDCM.Data.DAM;
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -17,7 +18,7 @@ namespace IDCM.Data
     /// 数据源存储管理的应用支持类定义
     /// @author JiahaiWu 2014-12-27
     /// </summary>
-    class DataSupporter
+    public class DataSupporter
     {
         /// <summary>
         /// 获取唯一序列生成ID值
@@ -35,6 +36,32 @@ namespace IDCM.Data
 #endif
             return BaseInfoNoteDAM.nextSeqID(wsm.getConnectPicker());
         }
-        
+        //////////////////////////////////////////////////////////////////////////////////////
+        ///// <summary>
+        ///// 执行SQL非查询命令，返回查询结果集
+        ///// 说明：
+        ///// 1.可重入，可并入。
+        ///// </summary>
+        ///// <param name="wsm">工作空间管理器对象实例</param>
+        ///// <param name="sqlExpressions"></param>
+        ///// <returns></returns>
+        //public override dynamic[] SQLQuery(WorkSpaceManager wsm,params string[] sqlExpressions)
+        //{
+        //    return wsm.SQLQuery(sqlExpressions);
+        //}
+        ///// <summary>
+        ///// 执行SQL查询命令，返回查询结果集
+        ///// 说明：
+        ///// 1.可重入，可并入。
+        ///// </summary>
+        ///// <param name="wsm">工作空间管理器对象实例</param>
+        ///// <param name="commands"></param>
+        ///// <returns></returns>
+        //public override int[] executeSQL(WorkSpaceManager wsm,params string[] commands)
+        //{
+        //    return wsm.executeSQL(commands);
+        //}
+        //////////////////////////////////////////////////////////////////////////////////////
+        //保留未用
     }
 }

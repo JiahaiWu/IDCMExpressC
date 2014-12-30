@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Data.Base
+namespace IDCM.Data.Common
 {
     class ErrorNote
     {

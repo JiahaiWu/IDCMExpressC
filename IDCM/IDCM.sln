@@ -13,11 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Service.Common", "IDCM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Data", "IDCM.Data\IDCM.Data.csproj", "{752162EF-640A-488D-BC00-0B264FAEF9F2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".docs", ".docs", "{A8C0DF1F-946A-488A-BFF5-CE6D84C098B5}"
-	ProjectSection(SolutionItems) = preProject
-		IDCM_DesignE.png = IDCM_DesignE.png
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DAF17B5E-1BF3-4457-852E-FFB2F6B0483E}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config

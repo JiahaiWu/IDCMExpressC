@@ -5,8 +5,8 @@ using System.Text;
 using IDCM.Data.Common;
 using IDCM.Data.POO;
 using IDCM.Data.DAM;
-using IDCM.Data.Base;
 using Dapper;
+using IDCM.Data.DHCP;
 
 namespace IDCM.Data.Core
 {
@@ -54,22 +54,13 @@ namespace IDCM.Data.Core
                     {
                         CustomTColMapDAM.buildCustomTable(picker);
                         queryCacheAttrDBMap(picker);
+                        return true;
                     }
                 }
             }
             return false;
         }
 
-        public static void noteDefaultColMap(SQLiteConnPicker picker,string attr, int dbOrder, int viewOrder)
-        {
-            CustomTColMapDAM.noteDefaultColMap(attr, dbOrder, viewOrder);
-            queryCacheAttrDBMap(picker);
-        }
-        public static void clearColMap()
-        {
-            CustomTColMapDAM.clearColMap();
-            attrMapping.Clear();
-        }
         /// <summary>
         /// 缓存数据字段映射关联关系
         /// </summary>
@@ -77,13 +68,10 @@ namespace IDCM.Data.Core
         {
             //select * from CustomTColMap order by viewOrder
             List<CustomTColMap> ctcms = CustomTColMapDAM.findAllByOrder(picker);
-            lock (attrMapping)
+            attrMapping.Clear();
+            foreach (CustomTColMap dr in ctcms)
             {
-                attrMapping.Clear();
-                foreach (CustomTColMap dr in ctcms)
-                {
-                    attrMapping.Add(dr.Attr, new ObjectPair<int, int>(dr.MapOrder, dr.ViewOrder));
-                }
+                attrMapping[dr.Attr]= new ObjectPair<int, int>(dr.MapOrder, dr.ViewOrder);
             }
         }
         /// <summary>
@@ -180,23 +168,23 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr"></param>
         /// <param name="viewOrder"></param>
-        public static void updateViewOrder(string attr, int viewOrder, bool isRequired)
+        public static void updateViewOrder(SQLiteConnPicker picker, string attr, int viewOrder, bool isRequired)
         {
             int vOrder = viewOrder;
             if (isRequired == false && viewOrder < CustomTColMapDAM.MaxMainViewCount)
                 vOrder = viewOrder + CustomTColMapDAM.MaxMainViewCount;
             else if (viewOrder > CustomTColMapDAM.MaxMainViewCount)
                 vOrder = viewOrder - CustomTColMapDAM.MaxMainViewCount;
-            updateViewOrder(attr, vOrder);
+            updateViewOrder(picker,attr, vOrder);
         }
         /// <summary>
         /// 更新预览字段位序值
         /// </summary>
         /// <param name="attr"></param>
         /// <param name="viewOrder"></param>
-        public static void updateViewOrder(string attr, int viewOrder)
+        public static void updateViewOrder(SQLiteConnPicker picker, string attr, int viewOrder)
         {
-            int ic = CustomTColMapDAM.updateViewOrder(attr, viewOrder);
+            int ic = CustomTColMapDAM.updateViewOrder(picker,attr, viewOrder);
             if (ic > 0)
                 attrMapping[attr] = new ObjectPair<int, int>(attrMapping[attr].Key, viewOrder);
         }

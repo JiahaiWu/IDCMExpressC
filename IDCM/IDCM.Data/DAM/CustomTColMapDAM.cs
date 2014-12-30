@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IDCM.Data.POO;
-using IDCM.Data.Base;
 using IDCM.Data.Common;
 using Dapper;
+using IDCM.Data.DHCP;
 
 namespace IDCM.Data.DAM
 {
@@ -85,10 +85,10 @@ namespace IDCM.Data.DAM
             }
         }
 
-        public static int updateViewOrder(string attr, int viewOrder)
+        public static int updateViewOrder(SQLiteConnPicker picker,string attr, int viewOrder)
         {
             string cmd = "update " + typeof(CustomTColMap).Name + " set viewOrder=" + viewOrder + " where attr='" + attr + "'";
-            using (SQLiteConnPicker picker = new SQLiteConnPicker(ConnectStr))
+            using (picker)
             {
                 return picker.getConnection().Execute(cmd);
             }

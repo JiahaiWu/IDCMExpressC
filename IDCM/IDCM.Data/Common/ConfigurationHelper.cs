@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
-namespace IDCM.Data.Base
+namespace IDCM.Data.Common
 {
     class ConfigurationHelper
     {

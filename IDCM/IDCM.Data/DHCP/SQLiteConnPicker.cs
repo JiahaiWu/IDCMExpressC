@@ -8,7 +8,8 @@ using System.Data.SQLite;
 using System.Threading;
 using System.Collections.Concurrent;
 
-namespace IDCM.Data.Base
+
+namespace IDCM.Data.DHCP
 {
     /// <summary>
     /// 数据库连接池，获取连接选择器。
@@ -36,7 +37,7 @@ namespace IDCM.Data.Base
             if (holder == null)
             {
                 holder = new SQLiteConnHolder(connectionStr);//创建一个数据库连接，创建一个信号灯
-                lock (ShareSyncLockers.SQLiteConnPicker_Lock)//因为连接池是公共资源，所以在池中存取都要加锁
+                lock (SQLiteConnPicker_Lock)//因为连接池是公共资源，所以在池中存取都要加锁
                 {
                     bool SQLiteConnAdded = connectPool.TryAdd(connectionStr, holder);//把新建的链接str与链接存入池
 #if DEBUG
@@ -103,7 +104,7 @@ namespace IDCM.Data.Base
         /// </summary>
         internal static void shutdownAll()
         {
-            lock (ShareSyncLockers.SQLiteConnPicker_Lock)
+            lock (SQLiteConnPicker_Lock)
             {
                 foreach (SQLiteConnHolder holder in connectPool.Values)
                 {
@@ -127,6 +128,10 @@ namespace IDCM.Data.Base
         /// 最长等待毫秒数（默认为5000ms）
         /// </summary>
         protected static int MAX_WAIT_TIME_OUT = 5000;
+        /// <summary>
+        /// 用于保持串行获取数据库连接的共享锁对象
+        /// </summary>
+        public static object SQLiteConnPicker_Lock = new object();
         #endregion
 
 

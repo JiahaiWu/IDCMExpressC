@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IDCM.Data.Base;
 using IDCM.Data.POO;
 using System.Data;
 using System.Data.SQLite;
@@ -10,6 +9,8 @@ using Dapper;
 using System.IO;
 using IDCM.Data.Common;
 using System.Configuration;
+using IDCM.Data.DHCP;
+
 
 namespace IDCM.Data.DAM
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Data
+namespace IDCM.Data.Core
 {
     /// <summary>
     /// 数据文档的用户工作空间WorkSpace的上层运营状态类型

@@ -8,8 +8,10 @@ using System.Data.SQLite;
 using System.Data.SQLite.Generic;
 using Dapper;
 using System.Threading;
+using IDCM.Data.DHCP;
 
-namespace IDCM.Data.Base
+
+namespace IDCM.Data.DAM
 {
     class DAMBase
     {

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IDCM.Data.Base;
+using IDCM.Data.Common;
+using IDCM.Data.DHCP;
 
 namespace IDCM.Data.Core
 {
