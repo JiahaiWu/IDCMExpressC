@@ -12,7 +12,7 @@ using IDCM.Data;
  * 
  * @Contact NO.1 Beichen West Road, Chaoyang District, Beijing 100101, Email: office@im.ac.cn
  */
-namespace IDCM.Service.Common.DMHub
+namespace IDCM.Service.Common
 {
     /// <summary>
     /// 数据源管理集线器类

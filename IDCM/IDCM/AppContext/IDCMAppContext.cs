@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Windows.Forms;
+using IDCM.ViewManager;
+using IDCM.Service.Common;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -13,7 +15,7 @@ using System.Windows.Forms;
  * 
  * @Contact NO.1 Beichen West Road, Chaoyang District, Beijing 100101, Email: office@im.ac.cn
  */
-namespace IDCM
+namespace IDCM.AppContext
 {
     /// <summary>
     /// The class that handles the creation of the application windows
@@ -48,15 +50,10 @@ namespace IDCM
                 hasInited = true;
                 // Handle the ApplicationExit event to know when the application is exiting.
                 Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
-                //初始化检测...
-                //检查当前目录下的进程实例是否已存在，如果存在执行退出操作;
-                //检查目标工作空间的文档是否已占用，如果被占用则执行退出操作;
-                WorkSpaceHolder.checkWorkSpaceSingleton(workspacePath);
-
                 // Create main application form and active the initForm method
                 mainManger = new IDCMFormManger();
                 mainManger.initForm(true);
-                LongTermHandleNoter.checkForIdle();
+                
                 //Run HandleInstanceMonitor
                 monitor.Interval = 2000;
                 monitor.Tick += OnHeartBreak;
@@ -85,7 +82,7 @@ namespace IDCM
 #if DEBUG
             //Console.WriteLine("* Heart Break For checkForIdle()");
 #endif
-            if (LongTermHandleNoter.checkForIdle())
+            if (DWorkMHub.checkForIdle())
             {
                 monitor.Stop();
                 ExitThread();
