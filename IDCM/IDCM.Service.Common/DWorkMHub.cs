@@ -54,7 +54,7 @@ namespace IDCM.Service.Common
         /// <param name="method"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static bool callAsyncHandle(AbsHandler hanldeInstance, MethodInfo method = null,object[] args = null)
+        public static bool callAsyncHandle(AbsHandler hanldeInstance, MethodInfo method = null,params object[] args)
         {
             if (method != null)
                 method.Invoke(hanldeInstance, args);
