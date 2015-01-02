@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using IDCM.Service.Common;
 
 namespace IDCM.AppContext
 {
@@ -15,61 +16,6 @@ namespace IDCM.AppContext
     /// </summary>
     class DataSourceHolder
     {
-        /// <summary>
-        /// 检查当前目录下的进程实例是否已存在，如果存在执行退出操作;
-        /// 检查目标工作空间的文档是否已占用，如果被占用则执行退出操作;
-        /// </summary>
-        /// <param name="workspacePath"></param>
-        public static void checkWorkSpaceSingleton(string preparepath = null)
-        {
-            if (preparepath != null)
-            {
-                if (FileUtil.isFileInUse(preparepath) == true)
-                {
-                    DialogResult res = MessageBox.Show("The Client is in working. Choose \"OK\" to change a workspace or choose \"Cancel\" to quit.", "Duplicated Workspace Notice", MessageBoxButtons.OKCancel);
-                    if (res.Equals(DialogResult.Cancel))
-                    {
-                        System.Environment.Exit(0);
-                    }
-                }
-                if (preparepath != null && File.Exists(preparepath))
-                {
-                    IDCMEnvironment.CURRENT_WORKSPACE = Path.GetDirectoryName(preparepath);
-                    IDCMEnvironment.LUID = Path.GetFileName(preparepath);
-                }
-            }
-            if (checkDuplicateProcess() != null)
-            {
-                MessageBox.Show("The process of current directionary is in working. Choose \"OK\" to quit.", "Duplicated Instance Notice", MessageBoxButtons.OK);
-                System.Environment.Exit(0);
-            }
-        }
-        /// <summary>
-        /// 查询同一目录下是否存在已经运行的进程实例
-        /// </summary>
-        /// <returns></returns>
-        public static Process checkDuplicateProcess()
-        {
-            Process currentProcess = Process.GetCurrentProcess(); //获取当前进程 
-            //获取当前运行程序完全限定名 
-            string currentFileName = currentProcess.MainModule.FileName;
-            //获取进程名为ProcessName的Process数组。 
-            Process[] processes = Process.GetProcessesByName(currentProcess.ProcessName);
-            //遍历有相同进程名称正在运行的进程 
-            foreach (Process process in processes)
-            {
-                if (process.MainModule.FileName == currentFileName)
-                {
-                    if (process.Id != currentProcess.Id) //根据进程ID排除当前进程 
-                    {
-                        //当前目录存在已运行的进程实例
-                        return process;
-                    }
-                }
-            }
-            return null;
-        }
-
         /// <summary>
         /// choose or create a new empty file for the new workspace
         /// </summary>
@@ -159,27 +105,30 @@ namespace IDCM.AppContext
         /// <returns></returns>
         public static bool close()
         {
-            inWorking = false;
-            DAMBase.stopDBInstance();
-            return true;
+            return dataSource.disconnect();
         }
         /// <summary>
-        /// 当前工作空间状态标识
+        /// 数据源实例
         /// </summary>
-        private static volatile bool inWorking = false;
-
+        private static volatile DataSourceMHub dataSource = null;
+        /// <summary>
+        /// 返回是否处于数据源连接保持中
+        /// </summary>
         public static bool InWorking
         {
-            get { return DataSourceHolder.inWorking; }
+            get { return dataSource!=null && dataSource.InWorking; }
         }
-        private static string connectStr = null;
         /// <summary>
         /// 数据库连接串
         /// </summary>
+        private static string connectStr = null;
+        /// <summary>
+        /// 获取或设置数据库连接串
+        /// </summary>
         public static string ConnectStr
         {
-            get { return DataSourceHolder.connectStr; }
-            set { DataSourceHolder.connectStr = value; }
+            get { return connectStr; }
+            set { connectStr = value; }
         }
     }
 }

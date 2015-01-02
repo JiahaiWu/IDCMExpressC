@@ -90,8 +90,9 @@ namespace IDCM.ViewManager
         /// <param name="e"></param>
         private void IDCMForm_Shown(object sender, EventArgs e)
         {
-            activeChildViewAwait(typeof(HomeViewManager), true);
-            activeChildView(typeof(AuthenticationRetainer), false);
+            activeChildView(typeof(AuthenticationRetainer), true);
+            //activeChildViewAwait(typeof(HomeViewManager), true);
+            //activeChildView(typeof(AuthenticationRetainer), false);
         }
 #endregion
         /// <summary>
@@ -103,19 +104,14 @@ namespace IDCM.ViewManager
         /// <returns>初始化成功与否状态</returns>
         public bool initForm(bool activeShow = true)
         {
-            if (WorkSpaceHolder.InWorking || WorkSpaceHolder.verifyForLoad())
+            mainForm.WindowState = FormWindowState.Maximized;
+            if (activeShow)
             {
-                mainForm.WindowState = FormWindowState.Maximized;
-                if (activeShow)
-                {
-                    mainForm.Show();
-                }
-                else
-                    mainForm.Hide();
-                return true;
+                mainForm.Show();
             }
-            Dispose();
-            return false;
+            else
+                mainForm.Hide();
+            return true;
         }
         /// <summary>
         /// 获取子视图的用户交互界面管理器的实例对象
@@ -204,7 +200,7 @@ namespace IDCM.ViewManager
                 ma.dispose();
             }
             subManagers.Clear();
-            WorkSpaceHolder.close();
+            DataSourceHolder.close();
             return true;
         }
         /// <summary>

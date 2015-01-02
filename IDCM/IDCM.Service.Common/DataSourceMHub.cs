@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IDCM.Data;
+using IDCM.Data.Core;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -59,8 +60,20 @@ namespace IDCM.Service.Common
         {
             return wsm.disconnect();
         }
-        
-        public WorkSpaceManager WSM
+        /// <summary>
+        /// 返回是否处于数据源连接保持中
+        /// </summary>
+        public bool InWorking
+        {
+            get 
+            { 
+                return wsm!=null && wsm.getStatus().Equals(WSStatus.InWorking);
+            }
+        }
+        /// <summary>
+        /// 获取数据存储管理具体实例对象
+        /// </summary>
+        internal WorkSpaceManager WSM
         {
             get
             {
