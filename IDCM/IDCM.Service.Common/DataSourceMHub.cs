@@ -61,7 +61,20 @@ namespace IDCM.Service.Common
             return wsm.disconnect();
         }
         /// <summary>
-        /// 返回是否处于数据源连接保持中
+        /// 返回是否处于数据源初始连接状态中
+        /// </summary>
+        public bool Connected
+        {
+            get
+            {
+                /////////////////////////////////////////////////////////////////////////
+                //return wsm != null && (wsm.getStatus().Equals(WSStatus.Connected)||wsm.getStatus().Equals(WSStatus.InWorking));
+                /////////////////////////////////////////////////////////////////////////
+                return wsm != null && wsm.getStatus().Equals(WSStatus.Connected);
+            }
+        }
+        /// <summary>
+        /// 返回是否处于数据源连接适配运行期中
         /// </summary>
         public bool InWorking
         {

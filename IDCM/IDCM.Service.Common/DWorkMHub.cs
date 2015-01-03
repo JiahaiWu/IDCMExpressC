@@ -25,6 +25,14 @@ namespace IDCM.Service.Common
     public class DWorkMHub
     {
         /// <summary>
+        /// 记录消息至消息队列
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void note(AsyncMessage msg)
+        {
+            AsyncMessageNoter.push(msg);
+        }
+        /// <summary>
         /// 记录实例化对象
         /// </summary>
         /// <param name="formType"></param>
@@ -58,7 +66,7 @@ namespace IDCM.Service.Common
         {
             if (method != null)
                 method.Invoke(hanldeInstance, args);
-            BGWorkerPool.pushHandler(hanldeInstance);
+            BGWorkerInvoker.pushHandler(hanldeInstance);
             return true;
         }
 
@@ -72,7 +80,21 @@ namespace IDCM.Service.Common
         {
             return LongTermHandleNoter.getActiveForm(formType);
         }
-
+        /// <summary>
+        /// 获取缓冲区的有限长度的异步消息集
+        /// </summary>
+        /// <param name="dequeueLimit">默认的一次获取最大长度为10</param>
+        /// <returns></returns>
+        public static AsyncMessage[] getAsyncMessage(int dequeueLimit=10)
+        {
+            List<AsyncMessage> res = new List<AsyncMessage>();
+            AsyncMessage msg = null;
+            while ((msg = AsyncMessageNoter.pop()) != null && res.Count < dequeueLimit)
+            {
+                res.Add(msg);
+            }
+            return res.ToArray();
+        }
         /// <summary>
         /// 查询句柄记录集，验证当前空闲状态
         /// </summary>
@@ -93,7 +115,7 @@ namespace IDCM.Service.Common
         {
             if (method != null)
                 method.Invoke(servInstance, args);
-            BGWorkerPool.abortHandlerByType(servInstance.GetType());
+            BGWorkerInvoker.abortHandlerByType(servInstance.GetType());
             return true;
         }
     }

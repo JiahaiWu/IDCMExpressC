@@ -9,7 +9,7 @@ namespace IDCM.Service.Common.Core.ServBuf
     /// <summary>
     /// 本地后台运行服务池，为后台执行线程
     /// </summary>
-    class BGWorkerPool
+    class BGWorkerInvoker
     {
         /// <summary>
         /// 加载后台执行任务袋，并立即提交异步执行操作

@@ -39,6 +39,7 @@
             this.label_user = new System.Windows.Forms.Label();
             this.textBox_datasource = new System.Windows.Forms.TextBox();
             this.label_dataSource = new System.Windows.Forms.Label();
+            this.checkBox_defaultWS = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).BeginInit();
             this.panel_start.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +61,7 @@
             this.panel_start.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_start.BackColor = System.Drawing.Color.Transparent;
+            this.panel_start.Controls.Add(this.checkBox_defaultWS);
             this.panel_start.Controls.Add(this.checkBox_remember);
             this.panel_start.Controls.Add(this.button_confirm);
             this.panel_start.Controls.Add(this.textBox_pwd);
@@ -78,7 +80,7 @@
             this.checkBox_remember.AutoSize = true;
             this.checkBox_remember.Checked = true;
             this.checkBox_remember.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_remember.Location = new System.Drawing.Point(297, 44);
+            this.checkBox_remember.Location = new System.Drawing.Point(293, 72);
             this.checkBox_remember.Name = "checkBox_remember";
             this.checkBox_remember.Size = new System.Drawing.Size(126, 16);
             this.checkBox_remember.TabIndex = 7;
@@ -87,21 +89,22 @@
             // 
             // button_confirm
             // 
-            this.button_confirm.Location = new System.Drawing.Point(467, 66);
+            this.button_confirm.Location = new System.Drawing.Point(496, 54);
             this.button_confirm.Name = "button_confirm";
-            this.button_confirm.Size = new System.Drawing.Size(75, 23);
+            this.button_confirm.Size = new System.Drawing.Size(85, 36);
             this.button_confirm.TabIndex = 6;
             this.button_confirm.Text = "Confirm";
             this.button_confirm.UseVisualStyleBackColor = true;
+            this.button_confirm.Click += new System.EventHandler(this.button_confirm_Click);
             // 
             // textBox_pwd
             // 
             this.textBox_pwd.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_pwd.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.textBox_pwd.Location = new System.Drawing.Point(384, 12);
+            this.textBox_pwd.Location = new System.Drawing.Point(110, 69);
             this.textBox_pwd.Name = "textBox_pwd";
             this.textBox_pwd.ShortcutsEnabled = false;
-            this.textBox_pwd.Size = new System.Drawing.Size(158, 21);
+            this.textBox_pwd.Size = new System.Drawing.Size(176, 21);
             this.textBox_pwd.TabIndex = 5;
             this.textBox_pwd.Tag = "Optional Password For GCM View ";
             this.textBox_pwd.UseSystemPasswordChar = true;
@@ -109,7 +112,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(295, 16);
+            this.label1.Location = new System.Drawing.Point(24, 72);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(83, 12);
             this.label1.TabIndex = 4;
@@ -118,15 +121,15 @@
             // textBox_loginName
             // 
             this.textBox_loginName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_loginName.Location = new System.Drawing.Point(108, 12);
+            this.textBox_loginName.Location = new System.Drawing.Point(110, 40);
             this.textBox_loginName.Name = "textBox_loginName";
-            this.textBox_loginName.Size = new System.Drawing.Size(159, 21);
+            this.textBox_loginName.Size = new System.Drawing.Size(177, 21);
             this.textBox_loginName.TabIndex = 3;
             // 
             // label_user
             // 
             this.label_user.AutoSize = true;
-            this.label_user.Location = new System.Drawing.Point(38, 16);
+            this.label_user.Location = new System.Drawing.Point(42, 44);
             this.label_user.Name = "label_user";
             this.label_user.Size = new System.Drawing.Size(65, 12);
             this.label_user.TabIndex = 2;
@@ -135,7 +138,7 @@
             // textBox_datasource
             // 
             this.textBox_datasource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_datasource.Location = new System.Drawing.Point(108, 66);
+            this.textBox_datasource.Location = new System.Drawing.Point(111, 11);
             this.textBox_datasource.Name = "textBox_datasource";
             this.textBox_datasource.Size = new System.Drawing.Size(270, 21);
             this.textBox_datasource.TabIndex = 1;
@@ -143,11 +146,21 @@
             // label_dataSource
             // 
             this.label_dataSource.AutoSize = true;
-            this.label_dataSource.Location = new System.Drawing.Point(33, 71);
+            this.label_dataSource.Location = new System.Drawing.Point(36, 16);
             this.label_dataSource.Name = "label_dataSource";
             this.label_dataSource.Size = new System.Drawing.Size(71, 12);
             this.label_dataSource.TabIndex = 0;
             this.label_dataSource.Text = "DataSource:";
+            // 
+            // checkBox_defaultWS
+            // 
+            this.checkBox_defaultWS.AutoSize = true;
+            this.checkBox_defaultWS.Location = new System.Drawing.Point(393, 14);
+            this.checkBox_defaultWS.Name = "checkBox_defaultWS";
+            this.checkBox_defaultWS.Size = new System.Drawing.Size(144, 16);
+            this.checkBox_defaultWS.TabIndex = 8;
+            this.checkBox_defaultWS.Text = "As Default Workspace";
+            this.checkBox_defaultWS.UseVisualStyleBackColor = true;
             // 
             // StartView
             // 
@@ -160,6 +173,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "StartView";
             this.Text = "StartView";
+            this.Shown += new System.EventHandler(this.StartView_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).EndInit();
             this.panel_start.ResumeLayout(false);
             this.panel_start.PerformLayout();
@@ -179,5 +193,6 @@
         private System.Windows.Forms.Button button_confirm;
         private System.Windows.Forms.TextBox textBox_pwd;
         private System.Windows.Forms.CheckBox checkBox_remember;
+        private System.Windows.Forms.CheckBox checkBox_defaultWS;
     }
 }

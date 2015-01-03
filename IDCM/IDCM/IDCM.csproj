@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext\DataSourceHolder.cs" />
+    <Compile Include="Common\FileUtil.cs" />
     <Compile Include="Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -242,9 +243,12 @@
       <Project>{a048e804-8090-4395-8aa3-4aefcd90f88e}</Project>
       <Name>IDCM.Service.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IDCM.Service\IDCM.Service.csproj">
+      <Project>{7bdb8e9c-7f62-4154-a9c8-250eafb940cd}</Project>
+      <Name>IDCM.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="ControlFrags\AsyncInvoker\" />
     <Folder Include="ControlFrags\Modules\" />
     <Folder Include="ControlFrags\Utils\" />

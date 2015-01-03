@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace IDCM.Service.Common.Core
 {
-    interface AbsHandler
+    public interface AbsHandler
     {
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！

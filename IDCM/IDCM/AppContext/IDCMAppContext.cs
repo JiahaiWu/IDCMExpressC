@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using IDCM.ViewManager;
 using IDCM.Service.Common;
+using IDCM.Service.Common.Core.ServBuf;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -55,9 +56,13 @@ namespace IDCM.AppContext
                 mainManger.initForm(true);
                 
                 //Run HandleInstanceMonitor
-                monitor.Interval = 2000;
-                monitor.Tick += OnHeartBreak;
-                monitor.Start();
+                handleMonitor.Interval = 2000;
+                handleMonitor.Tick += OnHMHeartBreak;
+                handleMonitor.Start();
+                //Run MessageInstanceMonitor
+                messageMonitor.Interval = 100;
+                messageMonitor.Tick += OnMMHeartBreak;
+                messageMonitor.Start();
             }
         }
         /// <summary>
@@ -77,16 +82,33 @@ namespace IDCM.AppContext
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnHeartBreak(object sender, EventArgs e)
+        private void OnHMHeartBreak(object sender, EventArgs e)
         {
 #if DEBUG
             //Console.WriteLine("* Heart Break For checkForIdle()");
 #endif
             if (DWorkMHub.checkForIdle())
             {
-                monitor.Stop();
+                handleMonitor.Stop();
+                messageMonitor.Stop();
                 ExitThread();
                 this.Dispose();
+            }
+        }
+        /// <summary>
+        /// 异步消息轮询监视器的心跳检测事件处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnMMHeartBreak(object sender, EventArgs e)
+        {
+#if DEBUG
+            //Console.WriteLine("* Heart Break For checkAnsycMessage()");
+#endif
+            AsyncMessage[] msgs=DWorkMHub.getAsyncMessage();
+            foreach(AsyncMessage msg in msgs)
+            {
+                mainManger.dispatchMessage(msg);
             }
         }
         /// <summary>
@@ -110,7 +132,11 @@ namespace IDCM.AppContext
         /// <summary>
         /// HandleInstanceMonitor
         /// </summary>
-        private static System.Windows.Forms.Timer monitor = new System.Windows.Forms.Timer();
+        private static System.Windows.Forms.Timer handleMonitor = new System.Windows.Forms.Timer();
+        /// <summary>
+        /// MessageInstanceMonitor
+        /// </summary>
+        private static System.Windows.Forms.Timer messageMonitor = new System.Windows.Forms.Timer();
         private static volatile bool hasInited = false;
         private static IDCMFormManger mainManger = null;
     }

@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IDCM.AppContext;
+using IDCM.Service;
+using IDCM.Service.POO;
+using IDCM.Forms;
+using System.Windows.Forms;
 
 namespace IDCM.ViewManager
 {
@@ -16,7 +21,7 @@ namespace IDCM.ViewManager
         #region 构造&析构
         public StartRetainer()
         {
-            new System.Threading.Thread(delegate() { OnSignInHold(null, null); }).Start();
+            startInfo = IDCMEnvironment.getLastStartInfo();
         }
 
         public static StartRetainer getInstance()
@@ -37,12 +42,7 @@ namespace IDCM.ViewManager
         public override void dispose()
         {
             base.dispose();
-            if (signMonitor != null && !signMonitor.Enabled)
-            {
-                signMonitor.Stop();
-                signMonitor.Dispose();
-                signMonitor = null;
-            }
+            startInfo = null;
         }
         
         /// <summary>
@@ -51,44 +51,31 @@ namespace IDCM.ViewManager
         /// <returns></returns>
         public override bool initView(bool activeShow = true)
         {
-            if (signMonitor == null)
-            {
-                signMonitor = new System.Windows.Forms.Timer();
-                signMonitor.Interval = 600000;
-                signMonitor.Tick += OnSignInHold;
-                signMonitor.Start();
-            }
             if (activeShow)
             {
-                if (checkLoginStatus())
+                StartView startView = new StartView();
+                startView.setReferStartInfo(ref startInfo);
+                DialogResult res = startView.ShowDialog();
+                if(res.Equals(DialogResult.OK))
                 {
-                    LoginStatusDlg loginStatus = new LoginStatusDlg();
-                    loginStatus.setSignInInfo(authInfo.Username, authInfo.Timestamp);
-                    loginStatus.ShowDialog();
-                    loginStatus.Dispose();
-                }
-                else
-                {
-                    SignInDlg signin = new SignInDlg();
-                    signin.setReferAuthInfo(authInfo);
-                    DialogResult res = signin.ShowDialog();
-                    authInfo=signin.getAuthInfo();
-                    signin.Dispose();
-                    if (authInfo.LoginFlag)
+                    if(DataSourceHolder.chooseWorkspace(startInfo.Location,startInfo.LoginName))
                     {
-                        AuthInfoDAM.updateLastAuthInfo(authInfo);
-                        IDCMFormManger.getInstance().updateUserStatus(authInfo.Username);
+                        DataSourceHolder.GCMLogin(startInfo.LoginName, startInfo.GCMPassword);
+                        noteStartInfo(startInfo.Location,startInfo.asDefaultWorkspace,startInfo.LoginName,startInfo.rememberPassword?startInfo.GCMPassword:null);
+                        startView.Dispose();
+                        return true;
                     }
-                    else
-                        IDCMFormManger.getInstance().updateUserStatus(null);
                 }
+                startView.Dispose();
             }
             return true;
         }
+
         public override bool isDisposed()
         {
             return _isDisposed;
         }
         #endregion
+        
     }
 }

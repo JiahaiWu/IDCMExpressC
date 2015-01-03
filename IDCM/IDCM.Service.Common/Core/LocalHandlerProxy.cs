@@ -63,7 +63,7 @@ namespace IDCM.Service.Common.Core
             //////////////////////////////////////////
             handler.complete(worker, e.Cancelled, e.Error, args);
             //////////////////////////////
-            BGWorkerPool.removeWorker(worker);
+            BGWorkerInvoker.removeWorker(worker);
         }
         /// <summary>
         /// 后台任务执行结束后的串联执行任务队列的代理实现代码段
@@ -99,7 +99,7 @@ namespace IDCM.Service.Common.Core
                 }
                 else
                     args.Add(e.Result);
-                BGWorkerPool.pushHandler(nextHandler, args, cascadeHandlers);
+                BGWorkerInvoker.pushHandler(nextHandler, args, cascadeHandlers);
             }
         }
         /// <summary>

@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using IDCM.AppContext;
 using IDCM.Forms;
 using IDCM.Service.Common;
+using IDCM.Service.Common.Core.ServBuf;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -90,9 +91,20 @@ namespace IDCM.ViewManager
         /// <param name="e"></param>
         private void IDCMForm_Shown(object sender, EventArgs e)
         {
-            activeChildView(typeof(AuthenticationRetainer), true);
+            //启动欢迎页面
+            activeChildView(typeof(StartRetainer), true);
             //activeChildViewAwait(typeof(HomeViewManager), true);
             //activeChildView(typeof(AuthenticationRetainer), false);
+        }
+        /// <summary>
+        /// 异步消息事务分发处理
+        /// </summary>
+        /// <param name="msg"></param>
+        internal void dispatchMessage(AsyncMessage msg)
+        {
+            //switch (msg)
+            //{
+            //}
         }
 #endregion
         /// <summary>

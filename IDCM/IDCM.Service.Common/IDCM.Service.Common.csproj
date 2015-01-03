@@ -49,7 +49,9 @@
     <Compile Include="Core\AbsHandler.cs" />
     <Compile Include="Core\HandleRunStatus.cs" />
     <Compile Include="Core\LocalHandlerProxy.cs" />
-    <Compile Include="Core\ServBuf\BGWorkerPool.cs" />
+    <Compile Include="Core\ServBuf\AsyncMessage.cs" />
+    <Compile Include="Core\ServBuf\AsyncMessageNoter.cs" />
+    <Compile Include="Core\ServBuf\BGWorkerInvoker.cs" />
     <Compile Include="Core\ServBuf\HandleHolderI.cs" />
     <Compile Include="Core\ServBuf\LongTermHandleNoter.cs" />
     <Compile Include="DAM\AuthInfoDAM.cs" />
@@ -74,9 +76,7 @@
   <ItemGroup>
     <Content Include="ReadMe.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
