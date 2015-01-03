@@ -102,10 +102,14 @@ namespace IDCM.ViewManager
         /// <param name="msg"></param>
         internal void dispatchMessage(AsyncMessage msg)
         {
-            //switch (msg)
-            //{
-            //}
+#if DEBUG
+            System.Diagnostics.Debug.Assert(msg !=null);
+#endif
+            if(msg.Equals(AsyncMessage.Prepared))
+            {
+            }
         }
+
 #endregion
         /// <summary>
         /// 主窗体初始化方法，用于激活新（或旧）实例的界面资源及其动态动态显示
