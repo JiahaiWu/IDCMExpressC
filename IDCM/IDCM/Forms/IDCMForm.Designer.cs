@@ -243,7 +243,6 @@
             this.Text = "IDCM";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.IDCMForm_FormClosed);
             this.Load += new System.EventHandler(this.IDCMForm_Load);
-            this.Shown += new System.EventHandler(this.IDCMForm_Shown);
             this.MenuStrip_IDCM.ResumeLayout(false);
             this.MenuStrip_IDCM.PerformLayout();
             this.ResumeLayout(false);

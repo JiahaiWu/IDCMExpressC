@@ -52,9 +52,11 @@ namespace IDCM.AppContext
                 // Handle the ApplicationExit event to know when the application is exiting.
                 Application.ApplicationExit += new EventHandler(this.OnApplicationExit);
                 // Create main application form and active the initForm method
+                servInvoker = new AsyncServInvoker();
                 mainManger = new IDCMFormManger();
                 mainManger.initForm(true);
-                
+                //bind Async Service to AsyncServInvoker
+                servInvoker.OnDataPrepared += mainManger.OnDataPrepared;
                 //Run HandleInstanceMonitor
                 handleMonitor.Interval = 2000;
                 handleMonitor.Tick += OnHMHeartBreak;
@@ -65,6 +67,7 @@ namespace IDCM.AppContext
                 messageMonitor.Start();
             }
         }
+
         /// <summary>
         /// 应用程序常规退出触发事件处理
         /// </summary>
@@ -108,7 +111,7 @@ namespace IDCM.AppContext
             AsyncMessage[] msgs=DWorkMHub.getAsyncMessage();
             foreach(AsyncMessage msg in msgs)
             {
-                mainManger.dispatchMessage(msg);
+                servInvoker.dispatchMessage(msg);
             }
         }
         /// <summary>
@@ -139,5 +142,6 @@ namespace IDCM.AppContext
         private static System.Windows.Forms.Timer messageMonitor = new System.Windows.Forms.Timer();
         private static volatile bool hasInited = false;
         private static IDCMFormManger mainManger = null;
+        private static AsyncServInvoker servInvoker = null;
     }
 }

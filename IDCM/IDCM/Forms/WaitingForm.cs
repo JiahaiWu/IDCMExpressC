@@ -6,10 +6,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using IDCM.ViewLL.Manager;
-using IDCM.ServiceBL;
-using IDCM.SimpleDAL.POO;
-using IDCM.SimpleDAL.DAM;
 using IDCM.AppContext;
 
 namespace IDCM.Forms

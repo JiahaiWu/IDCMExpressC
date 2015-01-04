@@ -4,15 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A048E804-8090-4395-8AA3-4AEFCD90F88E}</ProjectGuid>
+    <ProjectGuid>{9B607956-AB6F-4B3B-AD56-B923FDD17EEA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IDCM.Service.Common</RootNamespace>
-    <AssemblyName>IDCM.Service.Common</AssemblyName>
+    <RootNamespace>IDCM.Data.Base</RootNamespace>
+    <AssemblyName>IDCM.Data.Base</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,13 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Dapper, Version=1.38.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Dapper.1.38\lib\net40\Dapper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,46 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\AbsHandler.cs" />
-    <Compile Include="Core\HandleRunStatus.cs" />
-    <Compile Include="Core\LocalHandlerProxy.cs" />
-    <Compile Include="Core\ServBuf\AsyncMessage.cs" />
-    <Compile Include="Core\ServBuf\AsyncMessageNoter.cs" />
-    <Compile Include="Core\ServBuf\BGWorkerInvoker.cs" />
-    <Compile Include="Core\ServBuf\HandleHolderI.cs" />
-    <Compile Include="Core\ServBuf\LongTermHandleNoter.cs" />
-    <Compile Include="DAM\AuthInfoDAM.cs" />
-    <Compile Include="DAM\CTDRecordDAM.cs" />
-    <Compile Include="DAM\CustomTColDefDAM.cs" />
-    <Compile Include="DAM\DelayWorkNoteDAM.cs" />
-    <Compile Include="DAM\LibraryNodeDAM.cs" />
-    <Compile Include="AuthMHub.cs" />
-    <Compile Include="CatalogMHub.cs" />
-    <Compile Include="DataSourceMHub.cs" />
-    <Compile Include="DWorkMHub.cs" />
-    <Compile Include="RecordMHub.cs" />
-    <Compile Include="POO\HandleRunInfo.cs" />
+    <Compile Include="AuthInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IDCM.Data.Base\IDCM.Data.Base.csproj">
-      <Project>{9b607956-ab6f-4b3b-ad56-b923fdd17eea}</Project>
-      <Name>IDCM.Data.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IDCM.Data\IDCM.Data.csproj">
-      <Project>{752162ef-640a-488d-bc00-0b264faef9f2}</Project>
-      <Name>IDCM.Data</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

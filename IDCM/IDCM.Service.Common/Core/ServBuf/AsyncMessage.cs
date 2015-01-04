@@ -5,9 +5,12 @@ using System.Text;
 
 namespace IDCM.Service.Common.Core.ServBuf
 {
+    /// <summary>
+    /// 异步消息类型及附属参数的封装类
+    /// </summary>
     public class AsyncMessage
     {
-        public static readonly AsyncMessage Prepared = new AsyncMessage("Prepared", MsgType.DataLoading);
+        public static readonly AsyncMessage DataPrepared = new AsyncMessage(MsgType.DataPrepared, "Data Prepared");
 
         /// <summary>
         /// For iterator 
@@ -16,34 +19,37 @@ namespace IDCM.Service.Common.Core.ServBuf
         {
             get
             {
-                yield return Prepared;
+                yield return DataPrepared;
             }
         }
-        private readonly string message;
+        private readonly string msgTag;
         private readonly MsgType msgType;
         private readonly object[] parameters;
 
-        AsyncMessage(string message, MsgType msgType, object[] parameters = null)
+        AsyncMessage(MsgType msgType, string msgTag, object[] parameters = null)
         {
-            this.message = message;
+            this.msgTag = msgTag;
             this.msgType = msgType;
             this.parameters = parameters;
         }
 
-        public string Message { get { return message; } }
+        public string MsgTag { get { return msgTag; } }
 
         public MsgType MsgType { get { return msgType; } }
+
         public object[] Parameters { get { return parameters; } }
 
         public override string ToString()
         {
-            return message + "/" + msgType;
+            return msgType+":"+msgTag;
         }
     }
+    /// <summary>
+    /// 预定义的消息类型
+    /// </summary>
     public class MsgType
     {
-        public static readonly MsgType DataLoading = new MsgType("DataLoading",0);
-        public static readonly MsgType FormActiving = new MsgType("FormActiving", 0);
+        public static readonly MsgType DataPrepared = new MsgType("DataPrepared", 0);
 
         /// <summary>
         /// For iterator 
@@ -52,8 +58,7 @@ namespace IDCM.Service.Common.Core.ServBuf
         {
             get
             {
-                yield return DataLoading;
-                yield return FormActiving;
+                yield return DataPrepared;
             }
         }
         private readonly string name;
@@ -73,6 +78,5 @@ namespace IDCM.Service.Common.Core.ServBuf
         {
             return name;
         }
-
     }
 }

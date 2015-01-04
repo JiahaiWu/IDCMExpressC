@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartView));
             this.pictureBox_start = new System.Windows.Forms.PictureBox();
             this.panel_start = new System.Windows.Forms.Panel();
+            this.checkBox_defaultWS = new System.Windows.Forms.CheckBox();
             this.checkBox_remember = new System.Windows.Forms.CheckBox();
             this.button_confirm = new System.Windows.Forms.Button();
             this.textBox_pwd = new System.Windows.Forms.TextBox();
@@ -39,7 +40,6 @@
             this.label_user = new System.Windows.Forms.Label();
             this.textBox_datasource = new System.Windows.Forms.TextBox();
             this.label_dataSource = new System.Windows.Forms.Label();
-            this.checkBox_defaultWS = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).BeginInit();
             this.panel_start.SuspendLayout();
             this.SuspendLayout();
@@ -74,6 +74,16 @@
             this.panel_start.Name = "panel_start";
             this.panel_start.Size = new System.Drawing.Size(606, 100);
             this.panel_start.TabIndex = 1;
+            // 
+            // checkBox_defaultWS
+            // 
+            this.checkBox_defaultWS.AutoSize = true;
+            this.checkBox_defaultWS.Location = new System.Drawing.Point(393, 14);
+            this.checkBox_defaultWS.Name = "checkBox_defaultWS";
+            this.checkBox_defaultWS.Size = new System.Drawing.Size(144, 16);
+            this.checkBox_defaultWS.TabIndex = 8;
+            this.checkBox_defaultWS.Text = "As Default Workspace";
+            this.checkBox_defaultWS.UseVisualStyleBackColor = true;
             // 
             // checkBox_remember
             // 
@@ -152,16 +162,6 @@
             this.label_dataSource.TabIndex = 0;
             this.label_dataSource.Text = "DataSource:";
             // 
-            // checkBox_defaultWS
-            // 
-            this.checkBox_defaultWS.AutoSize = true;
-            this.checkBox_defaultWS.Location = new System.Drawing.Point(393, 14);
-            this.checkBox_defaultWS.Name = "checkBox_defaultWS";
-            this.checkBox_defaultWS.Size = new System.Drawing.Size(144, 16);
-            this.checkBox_defaultWS.TabIndex = 8;
-            this.checkBox_defaultWS.Text = "As Default Workspace";
-            this.checkBox_defaultWS.UseVisualStyleBackColor = true;
-            // 
             // StartView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -172,6 +172,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "StartView";
+            this.ShowInTaskbar = false;
             this.Text = "StartView";
             this.Shown += new System.EventHandler(this.StartView_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).EndInit();

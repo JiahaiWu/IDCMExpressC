@@ -46,6 +46,10 @@
     <Compile Include="Utils\ConfigurationHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IDCM.Data.Base\IDCM.Data.Base.csproj">
+      <Project>{9b607956-ab6f-4b3b-ad56-b923fdd17eea}</Project>
+      <Name>IDCM.Data.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IDCM.Data\IDCM.Data.csproj">
       <Project>{752162ef-640a-488d-bc00-0b264faef9f2}</Project>
       <Name>IDCM.Data</Name>

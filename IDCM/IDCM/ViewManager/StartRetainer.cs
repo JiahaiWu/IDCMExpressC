@@ -15,7 +15,7 @@ namespace IDCM.ViewManager
     /// 说明：
     /// 1.每次初始化显示欢迎登陆页面，主要包含数据文件地址、访问用户及其密码三部分。
     /// </summary>
-    class StartRetainer:RetainerA
+    class StartRetainer:ManagerA
     {
          
         #region 构造&析构
@@ -26,7 +26,7 @@ namespace IDCM.ViewManager
 
         public static StartRetainer getInstance()
         {
-            ManagerI am = IDCMAppContext.MainManger.getManager(typeof(StartRetainer));
+            ManagerI am = ViewManagerHolder.getManager(typeof(StartRetainer));
             return am == null ? null : (am as StartRetainer);
         }
         ~StartRetainer()
@@ -37,6 +37,7 @@ namespace IDCM.ViewManager
         #region 实例对象保持部分
 
         private StartInfo startInfo =null;
+        private StartView startView = null;
         #endregion
         #region 接口实例化部分
         public override void dispose()
@@ -44,7 +45,16 @@ namespace IDCM.ViewManager
             base.dispose();
             startInfo = null;
         }
-        
+        public override void setMdiParent(Form pForm)
+        {
+            startView.MdiParent = pForm;
+        }
+        public override void setMaxToNormal()
+        {
+        }
+        public override void setToMaxmize(bool activeFront = false)
+        {
+        }
         /// <summary>
         /// 对象实例化初始化方法
         /// </summary>
@@ -53,20 +63,19 @@ namespace IDCM.ViewManager
         {
             if (activeShow)
             {
-                StartView startView = new StartView();
                 startView.setReferStartInfo(ref startInfo);
                 DialogResult res = startView.ShowDialog();
                 if(res.Equals(DialogResult.OK))
                 {
                     if(DataSourceHolder.chooseWorkspace(startInfo.Location,startInfo.LoginName))
                     {
-                        DataSourceHolder.GCMLogin(startInfo.LoginName, startInfo.GCMPassword);
-                        noteStartInfo(startInfo.Location,startInfo.asDefaultWorkspace,startInfo.LoginName,startInfo.rememberPassword?startInfo.GCMPassword:null);
+                        //DataSourceHolder.GCMLogin(startInfo.LoginName, startInfo.GCMPassword);
+                        //noteStartInfo(startInfo.Location,startInfo.asDefaultWorkspace,startInfo.LoginName,startInfo.rememberPassword?startInfo.GCMPassword:null);
                         startView.Dispose();
                         return true;
                     }
                 }
-                startView.Dispose();
+                startView.Close();
             }
             return true;
         }

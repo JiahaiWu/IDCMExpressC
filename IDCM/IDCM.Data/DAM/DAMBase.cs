@@ -8,6 +8,7 @@ using System.Data.SQLite;
 using System.Data.SQLite.Generic;
 using Dapper;
 using System.Threading;
+using IDCM.Data.Base;
 using IDCM.Data.DHCP;
 
 

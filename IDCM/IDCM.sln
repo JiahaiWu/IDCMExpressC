@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DAF17B
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDCM.Data.Base", "IDCM.Data.Base\IDCM.Data.Base.csproj", "{9B607956-AB6F-4B3B-AD56-B923FDD17EEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{752162EF-640A-488D-BC00-0B264FAEF9F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{752162EF-640A-488D-BC00-0B264FAEF9F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{752162EF-640A-488D-BC00-0B264FAEF9F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B607956-AB6F-4B3B-AD56-B923FDD17EEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B607956-AB6F-4B3B-AD56-B923FDD17EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B607956-AB6F-4B3B-AD56-B923FDD17EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B607956-AB6F-4B3B-AD56-B923FDD17EEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -175,10 +175,18 @@ namespace IDCM.Service.Common.Core.ServBuf
         {
             if(sender==null)
                 return;
-#if DEBUG
-            System.Diagnostics.Debug.Assert(sender is HandleHolderI,"Illegal parameter!");
-#endif
-            removeHanlde(sender as HandleHolderI);
+            if (sender is BackgroundWorker)
+            {
+                removeBackgroundworker(sender as BackgroundWorker);
+            }
+            if (sender is Form)
+            {
+                removeForm(sender as Form);
+            }
+            if(sender is HandleHolderI)
+            {
+                removeHanlde(sender as HandleHolderI);
+            }
         }
         /// <summary>
         /// 移除目标实例句柄对象
@@ -210,6 +218,31 @@ namespace IDCM.Service.Common.Core.ServBuf
                     if (handle != null  && handle is BackgroundWorkerHolder)
                     {
                         if((handle as BackgroundWorkerHolder).Contains(worker))
+                        {
+                            handleList.Remove(handle);
+                            break;
+                        }
+                    }
+                    ++idx;
+                }
+            }
+        }
+        /// <summary>
+        /// 移除特定的Form实例句柄对象
+        /// </summary>
+        /// <param name="worker"></param>
+        internal static void removeForm(Form form)
+        {
+            lock (BackendHandleMonitor_Lock)
+            {
+                int count = handleList.Count;
+                int idx = 0;
+                while (idx < count)
+                {
+                    HandleHolderI handle = handleList.ElementAt(idx);
+                    if (handle != null && handle is FormHolder)
+                    {
+                        if ((handle as FormHolder).Contains(form))
                         {
                             handleList.Remove(handle);
                             break;
@@ -440,6 +473,19 @@ namespace IDCM.Service.Common.Core.ServBuf
                 {
                     return form;
                 }
+            }
+            /// <summary>
+            /// 判断是否存储同一实例的后台线程任务句柄
+            /// </summary>
+            /// <param name="worker"></param>
+            /// <returns></returns>
+            public bool Contains(Form targetForm)
+            {
+                if (targetForm != null && targetForm == form)
+                {
+                    return true;
+                }
+                return false;
             }
         }
         #endregion

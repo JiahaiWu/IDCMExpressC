@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IDCM.AppContext;
-using IDCM.ViewLL.Win;
-using IDCM.SimpleDAL.POO;
-using IDCM.SimpleDAL.DAM;
 using System.Windows.Forms;
-using IDCM.ServiceBL.NetTransfer;
+using IDCM.Data.Base;
+using IDCM.Forms;
 
 namespace IDCM.ViewManager
 {
@@ -29,7 +27,7 @@ namespace IDCM.ViewManager
 
         public static AuthenticationRetainer getInstance()
         {
-            ManagerI am = IDCMAppContext.MainManger.getManager(typeof(AuthenticationRetainer));
+            ManagerI am = ViewManagerHolder.getManager(typeof(AuthenticationRetainer));
             return am == null ? null : (am as AuthenticationRetainer);
         }
         ~AuthenticationRetainer()
@@ -88,7 +86,7 @@ namespace IDCM.ViewManager
                     signin.Dispose();
                     if (authInfo.LoginFlag)
                     {
-                        AuthInfoDAM.updateLastAuthInfo(authInfo);
+                        //AuthInfoDAM.updateLastAuthInfo(authInfo);
                         IDCMFormManger.getInstance().updateUserStatus(authInfo.Username);
                     }
                     else
@@ -120,7 +118,7 @@ namespace IDCM.ViewManager
                 {
                     if (authInfo.Username != null && authInfo.Password != null)
                     {
-                        authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 2000, authInfo.autoLogin);
+                        //authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 2000, authInfo.autoLogin);
                     }
                     return false;
                 }
@@ -141,7 +139,7 @@ namespace IDCM.ViewManager
                 {
                     if (authInfo.Username != null && authInfo.Password != null)
                     {
-                        authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 2000, authInfo.autoLogin);
+                        //authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 2000, authInfo.autoLogin);
                     }
                 }
                 return (authInfo != null && authInfo.LoginFlag) ? authInfo : null;
@@ -158,20 +156,20 @@ namespace IDCM.ViewManager
 #if DEBUG
             Console.WriteLine("* Sign in hold For Login()");
 #endif
-            if (authInfo == null)
-                authInfo = AuthInfoDAM.queryLastAuthInfo();
-            if (authInfo != null && authInfo.autoLogin && authInfo.Username != null && authInfo.Password != null)
-            {
-                authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 10000, authInfo.autoLogin);
-                authInfo.autoLogin = true;
-                if (authInfo.LoginFlag)
-                {
-                    AuthInfoDAM.updateLastAuthInfo(authInfo);
-                    IDCMFormManger.getInstance().updateUserStatus(authInfo.Username);
-                }
-                else
-                    IDCMFormManger.getInstance().updateUserStatus(null);
-            }
+            //if (authInfo == null)
+            //    authInfo = AuthInfoDAM.queryLastAuthInfo();
+            //if (authInfo != null && authInfo.autoLogin && authInfo.Username != null && authInfo.Password != null)
+            //{
+            //    authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 10000, authInfo.autoLogin);
+            //    authInfo.autoLogin = true;
+            //    if (authInfo.LoginFlag)
+            //    {
+            //        AuthInfoDAM.updateLastAuthInfo(authInfo);
+            //        IDCMFormManger.getInstance().updateUserStatus(authInfo.Username);
+            //    }
+            //    else
+            //        IDCMFormManger.getInstance().updateUserStatus(null);
+            //}
         }
     }
 }

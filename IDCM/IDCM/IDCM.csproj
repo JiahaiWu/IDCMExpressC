@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppContext\AsyncServInvoker.cs" />
     <Compile Include="AppContext\DataSourceHolder.cs" />
     <Compile Include="Common\FileUtil.cs" />
     <Compile Include="Forms\AboutDlg.cs">
@@ -58,36 +59,6 @@
     <Compile Include="Forms\AboutDlg.designer.cs">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AttrMapOptionDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AttrMapOptionDlg.Designer.cs">
-      <DependentUpon>AttrMapOptionDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ExportTypeDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ExportTypeDlg.Designer.cs">
-      <DependentUpon>ExportTypeDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\GCMFrontFindDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GCMFrontFindDlg.Designer.cs">
-      <DependentUpon>GCMFrontFindDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\GCMView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\GCMView.Designer.cs">
-      <DependentUpon>GCMView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\HomeView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\HomeView.Designer.cs">
-      <DependentUpon>HomeView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\IDCMForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,18 +66,6 @@
       <DependentUpon>IDCMForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AppContext\IDCMAppContext.cs" />
-    <Compile Include="Forms\LibFieldSettingView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\LibFieldSettingView.Designer.cs">
-      <DependentUpon>LibFieldSettingView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\LocalFrontFindDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\LocalFrontFindDlg.Designer.cs">
-      <DependentUpon>LocalFrontFindDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\LoginStatusDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,12 +83,6 @@
     </Compile>
     <Compile Include="Forms\SignInDlg.Designer.cs">
       <DependentUpon>SignInDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\StackInfoView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\StackInfoView.Designer.cs">
-      <DependentUpon>StackInfoView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\StartForm.cs">
       <SubType>Form</SubType>
@@ -152,40 +105,17 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewManager\AuthenticationRetainer.cs" />
-    <Compile Include="ViewManager\GCMViewManager.cs" />
-    <Compile Include="ViewManager\HomeViewManager.cs" />
     <Compile Include="ViewManager\IDCMFormManger.cs" />
-    <Compile Include="ViewManager\LibFieldManager.cs" />
     <Compile Include="ViewManager\ManagerA.cs" />
     <Compile Include="ViewManager\ManagerI.cs" />
     <Compile Include="ViewManager\RetainerA.cs" />
     <Compile Include="ViewManager\StartRetainer.cs" />
+    <Compile Include="ViewManager\ViewManagerHolder.cs" />
     <EmbeddedResource Include="Forms\AboutDlg.resx">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AttrMapOptionDlg.resx">
-      <DependentUpon>AttrMapOptionDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ExportTypeDlg.resx">
-      <DependentUpon>ExportTypeDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\GCMFrontFindDlg.resx">
-      <DependentUpon>GCMFrontFindDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\GCMView.resx">
-      <DependentUpon>GCMView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HomeView.resx">
-      <DependentUpon>HomeView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\IDCMForm.resx">
       <DependentUpon>IDCMForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LibFieldSettingView.resx">
-      <DependentUpon>LibFieldSettingView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LocalFrontFindDlg.resx">
-      <DependentUpon>LocalFrontFindDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\LoginStatusDlg.resx">
       <DependentUpon>LoginStatusDlg.cs</DependentUpon>
@@ -195,9 +125,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SignInDlg.resx">
       <DependentUpon>SignInDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\StackInfoView.resx">
-      <DependentUpon>StackInfoView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartForm.resx">
       <DependentUpon>StartForm.cs</DependentUpon>
@@ -231,6 +158,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IDCM.Data.Base\IDCM.Data.Base.csproj">
+      <Project>{9b607956-ab6f-4b3b-ad56-b923fdd17eea}</Project>
+      <Name>IDCM.Data.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IDCM.GCMModule\IDCM.GCMModule.csproj">
       <Project>{1e1dfbe9-875c-414a-85f7-4b92972cffa1}</Project>
       <Name>IDCM.GCMModule</Name>
