@@ -40,6 +40,8 @@
             this.label_user = new System.Windows.Forms.Label();
             this.textBox_datasource = new System.Windows.Forms.TextBox();
             this.label_dataSource = new System.Windows.Forms.Label();
+            this.button_cancel = new System.Windows.Forms.Button();
+            this.button_download = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).BeginInit();
             this.panel_start.SuspendLayout();
             this.SuspendLayout();
@@ -61,6 +63,8 @@
             this.panel_start.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_start.BackColor = System.Drawing.Color.Transparent;
+            this.panel_start.Controls.Add(this.button_download);
+            this.panel_start.Controls.Add(this.button_cancel);
             this.panel_start.Controls.Add(this.checkBox_defaultWS);
             this.panel_start.Controls.Add(this.checkBox_remember);
             this.panel_start.Controls.Add(this.button_confirm);
@@ -80,9 +84,9 @@
             this.checkBox_defaultWS.AutoSize = true;
             this.checkBox_defaultWS.Location = new System.Drawing.Point(393, 14);
             this.checkBox_defaultWS.Name = "checkBox_defaultWS";
-            this.checkBox_defaultWS.Size = new System.Drawing.Size(144, 16);
+            this.checkBox_defaultWS.Size = new System.Drawing.Size(84, 16);
             this.checkBox_defaultWS.TabIndex = 8;
-            this.checkBox_defaultWS.Text = "As Default Workspace";
+            this.checkBox_defaultWS.Text = "As Default";
             this.checkBox_defaultWS.UseVisualStyleBackColor = true;
             // 
             // checkBox_remember
@@ -99,9 +103,10 @@
             // 
             // button_confirm
             // 
-            this.button_confirm.Location = new System.Drawing.Point(496, 54);
+            this.button_confirm.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_confirm.Location = new System.Drawing.Point(509, 69);
             this.button_confirm.Name = "button_confirm";
-            this.button_confirm.Size = new System.Drawing.Size(85, 36);
+            this.button_confirm.Size = new System.Drawing.Size(75, 21);
             this.button_confirm.TabIndex = 6;
             this.button_confirm.Text = "Confirm";
             this.button_confirm.UseVisualStyleBackColor = true;
@@ -162,6 +167,30 @@
             this.label_dataSource.TabIndex = 0;
             this.label_dataSource.Text = "DataSource:";
             // 
+            // button_cancel
+            // 
+            this.button_cancel.BackColor = System.Drawing.Color.Transparent;
+            this.button_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button_cancel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button_cancel.Location = new System.Drawing.Point(509, 10);
+            this.button_cancel.Name = "button_cancel";
+            this.button_cancel.Size = new System.Drawing.Size(75, 23);
+            this.button_cancel.TabIndex = 9;
+            this.button_cancel.Text = "Cancel";
+            this.button_cancel.UseVisualStyleBackColor = false;
+            this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
+            // 
+            // button_download
+            // 
+            this.button_download.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button_download.Location = new System.Drawing.Point(509, 40);
+            this.button_download.Name = "button_download";
+            this.button_download.Size = new System.Drawing.Size(75, 23);
+            this.button_download.TabIndex = 10;
+            this.button_download.Text = "Download";
+            this.button_download.UseVisualStyleBackColor = true;
+            this.button_download.Click += new System.EventHandler(this.button_download_Click);
+            // 
             // StartView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -173,6 +202,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "StartView";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "StartView";
             this.Shown += new System.EventHandler(this.StartView_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).EndInit();
@@ -195,5 +225,7 @@
         private System.Windows.Forms.TextBox textBox_pwd;
         private System.Windows.Forms.CheckBox checkBox_remember;
         private System.Windows.Forms.CheckBox checkBox_defaultWS;
+        private System.Windows.Forms.Button button_cancel;
+        private System.Windows.Forms.Button button_download;
     }
 }

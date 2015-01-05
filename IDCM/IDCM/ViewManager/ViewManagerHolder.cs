@@ -24,7 +24,7 @@ namespace IDCM.ViewManager
             if (obj == null || obj.isDisposed())
             {
 #if DEBUG
-                System.Diagnostics.Debug.Assert(manager.IsSubclassOf(typeof(ManagerA)) || manager.IsSubclassOf(typeof(RetainerA)));
+                System.Diagnostics.Debug.Assert(manager.IsSubclassOf(typeof(ManagerA)));
 #endif
                 obj = Activator.CreateInstance(manager) as ManagerI;
                 subManagers[manager] = obj;
@@ -53,18 +53,11 @@ namespace IDCM.ViewManager
                 ManagerI view = getManager(manager);
                 if (activeFront)
                 {
-                    if (manager.IsSubclassOf(typeof(RetainerA)))
+                    foreach (ManagerI ma in subManagers.Values)
                     {
-                        view.initView(true);
+                        ma.setMaxToNormal();
                     }
-                    else
-                    {
-                        foreach (ManagerI ma in subManagers.Values)
-                        {
-                            ma.setMaxToNormal();
-                        }
-                        view.setToMaxmize(activeFront);
-                    }
+                    view.setToMaxmize(activeFront);
                 }
                 return view != null;
             }

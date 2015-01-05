@@ -58,7 +58,7 @@ namespace IDCM.AppContext
                 //bind Async Service to AsyncServInvoker
                 servInvoker.OnDataPrepared += mainManger.OnDataPrepared;
                 //Run HandleInstanceMonitor
-                handleMonitor.Interval = 2000;
+                handleMonitor.Interval = 1000;
                 handleMonitor.Tick += OnHMHeartBreak;
                 handleMonitor.Start();
                 //Run MessageInstanceMonitor

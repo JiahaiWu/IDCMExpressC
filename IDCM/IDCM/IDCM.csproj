@@ -108,7 +108,6 @@
     <Compile Include="ViewManager\IDCMFormManger.cs" />
     <Compile Include="ViewManager\ManagerA.cs" />
     <Compile Include="ViewManager\ManagerI.cs" />
-    <Compile Include="ViewManager\RetainerA.cs" />
     <Compile Include="ViewManager\StartRetainer.cs" />
     <Compile Include="ViewManager\ViewManagerHolder.cs" />
     <EmbeddedResource Include="Forms\AboutDlg.resx">

@@ -12,7 +12,7 @@ namespace IDCM.ViewManager
     /// <summary>
     /// 用户身份认证管理
     /// </summary>
-    public class AuthenticationRetainer:RetainerA
+    public class AuthenticationRetainer:ManagerI
     {
         
         #region 构造&析构
@@ -44,9 +44,17 @@ namespace IDCM.ViewManager
         private AuthInfo authInfo =null;
         #endregion
         #region 接口实例化部分
-        public override void dispose()
+        public void setMaxToNormal()
         {
-            base.dispose();
+        }
+        public void setToMaxmize(bool activeFront = false)
+        {
+        }
+        public void setMdiParent(Form pForm)
+        {
+        }
+        public void dispose()
+        {
             if (signMonitor != null && !signMonitor.Enabled)
             {
                 signMonitor.Stop();
@@ -54,12 +62,20 @@ namespace IDCM.ViewManager
                 signMonitor = null;
             }
         }
-        
+        public bool isActive()
+        {
+            return false;
+        }
+        public bool isDisposed()
+        {
+            return _isDisposed;
+        }
+        protected volatile bool _isDisposed = false;
         /// <summary>
         /// 对象实例化初始化方法
         /// </summary>
         /// <returns></returns>
-        public override bool initView(bool activeShow = true)
+        public bool initView(bool activeShow = true)
         {
             if (signMonitor == null)
             {
@@ -94,10 +110,6 @@ namespace IDCM.ViewManager
                 }
             }
             return true;
-        }
-        public override bool isDisposed()
-        {
-            return _isDisposed;
         }
         #endregion
         /// <summary>

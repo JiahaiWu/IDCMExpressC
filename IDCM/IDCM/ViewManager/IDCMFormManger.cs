@@ -81,29 +81,6 @@ namespace IDCM.ViewManager
         internal IDCMForm mainForm = null;
         #endregion
 
-#region 接管视图组件的关键的事件处理区
-        /// <summary>
-        /// IDCMForm主界面第一次显示后，启动默认的数据页面展示
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void IDCMForm_Shown(object sender, EventArgs e)
-        {
-            //启动欢迎页面
-            ViewManagerHolder.activeChildView(typeof(StartRetainer), true);
-        }
-        /// <summary>
-        /// 数据源预处理流程完成事件处理方法
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void OnDataPrepared(object sender, IDCMAsyncEventArgs e)
-        {
-            //activeChildViewAwait(typeof(HomeViewManager), true);
-            //activeChildView(typeof(AuthenticationRetainer), false);
-        }
-#endregion
-
         /// <summary>
         /// 主窗体初始化方法，用于激活新（或旧）实例的界面资源及其动态动态显示
         /// 注意：
@@ -122,29 +99,71 @@ namespace IDCM.ViewManager
                 mainForm.Hide();
             return true;
         }
-        
+
+#region 接管视图组件的关键的事件处理区
         /// <summary>
-        /// 显示等待提示页面，并隐式地激活直属视图实例及其必要的窗口显示操作。
+        /// IDCMForm主界面第一次显示后，启动默认的数据页面展示
         /// </summary>
-        /// <param name="manager"></param>
-        /// <param name="activeFront"></param>
-        /// <returns></returns>
-        public void activeChildViewAwait(Type manager, bool activeFront = false)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void IDCMForm_Shown(object sender, EventArgs e)
         {
-            Form startForm = new StartForm();
-            startForm.Show();
-            startForm.Update();
-            bool res = ViewManagerHolder.activeChildView(manager, activeFront);
-            startForm.Close();
-            startForm.Dispose();
+            //启动欢迎页面
+            ManagerI view = ViewManagerHolder.getManager(typeof(StartRetainer));
+            view.initView(true);
         }
+        /// <summary>
+        /// 数据源预处理流程完成事件处理方法
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal void OnDataPrepared(object sender, IDCMAsyncEventArgs e)
+        {
+            //activeChildViewAwait(typeof(HomeViewManager), true);
+            //activeChildView(typeof(AuthenticationRetainer), false);
+        }
+#endregion
+
+        ///// <summary>
+        ///// 主窗体初始化方法，用于激活新（或旧）实例的界面资源及其动态动态显示
+        ///// 注意：
+        ///// 1.该方法的实现务必保证冗余调用许可性，容错性，资源释放状态判定务必保持同步可用。
+        ///// </summary>
+        ///// <param name="activeShow">激活界面用户可见性（可选）</param>
+        ///// <returns>初始化成功与否状态</returns>
+        //public bool initForm(bool activeShow = true)
+        //{
+        //    mainForm.WindowState = FormWindowState.Maximized;
+        //    if (activeShow)
+        //    {
+        //        mainForm.Show();
+        //    }
+        //    else
+        //        mainForm.Hide();
+        //    return true;
+        //}
+        
+        ///// <summary>
+        ///// 显示等待提示页面，并隐式地激活直属视图实例及其必要的窗口显示操作。
+        ///// </summary>
+        ///// <param name="manager"></param>
+        ///// <param name="activeFront"></param>
+        ///// <returns></returns>
+        //public void activeChildViewAwait(Type manager, bool activeFront = false)
+        //{
+        //    Form startForm = new StartForm();
+        //    startForm.Show();
+        //    startForm.Update();
+        //    bool res = ViewManagerHolder.activeChildView(manager, activeFront);
+        //    startForm.Close();
+        //    startForm.Dispose();
+        //}
         /// <summary>
         /// 关闭当前工作空间，仅保留主框架窗口
         /// </summary>
         /// <returns></returns>
         public bool closeWorkSpaceHolder()
         {
-            
             ViewManagerHolder.Dispose();
             DataSourceHolder.close();
             return true;

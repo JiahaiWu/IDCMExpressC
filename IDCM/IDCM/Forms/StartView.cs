@@ -52,6 +52,18 @@ namespace IDCM.Forms
                 }
             }
         }
+        private void button_cancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button_download_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private StartInfo startInfo = null;
+
+
     }
 }

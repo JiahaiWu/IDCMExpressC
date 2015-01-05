@@ -22,6 +22,7 @@ namespace IDCM.ViewManager
         public StartRetainer()
         {
             startInfo = IDCMEnvironment.getLastStartInfo();
+            startView = new StartView();
         }
 
         public static StartRetainer getInstance()
@@ -47,7 +48,6 @@ namespace IDCM.ViewManager
         }
         public override void setMdiParent(Form pForm)
         {
-            startView.MdiParent = pForm;
         }
         public override void setMaxToNormal()
         {
