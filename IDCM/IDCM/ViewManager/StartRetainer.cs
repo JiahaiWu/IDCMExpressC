@@ -7,6 +7,8 @@ using IDCM.Service;
 using IDCM.Service.POO;
 using IDCM.Forms;
 using System.Windows.Forms;
+using IDCM.Service.Common.Core.ServBuf;
+using IDCM.Service.Common;
 
 namespace IDCM.ViewManager
 {
@@ -67,13 +69,21 @@ namespace IDCM.ViewManager
                 DialogResult res = startView.ShowDialog();
                 if(res.Equals(DialogResult.OK))
                 {
-                    if(DataSourceHolder.chooseWorkspace(startInfo.Location,startInfo.LoginName))
+                    Form waitingForm = new WaitingForm();
+                    waitingForm.Show();
+                    waitingForm.Update();
+                    if(DataSourceHolder.connectWorkspace(startInfo.Location,startInfo.LoginName))
                     {
-                        //DataSourceHolder.GCMLogin(startInfo.LoginName, startInfo.GCMPassword);
-                        //noteStartInfo(startInfo.Location,startInfo.asDefaultWorkspace,startInfo.LoginName,startInfo.rememberPassword?startInfo.GCMPassword:null);
-                        startView.Dispose();
-                        return true;
+                        if (startInfo.GCMPassword != null)
+                        {
+                            DataSourceHolder.connectGCM(startInfo.LoginName, startInfo.GCMPassword);
+                        }
+                        IDCMEnvironment.noteStartInfo(startInfo.Location, startInfo.asDefaultWorkspace, startInfo.LoginName, startInfo.rememberPassword ? startInfo.GCMPassword : null);
+                        DataSourceHolder.prepareInstance();
+                        DWorkMHub.note(new AsyncMessage(MsgType.DataPrepared, "DataSource Prepared."));
                     }
+                    waitingForm.Close();
+                    waitingForm.Dispose();
                 }
                 startView.Close();
             }

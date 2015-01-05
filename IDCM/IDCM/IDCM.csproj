@@ -33,9 +33,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>003_05.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
-      <HintPath>..\packages\NLog.3.1.0.0\lib\net40\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.3.2.0.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -52,7 +55,6 @@
   <ItemGroup>
     <Compile Include="AppContext\AsyncServInvoker.cs" />
     <Compile Include="AppContext\DataSourceHolder.cs" />
-    <Compile Include="Common\FileUtil.cs" />
     <Compile Include="Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,12 +85,6 @@
     </Compile>
     <Compile Include="Forms\SignInDlg.Designer.cs">
       <DependentUpon>SignInDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\StartForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\StartForm.Designer.cs">
-      <DependentUpon>StartForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\StartView.cs">
       <SubType>Form</SubType>
@@ -124,9 +120,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SignInDlg.resx">
       <DependentUpon>SignInDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\StartForm.resx">
-      <DependentUpon>StartForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartView.resx">
       <DependentUpon>StartView.cs</DependentUpon>
@@ -179,6 +172,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Common\" />
     <Folder Include="ControlFrags\AsyncInvoker\" />
     <Folder Include="ControlFrags\Modules\" />
     <Folder Include="ControlFrags\Utils\" />
@@ -266,6 +260,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\uploading2_cut1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="003_05.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

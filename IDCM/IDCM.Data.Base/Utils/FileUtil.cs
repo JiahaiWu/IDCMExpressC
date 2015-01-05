@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace IDCM.Common
+namespace IDCM.Data.Base.Utils
 {
-    class FileUtil
+    public class FileUtil
     {
-        public static bool isValidFilePath(string filepath,bool autoCreateFile=false)
+        public static bool isValidFilePath(string filepath, bool autoCreateFile = false)
         {
             if (filepath != null && filepath.Length > 0)
             {
@@ -22,11 +21,12 @@ namespace IDCM.Common
                 }
                 catch (Exception ex)
                 {
-                    log.Debug("File Path Detect Failed with Exception: ",ex);
+                    log.Debug("File Path Detect Failed with Exception: ", ex);
                 }
             }
             return false;
         }
+
         public static bool writeToUTF8File(String filepath, String outputStr)
         {
             FileStream fs = new FileStream(filepath, FileMode.Create);
@@ -101,6 +101,7 @@ namespace IDCM.Common
             }
             return false;
         }
+
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
     }
 }

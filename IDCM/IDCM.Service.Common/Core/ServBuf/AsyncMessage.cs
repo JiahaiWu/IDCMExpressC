@@ -26,7 +26,7 @@ namespace IDCM.Service.Common.Core.ServBuf
         private readonly MsgType msgType;
         private readonly object[] parameters;
 
-        AsyncMessage(MsgType msgType, string msgTag, object[] parameters = null)
+        public AsyncMessage(MsgType msgType, string msgTag, object[] parameters = null)
         {
             this.msgTag = msgTag;
             this.msgType = msgType;

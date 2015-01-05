@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows.Forms;
 using IDCM.AppContext;
 using IDCM.Forms;
-using IDCM.Common;
 using IDCM.Service.Common;
 using IDCM.Service.Common.Core.ServBuf;
 
@@ -119,8 +118,8 @@ namespace IDCM.ViewManager
         /// <param name="e"></param>
         internal void OnDataPrepared(object sender, IDCMAsyncEventArgs e)
         {
-            //activeChildViewAwait(typeof(HomeViewManager), true);
-            //activeChildView(typeof(AuthenticationRetainer), false);
+            ManagerI view = ViewManagerHolder.getManager(typeof(HomeViewManager));
+            view.initView(true);
         }
 #endregion
 

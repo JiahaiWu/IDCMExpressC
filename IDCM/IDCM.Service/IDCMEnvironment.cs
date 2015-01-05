@@ -5,6 +5,8 @@ using System.Text;
 using System.Configuration;
 using IDCM.Service.POO;
 using IDCM.Service.Utils;
+using System.IO;
+using IDCM.Data.Base;
 
 namespace IDCM.Service
 {
@@ -26,9 +28,24 @@ namespace IDCM.Service
             val = ConfigurationManager.AppSettings.Get(LPWD);
             if (val != null && val.IndexOf(",") < 0)
                 si.GCMPassword = val;
+
+            if (si.Location == null)
+            {
+                string initDir = "";
+                try
+                {
+                    initDir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                    DirectoryInfo dirInfo = Directory.CreateDirectory(initDir + Path.DirectorySeparatorChar + SysConstants.APP_Assembly);
+                    initDir = dirInfo.FullName;
+                    si.Location = initDir + Path.DirectorySeparatorChar + SysConstants.DB_SUFFIX;
+                }
+                catch (Exception ex)
+                {
+                    log.Warn("Default Initial Directory based from Environment.SpecialFolder.CommonApplicationData fetch failed.", ex);
+                }
+            }
             return si;
         }
-
         public static void noteStartInfo(string location, bool asDefaultWorkSpace, string loginName, string gcmPassword)
         {
             ConfigurationHelper.SetAppConfig(LastWorkSpace, location);
@@ -42,6 +59,7 @@ namespace IDCM.Service
         internal const string LWSAsDefault = "LWS_As_Default";
         internal const string LUID = "LUID";
         internal const string LPWD = "LPWD";
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         #endregion
     }
 }
