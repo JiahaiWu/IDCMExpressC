@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IDCM.Service;
+using IDCM.HomeModule.Forms;
+using IDCM.HomeModule.Modules;
+using System.Windows.Forms;
 
 namespace IDCM.HomeModule
 {
