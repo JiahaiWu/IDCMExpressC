@@ -19,7 +19,7 @@ namespace IDCM.Data.DHCP
     /// 3.本类允许多实例化及单实例复用策略，但外部获取SQLiteConnection句柄后不得长时占用及缓存复用。
     /// @author JiahaiWu 2014-11-06
     /// </summary>
-    class SQLiteConnPicker : IDisposable
+    internal class SQLiteConnPicker : IDisposable
     {
         /// <summary>
         /// 获取单点数据库连接的构造方法

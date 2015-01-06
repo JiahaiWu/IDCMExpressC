@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IDCM.Data.POO;
+using IDCM.Data.Base;
 using System.IO;
 using System.Data.SQLite;
 using System.Data.SQLite.Generic;
 using Dapper;
+using System.Data;
 using System.Threading;
-using IDCM.Data.Base;
 using IDCM.Data.DHCP;
-
 
 namespace IDCM.Data.DAM
 {
@@ -105,20 +104,23 @@ namespace IDCM.Data.DAM
         /// <param name="picker"></param>
         /// <param name="sqlExpressions"></param>
         /// <returns></returns>
-        public static dynamic[] SQLQuery(SQLiteConnPicker picker,params string[] sqlExpressions)
+        public static IEnumerable<T>[] SQLQuery<T>(SQLiteConnPicker picker,params string[] sqlExpressions)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(picker != null);
             System.Diagnostics.Debug.Assert(sqlExpressions != null);
 #endif 
-            List<dynamic> res = new List<dynamic>(sqlExpressions.Count());
+            List<IEnumerable<T>> res = new List<IEnumerable<T>>(sqlExpressions.Count());
             foreach (string sql in sqlExpressions)
             {
                 using (picker)
                 {
-                    using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                    ////////////////////////////////////////////////
+                    //using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                    ///////////////////////////////////////////////
+                    //For Query default without Transaction
                     {
-                        dynamic result = picker.getConnection().Query(sql);
+                        IEnumerable<T> result = picker.getConnection().Query<T>(sql);
                         res.Add(result);
                     }
                 }
@@ -153,13 +155,72 @@ namespace IDCM.Data.DAM
             }
             return res.ToArray();
         }
+        #region ExecuteDataTable
+        /// <summary>
+        /// 执行数据库查询，返回DataTable对象
+        /// </summary>
+        /// <param name="connectionString">连接字符串</param>
+        /// <param name="commandText">执行语句或存储过程名</param>
+        /// <param name="commandType">执行类型</param>
+        /// <returns>DataTable对象</returns>
+        public static DataTable DataTableSQLQuery(SQLiteConnPicker picker, string commandText, CommandType commandType = CommandType.Text)
+        {
+            return DataTableSQLQuery(picker, commandText, commandType, null);
+        }
 
+        /// <summary>
+        /// 执行数据库查询，返回DataTable对象
+        /// </summary>
+        /// <param name="connectionString">连接字符串</param>
+        /// <param name="commandText">执行语句或存储过程名</param>
+        /// <param name="commandType">执行类型</param>
+        /// <param name="cmdParms">SQL参数对象</param>
+        /// <returns>DataTable对象</returns>
+        public static DataTable DataTableSQLQuery(SQLiteConnPicker picker, string commandText, CommandType commandType, params SQLiteParameter[] cmdParms)
+        {
+            if (commandText == null || commandText.Length == 0)
+                throw new ArgumentNullException("commandText");
+            DataSet ds = new DataSet();
+            using (picker)
+            {
+                ////////////////////////////////////////////////
+                //using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                ///////////////////////////////////////////////
+                //For Query default without Transaction
+                {
+                    SQLiteConnection conn = picker.getConnection();
+                    SQLiteCommand cmd = new SQLiteCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandText = commandText;
+                    cmd.CommandType = commandType;
+                    if (cmdParms != null)
+                    {
+                        foreach (SQLiteParameter parm in cmdParms)
+                            cmd.Parameters.Add(parm);
+                    }
+                    try
+                    {
+#if DEBUG
+                        log.Debug("DataTableSQLQuery Info: @CommandText=" + cmd.CommandText);
+#endif
+                        SQLiteDataAdapter sda = new SQLiteDataAdapter(cmd);
+                        sda.Fill(ds);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("DataTableSQLQuery Error.", ex);
+                    }
+                }
+            }
+            return ds.Tables.Count > 0 ? ds.Tables[0] : null;
+        }
+        #endregion
         #region 基础数据库表定义
         protected static string getBasicTableCmds()
         {
             StringBuilder strbuilder = new StringBuilder();
             //创建目录库数据表定义
-            string cmd = "Create Table if Not Exists " + typeof(LibraryNode).Name + "("
+            string cmd = "Create Table if Not Exists " + typeof(CatalogNode).Name + "("
                 + "Lid INTEGER primary key,"
                 + "Name TEXT,"
                 + "Type TEXT,"
@@ -216,6 +277,8 @@ namespace IDCM.Data.DAM
             return strbuilder.ToString();
         }
         #endregion
+
+        
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         /// <summary>

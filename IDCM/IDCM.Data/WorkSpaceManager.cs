@@ -124,13 +124,13 @@ namespace IDCM.Data
         }
 
         /// <summary>
-        /// 执行SQL非查询命令，返回查询结果集
+        /// 执行SQL查询命令，返回查询结果集
         /// 说明：
         /// 1.可重入，可并入。
         /// </summary>
         /// <param name="sqlExpressions"></param>
         /// <returns></returns>
-        public override dynamic[] SQLQuery(params string[] sqlExpressions)
+        internal IEnumerable<T>[] SQLQuery<T>(params string[] sqlExpressions)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.InWorking), "illegal status to Query Data! @getStatus()=" + getStatus());
@@ -138,7 +138,7 @@ namespace IDCM.Data
 #endif
             try
             {
-                return DAMBase.SQLQuery(picker, sqlExpressions);
+                return DAMBase.SQLQuery<T>(picker, sqlExpressions);
             }
             catch (Exception ex)
             {
@@ -147,13 +147,13 @@ namespace IDCM.Data
             return null;
         }
         /// <summary>
-        /// 执行SQL查询命令，返回查询结果集
+        /// 执行SQL非查询命令，返回执行结果
         /// 说明：
         /// 1.可重入，可并入。
         /// </summary>
         /// <param name="commands"></param>
         /// <returns></returns>
-        public override int[] executeSQL(params string[] commands)
+        internal int[] executeSQL(params string[] commands)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.InWorking), "illegal status to Execute SQL commands! @getStatus()=" + getStatus());

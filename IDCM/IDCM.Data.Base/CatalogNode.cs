@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Data.POO
+namespace IDCM.Data.Base
 {
-    class LibraryNode
+    public class CatalogNode
     {
         public const int REC_ALL = -1;
         public const int REC_UNFILED = -2;
         public const int REC_TRASH = -4;
         public const int REC_TEMP = -8;
 
-        public LibraryNode()
+        public enum LibraryNodeType { GroupSet = 0, Group = 1, SmartGroup = 2 };
+
+        public CatalogNode()
         {
         }
-        public LibraryNode(string _name, string _type = "Group", string _desc = "", int _order = 0)
+        public CatalogNode(string _name, string _type = "Group", string _desc = "", int _order = 0)
         {
             this.name = _name;
             this.type = _type;

@@ -49,6 +49,12 @@
   <ItemGroup>
     <Compile Include="AbsHandler.cs" />
     <Compile Include="AuthInfo.cs" />
+    <Compile Include="CatalogNode.cs" />
+    <Compile Include="CustomTColDef.cs" />
+    <Compile Include="CustomTColMap.cs" />
+    <Compile Include="DBVersionNote.cs" />
+    <Compile Include="DelayWorkNote.cs" />
+    <Compile Include="HandleRunInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SysConstants.cs" />
     <Compile Include="Utils\Base64CShared.cs" />

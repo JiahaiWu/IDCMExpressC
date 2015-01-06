@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Data.POO
+namespace IDCM.Data.Base
 {
     /// <summary>
     /// 用户标记当前数据库记录版本标识类定义
     /// 该类实例应当唯一确定，不接受运行时变更标识信息。
     /// </summary>
-    class DBVersionNote
+    public class DBVersionNote
     {
         private string dbType = "SQLite";
 

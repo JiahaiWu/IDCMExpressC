@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IDCM.Data.POO;
+using IDCM.Data.Base;
 using Dapper;
 using IDCM.Data.DHCP;
 

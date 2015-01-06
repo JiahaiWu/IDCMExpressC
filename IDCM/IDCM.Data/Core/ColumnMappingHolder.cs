@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IDCM.Data.Common;
-using IDCM.Data.POO;
+using IDCM.Data.Base;
 using IDCM.Data.DAM;
 using Dapper;
 using IDCM.Data.DHCP;

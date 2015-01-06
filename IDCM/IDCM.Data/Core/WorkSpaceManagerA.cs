@@ -61,6 +61,14 @@ namespace IDCM.Data.Core
             return _lastError==null?null:_lastError.ToString();
         }
         /// <summary>
+        /// 设置最近一次的错误消息描述
+        /// </summary>
+        /// <returns></returns>
+        internal void setLastError(ErrorNote error)
+        {
+            _lastError = error;
+        }
+        /// <summary>
         /// 获取数据库连接器对象实例
         /// </summary>
         /// <param name="renew"></param>
@@ -85,20 +93,12 @@ namespace IDCM.Data.Core
         {
             return false;
         }
-        public virtual dynamic[] SQLQuery(params string[] sqlExpressions)
-        {
-            return null;
-        }
-        public virtual int[] executeSQL(params string[] commands)
-        {
-            return null;
-        }
         #endregion
         #region 内置实例对象保持部分
         /// <summary>
         /// 用户工作空间运营状态标识
         /// </summary>
-        internal volatile WSStatus _status = WSStatus.Idle;
+        protected volatile WSStatus _status = WSStatus.Idle;
         /// <summary>
         /// 数据库连接器对象
         /// </summary>
@@ -106,11 +106,11 @@ namespace IDCM.Data.Core
         /// <summary>
         /// 数据库连接句柄标识
         /// </summary>
-        internal volatile string _connectStr = null;
+        protected volatile string _connectStr = null;
         /// <summary>
         /// 最近一次错误记录
         /// </summary>
-        internal volatile ErrorNote _lastError = null;
+        protected volatile ErrorNote _lastError = null;
         /// <summary>
         /// 数据库目标存档路径
         /// </summary>

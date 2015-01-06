@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IDCM.Data.Common
 {
-    class ErrorNote
+    public class ErrorNote
     {
         public ErrorNote(Type type, string errorMsg)
         {

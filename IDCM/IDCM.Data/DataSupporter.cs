@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using IDCM.Data.Core;
 using IDCM.Data.DAM;
+using IDCM.Data.Common;
+using System.Data;
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
  * A desktop software package for microbial resources researchers.
@@ -36,32 +38,84 @@ namespace IDCM.Data
 #endif
             return BaseInfoNoteDAM.nextSeqID(wsm.getConnectPicker());
         }
-        //////////////////////////////////////////////////////////////////////////////////////
-        ///// <summary>
-        ///// 执行SQL非查询命令，返回查询结果集
-        ///// 说明：
-        ///// 1.可重入，可并入。
-        ///// </summary>
-        ///// <param name="wsm">工作空间管理器对象实例</param>
-        ///// <param name="sqlExpressions"></param>
-        ///// <returns></returns>
-        //public override dynamic[] SQLQuery(WorkSpaceManager wsm,params string[] sqlExpressions)
-        //{
-        //    return wsm.SQLQuery(sqlExpressions);
-        //}
-        ///// <summary>
-        ///// 执行SQL查询命令，返回查询结果集
-        ///// 说明：
-        ///// 1.可重入，可并入。
-        ///// </summary>
-        ///// <param name="wsm">工作空间管理器对象实例</param>
-        ///// <param name="commands"></param>
-        ///// <returns></returns>
-        //public override int[] executeSQL(WorkSpaceManager wsm,params string[] commands)
-        //{
-        //    return wsm.executeSQL(commands);
-        //}
-        //////////////////////////////////////////////////////////////////////////////////////
-        //保留未用
+        /// <summary>
+        /// 执行SQL查询命令，返回查询结果集
+        /// 说明：
+        /// 1.可重入，可并入。
+        /// </summary>
+        /// <param name="wsm">工作空间管理器对象实例</param>
+        /// <param name="sqlExpressions"></param>
+        /// <returns></returns>
+        public static IEnumerable<T>[] SQLQuery<T>(WorkSpaceManager wsm, params string[] sqlExpressions)
+        {
+            IEnumerable<T>[] res= wsm.SQLQuery<T>(sqlExpressions);
+            return res;
+        }
+        /// <summary>
+        /// 执行SQL查询命令，返回查询结果
+        /// 说明：
+        /// 1.可重入，可并入。
+        /// </summary>
+        /// <param name="wsm">工作空间管理器对象实例</param>
+        /// <param name="sqlExpression"></param>
+        /// <returns></returns>
+        public static List<T> SQLQuery<T>(WorkSpaceManager wsm, string sqlExpression)
+        {
+            IEnumerable<T>[] res = wsm.SQLQuery<T>(sqlExpression);
+            if (res != null && res.Length>0)
+                return res[0].ToList();
+            return null;
+        }
+        /// <summary>
+        /// 执行SQL查询命令，返回查询结果
+        /// 说明：
+        /// 1.可重入，可并入。
+        /// </summary>
+        /// <param name="wsm">工作空间管理器对象实例</param>
+        /// <param name="sqlExpression"></param>
+        /// <returns></returns>
+        public static DataTable SQLQuery(WorkSpaceManager wsm, string sqlExpression)
+        {
+#if DEBUG
+            System.Diagnostics.Debug.Assert(wsm.getStatus().Equals(WSStatus.InWorking), "illegal status to Query Data! @getStatus()=" + wsm.getStatus());
+            System.Diagnostics.Debug.Assert(sqlExpression != null, "sqlExpressions should not be null.");
+#endif
+            try
+            {
+                return DAMBase.DataTableSQLQuery(wsm.getConnectPicker(), sqlExpression);
+            }
+            catch (Exception ex)
+            {
+                wsm.setLastError(new ErrorNote(ex));
+            }
+            return null;
+        }
+        /// <summary>
+        /// 执行SQL非查询命令，返回执行结果
+        /// 说明：
+        /// 1.可重入，可并入。
+        /// </summary>
+        /// <param name="wsm">工作空间管理器对象实例</param>
+        /// <param name="commands"></param>
+        /// <returns>Array of Number of rows affected</returns>
+        public static int[] executeSQL(WorkSpaceManager wsm, params string[] commands)
+        {
+            return wsm.executeSQL(commands);
+        }
+        /// <summary>
+        /// 执行SQL非查询命令，返回执行结果
+        /// 说明：
+        /// 1.可重入，可并入。
+        /// </summary>
+        /// <param name="wsm">工作空间管理器对象实例</param>
+        /// <param name="command"></param>
+        /// <returns>Number of rows affected</returns>
+        public static int executeSQL(WorkSpaceManager wsm, string command)
+        {
+            int[] res= wsm.executeSQL(command);
+            if (res != null && res.Length>0)
+                return res[0];
+            return -2;
+        }
     }
 }

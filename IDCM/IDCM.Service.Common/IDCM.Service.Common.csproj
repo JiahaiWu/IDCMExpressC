@@ -60,13 +60,12 @@
     <Compile Include="DAM\CTDRecordDAM.cs" />
     <Compile Include="DAM\CustomTColDefDAM.cs" />
     <Compile Include="DAM\DelayWorkNoteDAM.cs" />
-    <Compile Include="DAM\LibraryNodeDAM.cs" />
+    <Compile Include="DAM\CatalogNodeDAM.cs" />
     <Compile Include="AuthMHub.cs" />
     <Compile Include="CatalogMHub.cs" />
     <Compile Include="DataSourceMHub.cs" />
     <Compile Include="DWorkMHub.cs" />
     <Compile Include="RecordMHub.cs" />
-    <Compile Include="POO\HandleRunInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
