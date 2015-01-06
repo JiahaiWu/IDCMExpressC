@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\AbsHandler.cs" />
     <Compile Include="Core\HandleRunStatus.cs" />
     <Compile Include="Core\LocalHandlerProxy.cs" />
     <Compile Include="Core\ServBuf\AsyncMessage.cs" />

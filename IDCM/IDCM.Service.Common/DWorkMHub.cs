@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Reflection;
 using IDCM.Service.Common.Core;
 using IDCM.Service.Common.Core.ServBuf;
+using IDCM.Data.Base;
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
  * A desktop software package for microbial resources researchers.

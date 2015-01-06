@@ -7,14 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-using IDCM.SimpleDAL.POO;
-using IDCM.OverallSC.Commons;
-using IDCM.ControlMBL.Module;
-using IDCM.ViewLL.Manager;
-using IDCM.ServiceBL.Common;
-using IDCM.ControlMBL;
-using IDCM.SimpleDAL.DAM;
-using IDCM.ControlMBL.Utilities;
+using IDCM.Service.Utils;
+using IDCM.HomeModule.Modules;
 
 namespace IDCM.HomeModule.Forms
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using IDCM.Data.Base;
 
 namespace IDCM.Service.Common.Core.ServBuf
 {

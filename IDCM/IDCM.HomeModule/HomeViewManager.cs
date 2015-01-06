@@ -6,6 +6,7 @@ using IDCM.Service;
 using IDCM.HomeModule.Forms;
 using IDCM.HomeModule.Modules;
 using System.Windows.Forms;
+using IDCM.Service.Utils;
 
 namespace IDCM.HomeModule
 {
@@ -20,16 +21,16 @@ namespace IDCM.HomeModule
         public HomeViewManager()
         {
             homeView = new HomeView();
-            LongTermHandleNoter.note(homeView);
+            //LongTermHandleNoter.note(homeView);
             frontFindDlg = new LocalFrontFindDlg(homeView.getItemGridView());
             frontFindDlg.setCellHit += new LocalFrontFindDlg.SetHit<DataGridViewCell>(setDGVCellHit);
             frontFindDlg.cancelCellHit += new LocalFrontFindDlg.CancelHit<DataGridViewCell>(cancelDGVCellHit);
-            LongTermHandleNoter.note(frontFindDlg);
+            //LongTermHandleNoter.note(frontFindDlg);
             homeView.setManager(this);
             libBuilder = new LocalLibBuilder(homeView.getBaseTree(), homeView.getLibTree());
             datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
             searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());
-            BackProgressIndicator.addIndicatorBar(homeView.getProgressBar());
+            //BackProgressIndicator.addIndicatorBar(homeView.getProgressBar());
         }
         public static HomeViewManager getInstance()
         {
@@ -165,90 +166,90 @@ namespace IDCM.HomeModule
         /// 导入数据文档
         /// </summary>
         /// <param name="fpath"></param>
-        public void importData(string fpath)
-        {
-            if (fpath.ToLower().EndsWith("xls") || fpath.ToLower().EndsWith(".xlsx"))
-            {
-                ExcelImportHandler eih = new ExcelImportHandler(fpath, LibraryNodeDAM.REC_UNFILED, LibraryNodeDAM.REC_ALL);
-                eih.addHandler(new UpdateHomeDataViewHandler(libBuilder.RootNode_unfiled, homeView.getItemGridView()));
-                UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
-                eih.addHandler(uhlch);
-                uhlch.addHandler(new SelectDataRowHandler(homeView.getItemGridView(), homeView.getAttachTabControl()));
-                CmdConsole.call(eih, CmdConsole.CmdReqOption.L);
-            }
-        }
+        //public void importData(string fpath)
+        //{
+        //    if (fpath.ToLower().EndsWith("xls") || fpath.ToLower().EndsWith(".xlsx"))
+        //    {
+        //        ExcelImportHandler eih = new ExcelImportHandler(fpath, LibraryNodeDAM.REC_UNFILED, LibraryNodeDAM.REC_ALL);
+        //        eih.addHandler(new UpdateHomeDataViewHandler(libBuilder.RootNode_unfiled, homeView.getItemGridView()));
+        //        UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
+        //        eih.addHandler(uhlch);
+        //        uhlch.addHandler(new SelectDataRowHandler(homeView.getItemGridView(), homeView.getAttachTabControl()));
+        //        CmdConsole.call(eih, CmdConsole.CmdReqOption.L);
+        //    }
+        //}
         /// <summary>
         /// 导出数据文档
         /// </summary>
         /// <param name="fpath"></param>
-        public void exportData(ExportType etype, string fpath)
-        {
-            //DataGridView itemDGV = homeView.getItemGridView();
-            KeyValuePair<string, int> lastQuery = QueryCmdCache.getLastDGVRQuery();
-            AbsHandler handler = null;
-            switch (etype)
-            {
-                case ExportType.Excel:
-                    handler = new ExcelExportHandler(fpath, lastQuery.Key, lastQuery.Value);
-                    CmdConsole.call(handler);
-                    break;
-                case ExportType.JSONList:
-                    handler = new JSONListExportHandler(fpath, lastQuery.Key, lastQuery.Value);
-                    CmdConsole.call(handler);
-                    break;
-                case ExportType.TSV:
-                    handler = new TextExportHandler(fpath, lastQuery.Key, lastQuery.Value, "\t");
-                    CmdConsole.call(handler);
-                    break;
-                case ExportType.CSV:
-                    handler = new TextExportHandler(fpath, lastQuery.Key, lastQuery.Value, ",");
-                    CmdConsole.call(handler);
-                    break;
-                default:
-                    MessageBox.Show("Unsupport export type!");
-                    break;
-            }
-        }
+        //public void exportData(ExportType etype, string fpath)
+        //{
+        //    //DataGridView itemDGV = homeView.getItemGridView();
+        //    KeyValuePair<string, int> lastQuery = QueryCmdCache.getLastDGVRQuery();
+        //    AbsHandler handler = null;
+        //    switch (etype)
+        //    {
+        //        case ExportType.Excel:
+        //            handler = new ExcelExportHandler(fpath, lastQuery.Key, lastQuery.Value);
+        //            CmdConsole.call(handler);
+        //            break;
+        //        case ExportType.JSONList:
+        //            handler = new JSONListExportHandler(fpath, lastQuery.Key, lastQuery.Value);
+        //            CmdConsole.call(handler);
+        //            break;
+        //        case ExportType.TSV:
+        //            handler = new TextExportHandler(fpath, lastQuery.Key, lastQuery.Value, "\t");
+        //            CmdConsole.call(handler);
+        //            break;
+        //        case ExportType.CSV:
+        //            handler = new TextExportHandler(fpath, lastQuery.Key, lastQuery.Value, ",");
+        //            CmdConsole.call(handler);
+        //            break;
+        //        default:
+        //            MessageBox.Show("Unsupport export type!");
+        //            break;
+        //    }
+        //}
         /// <summary>
         /// 更新分类目录关联文档数显示
         /// </summary>
         /// <param name="focusNode"></param>
-        public void updateLibRecCount(TreeNode focusNode = null)
-        {
-            UpdateHomeLibCountHandler ulch = null;
-            if (focusNode == null)
-                ulch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
-            else
-                ulch = new UpdateHomeLibCountHandler(focusNode);
-            CmdConsole.call(ulch);
-        }
+        //public void updateLibRecCount(TreeNode focusNode = null)
+        //{
+        //    UpdateHomeLibCountHandler ulch = null;
+        //    if (focusNode == null)
+        //        ulch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
+        //    else
+        //        ulch = new UpdateHomeLibCountHandler(focusNode);
+        //    CmdConsole.call(ulch);
+        //}
         public void selectViewRecord(DataGridViewRow dgvr)
         {
             datasetBuilder.selectViewRecord(dgvr);
         }
-        public void trashDataSet(TreeNode filteNode, int newlid = LibraryNodeDAM.REC_TRASH)
-        {
-            if (filteNode.Equals(libBuilder.RootNode_trash))
-            {
-                datasetBuilder.dropDataSet(filteNode);
-            }
-            else
-            {
-                datasetBuilder.trashDataSet(filteNode, newlid);
-            }
-            UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(filteNode, homeView.getItemGridView());
-            UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
-            uhdvh.addHandler(uhlch);
-            CmdConsole.call(uhdvh, CmdConsole.CmdReqOption.L);
-        }
+        //public void trashDataSet(TreeNode filteNode, int newlid = LibraryNodeDAM.REC_TRASH)
+        //{
+        //    if (filteNode.Equals(libBuilder.RootNode_trash))
+        //    {
+        //        datasetBuilder.dropDataSet(filteNode);
+        //    }
+        //    else
+        //    {
+        //        datasetBuilder.trashDataSet(filteNode, newlid);
+        //    }
+        //    UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(filteNode, homeView.getItemGridView());
+        //    UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
+        //    uhdvh.addHandler(uhlch);
+        //    CmdConsole.call(uhdvh, CmdConsole.CmdReqOption.L);
+        //}
         public void deleteNode(TreeNode treeNode)
         {
-            datasetBuilder.trashDataSet(treeNode, LibraryNodeDAM.REC_TRASH);
-            libBuilder.deleteNode(treeNode);
-            UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(libBuilder.RootNode_all, homeView.getItemGridView());
-            UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
-            uhdvh.addHandler(uhlch);
-            CmdConsole.call(uhdvh, CmdConsole.CmdReqOption.L);
+            //datasetBuilder.trashDataSet(treeNode, LibraryNodeDAM.REC_TRASH);
+            //libBuilder.deleteNode(treeNode);
+            //UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(libBuilder.RootNode_all, homeView.getItemGridView());
+            //UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
+            //uhdvh.addHandler(uhlch);
+            //CmdConsole.call(uhdvh, CmdConsole.CmdReqOption.L);
         }
         public void addGroup(TreeNode treeNode)
         {
@@ -276,11 +277,11 @@ namespace IDCM.HomeModule
         /// </summary>
         public void updateDataSet(TreeNode filterNode)
         {
-            datasetBuilder.noteDataSetLib(filterNode); //待考虑顺序问题///////////
-            UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(filterNode, homeView.getItemGridView());
-            uhdvh.addHandler(new SelectDataRowHandler(homeView.getItemGridView(), homeView.getAttachTabControl()));
-            uhdvh.addHandler(new UpdateHomeLibCountHandler(filterNode));
-            CmdConsole.call(uhdvh);
+            //datasetBuilder.noteDataSetLib(filterNode); //待考虑顺序问题///////////
+            //UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(filterNode, homeView.getItemGridView());
+            //uhdvh.addHandler(new SelectDataRowHandler(homeView.getItemGridView(), homeView.getAttachTabControl()));
+            //uhdvh.addHandler(new UpdateHomeLibCountHandler(filterNode));
+            //CmdConsole.call(uhdvh);
         }
         public void showDBDataSearch()
         {

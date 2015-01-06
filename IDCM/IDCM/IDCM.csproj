@@ -154,14 +154,6 @@
       <Project>{9b607956-ab6f-4b3b-ad56-b923fdd17eea}</Project>
       <Name>IDCM.Data.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IDCM.GCMModule\IDCM.GCMModule.csproj">
-      <Project>{1e1dfbe9-875c-414a-85f7-4b92972cffa1}</Project>
-      <Name>IDCM.GCMModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IDCM.HomeModule\IDCM.HomeModule.csproj">
-      <Project>{3459b17f-ded5-404b-8ef1-af61fc51279d}</Project>
-      <Name>IDCM.HomeModule</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IDCM.Service.Common\IDCM.Service.Common.csproj">
       <Project>{a048e804-8090-4395-8aa3-4aefcd90f88e}</Project>
       <Name>IDCM.Service.Common</Name>

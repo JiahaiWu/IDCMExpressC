@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
+using IDCM.Service.Utils;
+using System.Drawing;
 
 namespace IDCM.HomeModule.Modules
 {
