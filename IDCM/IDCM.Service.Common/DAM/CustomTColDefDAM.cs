@@ -73,16 +73,16 @@ namespace IDCM.Service.Common.DAM
                 cmds.Add(cmdBuilder.ToString());
             }
             if (cmds.Count > 0)
-                return SQLiteHelper.ExecuteNonQuery(ConnectStr, cmds.ToArray());
+                DataSupporter.executeSQL(wsm, cmds.ToArray());
             return -1;
         }
         /// <summary>
         /// clear all setting
         /// </summary>
-        public static void clearAll()
+        public static void clearAll(WorkSpaceManager wsm)
         {
             string cmd = "delete FROM CustomTColDef";
-            SQLiteHelper.ExecuteNonQuery(ConnectStr, cmd);
+            DataSupporter.executeSQL(wsm, cmd);
         }
         /// <summary>
         /// 查询所有数据表属性定义对象
@@ -96,7 +96,7 @@ namespace IDCM.Service.Common.DAM
                 {
                     ctcdCache.Clear();
                     string cmd = "SELECT * FROM CustomTColDef order by corder";
-                    DataTable table = SQLiteHelper.ExecuteDataTable(ConnectStr, cmd);
+                    DataTable table = DataSupporter.SQLQuery(wsm, cmd);
                     foreach (DataRow dr in table.Rows)
                     {
                         CustomTColDef ctcd = new CustomTColDef();
@@ -123,7 +123,7 @@ namespace IDCM.Service.Common.DAM
         {
             LinkedList<CustomTColDef> customList = new LinkedList<CustomTColDef>();
             string cmd = "SELECT * FROM CustomTColDef where isInter='" + false.ToString() + "' order by corder ";
-            DataTable table = SQLiteHelper.ExecuteDataTable(ConnectStr, cmd);
+            DataTable table = DataSupporter.SQLQuery(wsm, cmd);
             foreach (DataRow dr in table.Rows)
             {
                 CustomTColDef ctcd = new CustomTColDef();
@@ -145,7 +145,7 @@ namespace IDCM.Service.Common.DAM
             //alter table
             CustomTColMapDAM.alterCustomTable_add(ctcd,wsm);
             //add ctcd
-            CustomTColDefDAM.save(ctcd,wsm);
+            save(ctcd,wsm);
             //add to ctcdcache
             ctcdCache.Add(ctcd.Attr, ctcd);
         }
@@ -167,7 +167,7 @@ namespace IDCM.Service.Common.DAM
         /// </summary>
         /// <param name="attr"></param>
         /// <returns></returns>
-        public static CustomTColDef getCustomTColDef(string attr,WorkSpaceManager wsm)
+        public static CustomTColDef getCustomTColDef(WorkSpaceManager wsm,string attr)
         {
             if (ctcdCache.Count < 1)
                 loadAll(wsm);//SELECT * FROM CustomTColDef order by corder

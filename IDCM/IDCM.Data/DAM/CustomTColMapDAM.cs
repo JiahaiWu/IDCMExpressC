@@ -6,6 +6,7 @@ using IDCM.Data.Base;
 using IDCM.Data.Common;
 using Dapper;
 using IDCM.Data.DHCP;
+using IDCM.Data.Base.Utils;
 
 namespace IDCM.Data.DAM
 {
@@ -18,7 +19,7 @@ namespace IDCM.Data.DAM
         {
             List<CustomTColDef> ctcds = CustomTColDefDAM.loadAll(picker);
             StringBuilder cmdBuilder = new StringBuilder();
-            cmdBuilder.Append("Create Table if Not Exists " + CTDRecordDAM.table_name + " (" + CTDRecordDAM.CTD_RID + " Integer unique primary key ");
+            cmdBuilder.Append("Create Table if Not Exists " + CTDRecordA.table_name + " (" + CTDRecordA.CTD_RID + " Integer unique primary key ");
             int index = 1;
             Dictionary<string, string> noteCmds = new Dictionary<string, string>();
             foreach (CustomTColDef ctcd in ctcds)
@@ -30,12 +31,12 @@ namespace IDCM.Data.DAM
                     log.Warn("Duplicate column name: " + ctcd.Attr);
                     continue;
                 }
-                if (ctcd.Attr.Equals(CTDRecordDAM.CTD_RID))
+                if (ctcd.Attr.Equals(CTDRecordA.CTD_RID))
                 {
                     noteCmds.Add(ctcd.Attr, "insert into " + typeof(CustomTColMap).Name + "(attr,mapOrder,viewOrder) values('" + ctcd.Attr + "',0,-1)");
                     continue;
                 }
-                else if (ctcd.Attr.Equals(CTDRecordDAM.CTD_PLID) || ctcd.Attr.Equals(CTDRecordDAM.CTD_LID))
+                else if (ctcd.Attr.Equals(CTDRecordA.CTD_PLID) || ctcd.Attr.Equals(CTDRecordA.CTD_LID))
                 {
                     noteCmds.Add(ctcd.Attr, "insert into " + typeof(CustomTColMap).Name + "(attr,mapOrder,viewOrder) values('" + ctcd.Attr + "'," + index + ",-1)");
                 }

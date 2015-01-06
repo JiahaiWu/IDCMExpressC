@@ -7,6 +7,7 @@ using IDCM.Data.Base;
 using IDCM.Data.DAM;
 using Dapper;
 using IDCM.Data.DHCP;
+using IDCM.Data.Base.Utils;
 
 namespace IDCM.Data.Core
 {

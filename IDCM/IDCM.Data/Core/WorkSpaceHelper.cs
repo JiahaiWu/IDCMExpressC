@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using IDCM.Data.Common;
+using IDCM.Data.Base.Utils;
 
 namespace IDCM.Data.Core
 {

@@ -10,7 +10,7 @@ using System.IO;
 using IDCM.Data.Common;
 using System.Configuration;
 using IDCM.Data.DHCP;
-
+using IDCM.Data.Base.Utils;
 
 namespace IDCM.Data.DAM
 {
@@ -237,7 +237,7 @@ namespace IDCM.Data.DAM
         {
             List<CustomTColDef> ctcds = new List<CustomTColDef>();
             CustomTColDef rid = new CustomTColDef();
-            rid.Attr = CTDRecordDAM.CTD_RID;
+            rid.Attr = CTDRecordA.CTD_RID;
             rid.AttrType = AttrTypeConverter.IDCM_Integer;
             rid.IsRequire = true;
             rid.IsUnique = true;
@@ -247,22 +247,22 @@ namespace IDCM.Data.DAM
             ctcds.Add(rid);
             ///////////////////////////////////
             CustomTColDef plid = new CustomTColDef();
-            plid.Attr = CTDRecordDAM.CTD_PLID;
+            plid.Attr = CTDRecordA.CTD_PLID;
             plid.AttrType = AttrTypeConverter.IDCM_Integer;
             plid.IsRequire = true;
             plid.IsUnique = false;
             plid.IsInter = true;
-            plid.DefaultVal = LibraryNodeDAM.REC_ALL.ToString();
+            plid.DefaultVal = CatalogNode.REC_ALL.ToString();
             plid.Comments = "CTDRecordDA.CTD_PLID";
             ctcds.Add(plid);
             ///////////////////////////////////////
             CustomTColDef lid = new CustomTColDef();
-            lid.Attr = CTDRecordDAM.CTD_LID;
+            lid.Attr = CTDRecordA.CTD_LID;
             lid.AttrType = AttrTypeConverter.IDCM_Integer;
             lid.IsRequire = true;
             lid.IsUnique = false;
             lid.IsInter = true;
-            lid.DefaultVal = LibraryNodeDAM.REC_ALL.ToString();
+            lid.DefaultVal = CatalogNode.REC_ALL.ToString();
             lid.Comments = "CTDRecordDA.CTD_LID";
             ctcds.Add(lid);
 

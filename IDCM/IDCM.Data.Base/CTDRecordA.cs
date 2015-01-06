@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Data.DAM
+namespace IDCM.Data.Base
 {
-    class CTDRecordDAM
+    public class CTDRecordA
     {
         /// <summary>
         /// 动态记录表名预定义
@@ -23,6 +23,5 @@ namespace IDCM.Data.DAM
         /// Record 从属目录的Library ID的列名设定，没有从属特定节点时为LibraryNodeDA.REC_UNFILED
         /// </summary>
         public const string CTD_LID = "ctd_lid";
-        
     }
 }

@@ -59,13 +59,13 @@ namespace IDCM.Data
         /// <param name="wsm">工作空间管理器对象实例</param>
         /// <param name="sqlExpression"></param>
         /// <returns></returns>
-        public static List<T> SQLQuery<T>(WorkSpaceManager wsm, string sqlExpression)
+        public static IEnumerable<T> SQLQuery<T>(WorkSpaceManager wsm, string sqlExpression)
         {
             IEnumerable<T>[] res = wsm.SQLQuery<T>(sqlExpression);
-            if (res != null && res.Length>0)
-                return res[0].ToList();
+            if (res != null && res.Length > 0)
+                return res[0];
             return null;
-        }
+        }        
         /// <summary>
         /// 执行SQL查询命令，返回查询结果
         /// 说明：
@@ -90,6 +90,37 @@ namespace IDCM.Data
             }
             return null;
         }
+        /// <summary>
+        /// 执行SQL查询命令，返回查询结果
+        /// 说明：
+        /// 1.可重入，可并入。
+        /// </summary>
+        /// <param name="wsm">工作空间管理器对象实例</param>
+        /// <param name="sqlExpression"></param>
+        /// <returns></returns>
+        public static List<T> ListSQLQuery<T>(WorkSpaceManager wsm, string sqlExpression)
+        {
+            IEnumerable<T>[] res = wsm.SQLQuery<T>(sqlExpression);
+            if (res != null && res.Length > 0)
+                return res[0].ToList();
+            return null;
+        }
+        /// <summary>
+        /// 执行SQL查询命令，返回查询结果
+        /// 说明：
+        /// 1.可重入，可并入。
+        /// </summary>
+        /// <param name="wsm">工作空间管理器对象实例</param>
+        /// <param name="sqlExpression"></param>
+        /// <returns></returns>
+        public static long CountSQLQuery(WorkSpaceManager wsm, string sqlExpression)
+        {
+            IEnumerable<long>[] res = wsm.SQLQuery<long>(sqlExpression);
+            if (res != null && res.Length > 0)
+                return res[0].FirstOrDefault();
+            return 0;
+        }
+
         /// <summary>
         /// 执行SQL非查询命令，返回执行结果
         /// 说明：

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Data.Common
+namespace IDCM.Data.Base.Utils
 {
     /// <summary>
     /// 表属性值类型枚举定义
     /// </summary>
-    class AttrTypeConverter
+    public class AttrTypeConverter
     {
         /// <summary>
         /// IDCM 表定义基本类型-数值类型

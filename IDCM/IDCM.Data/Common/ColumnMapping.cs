@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Collections.Concurrent;
+using IDCM.Data.Base;
 
 namespace IDCM.Data.Common
 {
