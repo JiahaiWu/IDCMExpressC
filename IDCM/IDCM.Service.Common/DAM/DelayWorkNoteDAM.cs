@@ -9,7 +9,7 @@ namespace IDCM.Service.Common.DAM
 {
     class DelayWorkNoteDAM
     {
-        public static long save(DelayWorkNote ltwNote,WorkSpaceManager wsm)
+        public static long saveWork(WorkSpaceManager wsm,DelayWorkNote ltwNote)
         {
             if (ltwNote.JobSerialInfo != null && ltwNote.JobSerialInfo.Length > 0)
             {

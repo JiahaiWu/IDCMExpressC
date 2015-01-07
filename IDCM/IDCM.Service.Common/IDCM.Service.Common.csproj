@@ -65,20 +65,18 @@
     <Compile Include="Core\BGWorkerInvoker.cs" />
     <Compile Include="Core\HandleHolderI.cs" />
     <Compile Include="Core\LongTermHandleNoter.cs" />
-    <Compile Include="DAM\AuthInfoDAM.cs" />
     <Compile Include="DAM\CTDRecordDAM.cs" />
     <Compile Include="DAM\CustomTColDefDAM.cs" />
     <Compile Include="DAM\DelayWorkNoteDAM.cs" />
     <Compile Include="DAM\CatalogNodeDAM.cs" />
     <Compile Include="GCMDataMHub.cs" />
     <Compile Include="GCMSiteMHub.cs" />
-    <Compile Include="CatalogMHub.cs" />
     <Compile Include="DataSourceMHub.cs" />
     <Compile Include="DWorkMHub.cs" />
     <Compile Include="GCMDAM\SignExecutor.cs" />
     <Compile Include="GCMDAM\StrainListQueryExecutor.cs" />
     <Compile Include="GCMDAM\StrainViewQueryExecutor.cs" />
-    <Compile Include="RecordMHub.cs" />
+    <Compile Include="LocalRecordMHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,7 +95,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

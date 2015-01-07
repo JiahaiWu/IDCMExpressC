@@ -13,16 +13,13 @@ namespace IDCM.Data.Base
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="args"></param>
-        public virtual Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
-        {
-            return null;
-        }
+        public abstract Object doWork(BackgroundWorker worker, bool cancel, List<Object> args);
         /// <summary>
         /// 后台任务执行结束，回调代码段
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="args"></param>
-        public void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
+        public virtual void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
         {
             if (canceled)
                 return;
@@ -49,7 +46,7 @@ namespace IDCM.Data.Base
         /// 单任务情形，返回结果为空即可。
         /// </summary>
         /// <returns></returns>
-        public Queue<AbsHandler> cascadeHandlers()
+        public virtual Queue<AbsHandler> cascadeHandlers()
         {
             return nextHandlers;
         }
@@ -57,7 +54,7 @@ namespace IDCM.Data.Base
         /// 添加后台任务执行结束后的串联执行任务
         /// </summary>
         /// <param name="nextHandler"></param>
-        protected void addHandler(AbsHandler nextHandler)
+        protected virtual void addHandler(AbsHandler nextHandler)
         {
             if (nextHandler == null)
                 return;

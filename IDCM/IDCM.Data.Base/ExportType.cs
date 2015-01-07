@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Service.Common
+namespace IDCM.Data.Base
 {
-    public class RecordMHub
+    public enum ExportType
     {
+        JSONList = 1, Excel = 2, CSV = 3, TSV = 4
     }
 }

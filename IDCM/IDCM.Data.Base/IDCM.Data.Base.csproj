@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbsHandler.cs" />
+    <Compile Include="ExportType.cs" />
     <Compile Include="ObjectPair.cs" />
     <Compile Include="StrainListPage.cs" />
     <Compile Include="StrainView.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Utils\Base64SharedI.cs" />
     <Compile Include="Utils\CUIDGenerator.cs" />
     <Compile Include="Utils\FileUtil.cs" />
+    <Compile Include="Utils\StringSimilarity.cs" />
     <Compile Include="Utils\StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>

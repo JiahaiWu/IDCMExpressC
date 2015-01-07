@@ -33,9 +33,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>003_05.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NLog">
-      <HintPath>..\packages\NLog.3.1.0.0\lib\net40\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.3.2.0.0\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -50,21 +53,146 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppContext\AsyncServInvoker.cs" />
     <Compile Include="AppContext\DataSourceHolder.cs" />
+    <Compile Include="Forms\AboutDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutDlg.designer.cs">
+      <DependentUpon>AboutDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AttrMapOptionDlg.cs" >
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AttrMapOptionDlg.Designer.cs" >
+      <DependentUpon>AttrMapOptionDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ExportTypeDlg.cs" >
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExportTypeDlg.Designer.cs" >
+      <DependentUpon>ExportTypeDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GCMFrontFindDlg.cs" >
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GCMFrontFindDlg.Designer.cs" >
+      <DependentUpon>GCMFrontFindDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GCMView.cs" >
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GCMView.Designer.cs" >
+      <DependentUpon>GCMView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HomeView.cs" >
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HomeView.Designer.cs" >
+      <DependentUpon>HomeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\IDCMForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\IDCMForm.Designer.cs" >
+    <Compile Include="Forms\IDCMForm.Designer.cs">
       <DependentUpon>IDCMForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IDCMAppContext.cs" />
+    <Compile Include="AppContext\IDCMAppContext.cs" />
+    <Compile Include="Forms\LibFieldSettingView.cs" >
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LibFieldSettingView.Designer.cs" >
+      <DependentUpon>LibFieldSettingView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LocalFrontFindDlg.cs" >
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LocalFrontFindDlg.Designer.cs" >
+      <DependentUpon>LocalFrontFindDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LoginStatusDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LoginStatusDlg.Designer.cs">
+      <DependentUpon>LoginStatusDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessDlg.Designer.cs">
+      <DependentUpon>ProcessDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SignInDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SignInDlg.Designer.cs">
+      <DependentUpon>SignInDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StartView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StartView.Designer.cs">
+      <DependentUpon>StartView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WaitingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WaitingForm.Designer.cs">
+      <DependentUpon>WaitingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewManager\AuthenticationRetainer.cs" />
+    <Compile Include="ViewManager\GCMViewManager.cs" />
+    <Compile Include="ViewManager\HomeViewManager.cs" />
     <Compile Include="ViewManager\IDCMFormManger.cs" />
+    <Compile Include="ViewManager\LibFieldManager.cs" />
     <Compile Include="ViewManager\ManagerA.cs" />
     <Compile Include="ViewManager\ManagerI.cs" />
-    <Compile Include="ViewManager\RetainerA.cs" />
-    <EmbeddedResource Include="Forms\IDCMForm.resx" />
+    <Compile Include="ViewManager\StartRetainer.cs" />
+    <Compile Include="ViewManager\ViewManagerHolder.cs" />
+    <EmbeddedResource Include="Forms\AboutDlg.resx">
+      <DependentUpon>AboutDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AttrMapOptionDlg.resx" >
+      <DependentUpon>AttrMapOptionDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExportTypeDlg.resx" >
+      <DependentUpon>ExportTypeDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GCMFrontFindDlg.resx" >
+      <DependentUpon>GCMFrontFindDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GCMView.resx" >
+      <DependentUpon>GCMView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HomeView.resx" >
+      <DependentUpon>HomeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\IDCMForm.resx">
+      <DependentUpon>IDCMForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LibFieldSettingView.resx" >
+      <DependentUpon>LibFieldSettingView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LocalFrontFindDlg.resx" >
+      <DependentUpon>LocalFrontFindDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LoginStatusDlg.resx">
+      <DependentUpon>LoginStatusDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessDlg.resx">
+      <DependentUpon>ProcessDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SignInDlg.resx">
+      <DependentUpon>SignInDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StartView.resx">
+      <DependentUpon>StartView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WaitingForm.resx">
+      <DependentUpon>WaitingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -88,17 +216,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IDCM.GCMModule\IDCM.GCMModule.csproj">
-      <Project>{1e1dfbe9-875c-414a-85f7-4b92972cffa1}</Project>
-      <Name>IDCM.GCMModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IDCM.HomeModule\IDCM.HomeModule.csproj">
-      <Project>{3459b17f-ded5-404b-8ef1-af61fc51279d}</Project>
-      <Name>IDCM.HomeModule</Name>
+    <ProjectReference Include="..\IDCM.Data.Base\IDCM.Data.Base.csproj">
+      <Project>{9b607956-ab6f-4b3b-ad56-b923fdd17eea}</Project>
+      <Name>IDCM.Data.Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\IDCM.Service.Common\IDCM.Service.Common.csproj">
       <Project>{a048e804-8090-4395-8aa3-4aefcd90f88e}</Project>
       <Name>IDCM.Service.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IDCM.Service\IDCM.Service.csproj">
+      <Project>{7bdb8e9c-7f62-4154-a9c8-250eafb940cd}</Project>
+      <Name>IDCM.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +318,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\uploading2_cut1.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="003_05.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

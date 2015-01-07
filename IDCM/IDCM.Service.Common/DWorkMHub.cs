@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Reflection;
 using IDCM.Service.Common.Core;
 using IDCM.Data.Base;
+using IDCM.Service.Common.DAM;
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
  * A desktop software package for microbial resources researchers.
@@ -54,7 +55,16 @@ namespace IDCM.Service.Common
         {
             return LongTermHandleNoter.note(thread);
         }
-
+        /// <summary>
+        /// 记录延滞性的后台数据请求任务
+        /// 注意：
+        /// 1.延滞任务的具体调度与实现有待补充。
+        /// </summary>
+        /// <param name="ltwNote"></param>
+        public static void note(DelayWorkNote ltwNote,DataSourceMHub datasource)
+        {
+            DelayWorkNoteDAM.saveWork(datasource.WSM,ltwNote);
+        }
         /// <summary>
         /// 向指定的对象实例和关联方法传递参数，并请求执行
         /// </summary>
