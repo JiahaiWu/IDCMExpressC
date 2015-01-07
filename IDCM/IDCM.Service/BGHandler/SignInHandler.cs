@@ -19,7 +19,7 @@ namespace IDCM.Service.BGHandler
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="args"></param>
-        public Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
+        public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
             bool res=gcmSite.connect();
             return new object[] { res };

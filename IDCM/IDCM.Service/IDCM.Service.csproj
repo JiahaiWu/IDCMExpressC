@@ -35,12 +35,27 @@
     <ApplicationIcon>003_03.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=3.2.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NLog.3.2.0.0\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\packages\NPOI.2.1.3\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -56,13 +71,12 @@
     <Compile Include="BGHandler\ExcelExportHandler.cs" />
     <Compile Include="BGHandler\ExcelImportHandler.cs" />
     <Compile Include="BGHandler\JSONListExportHandler.cs" />
-    <Compile Include="BGHandler\LoadGCMDataHandler.cs" />
-    <Compile Include="BGHandler\SelectDataRowHandler.cs" />
     <Compile Include="BGHandler\SignInHandler.cs" />
     <Compile Include="BGHandler\TextExportHandler.cs" />
-    <Compile Include="BGHandler\UpdateHomeDataViewHandler.cs" />
-    <Compile Include="BGHandler\UpdateHomeLibCountHandler.cs" />
-    <Compile Include="BGHandler\UpdateTemplateHandler.cs" />
+    <Compile Include="DataTransfer\ExcelDataImporter.cs" />
+    <Compile Include="DataTransfer\ExcelExporter.cs" />
+    <Compile Include="DataTransfer\JSONListExporter.cs" />
+    <Compile Include="DataTransfer\TextExporter.cs" />
     <Compile Include="IDCMEnvironment.cs" />
     <Compile Include="ManagerA.cs" />
     <Compile Include="ManagerI.cs" />

@@ -6,28 +6,31 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using IDCM.Data.Base;
 using IDCM.Service.Utils;
+using IDCM.Service.DataTransfer;
+using IDCM.Service.Common;
 
-namespace IDCM.ServiceBL.Handle
+namespace IDCM.Service.BGHandler
 {
     class TextExportHandler:AbsHandler
     {
-        public TextExportHandler(string fpath, string cmdstr,int tcount,string spliter=" ")
+        public TextExportHandler(DataSourceMHub datasource, string fpath, string cmdstr, int tcount, string spliter = " ")
         {
             this.textPath = System.IO.Path.GetFullPath(fpath);
             this.cmdstr = cmdstr;
             this.tcount = tcount;
             this.spliter = spliter;
+            this.datasource = datasource;
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="args"></param>
-        public Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
+        public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
             bool res=false;
             TextExporter exporter = new TextExporter();
-            res = exporter.exportText(textPath, cmdstr,tcount, spliter);
+            res = exporter.exportText(datasource,textPath, cmdstr,tcount, spliter);
             return new object[] { res};
         }
         /// <summary>
@@ -35,7 +38,7 @@ namespace IDCM.ServiceBL.Handle
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="args"></param>
-        public void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
+        public override void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
         {
             if (canceled)
                 return;
@@ -54,5 +57,6 @@ namespace IDCM.ServiceBL.Handle
         private string textPath = null;
         private string cmdstr=null;
         private int tcount = 0;
+        private DataSourceMHub datasource=null;
     }
 }

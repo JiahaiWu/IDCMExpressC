@@ -5,27 +5,30 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 using IDCM.Data.Base;
+using IDCM.Service.DataTransfer;
+using IDCM.Service.Common;
 
-namespace IDCM.ServiceBL.Handle
+namespace IDCM.Service.BGHandler
 {
     class ExcelExportHandler:AbsHandler
     {
-        public ExcelExportHandler(string fpath,  string cmdstr,int tcount)
+        public ExcelExportHandler(DataSourceMHub datasource, string fpath, string cmdstr, int tcount)
         {
             this.xlsPath = System.IO.Path.GetFullPath(fpath);
             this.cmdstr = cmdstr;
             this.tcount = tcount;
+            this.datasource = datasource;
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="args"></param>
-        public Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
+        public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
             bool res=false;
             ExcelExporter exporter = new ExcelExporter();
-            res = exporter.exportExcel(xlsPath,cmdstr,tcount);
+            res = exporter.exportExcel(datasource,xlsPath, cmdstr, tcount);
             return new object[] { res};
         }
         /// <summary>
@@ -33,7 +36,7 @@ namespace IDCM.ServiceBL.Handle
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="args"></param>
-        public void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
+        public override void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
         {
             if (canceled)
                 return;
@@ -51,5 +54,6 @@ namespace IDCM.ServiceBL.Handle
         private string xlsPath = null;
         private  string cmdstr;
         private int tcount;
+        private DataSourceMHub datasource = null;
     }
 }
