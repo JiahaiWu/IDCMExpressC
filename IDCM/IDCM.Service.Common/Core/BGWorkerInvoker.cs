@@ -5,7 +5,7 @@ using System.Text;
 using System.ComponentModel;
 using IDCM.Data.Base;
 
-namespace IDCM.Service.Common.Core.ServBuf
+namespace IDCM.Service.Common.Core
 {
     /// <summary>
     /// 本地后台运行服务池，为后台执行线程

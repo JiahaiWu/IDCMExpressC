@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Service.Common.Core.ServBuf
+namespace IDCM.Service.Common.Core
 {
     /// <summary>
     /// 异步消息类型及附属参数的封装类

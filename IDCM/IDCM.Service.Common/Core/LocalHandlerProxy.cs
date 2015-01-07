@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Threading;
-using IDCM.Service.Common.Core.ServBuf;
 using IDCM.Data.Base;
 
 namespace IDCM.Service.Common.Core

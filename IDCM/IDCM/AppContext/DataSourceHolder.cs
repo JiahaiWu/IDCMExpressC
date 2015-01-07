@@ -9,6 +9,7 @@ using IDCM.Service;
 using IDCM.Service.Common;
 using System.Windows.Forms;
 using IDCM.Data.Base;
+using IDCM.Service.BGHandler;
 
 namespace IDCM.AppContext
 {
@@ -23,7 +24,7 @@ namespace IDCM.AppContext
         /// Connect Workspace, it willl choose or create a new workspace in local disk.
         /// </summary>
         /// <returns></returns>
-        public static bool connectWorkspace(string location,string loginName)
+        internal static bool connectWorkspace(string location,string loginName)
         {
             dataSource = new DataSourceMHub(location, loginName);
             return dataSource.connect();
@@ -35,55 +36,26 @@ namespace IDCM.AppContext
         /// <param name="gcmPassword"></param>
         /// <param name="autoLogin"></param>
         /// <returns></returns>
-        public static bool connectGCM(string loginName,string gcmPassword,bool autoLogin=true)
+        internal static bool connectGCM(string loginName, string gcmPassword, bool autoLogin = true)
         {
-            AuthInfo auth = SignInExecutor.SignIn(loginName, gcmPassword,autoLogin);
-            if (auth != null && auth.autoLogin)
-            {
-                signMonitor = new System.Windows.Forms.Timer();
-                signMonitor.Interval = 600000;
-                signMonitor.Tick += OnSignInHold;
-                signMonitor.Start();
-                new System.Threading.Thread(delegate() { OnSignInHold(null, null); }).Start();
-            }
-            return auth!=null && auth.LoginFlag;
+            gcmHolder = new GCMSiteMHub(loginName, gcmPassword, autoLogin);
+            return gcmHolder.connect(2000);
         }
         /// <summary>
-        /// 登录状态验证与保持
+        /// Connect Workspace and Connect GCM server asynchronous with specific Login Name and password.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private static void OnSignInHold(object sender, EventArgs e)
-        {
-#if DEBUG
-            Console.WriteLine("* Sign in hold For Login()");
-#endif
-            if (authInfo != null && authInfo.autoLogin && authInfo.Username != null && authInfo.Password != null)
-            {
-                authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, authInfo.autoLogin);
-            }
-        }
-        /// <summary>
-        /// 获取有效登录用户身份信息，如果登录状态无效则返回null
-        /// </summary>
+        /// <param name="loginName"></param>
+        /// <param name="gcmPassword"></param>
+        /// <param name="autoLogin"></param>
         /// <returns></returns>
-        public static AuthInfo getSignedAuthInfo()
+        internal static bool quickConnect(string location, string loginName, string gcmPassword, bool autoLogin = true)
         {
-            if (authInfo != null)
-            {
-                long elapsedTicks = DateTime.Now.Ticks - authInfo.Timestamp;
-                TimeSpan elapsedSpan = new TimeSpan(elapsedTicks);
-                if (elapsedSpan.TotalMinutes > 15)
-                {
-                    if (authInfo.Username != null && authInfo.Password != null)
-                    {
-                        authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, authInfo.autoLogin,3000);
-                    }
-                }
-                return (authInfo != null && authInfo.LoginFlag) ? authInfo : null;
-            }
-            return null;
+            dataSource = new DataSourceMHub(location, loginName);
+            gcmHolder = new GCMSiteMHub(loginName, gcmPassword, autoLogin);
+            DWorkMHub.callAsyncHandle(new SignInHandler(gcmHolder));
+            return dataSource.connect();
         }
+
         /// <summary>
         /// 启动工作空间实例
         /// </summary>
@@ -108,11 +80,10 @@ namespace IDCM.AppContext
         /// <returns></returns>
         public static bool close()
         {
-            if (signMonitor != null)
+            if (gcmHolder != null)
             {
-                signMonitor.Stop();
-                signMonitor = null;
-                authInfo = null;
+                gcmHolder.disconnect();
+                gcmHolder = null;
             }
             bool res = false;
             if (dataSource != null)
@@ -135,13 +106,9 @@ namespace IDCM.AppContext
         /// 数据源实例
         /// </summary>
         private static volatile DataSourceMHub dataSource = null;
+        private static volatile GCMSiteMHub gcmHolder = null;
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
-        /// <summary>
-        /// SignIn hold Monitor
-        /// </summary>
-        private static System.Windows.Forms.Timer signMonitor = null;
-        private static AuthInfo authInfo = null;
         #endregion
     }
 }

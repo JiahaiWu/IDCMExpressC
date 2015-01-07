@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IDCM.Data.Base
 {
-    class ObjectPair<T, R>
+    public class ObjectPair<T, R>
     {
         public ObjectPair(T _key, R _val)
         {

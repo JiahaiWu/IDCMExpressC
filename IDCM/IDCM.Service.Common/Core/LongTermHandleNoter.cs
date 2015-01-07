@@ -5,9 +5,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.ComponentModel;
-using IDCM.Service.Common.POO;
+using IDCM.Data.Base;
 
-namespace IDCM.Service.Common.Core.ServBuf
+namespace IDCM.Service.Common.Core
 {
     /// <summary>
     /// 内部线程实例化句柄统一监管器

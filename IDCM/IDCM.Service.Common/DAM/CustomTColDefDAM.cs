@@ -5,6 +5,7 @@ using System.Text;
 using IDCM.Data.Base;
 using IDCM.Data;
 using System.Data;
+using IDCM.Data.Base.Utils;
 
 namespace IDCM.Service.Common.DAM
 {
@@ -16,22 +17,25 @@ namespace IDCM.Service.Common.DAM
         public static bool checkTableSetting(WorkSpaceManager wsm)
         {
             string cmd = "SELECT * FROM " + typeof(CustomTColDef).Name;
-            List<CustomTColDef> ctcds = DataSupporter.SQLQuery<CustomTColDef>(wsm, cmd);
+            List<CustomTColDef> ctcds = DataSupporter.ListSQLQuery<CustomTColDef>(wsm, cmd);
             if (ctcds != null && ctcds.Count > 0)
             {
-                ColumnMappingHolder.queryCacheAttrDBMap();
+                CustomTColMapDAM.ColumnMappingHolder.queryCacheAttrDBMap(wsm);
                 return true;
             }
-            else
-            {
-                CTableSetting.buildDefaultSetting();
-                DataTable table = DataSupporter.SQLQuery(wsm, cmd);
-                if (table != null && table.Rows.Count > 0)
-                {
-                    CustomTColMapDAM.buildCustomTable();
-                    return true;
-                }
-            }
+            ////////////////////////////////////////////
+            //else
+            //{
+            //    CTableSetting.buildDefaultSetting();
+            //    DataTable table = DataSupporter.SQLQuery(wsm, cmd);
+            //    if (table != null && table.Rows.Count > 0)
+            //    {
+            //        CustomTColMapDAM.buildCustomTable();
+            //        return true;
+            //    }
+            //}
+            ///////////////////////////////////////////
+            //调用层次有问题，暂行阻断，待改进
             return false;
         }
 
@@ -143,9 +147,9 @@ namespace IDCM.Service.Common.DAM
         public static void appendCustomTColDef(CustomTColDef ctcd,WorkSpaceManager wsm)
         {
             //alter table
-            CustomTColMapDAM.alterCustomTable_add(ctcd,wsm);
+            CustomTColMapDAM.alterCustomTable_add(wsm,ctcd);
             //add ctcd
-            save(ctcd,wsm);
+            save(wsm,ctcd);
             //add to ctcdcache
             ctcdCache.Add(ctcd.Attr, ctcd);
         }
@@ -154,11 +158,11 @@ namespace IDCM.Service.Common.DAM
             CustomTColDef pctcd = ctcdCache[ctcd.Attr];
             if (!pctcd.Corder.Equals(ctcd.Corder))
             {
-                int viewOrder = ctcd.IsRequire ? ctcd.Corder : (ColumnMappingHolder.MaxMainViewCount + ctcd.Corder);
-                ColumnMappingHolder.noteDefaultColMap(ctcd.Attr, ctcd.Corder, viewOrder);
+                int viewOrder = ctcd.IsRequire ? ctcd.Corder : (CustomTColMapDAM.ColumnMappingHolder.MaxMainViewCount + ctcd.Corder);
+                CustomTColMapDAM.ColumnMappingHolder.noteDefaultColMap(wsm,ctcd.Attr, ctcd.Corder, viewOrder);
             }
             //update ctcd
-            save(ctcd,wsm);
+            save(wsm, ctcd);
             //update ctcdcache
             ctcdCache[ctcd.Attr] = ctcd;
         }

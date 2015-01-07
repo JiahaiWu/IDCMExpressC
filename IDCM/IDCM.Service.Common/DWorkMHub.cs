@@ -7,7 +7,6 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Reflection;
 using IDCM.Service.Common.Core;
-using IDCM.Service.Common.Core.ServBuf;
 using IDCM.Data.Base;
 /********************************
  * Individual Data Center of Microbial resources (IDCM)

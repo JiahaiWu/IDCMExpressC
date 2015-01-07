@@ -53,12 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BGHandler\SignInHandler.cs" />
     <Compile Include="IDCMEnvironment.cs" />
     <Compile Include="ManagerA.cs" />
     <Compile Include="ManagerI.cs" />
     <Compile Include="POO\StartInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SignInExecutor.cs" />
     <Compile Include="Utils\ComboxAsyncUitl.cs" />
     <Compile Include="Utils\ConfigurationHelper.cs" />
     <Compile Include="Utils\ControlAsyncUtil.cs" />

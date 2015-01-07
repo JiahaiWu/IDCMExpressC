@@ -71,8 +71,6 @@
   <ItemGroup>
     <Compile Include="DAM\DAMBase.cs" />
     <Compile Include="Common\ErrorNote.cs" />
-    <Compile Include="Common\ColumnMapping.cs" />
-    <Compile Include="Common\StringUtil.cs" />
     <Compile Include="Core\ColumnMappingHolder.cs" />
     <Compile Include="DAM\BaseInfoNoteDAM.cs" />
     <Compile Include="DAM\CustomTColDefDAM.cs" />

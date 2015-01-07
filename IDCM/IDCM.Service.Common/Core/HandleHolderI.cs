@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using IDCM.Service.Common.POO;
+using IDCM.Data.Base;
 
-namespace IDCM.Service.Common.Core.ServBuf
+namespace IDCM.Service.Common.Core
 {
     interface HandleHolderI
     {

@@ -49,12 +49,15 @@
   <ItemGroup>
     <Compile Include="AbsHandler.cs" />
     <Compile Include="ObjectPair.cs" />
+    <Compile Include="StrainListPage.cs" />
+    <Compile Include="StrainView.cs" />
     <Compile Include="Utils\AttrTypeConverter.cs" />
     <Compile Include="AuthInfo.cs" />
     <Compile Include="CatalogNode.cs" />
     <Compile Include="CTDRecordA.cs" />
     <Compile Include="CustomTColDef.cs" />
     <Compile Include="CustomTColMap.cs" />
+    <Compile Include="Utils\ColumnMapping.cs" />
     <Compile Include="Utils\ConfigurationHelper.cs" />
     <Compile Include="Utils\CVNameConverter.cs" />
     <Compile Include="DBVersionNote.cs" />

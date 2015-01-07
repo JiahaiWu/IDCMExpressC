@@ -39,6 +39,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Dapper.1.38\lib\net40\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.3.2.0.0\lib\net40\NLog.dll</HintPath>
     </Reference>
@@ -56,20 +59,25 @@
     <Compile Include="Core\CTableSetting.cs" />
     <Compile Include="Core\HandleRunStatus.cs" />
     <Compile Include="Core\LocalHandlerProxy.cs" />
-    <Compile Include="Core\ServBuf\AsyncMessage.cs" />
-    <Compile Include="Core\ServBuf\AsyncMessageNoter.cs" />
-    <Compile Include="Core\ServBuf\BGWorkerInvoker.cs" />
-    <Compile Include="Core\ServBuf\HandleHolderI.cs" />
-    <Compile Include="Core\ServBuf\LongTermHandleNoter.cs" />
+    <Compile Include="DAM\CustomTColMapDAM.cs" />
+    <Compile Include="Core\AsyncMessage.cs" />
+    <Compile Include="Core\AsyncMessageNoter.cs" />
+    <Compile Include="Core\BGWorkerInvoker.cs" />
+    <Compile Include="Core\HandleHolderI.cs" />
+    <Compile Include="Core\LongTermHandleNoter.cs" />
     <Compile Include="DAM\AuthInfoDAM.cs" />
     <Compile Include="DAM\CTDRecordDAM.cs" />
     <Compile Include="DAM\CustomTColDefDAM.cs" />
     <Compile Include="DAM\DelayWorkNoteDAM.cs" />
     <Compile Include="DAM\CatalogNodeDAM.cs" />
-    <Compile Include="AuthMHub.cs" />
+    <Compile Include="GCMDataMHub.cs" />
+    <Compile Include="GCMSiteMHub.cs" />
     <Compile Include="CatalogMHub.cs" />
     <Compile Include="DataSourceMHub.cs" />
     <Compile Include="DWorkMHub.cs" />
+    <Compile Include="GCMDAM\SignExecutor.cs" />
+    <Compile Include="GCMDAM\StrainListQueryExecutor.cs" />
+    <Compile Include="GCMDAM\StrainViewQueryExecutor.cs" />
     <Compile Include="RecordMHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

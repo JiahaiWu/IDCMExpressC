@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IDCM.Data.Base.Utils
 {
-    class StringUtil
+    public class StringUtil
     {
         public static string Reverse(string s)
         {

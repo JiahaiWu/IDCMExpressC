@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
@@ -7,18 +8,18 @@ using System.Configuration;
 using Newtonsoft.Json;
 using IDCM.Data.Base;
 
-namespace IDCM.Service
+namespace IDCM.Service.Common.GCMDAM
 {
-    public class SignInExecutor
+    public class StrainViewQueryExecutor
     {
-        public static AuthInfo SignIn(string username, string password, bool autoLogin = true, int timeout = 10000)
+        public static StrainView strainViewQuery(string id, AuthInfo authInfo=null,int timeout = 10000)
         {
-            if (username != null && password != null)
+            if (authInfo != null && id != null)
             {
-                string signInUri = ConfigurationManager.AppSettings["SignInUri"];
-                string url = string.Format(signInUri, new string[] { username, password });
+                string signInUri = ConfigurationManager.AppSettings["StrainViewUri"];
+                string url = string.Format(signInUri, new string[] { authInfo.Jsessionid, id });
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                log.Info("SignInExecutor Request Url=" + url);
+                log.Info("StrainViewQueryExecutor Request Url=" + url);
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Accept = "*/*";
@@ -33,32 +34,21 @@ namespace IDCM.Service
                 string resStr = myStreamReader.ReadToEnd();
                 myStreamReader.Close();
                 myResponseStream.Close();
-                log.Info("SignInExecutor Response=" + resStr);
-                AuthInfo auth = parserToAuthInfo(resStr);
-                if (auth != null)
+                log.Info("StrainViewQueryExecutor Response=" + resStr);
+                StrainView sv = parserToViewPageInfo(resStr);
+                if (sv != null)
                 {
-                    auth.Username = username;
-                    auth.Password = password;
-                    auth.autoLogin = autoLogin;
+                    sv.Jsessionid = authInfo.Jsessionid;
                 }
-                return auth;
+                return sv;
             }
             return null;
         }
 
-        protected static AuthInfo parserToAuthInfo(string jsonStr)
+        protected static StrainView parserToViewPageInfo(string jsonStr)
         {
-            AuthInfo auth = new AuthInfo();
-            AInfo ai = JsonConvert.DeserializeObject<AInfo>(jsonStr);
-            auth.LoginFlag = Boolean.Parse(ai.loginFlag);
-            auth.Jsessionid = ai.jsessionid;
-            return auth;
-        }
-        private class AInfo
-        {
-            public string username { get; set; }
-            public string loginFlag { get; set; }
-            public string jsessionid { get; set; }
+            StrainView sv = JsonConvert.DeserializeObject<StrainView>(jsonStr);
+            return sv;
         }
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
     }

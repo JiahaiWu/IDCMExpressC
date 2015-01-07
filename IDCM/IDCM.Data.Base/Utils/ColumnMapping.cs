@@ -9,13 +9,13 @@ using System.IO;
 using System.Collections.Concurrent;
 using IDCM.Data.Base;
 
-namespace IDCM.Data.Common
+namespace IDCM.Data.Base.Utils
 {
     /// <summary>
     /// 用于DataGirdView显示时的字段名称映射
     /// </summary>
     [Serializable]
-    class ColumnMapping : ConcurrentDictionary<String, ObjectPair<int, int>>, ICloneable
+    public class ColumnMapping : ConcurrentDictionary<String, ObjectPair<int, int>>, ICloneable
     {
         public object Clone()
         {
