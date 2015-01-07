@@ -53,7 +53,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BGHandler\ExcelExportHandler.cs" />
+    <Compile Include="BGHandler\ExcelImportHandler.cs" />
+    <Compile Include="BGHandler\JSONListExportHandler.cs" />
+    <Compile Include="BGHandler\LoadGCMDataHandler.cs" />
+    <Compile Include="BGHandler\SelectDataRowHandler.cs" />
     <Compile Include="BGHandler\SignInHandler.cs" />
+    <Compile Include="BGHandler\TextExportHandler.cs" />
+    <Compile Include="BGHandler\UpdateHomeDataViewHandler.cs" />
+    <Compile Include="BGHandler\UpdateHomeLibCountHandler.cs" />
+    <Compile Include="BGHandler\UpdateTemplateHandler.cs" />
     <Compile Include="IDCMEnvironment.cs" />
     <Compile Include="ManagerA.cs" />
     <Compile Include="ManagerI.cs" />

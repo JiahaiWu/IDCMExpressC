@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using IDCM.AppContext;
 using IDCM.Forms;
 using IDCM.Service.Common;
-using IDCM.Service.Common.Core.ServBuf;
+using IDCM.Service.Common.Core;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)

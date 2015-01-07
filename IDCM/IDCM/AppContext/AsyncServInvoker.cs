@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IDCM.ViewManager;
-using IDCM.Service.Common.Core.ServBuf;
+using IDCM.Service.Common.Core;
 
 namespace IDCM.AppContext
 {

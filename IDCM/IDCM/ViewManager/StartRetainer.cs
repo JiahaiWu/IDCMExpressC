@@ -7,7 +7,7 @@ using IDCM.Service;
 using IDCM.Service.POO;
 using IDCM.Forms;
 using System.Windows.Forms;
-using IDCM.Service.Common.Core.ServBuf;
+using IDCM.Service.Common.Core;
 using IDCM.Service.Common;
 
 namespace IDCM.ViewManager
