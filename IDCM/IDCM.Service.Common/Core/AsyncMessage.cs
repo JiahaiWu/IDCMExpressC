@@ -26,7 +26,14 @@ namespace IDCM.Service.Common.Core
         private readonly MsgType msgType;
         private readonly object[] parameters;
 
-        public AsyncMessage(MsgType msgType, string msgTag, object[] parameters = null)
+        public AsyncMessage(AsyncMessage amsg, params object[] parameters)
+        {
+            this.msgTag = amsg.msgTag;
+            this.msgType = amsg.msgType;
+            this.parameters = parameters;
+        }
+
+        protected AsyncMessage(MsgType msgType, string msgTag, object[] parameters = null)
         {
             this.msgTag = msgTag;
             this.msgType = msgType;
@@ -64,7 +71,7 @@ namespace IDCM.Service.Common.Core
         private readonly string name;
         private readonly int value;
 
-        MsgType(string name,int value)
+        protected MsgType(string name,int value)
         {
              this.name = name;
              this.value = value;

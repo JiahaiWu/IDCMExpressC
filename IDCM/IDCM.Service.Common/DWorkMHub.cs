@@ -26,7 +26,10 @@ namespace IDCM.Service.Common
     public class DWorkMHub
     {
         /// <summary>
-        /// 记录消息至消息队列
+        /// 记录异步反馈消息至消息缓冲队列
+        /// 说明
+        /// 1.该缓冲队列设计为等候拉取式的消息池。
+        /// 2.上层组件将据此获取到指示性的消息标记，并根据绑定的事件处理进行消息事务派发
         /// </summary>
         /// <param name="msg"></param>
         public static void note(AsyncMessage msg)

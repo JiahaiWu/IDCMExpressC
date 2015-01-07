@@ -80,7 +80,7 @@ namespace IDCM.ViewManager
                         }
                         IDCMEnvironment.noteStartInfo(startInfo.Location, startInfo.asDefaultWorkspace, startInfo.LoginName, startInfo.rememberPassword ? startInfo.GCMPassword : null);
                         DataSourceHolder.prepareInstance();
-                        DWorkMHub.note(new AsyncMessage(MsgType.DataPrepared, "DataSource Prepared."));
+                        DWorkMHub.note(AsyncMessage.DataPrepared);
                     }
                     waitingForm.Close();
                     waitingForm.Dispose();
