@@ -45,6 +45,7 @@ namespace IDCM.Data.DHCP
 #endif
                 }
             }
+            PickerConnected = true;
         }
         /// <summary>
         /// 实现IDisposable中的接口定义，销毁当前连接资源
@@ -54,6 +55,7 @@ namespace IDCM.Data.DHCP
 #if DEBUG
             System.Diagnostics.Debug.Assert(connectionStr != null && connectionStr.Length > 0);
 #endif
+            PickerConnected = false;
             SQLiteConnHolder holder = null;
             connectPool.TryGetValue(connectionStr, out holder);
             if (holder != null)
@@ -72,13 +74,16 @@ namespace IDCM.Data.DHCP
         /// @author JiahaiWu 2014-11-06
         /// </summary>
         /// <returns>SQLiteConnection (null able)</returns>
-        public SQLiteConnection getConnection()
+        public static SQLiteConnection getConnection(SQLiteConnPicker picker)
         {
+#if DEBUG
+            System.Diagnostics.Debug.Assert(picker.PickerConnected ,"Ivalid Picker Status for get Connection！");
+#endif
             SQLiteConnHolder holder = null;
-            connectPool.TryGetValue(connectionStr, out holder);
+            connectPool.TryGetValue(picker.connectionStr, out holder);
             if(holder != null)
             {
-                if(holder.tryOpen(connectionStr))
+                if (holder.tryOpen(picker.connectionStr))
                     return holder.Sconn;
             }
             return null;
@@ -118,8 +123,11 @@ namespace IDCM.Data.DHCP
         /// <summary>
         /// 数据库连接串
         /// </summary>
-        private volatile string connectionStr = null;
-
+        private readonly string connectionStr = null;
+        /// <summary>
+        /// picker连接状态标记
+        /// </summary>
+        private volatile bool PickerConnected = false;
         /// <summary>
         /// 多点数据库连接的连接池缓存对象
         /// </summary>
@@ -127,7 +135,7 @@ namespace IDCM.Data.DHCP
         /// <summary>
         /// 最长等待毫秒数（默认为5000ms）
         /// </summary>
-        protected static int MAX_WAIT_TIME_OUT = 5000;
+        public static int MAX_WAIT_TIME_OUT = 5000;
         /// <summary>
         /// 用于保持串行获取数据库连接的共享锁对象
         /// </summary>
@@ -170,7 +178,7 @@ namespace IDCM.Data.DHCP
             /// <returns></returns>
             internal bool tryOpen(string connectionStr = null)
             {
-                if (semaphore.WaitOne(MAX_WAIT_TIME_OUT, false))
+                if (semaphore.WaitOne(MAX_WAIT_TIME_OUT))
                 {
                     try
                     {
@@ -192,35 +200,31 @@ namespace IDCM.Data.DHCP
                     }
                     catch (Exception ex)
                     {
-                        throw new SQLiteException(ex.Message, ex);
+                        throw new SQLiteException("Try to open SQLite Connection Exception.", ex);
                     }
-                    finally
+                }
+                else
+                {
+                    //信号量等待超时！！
+                    //则试图阻断长时占用的SQLiteConnect连接实例
+                    try
                     {
+                        if (sconn != null)//如果链接不为空
+                        {
+                            //链接处于打开状态，且链接没有关闭
+                            if (!sconn.State.Equals(ConnectionState.Open) && !sconn.State.Equals(ConnectionState.Closed))
+                            {
+                                sconn.Close();//关闭连接
+                            }
+                        }
                         semaphore.Release();  //释放被阻塞的信号量计数值
                     }
-                }
-                //信号量等待超时！！
-                //则试图阻断长时占用的SQLiteConnect连接实例
-                try
-                {
-                    if (sconn != null)//如果链接不为空
+                    catch (Exception ex)
                     {
-                        //链接处于打开状态，且链接没有关闭
-                        if (!sconn.State.Equals(ConnectionState.Open) && !sconn.State.Equals(ConnectionState.Closed))
-                        {
-                            sconn.Close();//关闭连接
-                        }
+                        throw new SQLiteException("Waiting Time out, please try again.", ex);
                     }
+                    return false;
                 }
-                catch (Exception ex)
-                {
-                    throw new SQLiteException(ex.Message, ex);
-                }
-                finally
-                {
-                    semaphore.Release();  //释放被阻塞的信号量计数值
-                }
-                return false;
             }
             /// <summary>
             /// 销毁连接资源

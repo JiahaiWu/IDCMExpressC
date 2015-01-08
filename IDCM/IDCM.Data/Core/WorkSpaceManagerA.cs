@@ -66,6 +66,7 @@ namespace IDCM.Data.Core
         /// <returns></returns>
         internal void setLastError(ErrorNote error)
         {
+            log.Error(error);
             _lastError = error;
         }
         /// <summary>
@@ -110,7 +111,7 @@ namespace IDCM.Data.Core
         /// <summary>
         /// 最近一次错误记录
         /// </summary>
-        protected volatile ErrorNote _lastError = null;
+        private volatile ErrorNote _lastError = null;
         /// <summary>
         /// 数据库目标存档路径
         /// </summary>
@@ -119,6 +120,7 @@ namespace IDCM.Data.Core
         /// 数据库访问密码
         /// </summary>
         public readonly string password;
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         #endregion
     }
 }

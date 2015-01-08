@@ -35,23 +35,31 @@ namespace IDCM.Data.DAM
                 SQLiteConnectionStringBuilder sqlCSB = new SQLiteConnectionStringBuilder();
                 sqlCSB.DataSource = dbFilePath;
                 sqlCSB.Password = password;//设置密码
+                sqlCSB.SyncMode = SynchronizationModes.Off;//启用异步存储模式
+                sqlCSB.Pooling = true;
+                sqlCSB.DefaultTimeout = 5000;
+                //sqlCSB.Pooling = true;
+                ////////////////////////////////////////////////////////////////
+                sqlCSB.Add("PRAGMA application_id", IDCM_DATA_BIND_Code);
+                //sqlCSB.Add("PRAGMA case_sensitive_like", 0);//设置Like查询大小写敏感与否设置
+                //sqlCSB.Add("PRAGMA auto_vacuum", "INCREMENTAL");//设置Like查询大小写敏感与否设置
+                //sqlCSB.ToFullPath = true;
+                ////////////////////////////////////////////////////////////////
+                //有关PRAGMA的参数设置及读取未能有效执行，有待解决的问题 @Date 2015-01-08
+                ///////////////////////////////////////////////////////////////
                 string connectStr = sqlCSB.ToString();
                 if (!File.Exists(dbFilePath))
                 {
                     SQLiteConnection.CreateFile(dbFilePath);
-                    using (SQLiteConnPicker picker = new SQLiteConnPicker(connectStr))
-                    {
-                        picker.getConnection().Execute("PRAGMA application_id = " + IDCM_DATA_BIND_Code + ";"); //Refer:http://www.sqlite.org/src/artifact?ci=trunk&filename=magic.txt
-                    }
+                    sqlCSB.Add("PRAGMA application_id", IDCM_DATA_BIND_Code);//设置Like查询大小写敏感与否设置
+                    connectStr = sqlCSB.ToString();
                 }
                 using (SQLiteConnPicker picker = new SQLiteConnPicker(connectStr))
                 {
-                    int bindcode=picker.getConnection().Execute("PRAGMA application_id");
+                    picker.getConnection().Execute("PRAGMA application_id(" + IDCM_DATA_BIND_Code + ");");
+                    int bindcode = picker.getConnection().ExecuteScalar<int>("PRAGMA application_id");
                     if (bindcode == IDCM_DATA_BIND_Code)
                     {
-                        picker.getConnection().Execute("PRAGMA synchronous = OFF;"); //启用异步存储模式
-                        //picker.getConnection().Execute("PRAGMA case_sensitive_like = 0;"); //设置Like查询大小写敏感与否设置
-                        //picker.getConnection().Execute("PRAGMA auto_vacuum = INCREMENTAL;");  //设置索引增量存储模式
                         return connectStr;
                     }
                     else
@@ -130,7 +138,7 @@ namespace IDCM.Data.DAM
         /// <summary>
         /// 执行SQL查询命令，返回查询结果集
         /// </summary>
-        /// <param name="picker"></param>
+        /// <param name="picker">连接句柄</param>
         /// <param name="commands"></param>
         /// <returns></returns>
         public static int[] executeSQL(SQLiteConnPicker picker,params string[] commands)
@@ -159,7 +167,7 @@ namespace IDCM.Data.DAM
         /// <summary>
         /// 执行数据库查询，返回DataTable对象
         /// </summary>
-        /// <param name="connectionString">连接字符串</param>
+        /// <param name="picker">连接句柄</param>
         /// <param name="commandText">执行语句或存储过程名</param>
         /// <param name="commandType">执行类型</param>
         /// <returns>DataTable对象</returns>
@@ -213,6 +221,47 @@ namespace IDCM.Data.DAM
                 }
             }
             return ds.Tables.Count > 0 ? ds.Tables[0] : null;
+        }
+        /// <summary>
+        /// 执行数据库操作(新增、更新或删除)同时返回执行后查询所得的第1行第1列数据
+        /// </summary>
+        /// <param name="picker">连接句柄</param>
+        /// <param name="commandText">执行语句或存储过程名</param>
+        /// <param name="commandType">执行类型</param>
+        /// <param name="cmdParms">SQL参数对象</param>
+        /// <returns>查询所得的第1行第1列数据</returns>
+        private static object ExecuteScalar(SQLiteConnPicker picker, string commandText, CommandType commandType, params SQLiteParameter[] cmdParms)
+        {
+            object result = 0;
+            if (commandText == null || commandText.Length == 0)
+                throw new ArgumentNullException("commandText");
+            SQLiteCommand cmd = new SQLiteCommand();
+            SQLiteTransaction trans = null;
+            try
+            {
+                cmd.Connection = picker.getConnection();
+                cmd.CommandText = commandText;
+                cmd.CommandType = commandType;
+                trans = cmd.Connection.BeginTransaction(IsolationLevel.ReadCommitted);
+                cmd.Transaction = trans;
+                if (cmdParms != null)
+                {
+                    foreach (SQLiteParameter parm in cmdParms)
+                        cmd.Parameters.Add(parm);
+                }
+#if DEBUG
+                log.Debug("Info: @CommandText=" + cmd.CommandText);
+#endif
+                result = cmd.ExecuteScalar();
+                trans.Commit();
+            }
+            catch (Exception ex)
+            {
+                if (trans != null)
+                    trans.Rollback();
+                log.Error("ExecuteScalar Error.", ex);
+            }
+            return result;
         }
         #endregion
         #region 基础数据库表定义
@@ -282,7 +331,7 @@ namespace IDCM.Data.DAM
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         /// <summary>
-        /// IDCM.Data数据库文档特征标识码设定
+        /// IDCM.Data数据库文档特征标识码设定(设定为32bit长度)
         /// </summary>
         private const UInt32 IDCM_DATA_BIND_Code = 1415926535;
     }

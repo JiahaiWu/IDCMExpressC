@@ -26,9 +26,19 @@ namespace IDCM.Data.Core
         /// <returns>文件内容是否可访问</returns>
         public static bool isWorkSpaceAccessible(string checkPath)
         {
-            if (File.Exists(checkPath) &&  !FileUtil.isFileInUse(checkPath))
+            try
             {
-                return true;
+                if (File.Exists(checkPath))
+                {
+                    return !FileUtil.isFileInUse(checkPath);
+                }
+                else
+                {
+                    return FileUtil.isValidFilePath(checkPath);
+                }
+            }
+            catch (Exception)
+            {
             }
             return false;
         }

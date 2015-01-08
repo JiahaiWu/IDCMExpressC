@@ -48,7 +48,7 @@ namespace IDCM.Data
             {
                 if (WorkSpaceHelper.isWorkSpaceAccessible(DBPath))
                 {
-                    if (WorkSpaceHelper.isProcessDuplicate())
+                    if (!WorkSpaceHelper.isProcessDuplicate())
                     {
                         _connectStr = DAMBase.startDBInstance(DBPath, password);
                         if (_connectStr != null)
@@ -59,17 +59,17 @@ namespace IDCM.Data
                     }
                     else
                     {
-                        _lastError = new ErrorNote(typeof(WorkSpaceManager), "There is already another process instance with the same location and name, is should not be started again.");
+                        setLastError(new ErrorNote(typeof(WorkSpaceManager), "There is already another process instance with the same location and name, is should not be started again."));
                     }
                 }
                 else
                 {
-                    _lastError = new ErrorNote(typeof(WorkSpaceManager), "Database path is not valid or cannot be exclusively locked. @DBPath=" + DBPath);
+                    setLastError(new ErrorNote(typeof(WorkSpaceManager), "Database path is not valid or cannot be exclusively locked. @DBPath=" + DBPath));
                 }
             }
             catch (Exception ex)
             {
-                _lastError=new ErrorNote(ex);
+                setLastError(new ErrorNote(ex));
             }
             return false;    
         }
@@ -94,12 +94,12 @@ namespace IDCM.Data
                 }
                 else
                 {
-                    _lastError = new ErrorNote(typeof(WorkSpaceManager), "The target data source load failed at ColumnMappingHolder.verifyForLoad()!");
+                    setLastError(new ErrorNote(typeof(WorkSpaceManager), "The target data source load failed at ColumnMappingHolder.verifyForLoad()!"));
                 }
             }
             else
             {
-                _lastError = new ErrorNote(typeof(WorkSpaceManager), "Prepare Tables for database init failed!");
+                setLastError(new ErrorNote(typeof(WorkSpaceManager), "Prepare Tables for database init failed!"));
             }
             _status = WSStatus.FATAL;
             return false;
@@ -142,7 +142,7 @@ namespace IDCM.Data
             }
             catch (Exception ex)
             {
-                _lastError = new ErrorNote(ex);
+                setLastError(new ErrorNote(ex));
             }
             return null;
         }
@@ -165,7 +165,7 @@ namespace IDCM.Data
             }
             catch (Exception ex)
             {
-                _lastError = new ErrorNote(ex);
+                setLastError(new ErrorNote(ex));
             }
             return null;
         }

@@ -61,6 +61,19 @@ namespace IDCM.Service.Common
             return wsm.disconnect();
         }
         /// <summary>
+        /// 获取最近一次的错误消息描述
+        /// 说明:
+        /// 如果没有记录到的错误,则返回null
+        /// </summary>
+        /// <returns></returns>
+        public string LastError
+        {
+            get
+            {
+                return wsm!=null?wsm.getLastError():null;
+            }
+        }
+        /// <summary>
         /// 返回是否处于数据源初始连接状态中
         /// </summary>
         public bool Connected
