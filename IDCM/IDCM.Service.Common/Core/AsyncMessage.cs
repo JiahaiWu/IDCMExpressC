@@ -11,6 +11,7 @@ namespace IDCM.Service.Common.Core
     public class AsyncMessage
     {
         public static readonly AsyncMessage DataPrepared = new AsyncMessage(MsgType.DataPrepared, "Data Prepared");
+        public static readonly AsyncMessage RetryQuickStartConnect = new AsyncMessage(MsgType.RetryQuickStartConnect, "Retry Quick Start Connect");
 
         /// <summary>
         /// For iterator 
@@ -20,6 +21,7 @@ namespace IDCM.Service.Common.Core
             get
             {
                 yield return DataPrepared;
+                yield return RetryQuickStartConnect;
             }
         }
         private readonly string msgTag;
@@ -54,36 +56,9 @@ namespace IDCM.Service.Common.Core
     /// <summary>
     /// 预定义的消息类型
     /// </summary>
-    public class MsgType
+    public enum MsgType
     {
-        public static readonly MsgType DataPrepared = new MsgType("DataPrepared", 0);
-
-        /// <summary>
-        /// For iterator 
-        /// </summary>
-        public static IEnumerable<MsgType> Values
-        {
-            get
-            {
-                yield return DataPrepared;
-            }
-        }
-        private readonly string name;
-        private readonly int value;
-
-        protected MsgType(string name,int value)
-        {
-             this.name = name;
-             this.value = value;
-        }
-
-        public string Name { get { return name; } }
-
-        public double Value { get { return value; } }
-
-        public override string ToString()
-        {
-            return name;
-        }
+        DataPrepared = 0,
+        RetryQuickStartConnect = 1
     }
 }

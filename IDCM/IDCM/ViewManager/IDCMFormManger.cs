@@ -101,7 +101,7 @@ namespace IDCM.ViewManager
 
 #region 接管视图组件的关键的事件处理区
         /// <summary>
-        /// IDCMForm主界面第一次显示后，启动默认的数据页面展示
+        /// IDCMForm主界面第一次显示后，打开默认的登录启动页面展示
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -119,6 +119,16 @@ namespace IDCM.ViewManager
         internal void OnDataPrepared(object sender, IDCMAsyncEventArgs e)
         {
             ManagerI view = ViewManagerHolder.getManager(typeof(HomeViewManager));
+            view.initView(true);
+        }
+        /// <summary>
+        /// 再次打开默认的登录启动页面展示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal void OnRetryQuickStartConnect(object sender, IDCMAsyncEventArgs e)
+        {
+            ManagerI view = ViewManagerHolder.getManager(typeof(StartRetainer));
             view.initView(true);
         }
 #endregion

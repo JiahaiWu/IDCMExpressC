@@ -66,13 +66,44 @@ namespace IDCM.ViewManager
             if (activeShow)
             {
                 startView.setReferStartInfo(ref startInfo);
-                DialogResult res = startView.ShowDialog();
-                if(res.Equals(DialogResult.OK))
+                startView.FormClosed += OnStartViewClosed;
+                startView.Show();
+                ////////////////////////////////////////////////////////////
+                //DialogResult res = startView.ShowDialog();
+                //if(res.Equals(DialogResult.OK))
+                //{
+                //    Form waitingForm = new WaitingForm();
+                //    waitingForm.Show();
+                //    waitingForm.Update();
+                //    if(DataSourceHolder.connectWorkspace(startInfo.Location,startInfo.LoginName))
+                //    {
+                //        if (startInfo.GCMPassword != null)
+                //        {
+                //            DataSourceHolder.connectGCM(startInfo.LoginName, startInfo.GCMPassword);
+                //        }
+                //        IDCMEnvironment.noteStartInfo(startInfo.Location, startInfo.asDefaultWorkspace, startInfo.LoginName, startInfo.rememberPassword ? startInfo.GCMPassword : null);
+                //        DataSourceHolder.prepareInstance();
+                //        DWorkMHub.note(new AsyncMessage(MsgType.DataPrepared, "DataSource Prepared."));
+                //    }
+                //    waitingForm.Close();
+                //    waitingForm.Dispose();
+                //}
+                //startView.Close();
+                ///////////////////////////////////////////////////////
+            }
+            return true;
+        }
+        public void OnStartViewClosed(object sender, FormClosedEventArgs e)
+        {
+            CloseReason res = e.CloseReason;
+            if (res.Equals(CloseReason.UserClosing) || res.Equals(CloseReason.FormOwnerClosing))
+            {
+                if (startInfo.Location != null && startInfo.LoginName != null)
                 {
                     Form waitingForm = new WaitingForm();
                     waitingForm.Show();
                     waitingForm.Update();
-                    if(DataSourceHolder.connectWorkspace(startInfo.Location,startInfo.LoginName))
+                    if (DataSourceHolder.connectWorkspace(startInfo.Location, startInfo.LoginName))
                     {
                         if (startInfo.GCMPassword != null)
                         {
@@ -82,12 +113,16 @@ namespace IDCM.ViewManager
                         DataSourceHolder.prepareInstance();
                         DWorkMHub.note(AsyncMessage.DataPrepared);
                     }
+                    else
+                    {
+                        MessageBox.Show("DataSource Open Failed.");
+                        //MessageBox.Show("DataSource Open Failed. You can input again by 'Open' menu item in 'File' menu item.");
+                        DWorkMHub.note(AsyncMessage.RetryQuickStartConnect);
+                    }
                     waitingForm.Close();
                     waitingForm.Dispose();
                 }
-                startView.Close();
             }
-            return true;
         }
 
         public override bool isDisposed()

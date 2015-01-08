@@ -34,6 +34,9 @@ namespace IDCM.Service.Common
         /// <param name="msg"></param>
         public static void note(AsyncMessage msg)
         {
+#if DEBUG
+            Console.WriteLine("Asynchronous Message raised. @msg=" + msg.MsgTag);
+#endif
             AsyncMessageNoter.push(msg);
         }
         /// <summary>

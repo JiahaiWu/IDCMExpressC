@@ -57,6 +57,7 @@ namespace IDCM.AppContext
                 mainManger.initForm(true);
                 //bind Async Service to AsyncServInvoker
                 servInvoker.OnDataPrepared += mainManger.OnDataPrepared;
+                servInvoker.OnRetryQuickStartConnect += mainManger.OnRetryQuickStartConnect;
                 //Run HandleInstanceMonitor
                 handleMonitor.Interval = 1000;
                 handleMonitor.Tick += OnHMHeartBreak;
