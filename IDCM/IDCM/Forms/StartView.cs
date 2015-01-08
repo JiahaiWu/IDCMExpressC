@@ -23,7 +23,7 @@ namespace IDCM.Forms
         public void setReferStartInfo(ref StartInfo startInfo)
         {
             this.startInfo = startInfo;
-            if (this.startInfo.Location != null && this.startInfo.asDefaultWorkspace)
+            if (this.startInfo.Location != null)
                 this.textBox_datasource.Text = this.startInfo.Location;
             if (this.startInfo.asDefaultWorkspace)
                 this.checkBox_defaultWS.Checked = true;
@@ -53,7 +53,6 @@ namespace IDCM.Forms
             this.startInfo.GCMPassword = this.textBox_pwd.Text;
             this.startInfo.rememberPassword = this.checkBox_remember.Checked;
             this.startInfo.asDefaultWorkspace = this.checkBox_defaultWS.Checked;
-            this.DialogResult = DialogResult.OK;
             this.Close();
         }
         private void StartView_Shown(object sender, EventArgs e)

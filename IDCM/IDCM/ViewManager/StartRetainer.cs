@@ -50,6 +50,8 @@ namespace IDCM.ViewManager
         }
         public override void setMdiParent(Form pForm)
         {
+            if(!isDisposed())
+                startView.MdiParent = pForm;
         }
         public override void setMaxToNormal()
         {
@@ -58,8 +60,9 @@ namespace IDCM.ViewManager
         {
         }
         /// <summary>
-        /// 对象实例化初始化方法
+        /// 对象实例化，显示用户界面方法
         /// </summary>
+        /// <param name="activeShow"></param>
         /// <returns></returns>
         public override bool initView(bool activeShow = true)
         {
@@ -68,31 +71,14 @@ namespace IDCM.ViewManager
                 startView.setReferStartInfo(ref startInfo);
                 startView.FormClosed += OnStartViewClosed;
                 startView.Show();
-                ////////////////////////////////////////////////////////////
-                //DialogResult res = startView.ShowDialog();
-                //if(res.Equals(DialogResult.OK))
-                //{
-                //    Form waitingForm = new WaitingForm();
-                //    waitingForm.Show();
-                //    waitingForm.Update();
-                //    if(DataSourceHolder.connectWorkspace(startInfo.Location,startInfo.LoginName))
-                //    {
-                //        if (startInfo.GCMPassword != null)
-                //        {
-                //            DataSourceHolder.connectGCM(startInfo.LoginName, startInfo.GCMPassword);
-                //        }
-                //        IDCMEnvironment.noteStartInfo(startInfo.Location, startInfo.asDefaultWorkspace, startInfo.LoginName, startInfo.rememberPassword ? startInfo.GCMPassword : null);
-                //        DataSourceHolder.prepareInstance();
-                //        DWorkMHub.note(new AsyncMessage(MsgType.DataPrepared, "DataSource Prepared."));
-                //    }
-                //    waitingForm.Close();
-                //    waitingForm.Dispose();
-                //}
-                //startView.Close();
-                ///////////////////////////////////////////////////////
             }
             return true;
         }
+        /// <summary>
+        /// 当用户操作确认后窗口关闭，触发必要的数据加载流程和显示Loding进程状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnStartViewClosed(object sender, FormClosedEventArgs e)
         {
             CloseReason res = e.CloseReason;
@@ -103,6 +89,7 @@ namespace IDCM.ViewManager
                     Form waitingForm = new WaitingForm();
                     waitingForm.Show();
                     waitingForm.Update();
+                    waitingForm.UseWaitCursor = true;
                     if (DataSourceHolder.connectWorkspace(startInfo.Location, startInfo.LoginName))
                     {
                         if (startInfo.GCMPassword != null)
@@ -115,8 +102,7 @@ namespace IDCM.ViewManager
                     }
                     else
                     {
-                        MessageBox.Show("DataSource Open Failed.");
-                        //MessageBox.Show("DataSource Open Failed. You can input again by 'Open' menu item in 'File' menu item.");
+                        MessageBox.Show("DataSource Open Failed.");  //MessageBox.Show("DataSource Open Failed. You can input again by 'Open' menu item in 'File' menu item.");
                         DWorkMHub.note(AsyncMessage.RetryQuickStartConnect);
                     }
                     waitingForm.Close();
@@ -127,6 +113,10 @@ namespace IDCM.ViewManager
 
         public override bool isDisposed()
         {
+            if (_isDisposed == false)
+            {
+                _isDisposed = (startView == null || startView.Disposing || startView.IsDisposed);
+            }
             return _isDisposed;
         }
         #endregion
