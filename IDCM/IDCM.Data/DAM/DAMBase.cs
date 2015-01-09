@@ -24,7 +24,7 @@ namespace IDCM.Data.DAM
         /// <param name="dbFilePath"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static string startDBInstance(string dbFilePath,string password)
+        public static SQLiteConn startDBInstance(string dbFilePath, string password)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(dbFilePath != null);
@@ -47,20 +47,20 @@ namespace IDCM.Data.DAM
                 ////////////////////////////////////////////////////////////////
                 //有关PRAGMA的参数设置及读取未能有效执行，有待解决的问题 @Date 2015-01-08
                 ///////////////////////////////////////////////////////////////
-                string connectStr = sqlCSB.ToString();
+                SQLiteConn sconn = new SQLiteConn(sqlCSB);
                 if (!File.Exists(dbFilePath))
                 {
                     SQLiteConnection.CreateFile(dbFilePath);
                     sqlCSB.Add("PRAGMA application_id", IDCM_DATA_BIND_Code);//设置Like查询大小写敏感与否设置
-                    connectStr = sqlCSB.ToString();
+                    sconn = new SQLiteConn(sqlCSB);
                 }
-                using (SQLiteConnPicker picker = new SQLiteConnPicker(connectStr))
+                using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
                 {
-                    picker.getConnection().Execute("PRAGMA application_id(" + IDCM_DATA_BIND_Code + ");");
-                    int bindcode = picker.getConnection().ExecuteScalar<int>("PRAGMA application_id");
+                    SQLiteConnPicker.getConnection(picker).Execute("PRAGMA application_id(" + IDCM_DATA_BIND_Code + ");");
+                    int bindcode = SQLiteConnPicker.getConnection(picker).ExecuteScalar<int>("PRAGMA application_id");
                     if (bindcode == IDCM_DATA_BIND_Code)
                     {
-                        return connectStr;
+                        return sconn;
                     }
                     else
                     {
@@ -80,9 +80,9 @@ namespace IDCM.Data.DAM
         /// 1.Passes a shutdown request to the SQLite core library. Does not throw an exception if the shutdown request fails.
         /// </summary>
         /// <returns></returns>
-        public static void stopDBInstance(SQLiteConnPicker picker)
+        public static void stopDBInstance(SQLiteConn sconn)
         {
-            picker.shutdown();
+            SQLiteConnPicker.shutdown(sconn);
         }
 
        /// <summary>
@@ -91,17 +91,17 @@ namespace IDCM.Data.DAM
         /// 1.可重入
         /// </summary>
         /// <returns>初始化操作完成与否</returns>
-        public static bool prepareTables(SQLiteConnPicker picker)
+        public static bool prepareTables(SQLiteConn sconn)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(picker != null);
+            System.Diagnostics.Debug.Assert(sconn != null);
 #endif 
             int rescode = -1;
-            using (picker)
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                using (SQLiteTransaction transaction = SQLiteConnPicker.getConnection(picker).BeginTransaction())
                 {
-                    rescode=picker.getConnection().Execute(getBasicTableCmds());
+                    rescode = SQLiteConnPicker.getConnection(picker).Execute(getBasicTableCmds());
                 }
             }
             return rescode > -1;
@@ -112,23 +112,23 @@ namespace IDCM.Data.DAM
         /// <param name="picker"></param>
         /// <param name="sqlExpressions"></param>
         /// <returns></returns>
-        public static IEnumerable<T>[] SQLQuery<T>(SQLiteConnPicker picker,params string[] sqlExpressions)
+        public static IEnumerable<T>[] SQLQuery<T>(SQLiteConn sconn, params string[] sqlExpressions)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(picker != null);
+            System.Diagnostics.Debug.Assert(sconn != null);
             System.Diagnostics.Debug.Assert(sqlExpressions != null);
 #endif 
             List<IEnumerable<T>> res = new List<IEnumerable<T>>(sqlExpressions.Count());
             foreach (string sql in sqlExpressions)
             {
-                using (picker)
+                using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
                 {
                     ////////////////////////////////////////////////
                     //using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
                     ///////////////////////////////////////////////
                     //For Query default without Transaction
                     {
-                        IEnumerable<T> result = picker.getConnection().Query<T>(sql);
+                        IEnumerable<T> result = SQLiteConnPicker.getConnection(picker).Query<T>(sql);
                         res.Add(result);
                     }
                 }
@@ -141,21 +141,21 @@ namespace IDCM.Data.DAM
         /// <param name="picker">连接句柄</param>
         /// <param name="commands"></param>
         /// <returns></returns>
-        public static int[] executeSQL(SQLiteConnPicker picker,params string[] commands)
+        public static int[] executeSQL(SQLiteConn sconn, params string[] commands)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(picker != null);
+            System.Diagnostics.Debug.Assert(sconn != null);
             System.Diagnostics.Debug.Assert(commands != null);
 #endif 
             List<int> res = new List<int>(commands.Count());
             SQLiteCommand cmd = new SQLiteCommand();
-            using (picker)
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
+                using (SQLiteTransaction transaction = SQLiteConnPicker.getConnection(picker).BeginTransaction())
                 {
                     foreach (string execmd in commands)
                     {
-                        int result = picker.getConnection().Execute(execmd);
+                        int result = SQLiteConnPicker.getConnection(picker).Execute(execmd);
                         res.Add(result);
                     }
                     transaction.Commit();
@@ -171,9 +171,9 @@ namespace IDCM.Data.DAM
         /// <param name="commandText">执行语句或存储过程名</param>
         /// <param name="commandType">执行类型</param>
         /// <returns>DataTable对象</returns>
-        public static DataTable DataTableSQLQuery(SQLiteConnPicker picker, string commandText, CommandType commandType = CommandType.Text)
+        public static DataTable DataTableSQLQuery(SQLiteConn sconn, string commandText, CommandType commandType = CommandType.Text)
         {
-            return DataTableSQLQuery(picker, commandText, commandType, null);
+            return DataTableSQLQuery(sconn, commandText, commandType, null);
         }
 
         /// <summary>
@@ -184,19 +184,19 @@ namespace IDCM.Data.DAM
         /// <param name="commandType">执行类型</param>
         /// <param name="cmdParms">SQL参数对象</param>
         /// <returns>DataTable对象</returns>
-        public static DataTable DataTableSQLQuery(SQLiteConnPicker picker, string commandText, CommandType commandType, params SQLiteParameter[] cmdParms)
+        public static DataTable DataTableSQLQuery(SQLiteConn sconn, string commandText, CommandType commandType, params SQLiteParameter[] cmdParms)
         {
             if (commandText == null || commandText.Length == 0)
                 throw new ArgumentNullException("commandText");
             DataSet ds = new DataSet();
-            using (picker)
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
                 ////////////////////////////////////////////////
                 //using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
                 ///////////////////////////////////////////////
                 //For Query default without Transaction
                 {
-                    SQLiteConnection conn = picker.getConnection();
+                    SQLiteConnection conn = SQLiteConnPicker.getConnection(picker);
                     SQLiteCommand cmd = new SQLiteCommand();
                     cmd.Connection = conn;
                     cmd.CommandText = commandText;
@@ -222,47 +222,7 @@ namespace IDCM.Data.DAM
             }
             return ds.Tables.Count > 0 ? ds.Tables[0] : null;
         }
-        /// <summary>
-        /// 执行数据库操作(新增、更新或删除)同时返回执行后查询所得的第1行第1列数据
-        /// </summary>
-        /// <param name="picker">连接句柄</param>
-        /// <param name="commandText">执行语句或存储过程名</param>
-        /// <param name="commandType">执行类型</param>
-        /// <param name="cmdParms">SQL参数对象</param>
-        /// <returns>查询所得的第1行第1列数据</returns>
-        private static object ExecuteScalar(SQLiteConnPicker picker, string commandText, CommandType commandType, params SQLiteParameter[] cmdParms)
-        {
-            object result = 0;
-            if (commandText == null || commandText.Length == 0)
-                throw new ArgumentNullException("commandText");
-            SQLiteCommand cmd = new SQLiteCommand();
-            SQLiteTransaction trans = null;
-            try
-            {
-                cmd.Connection = picker.getConnection();
-                cmd.CommandText = commandText;
-                cmd.CommandType = commandType;
-                trans = cmd.Connection.BeginTransaction(IsolationLevel.ReadCommitted);
-                cmd.Transaction = trans;
-                if (cmdParms != null)
-                {
-                    foreach (SQLiteParameter parm in cmdParms)
-                        cmd.Parameters.Add(parm);
-                }
-#if DEBUG
-                log.Debug("Info: @CommandText=" + cmd.CommandText);
-#endif
-                result = cmd.ExecuteScalar();
-                trans.Commit();
-            }
-            catch (Exception ex)
-            {
-                if (trans != null)
-                    trans.Rollback();
-                log.Error("ExecuteScalar Error.", ex);
-            }
-            return result;
-        }
+
         #endregion
         #region 基础数据库表定义
         protected static string getBasicTableCmds()

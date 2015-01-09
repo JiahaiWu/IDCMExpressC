@@ -15,9 +15,9 @@ namespace IDCM.Data.DAM
         /// <summary>
         /// 创建自定义表实例
         /// </summary>
-        public static void buildCustomTable(SQLiteConnPicker picker)
+        public static void buildCustomTable(SQLiteConn sconn)
         {
-            List<CustomTColDef> ctcds = CustomTColDefDAM.loadAll(picker);
+            List<CustomTColDef> ctcds = CustomTColDefDAM.loadAll(sconn);
             StringBuilder cmdBuilder = new StringBuilder();
             cmdBuilder.Append("Create Table if Not Exists " + CTDRecordA.table_name + " (" + CTDRecordA.CTD_RID + " Integer unique primary key ");
             int index = 1;
@@ -67,8 +67,8 @@ namespace IDCM.Data.DAM
                 ++index;
             }
             cmdBuilder.Append(")");
-            DAMBase.executeSQL(picker, cmdBuilder.ToString());
-            DAMBase.executeSQL(picker, noteCmds.Values.ToArray()); //noteDefaultColMap
+            DAMBase.executeSQL(sconn, cmdBuilder.ToString());
+            DAMBase.executeSQL(sconn, noteCmds.Values.ToArray()); //noteDefaultColMap
         }
 
         
@@ -77,21 +77,21 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static List<CustomTColMap> findAllByOrder(SQLiteConnPicker picker)
+        public static List<CustomTColMap> findAllByOrder(SQLiteConn sconn)
         {
             string cmd = "select * from " + typeof(CustomTColMap).Name + " order by viewOrder";
-            using (picker)
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                return picker.getConnection().Query<CustomTColMap>(cmd).ToList<CustomTColMap>();
+                return SQLiteConnPicker.getConnection(picker).Query<CustomTColMap>(cmd).ToList<CustomTColMap>();
             }
         }
 
-        public static int updateViewOrder(SQLiteConnPicker picker,string attr, int viewOrder)
+        public static int updateViewOrder(SQLiteConn sconn, string attr, int viewOrder)
         {
             string cmd = "update " + typeof(CustomTColMap).Name + " set viewOrder=" + viewOrder + " where attr='" + attr + "'";
-            using (picker)
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                return picker.getConnection().Execute(cmd);
+                return SQLiteConnPicker.getConnection(picker).Execute(cmd);
             }
         }
       

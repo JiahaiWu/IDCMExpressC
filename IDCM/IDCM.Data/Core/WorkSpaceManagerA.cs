@@ -46,7 +46,7 @@ namespace IDCM.Data.Core
         {
             if (_status.Equals(WSStatus.InWorking))
             {
-                return _connectStr;
+                return sconn.connectStr;
             }
             return null;
         }
@@ -74,11 +74,26 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="renew"></param>
         /// <returns></returns>
-        internal SQLiteConnPicker getConnectPicker(bool renew = false)
+        internal SQLiteConn getConnection(bool doCheck = false)
         {
-            if(picker==null || renew==true)
-                return new SQLiteConnPicker(_connectStr);
-            return picker;
+            if (doCheck == true)
+            {
+                if (sconn != null)
+                {
+                    try
+                    {
+                        using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
+                        {
+                            SQLiteConnPicker.getConnection(picker);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        sconn = null;
+                    }
+                }
+            }
+            return sconn;
         }
         #endregion
         #region 虚拟定义部分
@@ -101,13 +116,9 @@ namespace IDCM.Data.Core
         /// </summary>
         protected volatile WSStatus _status = WSStatus.Idle;
         /// <summary>
-        /// 数据库连接器对象
-        /// </summary>
-        internal volatile SQLiteConnPicker picker = null;
-        /// <summary>
         /// 数据库连接句柄标识
         /// </summary>
-        protected volatile string _connectStr = null;
+        protected volatile SQLiteConn sconn = null;
         /// <summary>
         /// 最近一次错误记录
         /// </summary>

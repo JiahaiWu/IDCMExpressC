@@ -36,7 +36,7 @@ namespace IDCM.Data
 #if DEBUG
             System.Diagnostics.Debug.Assert(wsm!=null && wsm.getStatus().Equals(WSStatus.InWorking),"Ivalid params and status for get next sequence id.");
 #endif
-            return BaseInfoNoteDAM.nextSeqID(wsm.getConnectPicker());
+            return BaseInfoNoteDAM.nextSeqID(wsm.getConnection());
         }
         /// <summary>
         /// 执行SQL查询命令，返回查询结果集
@@ -82,7 +82,7 @@ namespace IDCM.Data
 #endif
             try
             {
-                return DAMBase.DataTableSQLQuery(wsm.getConnectPicker(), sqlExpression);
+                return DAMBase.DataTableSQLQuery(wsm.getConnection(), sqlExpression);
             }
             catch (Exception ex)
             {

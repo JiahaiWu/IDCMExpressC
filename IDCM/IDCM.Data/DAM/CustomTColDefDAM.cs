@@ -23,10 +23,10 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static bool rebuildCustomTColDef(SQLiteConnPicker picker)
+        public static bool rebuildCustomTColDef(SQLiteConn sconn)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(picker != null);
+            System.Diagnostics.Debug.Assert(sconn != null);
 #endif
             string cmd = @"drop table if exists " + typeof(CustomTColDef).Name + ";";
             cmd += "Create Table if Not Exists " + typeof(CustomTColDef).Name + "("
@@ -39,9 +39,9 @@ namespace IDCM.Data.DAM
                 + "DefaultVal TEXT default NULL,"
                 + "Corder INTEGER default 0,"
                 + "IsInter TEXT default '" + false.ToString() + "');";
-            using (picker)
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                int res = picker.getConnection().Execute(cmd);
+                int res = SQLiteConnPicker.getConnection(picker).Execute(cmd);
                 return res>-1;
             }
         }
@@ -51,13 +51,13 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static bool buildDefaultSetting(SQLiteConnPicker picker)
+        public static bool buildDefaultSetting(SQLiteConn sconn)
         {
             try
             {
                 string cTableDefpath = ConfigurationManager.AppSettings["CTableDef"];
                 List<CustomTColDef> ctcds = getCustomTableDef(cTableDefpath);
-                return overwriteAllCustomTColDef(picker,ctcds);
+                return overwriteAllCustomTColDef(sconn, ctcds);
             }
             catch (Exception ex)
             {
@@ -71,14 +71,14 @@ namespace IDCM.Data.DAM
         /// <param name="picker"></param>
         /// <param name="ctcds"></param>
         /// <returns></returns>
-        public static bool overwriteAllCustomTColDef(SQLiteConnPicker picker,List<CustomTColDef> ctcds)
+        public static bool overwriteAllCustomTColDef(SQLiteConn sconn, List<CustomTColDef> ctcds)
         {
             if (ctcds != null)
             {
                 List<CustomTColDef> ictcds = getEmbeddedTableDef();
                 ctcds.AddRange(ictcds);
-                rebuildCustomTColDef(picker);
-                CustomTColDefDAM.save(picker,ctcds.ToArray());
+                rebuildCustomTColDef(sconn);
+                CustomTColDefDAM.save(sconn, ctcds.ToArray());
                 return true;
             }
             return false;
@@ -88,7 +88,7 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="ctcd"></param>
         /// <returns></returns>
-        public static int save(SQLiteConnPicker picker, params CustomTColDef[] ctcds)
+        public static int save(SQLiteConn sconn, params CustomTColDef[] ctcds)
         {
             List<string> cmds = new List<string>();
             foreach (CustomTColDef ctcd in ctcds)
@@ -122,7 +122,7 @@ namespace IDCM.Data.DAM
             }
             if (cmds.Count > 0)
             {
-                int[] res = DAMBase.executeSQL(picker, cmds.ToArray());
+                int[] res = DAMBase.executeSQL(sconn, cmds.ToArray());
                 return res.Length;
             }
             return -1;
@@ -133,7 +133,7 @@ namespace IDCM.Data.DAM
         /// <param name="picker"></param>
         /// <param name="refresh"></param>
         /// <returns></returns>
-        public static List<CustomTColDef> loadAll(SQLiteConnPicker picker, bool refresh = true)
+        public static List<CustomTColDef> loadAll(SQLiteConn sconn, bool refresh = true)
         {
             if (refresh)
             {
@@ -141,9 +141,9 @@ namespace IDCM.Data.DAM
                 {
                     ctcdCache.Clear();
                     string cmd = "SELECT * FROM CustomTColDef order by corder";
-                    using (picker)
+                    using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
                     {
-                        List<CustomTColDef> ctcds = picker.getConnection().Query<CustomTColDef>(cmd).ToList<CustomTColDef>();
+                        List<CustomTColDef> ctcds = SQLiteConnPicker.getConnection(picker).Query<CustomTColDef>(cmd).ToList<CustomTColDef>();
                         foreach (CustomTColDef ctcd in ctcds)
                         {
                             ctcdCache[ctcd.Attr]= ctcd;

@@ -7,7 +7,7 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.Threading;
 using System.Collections.Concurrent;
-
+using IDCM.Data.Base;
 
 namespace IDCM.Data.DHCP
 {
@@ -16,7 +16,8 @@ namespace IDCM.Data.DHCP
     /// 说明：
     /// 1.单点数据库连接访问的串行保护类,封装SQLiteConnection用于多线程串行共享。
     /// 2.内置全局多点数据库连接的连接池,对多数据库实例提供支持。
-    /// 3.本类允许多实例化及单实例复用策略，但外部获取SQLiteConnection句柄后不得长时占用及缓存复用。
+    /// 3.本类允许多实例化策略，但外部获取SQLiteConnection及SQLiteConnPicker句柄后二次缓存使用或长时复用。
+    /// 4.连接异常信息需外部捕获，异常类型注释说明文档有待补充。
     /// @author JiahaiWu 2014-11-06
     /// </summary>
     internal class SQLiteConnPicker : IDisposable
@@ -24,8 +25,31 @@ namespace IDCM.Data.DHCP
         /// <summary>
         /// 获取单点数据库连接的构造方法
         /// </summary>
+        /// <param name="sconn"></param>
+        public SQLiteConnPicker(SQLiteConn sconn)
+        {
+#if DEBUG
+            if (sconn.connectStr == null || sconn.connectStr.Length == 0)//检查传进来的数据库连接url是否合法
+                throw new ArgumentNullException("connStr is NULL for SQLiteConnPicker(string)!");
+#endif
+            this.connectionStr = sconn.connectStr;//赋值给当前类的connectionStr
+            SQLiteConnHolder holder = null;//这个类是为了保证数据库单点链接，构造方法中有个信号灯
+            connectPool.TryGetValue(connectionStr, out holder);//查看池中有没有指定的数据库连接str与链接
+            if (holder == null)
+            {
+                holder = new SQLiteConnHolder(connectionStr);//创建一个数据库连接，创建一个信号灯
+                bool SQLiteConnAdded = connectPool.TryAdd(connectionStr, holder);//把新建的链接str与链接存入池
+#if DEBUG
+                System.Diagnostics.Debug.Assert(SQLiteConnAdded);//添加成功返回一个消息
+#endif
+            }
+            PickerConnected = true;
+        }
+        /// <summary>
+        /// 获取单点数据库连接的构造方法
+        /// </summary>
         /// <param name="connStr"></param>
-        public SQLiteConnPicker(string connStr)
+        protected SQLiteConnPicker(string connStr)
         {
 #if DEBUG
             if (connStr == null || connStr.Length == 0)//检查传进来的数据库连接url是否合法
@@ -37,13 +61,10 @@ namespace IDCM.Data.DHCP
             if (holder == null)
             {
                 holder = new SQLiteConnHolder(connectionStr);//创建一个数据库连接，创建一个信号灯
-                lock (SQLiteConnPicker_Lock)//因为连接池是公共资源，所以在池中存取都要加锁
-                {
-                    bool SQLiteConnAdded = connectPool.TryAdd(connectionStr, holder);//把新建的链接str与链接存入池
+                bool SQLiteConnAdded = connectPool.TryAdd(connectionStr, holder);//把新建的链接str与链接存入池
 #if DEBUG
-                    System.Diagnostics.Debug.Assert(SQLiteConnAdded);//添加成功返回一个消息
+                System.Diagnostics.Debug.Assert(SQLiteConnAdded);//添加成功返回一个消息
 #endif
-                }
             }
             PickerConnected = true;
         }
@@ -55,6 +76,8 @@ namespace IDCM.Data.DHCP
 #if DEBUG
             System.Diagnostics.Debug.Assert(connectionStr != null && connectionStr.Length > 0);
 #endif
+            if (PickerConnected == false)
+                return;
             PickerConnected = false;
             SQLiteConnHolder holder = null;
             connectPool.TryGetValue(connectionStr, out holder);
@@ -93,10 +116,10 @@ namespace IDCM.Data.DHCP
         /// 说明：
         /// 1.Passes a shutdown request to the SQLite core library. Does not throw an exception if the shutdown request fails.
         /// </summary>
-        internal void shutdown()
+        internal static void shutdown(SQLiteConn sconn)
         {
             SQLiteConnHolder holder = null;
-            connectPool.TryRemove(connectionStr, out holder);
+            connectPool.TryRemove(sconn.connectStr, out holder);
             if (holder != null)
             {
                 holder.kill();
@@ -109,14 +132,11 @@ namespace IDCM.Data.DHCP
         /// </summary>
         internal static void shutdownAll()
         {
-            lock (SQLiteConnPicker_Lock)
+            foreach (SQLiteConnHolder holder in connectPool.Values)
             {
-                foreach (SQLiteConnHolder holder in connectPool.Values)
-                {
-                    holder.kill();
-                }
-                connectPool.Clear();
+                holder.kill();
             }
+            connectPool.Clear();
         }
 
         #region 内置实例对象保持部分
@@ -132,14 +152,6 @@ namespace IDCM.Data.DHCP
         /// 多点数据库连接的连接池缓存对象
         /// </summary>
         private static volatile ConcurrentDictionary<string, SQLiteConnHolder> connectPool = new ConcurrentDictionary<string, SQLiteConnHolder>();
-        /// <summary>
-        /// 最长等待毫秒数（默认为5000ms）
-        /// </summary>
-        public static int MAX_WAIT_TIME_OUT = 5000;
-        /// <summary>
-        /// 用于保持串行获取数据库连接的共享锁对象
-        /// </summary>
-        public static object SQLiteConnPicker_Lock = new object();
         #endregion
 
 
@@ -178,7 +190,7 @@ namespace IDCM.Data.DHCP
             /// <returns></returns>
             internal bool tryOpen(string connectionStr = null)
             {
-                if (semaphore.WaitOne(MAX_WAIT_TIME_OUT))
+                if (semaphore.WaitOne(SysConstants.MAX_DB_REQUEST_TIME_OUT))
                 {
                     try
                     {
@@ -245,7 +257,7 @@ namespace IDCM.Data.DHCP
             /// </summary>
             internal void kill()
             {
-                if (semaphore.WaitOne(MAX_WAIT_TIME_OUT, true))
+                if (semaphore.WaitOne(SysConstants.MAX_DB_REQUEST_TIME_OUT, true))
                 {
                     if (sconn != null && sconn.State != ConnectionState.Closed)
                     {

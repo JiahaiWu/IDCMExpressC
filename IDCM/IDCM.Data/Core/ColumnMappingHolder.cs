@@ -21,42 +21,46 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="picker"></param>
         /// <returns>依赖数据项载入成功与否状态</returns>
-        public static bool prepareForLoad(SQLiteConnPicker picker)
+        public static bool prepareForLoad(SQLiteConn sconn)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(picker != null);
+            System.Diagnostics.Debug.Assert(sconn != null);
 #endif
-            BaseInfoNoteDAM.loadBaseInfo(picker);
-            return checkTableSetting(picker);
+            BaseInfoNoteDAM.loadBaseInfo(sconn);
+            return checkTableSetting(sconn);
         }
         /// <summary>
         /// 检查数据表配置存在与否，如不存在则创建默认表属性设定
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static bool checkTableSetting(SQLiteConnPicker picker)
+        public static bool checkTableSetting(SQLiteConn sconn)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(picker != null);
+            System.Diagnostics.Debug.Assert(sconn != null);
 #endif
             string cmd = "SELECT count(*) FROM " + typeof(CustomTColDef).Name;
-            using (picker)
+            long ctcdCount = 0;
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                long ctcdCount = picker.getConnection().Query<long>(cmd).Single<long>();
+                ctcdCount = SQLiteConnPicker.getConnection(picker).Query<long>(cmd).Single<long>();
+            }
+            if (ctcdCount > 0)
+            {
+                queryCacheAttrDBMap(sconn);
+                return true;
+            }
+            else if (CustomTColDefDAM.buildDefaultSetting(sconn))
+            {
+                using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
+                {
+                    ctcdCount = SQLiteConnPicker.getConnection(picker).Query<long>(cmd).Single<long>();
+                }
                 if (ctcdCount > 0)
                 {
-                    queryCacheAttrDBMap(picker);
+                    CustomTColMapDAM.buildCustomTable(sconn);
+                    queryCacheAttrDBMap(sconn);
                     return true;
-                }
-                else if (CustomTColDefDAM.buildDefaultSetting(picker))
-                {
-                    ctcdCount = picker.getConnection().Query<long>(cmd).Single<long>();
-                    if (ctcdCount > 0)
-                    {
-                        CustomTColMapDAM.buildCustomTable(picker);
-                        queryCacheAttrDBMap(picker);
-                        return true;
-                    }
                 }
             }
             return false;
@@ -65,10 +69,10 @@ namespace IDCM.Data.Core
         /// <summary>
         /// 缓存数据字段映射关联关系
         /// </summary>
-        public static void queryCacheAttrDBMap(SQLiteConnPicker picker)
+        public static void queryCacheAttrDBMap(SQLiteConn sconn)
         {
             //select * from CustomTColMap order by viewOrder
-            List<CustomTColMap> ctcms = CustomTColMapDAM.findAllByOrder(picker);
+            List<CustomTColMap> ctcms = CustomTColMapDAM.findAllByOrder(sconn);
             attrMapping.Clear();
             foreach (CustomTColMap dr in ctcms)
             {
@@ -79,11 +83,11 @@ namespace IDCM.Data.Core
         /// 获取视图和数据库查询映射
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, int> getViewDBMapping(SQLiteConnPicker picker)
+        public static Dictionary<string, int> getViewDBMapping(SQLiteConn sconn)
         {
             Dictionary<string, int> maps = new Dictionary<string, int>();
             if (attrMapping.Count < 1)
-                queryCacheAttrDBMap(picker);
+                queryCacheAttrDBMap(sconn);
             foreach (KeyValuePair<String, ObjectPair<int, int>> kvpair in attrMapping)
             {
                 maps[kvpair.Key] = kvpair.Value.Val;
@@ -97,9 +101,9 @@ namespace IDCM.Data.Core
         /// 数据库字段映射位序的值自0计数。
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, int> getCustomViewDBMapping(SQLiteConnPicker picker)
+        public static Dictionary<string, int> getCustomViewDBMapping(SQLiteConn sconn)
         {
-            Dictionary<string, int> maps = ColumnMappingHolder.getViewDBMapping(picker);
+            Dictionary<string, int> maps = ColumnMappingHolder.getViewDBMapping(sconn);
             //填写表头
             List<string> excludes = new List<string>();
             foreach (string attr in maps.Keys)
@@ -120,10 +124,10 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr"></param>
         /// <returns></returns>
-        public static int getDBOrder(SQLiteConnPicker picker, string attr)
+        public static int getDBOrder(SQLiteConn sconn, string attr)
         {
             if (attrMapping.Count < 1)
-                queryCacheAttrDBMap(picker);
+                queryCacheAttrDBMap(sconn);
             ObjectPair<int, int> kvpair = null;
             attrMapping.TryGetValue(attr, out kvpair);
             return kvpair == null ? -1 : kvpair.Key;
@@ -133,11 +137,11 @@ namespace IDCM.Data.Core
         /// 获取预览字段集序列
         /// </summary>
         /// <returns></returns>
-        public static List<string> getViewAttrs(SQLiteConnPicker picker,bool withInnerField = true)
+        public static List<string> getViewAttrs(SQLiteConn sconn, bool withInnerField = true)
         {
             if (attrMapping.Count < 1)
                 //作用是在attrMapping里存入，key属性名称，value<key value> key:数据库映射，字段显示
-                queryCacheAttrDBMap(picker);
+                queryCacheAttrDBMap(sconn);
             if (withInnerField)
                 return attrMapping.Keys.ToList<string>();//第一次进来没参数，所以返回key的集合(属性名称)
             else
@@ -156,10 +160,10 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr"></param>
         /// <returns></returns>
-        public static int getViewOrder(SQLiteConnPicker picker,string attr)
+        public static int getViewOrder(SQLiteConn sconn, string attr)
         {
             if (attrMapping.Count < 1)
-                queryCacheAttrDBMap(picker);
+                queryCacheAttrDBMap(sconn);
             ObjectPair<int, int> kvpair = null;
             attrMapping.TryGetValue(attr, out kvpair);
             return kvpair == null ? -1 : kvpair.Val;
@@ -169,23 +173,23 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr"></param>
         /// <param name="viewOrder"></param>
-        public static void updateViewOrder(SQLiteConnPicker picker, string attr, int viewOrder, bool isRequired)
+        public static void updateViewOrder(SQLiteConn sconn, string attr, int viewOrder, bool isRequired)
         {
             int vOrder = viewOrder;
             if (isRequired == false && viewOrder < CustomTColMapDAM.MaxMainViewCount)
                 vOrder = viewOrder + CustomTColMapDAM.MaxMainViewCount;
             else if (viewOrder > CustomTColMapDAM.MaxMainViewCount)
                 vOrder = viewOrder - CustomTColMapDAM.MaxMainViewCount;
-            updateViewOrder(picker,attr, vOrder);
+            updateViewOrder(sconn, attr, vOrder);
         }
         /// <summary>
         /// 更新预览字段位序值
         /// </summary>
         /// <param name="attr"></param>
         /// <param name="viewOrder"></param>
-        public static void updateViewOrder(SQLiteConnPicker picker, string attr, int viewOrder)
+        public static void updateViewOrder(SQLiteConn sconn, string attr, int viewOrder)
         {
-            int ic = CustomTColMapDAM.updateViewOrder(picker,attr, viewOrder);
+            int ic = CustomTColMapDAM.updateViewOrder(sconn, attr, viewOrder);
             if (ic > 0)
                 attrMapping[attr] = new ObjectPair<int, int>(attrMapping[attr].Key, viewOrder);
         }

@@ -10,6 +10,7 @@ using Dapper;
 using IDCM.Data.Core;
 using IDCM.Data.Common;
 using IDCM.Data.DAM;
+using IDCM.Data.DHCP;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -50,8 +51,8 @@ namespace IDCM.Data
                 {
                     if (!WorkSpaceHelper.isProcessDuplicate())
                     {
-                        _connectStr = DAMBase.startDBInstance(DBPath, password);
-                        if (_connectStr != null)
+                        sconn = DAMBase.startDBInstance(DBPath, password);
+                        if (sconn != null)
                         {
                             _status = WSStatus.Connected;
                             return true;
@@ -85,9 +86,9 @@ namespace IDCM.Data
             System.Diagnostics.Debug.Assert(_status.Equals(WSStatus.Connected), "illegal status to connect DataSource! @getStatus()=" + getStatus());
 #endif
             _status = WSStatus.Preparing;
-            if (DAMBase.prepareTables(picker)) ////定义静态表结构
+            if (DAMBase.prepareTables(sconn)) ////定义静态表结构
             {
-                if (ColumnMappingHolder.prepareForLoad(picker)) //检视基本动态表单数据
+                if (ColumnMappingHolder.prepareForLoad(sconn)) //检视基本动态表单数据
                 {
                     _status = WSStatus.InWorking;
                     return true;
@@ -116,7 +117,7 @@ namespace IDCM.Data
             //关闭用户工作空间
             if (!_status.Equals(WSStatus.Idle))
             {
-                picker.shutdown();
+                SQLiteConnPicker.shutdown(sconn);
                 _status = WSStatus.Idle;
                 return true;
             }
@@ -138,7 +139,7 @@ namespace IDCM.Data
 #endif
             try
             {
-                return DAMBase.SQLQuery<T>(picker, sqlExpressions);
+                return DAMBase.SQLQuery<T>(sconn, sqlExpressions);
             }
             catch (Exception ex)
             {
@@ -161,7 +162,7 @@ namespace IDCM.Data
 #endif
             try
             {
-                return DAMBase.executeSQL(picker, commands);
+                return DAMBase.executeSQL(sconn, commands);
             }
             catch (Exception ex)
             {
