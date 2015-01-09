@@ -26,13 +26,13 @@ namespace IDCM.Data.DHCP
         /// 获取单点数据库连接的构造方法
         /// </summary>
         /// <param name="sconn"></param>
-        public SQLiteConnPicker(SQLiteConn sconn)
+        public SQLiteConnPicker(ConnLabel connLabel)
         {
 #if DEBUG
-            if (sconn.connectStr == null || sconn.connectStr.Length == 0)//检查传进来的数据库连接url是否合法
+            if (connLabel.connectStr == null || connLabel.connectStr.Length == 0)//检查传进来的数据库连接url是否合法
                 throw new ArgumentNullException("connStr is NULL for SQLiteConnPicker(string)!");
 #endif
-            this.connectionStr = sconn.connectStr;//赋值给当前类的connectionStr
+            this.connectionStr = connLabel.connectStr;//赋值给当前类的connectionStr
             SQLiteConnHolder holder = null;//这个类是为了保证数据库单点链接，构造方法中有个信号灯
             connectPool.TryGetValue(connectionStr, out holder);//查看池中有没有指定的数据库连接str与链接
             if (holder == null)
@@ -43,33 +43,13 @@ namespace IDCM.Data.DHCP
                 System.Diagnostics.Debug.Assert(SQLiteConnAdded);//添加成功返回一个消息
 #endif
             }
-            PickerConnected = true;
+            PickerConnected = holder.tryOpen(connectionStr);//尝试获取并打开数据库连接
         }
+
         /// <summary>
-        /// 获取单点数据库连接的构造方法
-        /// </summary>
-        /// <param name="connStr"></param>
-        protected SQLiteConnPicker(string connStr)
-        {
-#if DEBUG
-            if (connStr == null || connStr.Length == 0)//检查传进来的数据库连接url是否合法
-                throw new ArgumentNullException("connStr is NULL for SQLiteConnPicker(string)!");
-#endif
-            this.connectionStr = connStr;//赋值给当前类的connectionStr
-            SQLiteConnHolder holder = null;//这个类是为了保证数据库单点链接，构造方法中有个信号灯
-            connectPool.TryGetValue(connectionStr, out holder);//查看池中有没有指定的数据库连接str与链接
-            if (holder == null)
-            {
-                holder = new SQLiteConnHolder(connectionStr);//创建一个数据库连接，创建一个信号灯
-                bool SQLiteConnAdded = connectPool.TryAdd(connectionStr, holder);//把新建的链接str与链接存入池
-#if DEBUG
-                System.Diagnostics.Debug.Assert(SQLiteConnAdded);//添加成功返回一个消息
-#endif
-            }
-            PickerConnected = true;
-        }
-        /// <summary>
-        /// 实现IDisposable中的接口定义，销毁当前连接资源
+        /// 实现IDisposable中的接口定义Dispose方法，销毁当前信号灯资源
+        /// 说明：
+        /// 1.一旦调用了Dispose方法被调用，不再允许通过该实例获取任何新的数据库连接
         /// </summary>
         public void Dispose()
         {
@@ -93,33 +73,29 @@ namespace IDCM.Data.DHCP
         /// 注意
         /// 1.该方法仅用于一次性SQL事务处理流程，且不需要外部的连接释放管理操作。
         /// 2.请注意安全使用本方法获取的连接实例，SQLiteConnPicker对象实例可重用。
-        /// 3.但外部对于获取到的SQLiteConnection句柄不得长时（$time > MAX_WAIT_TIME_OUT）占用及再次缓存利用，对此更进一步的封装未能有效实现。
+        /// 3.但外部对于获取到的SQLiteConnection句柄不得长时（$time > MAX_WAIT_TIME_OUT）占用及再次缓存利用是不能许可的，暂时对此连接对象暴露暂无良好封装。
         /// @author JiahaiWu 2014-11-06
         /// </summary>
         /// <returns>SQLiteConnection (null able)</returns>
-        public static SQLiteConnection getConnection(SQLiteConnPicker picker)
+        public SQLiteConnection getConnection()
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(picker.PickerConnected ,"Ivalid Picker Status for get Connection！");
+            System.Diagnostics.Debug.Assert(this.PickerConnected ,"Ivalid Picker Status for get Connection！");
 #endif
             SQLiteConnHolder holder = null;
-            connectPool.TryGetValue(picker.connectionStr, out holder);
-            if(holder != null)
-            {
-                if (holder.tryOpen(picker.connectionStr))
-                    return holder.Sconn;
-            }
-            return null;
+            connectPool.TryGetValue(connectionStr, out holder);
+            return holder != null ? holder.Sconn : null;
         }
+
         /// <summary>
         /// 销毁数据库资源连接<br/>
         /// 说明：
         /// 1.Passes a shutdown request to the SQLite core library. Does not throw an exception if the shutdown request fails.
         /// </summary>
-        internal static void shutdown(SQLiteConn sconn)
+        internal static void shutdown(ConnLabel connLabel)
         {
             SQLiteConnHolder holder = null;
-            connectPool.TryRemove(sconn.connectStr, out holder);
+            connectPool.TryRemove(connLabel.connectStr, out holder);
             if (holder != null)
             {
                 holder.kill();
@@ -137,6 +113,14 @@ namespace IDCM.Data.DHCP
                 holder.kill();
             }
             connectPool.Clear();
+            SQLiteConnection.ClearAllPools();
+            //////////////////////////////////////////////////////////////
+            //SQLiteConnection.Shutdown(true,true);
+            //GC.WaitForPendingFinalizers();
+            //GC.Collect();
+            //////////////////////////////////////////////////////////////
+            //Safely Operation but take long time for GC Collect.
+            //@Deprecated
         }
 
         #region 内置实例对象保持部分
@@ -212,30 +196,25 @@ namespace IDCM.Data.DHCP
                     }
                     catch (Exception ex)
                     {
-                        throw new SQLiteException("Try to open SQLite Connection Exception.", ex);
+                        throw new SQLiteException("Try to open SQLite Connection failed with Exception."+ex.Message, ex);
                     }
                 }
                 else
                 {
                     //信号量等待超时！！
-                    //则试图阻断长时占用的SQLiteConnect连接实例
-                    try
+#if DEBUG
+                    //则导致SQLiteConnPicker无法正常实例化，为此有必要试图阻断既有的长时占用的SQLiteConnect连接实例
+                    if (sconn != null)//如果链接不为空
                     {
-                        if (sconn != null)//如果链接不为空
+                        //链接处于打开状态，且链接没有关闭
+                        if (!sconn.State.Equals(ConnectionState.Open) && !sconn.State.Equals(ConnectionState.Closed))
                         {
-                            //链接处于打开状态，且链接没有关闭
-                            if (!sconn.State.Equals(ConnectionState.Open) && !sconn.State.Equals(ConnectionState.Closed))
-                            {
-                                sconn.Close();//关闭连接
-                            }
+                            sconn.Close();//关闭连接
                         }
-                        semaphore.Release();  //释放被阻塞的信号量计数值
                     }
-                    catch (Exception ex)
-                    {
-                        throw new SQLiteException("Waiting Time out, please try again.", ex);
-                    }
-                    return false;
+#endif
+                    semaphore.Release();  //释放被阻塞的信号量计数值
+                    throw new SQLiteException("SQLiteConnPicker try to get DB Connection with Waiting Time out, please check relative program coding.");
                 }
             }
             /// <summary>
@@ -263,8 +242,8 @@ namespace IDCM.Data.DHCP
                     {
                         sconn.Close();
                     }
+                    SQLiteConnection.ClearPool(sconn);
                     sconn.Dispose();
-                    sconn.Shutdown();
                     sconn = null;
                 }
                 semaphore.Close();

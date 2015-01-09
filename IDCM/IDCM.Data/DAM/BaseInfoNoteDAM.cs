@@ -19,17 +19,17 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="picker">数据库连接选择器实例</param>
         /// <returns>新序列值</returns>
-        public static long nextSeqID(SQLiteConn sconn)
+        public static long nextSeqID(ConnLabel sconn)
         {
             lock (IncrementKey_Lock)
             {
                 ++autoIncrementNum;
                 if (autoIncrementNum % 10 == 0)//如果是10的整数
                 {
-                    string cmd = "update BaseInfoNote set seqId=" + autoIncrementNum;//更新BaseInfoNote seqId
+                    string cmd = "update " + typeof(BaseInfoNote).Name + " set seqId=" + autoIncrementNum;//更新BaseInfoNote seqId
                     using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
                     {
-                        SQLiteConnPicker.getConnection(picker).Execute(cmd);
+                        picker.getConnection().Execute(cmd);
                     }
                 }
             }
@@ -42,23 +42,23 @@ namespace IDCM.Data.DAM
         /// 参考：
         /// 1. BaseInfoNoteDAM.nextSeqID(...)
         /// </summary>
-        public static void loadBaseInfo(SQLiteConn sconn)
+        public static void loadBaseInfo(ConnLabel sconn)
         {
             using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                List<long> seqIds = SQLiteConnPicker.getConnection(picker).Query<long>("SELECT seqId FROM BaseInfoNote").ToList<long>();
+                List<long> seqIds = picker.getConnection().Query<long>("SELECT seqId FROM "+typeof(BaseInfoNote).Name).ToList<long>();
                 if (seqIds.Count == 0)
                 {
-                    DBVersionNote dbvn = new DBVersionNote();
-                    string icmd = "insert into BaseInfoNote(seqId) values(" + dbvn.StartNo + ");";
-                    SQLiteConnPicker.getConnection(picker).Execute(icmd);
+                    BaseInfoNote dbvn = new BaseInfoNote();
+                    string icmd = "insert into " + typeof(BaseInfoNote).Name + "(seqId) values(" + dbvn.StartNo + ");";
+                    picker.getConnection().Execute(icmd);
                     autoIncrementNum = dbvn.StartNo;
                 }
                 else
                 {
                     autoIncrementNum = seqIds[0] + 10;
-                    string cmd = "update BaseInfoNote set seqId=" + autoIncrementNum;
-                    SQLiteConnPicker.getConnection(picker).Execute(cmd);
+                    string cmd = "update "+typeof(BaseInfoNote).Name+" set seqId=" + autoIncrementNum;
+                    picker.getConnection().Execute(cmd);
                 }
             }
         }

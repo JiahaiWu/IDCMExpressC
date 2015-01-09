@@ -63,5 +63,13 @@ namespace IDCM.Data.Core
         {
             return name;
         }
+        public override bool Equals(Object obj)
+        {
+            return this.name.Equals(obj.ToString());
+        }
+        public override int GetHashCode()
+        {
+            return name.GetHashCode();
+        }
     }
 }

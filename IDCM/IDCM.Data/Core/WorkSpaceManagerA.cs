@@ -74,7 +74,7 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="renew"></param>
         /// <returns></returns>
-        internal SQLiteConn getConnection(bool doCheck = false)
+        internal ConnLabel getConnection(bool doCheck = false)
         {
             if (doCheck == true)
             {
@@ -84,7 +84,7 @@ namespace IDCM.Data.Core
                     {
                         using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
                         {
-                            SQLiteConnPicker.getConnection(picker);
+                            picker.getConnection();
                         }
                     }
                     catch (Exception)
@@ -118,7 +118,7 @@ namespace IDCM.Data.Core
         /// <summary>
         /// 数据库连接句柄标识
         /// </summary>
-        protected volatile SQLiteConn sconn = null;
+        protected volatile ConnLabel sconn = null;
         /// <summary>
         /// 最近一次错误记录
         /// </summary>

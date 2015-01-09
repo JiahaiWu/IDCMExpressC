@@ -81,9 +81,9 @@ namespace IDCM.Service.Common
             get
             {
                 /////////////////////////////////////////////////////////////////////////
-                //return wsm != null && (wsm.getStatus().Equals(WSStatus.Connected)||wsm.getStatus().Equals(WSStatus.InWorking));
+                //return wsm != null && (WSStatus.Connected.Equals(wsm.getStatus())||WSStatus.InWorking.Equals(wsm.getStatus());
                 /////////////////////////////////////////////////////////////////////////
-                return wsm != null && wsm.getStatus().Equals(WSStatus.Connected);
+                return wsm != null && WSStatus.Connected.Equals(wsm.getStatus());
             }
         }
         /// <summary>
@@ -92,8 +92,8 @@ namespace IDCM.Service.Common
         public bool InWorking
         {
             get 
-            { 
-                return wsm!=null && wsm.getStatus().Equals(WSStatus.InWorking);
+            {
+                return wsm != null && WSStatus.InWorking.Equals(wsm.getStatus());
             }
         }
         /// <summary>

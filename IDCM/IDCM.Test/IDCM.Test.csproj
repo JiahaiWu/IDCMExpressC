@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9B607956-AB6F-4B3B-AD56-B923FDD17EEA}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{692B2E4A-823D-466F-8013-DA0D78F13E47}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IDCM.Data.Base</RootNamespace>
-    <AssemblyName>IDCM.Data.Base</AssemblyName>
+    <RootNamespace>IDCM.Test</RootNamespace>
+    <AssemblyName>IDCM.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,59 +31,57 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>003_12.ico</ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.3.2.0.0\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbsHandler.cs" />
-    <Compile Include="ExportType.cs" />
-    <Compile Include="ObjectPair.cs" />
-    <Compile Include="StrainListPage.cs" />
-    <Compile Include="StrainView.cs" />
-    <Compile Include="Utils\AttrTypeConverter.cs" />
-    <Compile Include="AuthInfo.cs" />
-    <Compile Include="CatalogNode.cs" />
-    <Compile Include="CTDRecordA.cs" />
-    <Compile Include="CustomTColDef.cs" />
-    <Compile Include="CustomTColMap.cs" />
-    <Compile Include="Utils\Base64DESEncrypt.cs" />
-    <Compile Include="Utils\ColumnMapping.cs" />
-    <Compile Include="Utils\ConfigurationHelper.cs" />
-    <Compile Include="Utils\CVNameConverter.cs" />
-    <Compile Include="BaseInfoNote.cs" />
-    <Compile Include="DelayWorkNote.cs" />
-    <Compile Include="HandleRunInfo.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SysConstants.cs" />
-    <Compile Include="Utils\Base64CShared.cs" />
-    <Compile Include="Utils\Base64Shared.cs" />
-    <Compile Include="Utils\Base64SharedI.cs" />
-    <Compile Include="Utils\CUIDGenerator.cs" />
-    <Compile Include="Utils\FileUtil.cs" />
-    <Compile Include="Utils\HashUtil.cs" />
-    <Compile Include="Utils\StringSimilarity.cs" />
-    <Compile Include="Utils\StringUtil.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="003_12.ico" />
+    <ProjectReference Include="..\IDCM.Data\IDCM.Data.csproj">
+      <Project>{752162ef-640a-488d-bc00-0b264faef9f2}</Project>
+      <Name>IDCM.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

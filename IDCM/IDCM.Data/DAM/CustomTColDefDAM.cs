@@ -23,7 +23,7 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static bool rebuildCustomTColDef(SQLiteConn sconn)
+        public static bool rebuildCustomTColDef(ConnLabel sconn)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(sconn != null);
@@ -41,7 +41,7 @@ namespace IDCM.Data.DAM
                 + "IsInter TEXT default '" + false.ToString() + "');";
             using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                int res = SQLiteConnPicker.getConnection(picker).Execute(cmd);
+                int res = picker.getConnection().Execute(cmd);
                 return res>-1;
             }
         }
@@ -51,7 +51,7 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static bool buildDefaultSetting(SQLiteConn sconn)
+        public static bool buildDefaultSetting(ConnLabel sconn)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace IDCM.Data.DAM
         /// <param name="picker"></param>
         /// <param name="ctcds"></param>
         /// <returns></returns>
-        public static bool overwriteAllCustomTColDef(SQLiteConn sconn, List<CustomTColDef> ctcds)
+        public static bool overwriteAllCustomTColDef(ConnLabel sconn, List<CustomTColDef> ctcds)
         {
             if (ctcds != null)
             {
@@ -88,7 +88,7 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="ctcd"></param>
         /// <returns></returns>
-        public static int save(SQLiteConn sconn, params CustomTColDef[] ctcds)
+        public static int save(ConnLabel sconn, params CustomTColDef[] ctcds)
         {
             List<string> cmds = new List<string>();
             foreach (CustomTColDef ctcd in ctcds)
@@ -133,7 +133,7 @@ namespace IDCM.Data.DAM
         /// <param name="picker"></param>
         /// <param name="refresh"></param>
         /// <returns></returns>
-        public static List<CustomTColDef> loadAll(SQLiteConn sconn, bool refresh = true)
+        public static List<CustomTColDef> loadAll(ConnLabel sconn, bool refresh = true)
         {
             if (refresh)
             {
@@ -143,7 +143,7 @@ namespace IDCM.Data.DAM
                     string cmd = "SELECT * FROM CustomTColDef order by corder";
                     using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
                     {
-                        List<CustomTColDef> ctcds = SQLiteConnPicker.getConnection(picker).Query<CustomTColDef>(cmd).ToList<CustomTColDef>();
+                        List<CustomTColDef> ctcds = picker.getConnection().Query<CustomTColDef>(cmd).ToList<CustomTColDef>();
                         foreach (CustomTColDef ctcd in ctcds)
                         {
                             ctcdCache[ctcd.Attr]= ctcd;
@@ -213,8 +213,8 @@ namespace IDCM.Data.DAM
             else
             {
                 log.Fatal("The setting file note exist! @Path=" + settingPath);
+                throw new System.Data.DataException("The setting file note exist! @Path=" + settingPath);
             }
-            return null;
         }
         public static CustomTColDef formatSettingLine(string line)
         {

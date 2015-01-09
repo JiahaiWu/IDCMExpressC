@@ -9,7 +9,7 @@ namespace IDCM.Data.Base
     /// 用户标记当前数据库记录版本标识类定义
     /// 该类实例应当唯一确定，不接受运行时变更标识信息。
     /// </summary>
-    public class DBVersionNote
+    public class BaseInfoNote
     {
         private string dbType = "SQLite";
 

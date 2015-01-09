@@ -24,7 +24,7 @@ namespace IDCM.Data.DAM
         /// <param name="dbFilePath"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public static SQLiteConn startDBInstance(string dbFilePath, string password)
+        public static ConnLabel startDBInstance(string dbFilePath, string password)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(dbFilePath != null);
@@ -37,27 +37,25 @@ namespace IDCM.Data.DAM
                 sqlCSB.Password = password;//设置密码
                 sqlCSB.SyncMode = SynchronizationModes.Off;//启用异步存储模式
                 sqlCSB.Pooling = true;
-                sqlCSB.DefaultTimeout = 5000;
-                //sqlCSB.Pooling = true;
+                sqlCSB.DefaultTimeout = SysConstants.MAX_DB_REQUEST_TIME_OUT;
                 ////////////////////////////////////////////////////////////////
-                sqlCSB.Add("PRAGMA application_id", IDCM_DATA_BIND_Code);
                 //sqlCSB.Add("PRAGMA case_sensitive_like", 0);//设置Like查询大小写敏感与否设置
                 //sqlCSB.Add("PRAGMA auto_vacuum", "INCREMENTAL");//设置Like查询大小写敏感与否设置
                 //sqlCSB.ToFullPath = true;
                 ////////////////////////////////////////////////////////////////
                 //有关PRAGMA的参数设置及读取未能有效执行，有待解决的问题 @Date 2015-01-08
                 ///////////////////////////////////////////////////////////////
-                SQLiteConn sconn = new SQLiteConn(sqlCSB);
+                ConnLabel sconn = new ConnLabel(sqlCSB);
                 if (!File.Exists(dbFilePath))
                 {
                     SQLiteConnection.CreateFile(dbFilePath);
                     sqlCSB.Add("PRAGMA application_id", IDCM_DATA_BIND_Code);//设置Like查询大小写敏感与否设置
-                    sconn = new SQLiteConn(sqlCSB);
+                    sconn = new ConnLabel(sqlCSB);
                 }
                 using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
                 {
-                    SQLiteConnPicker.getConnection(picker).Execute("PRAGMA application_id(" + IDCM_DATA_BIND_Code + ");");
-                    int bindcode = SQLiteConnPicker.getConnection(picker).ExecuteScalar<int>("PRAGMA application_id");
+                    picker.getConnection().Execute("PRAGMA application_id(" + IDCM_DATA_BIND_Code + ");");
+                    int bindcode = picker.getConnection().ExecuteScalar<int>("PRAGMA application_id");
                     if (bindcode == IDCM_DATA_BIND_Code)
                     {
                         return sconn;
@@ -70,7 +68,7 @@ namespace IDCM.Data.DAM
             }
             catch (SQLiteException ex)
             {
-                log.Error("Error in IDCM.Data.startDBInstance(): " + ex.Message,ex);
+                log.Error("Error in IDCM.Data.startDBInstance(). ",ex);
                 throw ex;
             }
         }
@@ -80,7 +78,7 @@ namespace IDCM.Data.DAM
         /// 1.Passes a shutdown request to the SQLite core library. Does not throw an exception if the shutdown request fails.
         /// </summary>
         /// <returns></returns>
-        public static void stopDBInstance(SQLiteConn sconn)
+        public static void stopDBInstance(ConnLabel sconn)
         {
             SQLiteConnPicker.shutdown(sconn);
         }
@@ -91,7 +89,7 @@ namespace IDCM.Data.DAM
         /// 1.可重入
         /// </summary>
         /// <returns>初始化操作完成与否</returns>
-        public static bool prepareTables(SQLiteConn sconn)
+        public static bool prepareTables(ConnLabel sconn)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(sconn != null);
@@ -99,9 +97,12 @@ namespace IDCM.Data.DAM
             int rescode = -1;
             using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                using (SQLiteTransaction transaction = SQLiteConnPicker.getConnection(picker).BeginTransaction())
+                using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
                 {
-                    rescode = SQLiteConnPicker.getConnection(picker).Execute(getBasicTableCmds());
+                    string baseTableDefs = getBasicTableCmds();
+                    log.Debug("PrepareTables @SQLCommand=" + baseTableDefs);
+                    rescode = picker.getConnection().Execute(baseTableDefs);
+                    transaction.Commit();
                 }
             }
             return rescode > -1;
@@ -112,7 +113,7 @@ namespace IDCM.Data.DAM
         /// <param name="picker"></param>
         /// <param name="sqlExpressions"></param>
         /// <returns></returns>
-        public static IEnumerable<T>[] SQLQuery<T>(SQLiteConn sconn, params string[] sqlExpressions)
+        public static IEnumerable<T>[] SQLQuery<T>(ConnLabel sconn, params string[] sqlExpressions)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(sconn != null);
@@ -128,7 +129,10 @@ namespace IDCM.Data.DAM
                     ///////////////////////////////////////////////
                     //For Query default without Transaction
                     {
-                        IEnumerable<T> result = SQLiteConnPicker.getConnection(picker).Query<T>(sql);
+#if DEBUG
+                        log.Debug("SQLQuery Info: @CommandText=" + sql);
+#endif
+                        IEnumerable<T> result = picker.getConnection().Query<T>(sql);
                         res.Add(result);
                     }
                 }
@@ -141,7 +145,7 @@ namespace IDCM.Data.DAM
         /// <param name="picker">连接句柄</param>
         /// <param name="commands"></param>
         /// <returns></returns>
-        public static int[] executeSQL(SQLiteConn sconn, params string[] commands)
+        public static int[] executeSQL(ConnLabel sconn, params string[] commands)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(sconn != null);
@@ -151,11 +155,14 @@ namespace IDCM.Data.DAM
             SQLiteCommand cmd = new SQLiteCommand();
             using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                using (SQLiteTransaction transaction = SQLiteConnPicker.getConnection(picker).BeginTransaction())
+                using (SQLiteTransaction transaction = picker.getConnection().BeginTransaction())
                 {
                     foreach (string execmd in commands)
                     {
-                        int result = SQLiteConnPicker.getConnection(picker).Execute(execmd);
+#if DEBUG
+                        log.Debug("executeSQL Info: @CommandText=" + execmd);
+#endif
+                        int result = picker.getConnection().Execute(execmd);
                         res.Add(result);
                     }
                     transaction.Commit();
@@ -171,7 +178,7 @@ namespace IDCM.Data.DAM
         /// <param name="commandText">执行语句或存储过程名</param>
         /// <param name="commandType">执行类型</param>
         /// <returns>DataTable对象</returns>
-        public static DataTable DataTableSQLQuery(SQLiteConn sconn, string commandText, CommandType commandType = CommandType.Text)
+        public static DataTable DataTableSQLQuery(ConnLabel sconn, string commandText, CommandType commandType = CommandType.Text)
         {
             return DataTableSQLQuery(sconn, commandText, commandType, null);
         }
@@ -184,7 +191,7 @@ namespace IDCM.Data.DAM
         /// <param name="commandType">执行类型</param>
         /// <param name="cmdParms">SQL参数对象</param>
         /// <returns>DataTable对象</returns>
-        public static DataTable DataTableSQLQuery(SQLiteConn sconn, string commandText, CommandType commandType, params SQLiteParameter[] cmdParms)
+        public static DataTable DataTableSQLQuery(ConnLabel sconn, string commandText, CommandType commandType, params SQLiteParameter[] cmdParms)
         {
             if (commandText == null || commandText.Length == 0)
                 throw new ArgumentNullException("commandText");
@@ -196,7 +203,7 @@ namespace IDCM.Data.DAM
                 ///////////////////////////////////////////////
                 //For Query default without Transaction
                 {
-                    SQLiteConnection conn = SQLiteConnPicker.getConnection(picker);
+                    SQLiteConnection conn = picker.getConnection();
                     SQLiteCommand cmd = new SQLiteCommand();
                     cmd.Connection = conn;
                     cmd.CommandText = commandText;
@@ -238,13 +245,13 @@ namespace IDCM.Data.DAM
                 + "Pid INTEGER default -1,"
                 + "UpdateTime TEXT);";
             strbuilder.Append(cmd).Append("\n");
-            DBVersionNote dbvn = new DBVersionNote();
+            BaseInfoNote dbvn = new BaseInfoNote();
             //创建基础自增长序列及版本记录数据表
-            cmd = "Create Table if Not Exists BaseInfoNote("
+            cmd = "Create Table if Not Exists " + typeof(BaseInfoNote).Name + "("
             + "SeqId INTEGER DEFAULT " + dbvn.StartNo + ","
             + "DbType Text default '" + dbvn.DbType + "', "
             + "AppType Text default '" + dbvn.AppType + "',"
-            + "AppVercode Real default " + dbvn.AppVercode + ");";
+            + "AppVercode Real default " + dbvn.AppVercode + " primary key);";
             strbuilder.Append(cmd).Append("\n");
             //创建CustomTColDef数据表定义
             cmd = "Create Table if Not Exists " + typeof(CustomTColDef).Name + "("
@@ -274,15 +281,18 @@ namespace IDCM.Data.DAM
                 + "StartCount INTEGER default 0,"
                 + "LastResult TEXT);";
             strbuilder.Append(cmd).Append("\n");
-            //创建用户身份认证信息
-            cmd = "Create Table if Not Exists " + typeof(AuthInfo).Name + "("
-                + "username primary key,"
-                + "password TEXT,"
-                + "jsessionid TEXT,"
-                + "loginFlag INTEGER default 0,"
-                + "autoLogin INTEGER default 0,"
-                + "timestamp INTEGER default 0);";
-            strbuilder.Append(cmd).Append("\n");
+            //////////////////////////////////////////////////////////////////
+            ////创建用户身份认证信息
+            //cmd = "Create Table if Not Exists " + typeof(AuthInfo).Name + "("
+            //    + "username primary key,"
+            //    + "password TEXT,"
+            //    + "jsessionid TEXT,"
+            //    + "loginFlag INTEGER default 0,"
+            //    + "autoLogin INTEGER default 0,"
+            //    + "timestamp INTEGER default 0);";
+            //strbuilder.Append(cmd).Append("\n");
+            ////////////////////////////////////////////////////////////////////
+            //@Deprecated
             return strbuilder.ToString();
         }
         #endregion

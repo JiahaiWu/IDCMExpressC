@@ -15,7 +15,7 @@ namespace IDCM.Data.DAM
         /// <summary>
         /// 创建自定义表实例
         /// </summary>
-        public static void buildCustomTable(SQLiteConn sconn)
+        public static void buildCustomTable(ConnLabel sconn)
         {
             List<CustomTColDef> ctcds = CustomTColDefDAM.loadAll(sconn);
             StringBuilder cmdBuilder = new StringBuilder();
@@ -77,21 +77,21 @@ namespace IDCM.Data.DAM
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static List<CustomTColMap> findAllByOrder(SQLiteConn sconn)
+        public static List<CustomTColMap> findAllByOrder(ConnLabel sconn)
         {
             string cmd = "select * from " + typeof(CustomTColMap).Name + " order by viewOrder";
             using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                return SQLiteConnPicker.getConnection(picker).Query<CustomTColMap>(cmd).ToList<CustomTColMap>();
+                return picker.getConnection().Query<CustomTColMap>(cmd).ToList<CustomTColMap>();
             }
         }
 
-        public static int updateViewOrder(SQLiteConn sconn, string attr, int viewOrder)
+        public static int updateViewOrder(ConnLabel sconn, string attr, int viewOrder)
         {
             string cmd = "update " + typeof(CustomTColMap).Name + " set viewOrder=" + viewOrder + " where attr='" + attr + "'";
             using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                return SQLiteConnPicker.getConnection(picker).Execute(cmd);
+                return picker.getConnection().Execute(cmd);
             }
         }
       

@@ -6,13 +6,13 @@ using System.Data.SQLite;
 
 namespace IDCM.Data.DHCP
 {
-    public class SQLiteConn
+    public class ConnLabel
     {
-        public SQLiteConn(SQLiteConnectionStringBuilder sqlCSB)
+        public ConnLabel(SQLiteConnectionStringBuilder sqlCSB)
         {
             connectStr = sqlCSB.ToString();
         }
-        public SQLiteConn(string connectionString)
+        public ConnLabel(string connectionString)
         {
             connectStr = connectionString;
         }

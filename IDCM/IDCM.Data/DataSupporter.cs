@@ -34,7 +34,8 @@ namespace IDCM.Data
         public static long nextSeqID(WorkSpaceManager wsm)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(wsm!=null && wsm.getStatus().Equals(WSStatus.InWorking),"Ivalid params and status for get next sequence id.");
+            bool res = WSStatus.InWorking.Equals(wsm.getStatus());
+            System.Diagnostics.Debug.Assert(wsm != null && WSStatus.InWorking.Equals(wsm.getStatus()), "Ivalid params and status for get next sequence id.");
 #endif
             return BaseInfoNoteDAM.nextSeqID(wsm.getConnection());
         }
@@ -77,7 +78,7 @@ namespace IDCM.Data
         public static DataTable SQLQuery(WorkSpaceManager wsm, string sqlExpression)
         {
 #if DEBUG
-            System.Diagnostics.Debug.Assert(wsm.getStatus().Equals(WSStatus.InWorking), "illegal status to Query Data! @getStatus()=" + wsm.getStatus());
+            System.Diagnostics.Debug.Assert(WSStatus.InWorking.Equals(wsm.getStatus()), "illegal status to Query Data! @getStatus()=" + wsm.getStatus());
             System.Diagnostics.Debug.Assert(sqlExpression != null, "sqlExpressions should not be null.");
 #endif
             try

@@ -104,8 +104,8 @@ namespace IDCM.Service.Common.Core
             else
             {
                 log.Fatal("The setting file note exist! @Path=" + settingPath);
+                throw new System.Data.DataException("The setting file note exist! @Path=" + settingPath);
             }
-            return null;
         }
         public static CustomTColDef formatSettingLine(string line)
         {

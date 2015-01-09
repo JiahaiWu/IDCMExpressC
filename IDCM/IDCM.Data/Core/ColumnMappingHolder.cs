@@ -21,7 +21,7 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="picker"></param>
         /// <returns>依赖数据项载入成功与否状态</returns>
-        public static bool prepareForLoad(SQLiteConn sconn)
+        public static bool prepareForLoad(ConnLabel sconn)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(sconn != null);
@@ -34,7 +34,7 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static bool checkTableSetting(SQLiteConn sconn)
+        public static bool checkTableSetting(ConnLabel sconn)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(sconn != null);
@@ -43,7 +43,7 @@ namespace IDCM.Data.Core
             long ctcdCount = 0;
             using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
             {
-                ctcdCount = SQLiteConnPicker.getConnection(picker).Query<long>(cmd).Single<long>();
+                ctcdCount = picker.getConnection().Query<long>(cmd).Single<long>();
             }
             if (ctcdCount > 0)
             {
@@ -54,7 +54,7 @@ namespace IDCM.Data.Core
             {
                 using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
                 {
-                    ctcdCount = SQLiteConnPicker.getConnection(picker).Query<long>(cmd).Single<long>();
+                    ctcdCount = picker.getConnection().Query<long>(cmd).Single<long>();
                 }
                 if (ctcdCount > 0)
                 {
@@ -69,7 +69,7 @@ namespace IDCM.Data.Core
         /// <summary>
         /// 缓存数据字段映射关联关系
         /// </summary>
-        public static void queryCacheAttrDBMap(SQLiteConn sconn)
+        public static void queryCacheAttrDBMap(ConnLabel sconn)
         {
             //select * from CustomTColMap order by viewOrder
             List<CustomTColMap> ctcms = CustomTColMapDAM.findAllByOrder(sconn);
@@ -83,7 +83,7 @@ namespace IDCM.Data.Core
         /// 获取视图和数据库查询映射
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, int> getViewDBMapping(SQLiteConn sconn)
+        public static Dictionary<string, int> getViewDBMapping(ConnLabel sconn)
         {
             Dictionary<string, int> maps = new Dictionary<string, int>();
             if (attrMapping.Count < 1)
@@ -101,7 +101,7 @@ namespace IDCM.Data.Core
         /// 数据库字段映射位序的值自0计数。
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, int> getCustomViewDBMapping(SQLiteConn sconn)
+        public static Dictionary<string, int> getCustomViewDBMapping(ConnLabel sconn)
         {
             Dictionary<string, int> maps = ColumnMappingHolder.getViewDBMapping(sconn);
             //填写表头
@@ -124,7 +124,7 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr"></param>
         /// <returns></returns>
-        public static int getDBOrder(SQLiteConn sconn, string attr)
+        public static int getDBOrder(ConnLabel sconn, string attr)
         {
             if (attrMapping.Count < 1)
                 queryCacheAttrDBMap(sconn);
@@ -137,7 +137,7 @@ namespace IDCM.Data.Core
         /// 获取预览字段集序列
         /// </summary>
         /// <returns></returns>
-        public static List<string> getViewAttrs(SQLiteConn sconn, bool withInnerField = true)
+        public static List<string> getViewAttrs(ConnLabel sconn, bool withInnerField = true)
         {
             if (attrMapping.Count < 1)
                 //作用是在attrMapping里存入，key属性名称，value<key value> key:数据库映射，字段显示
@@ -160,7 +160,7 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr"></param>
         /// <returns></returns>
-        public static int getViewOrder(SQLiteConn sconn, string attr)
+        public static int getViewOrder(ConnLabel sconn, string attr)
         {
             if (attrMapping.Count < 1)
                 queryCacheAttrDBMap(sconn);
@@ -173,7 +173,7 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr"></param>
         /// <param name="viewOrder"></param>
-        public static void updateViewOrder(SQLiteConn sconn, string attr, int viewOrder, bool isRequired)
+        public static void updateViewOrder(ConnLabel sconn, string attr, int viewOrder, bool isRequired)
         {
             int vOrder = viewOrder;
             if (isRequired == false && viewOrder < CustomTColMapDAM.MaxMainViewCount)
@@ -187,7 +187,7 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr"></param>
         /// <param name="viewOrder"></param>
-        public static void updateViewOrder(SQLiteConn sconn, string attr, int viewOrder)
+        public static void updateViewOrder(ConnLabel sconn, string attr, int viewOrder)
         {
             int ic = CustomTColMapDAM.updateViewOrder(sconn, attr, viewOrder);
             if (ic > 0)

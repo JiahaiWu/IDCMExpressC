@@ -117,8 +117,11 @@ namespace IDCM.Data
             //关闭用户工作空间
             if (!_status.Equals(WSStatus.Idle))
             {
-                SQLiteConnPicker.shutdown(sconn);
+                DAMBase.stopDBInstance(sconn);
+                sconn = null;
                 _status = WSStatus.Idle;
+                SQLiteConnection.ClearAllPools();
+                SQLiteConnection.Shutdown(true, true);
                 return true;
             }
             return false;
