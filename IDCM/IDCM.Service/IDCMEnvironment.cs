@@ -58,10 +58,18 @@ namespace IDCM.Service
         }
         public static void noteStartInfo(string location, bool asDefaultWorkSpace, string loginName, string gcmPassword)
         {
-            ConfigurationHelper.SetAppConfig(LastWorkSpace, location);
-            ConfigurationHelper.SetAppConfig(LWSAsDefault, asDefaultWorkSpace.ToString());
-            ConfigurationHelper.SetAppConfig(LUID, loginName);
-            ConfigurationHelper.SetAppConfig(LPWD, Base64DESEncrypt.CreateInstance(loginName).Encrypt(gcmPassword));
+            //ConfigurationManager.AppSettings.Set(LastWorkSpace, location);
+            //ConfigurationManager.AppSettings.Set(LWSAsDefault, asDefaultWorkSpace.ToString());
+            //ConfigurationManager.AppSettings.Set(LUID, loginName);
+            //ConfigurationManager.AppSettings.Set(LPWD, Base64DESEncrypt.CreateInstance(loginName).Encrypt(gcmPassword));
+
+            string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+
+            string defaultCfgPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + Path.GetFileName(exePath).Replace(".vshost.exe",".exe") + ".config";
+            ConfigurationHelper.SetAppConfig(LastWorkSpace, location, defaultCfgPath);
+            ConfigurationHelper.SetAppConfig(LWSAsDefault, asDefaultWorkSpace.ToString(), defaultCfgPath);
+            ConfigurationHelper.SetAppConfig(LUID, loginName, defaultCfgPath);
+            ConfigurationHelper.SetAppConfig(LPWD, Base64DESEncrypt.CreateInstance(loginName).Encrypt(gcmPassword), defaultCfgPath);
         }
 
         #region 配置参数参数设定

@@ -45,7 +45,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(580, 400);
+            this.pictureBox1.Size = new System.Drawing.Size(630, 440);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -60,7 +60,7 @@
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label1.Font = new System.Drawing.Font("Cambria", 10.5F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.label1.Location = new System.Drawing.Point(363, 297);
+            this.label1.Location = new System.Drawing.Point(354, 329);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 16);
             this.label1.TabIndex = 1;
@@ -69,9 +69,9 @@
             // pictureBox_loading
             // 
             this.pictureBox_loading.Image = global::IDCM.Properties.Resources.uploading2_cut1;
-            this.pictureBox_loading.Location = new System.Drawing.Point(162, 290);
+            this.pictureBox_loading.Location = new System.Drawing.Point(192, 320);
             this.pictureBox_loading.Name = "pictureBox_loading";
-            this.pictureBox_loading.Size = new System.Drawing.Size(195, 28);
+            this.pictureBox_loading.Size = new System.Drawing.Size(156, 31);
             this.pictureBox_loading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox_loading.TabIndex = 3;
             this.pictureBox_loading.TabStop = false;
@@ -81,7 +81,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(580, 400);
+            this.ClientSize = new System.Drawing.Size(630, 440);
             this.Controls.Add(this.pictureBox_loading);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);

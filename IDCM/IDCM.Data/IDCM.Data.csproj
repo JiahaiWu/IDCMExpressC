@@ -87,7 +87,6 @@
   <ItemGroup>
     <Content Include="003_12.ico" />
     <Content Include="ReadMe.txt" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

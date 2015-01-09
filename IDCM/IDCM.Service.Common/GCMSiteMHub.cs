@@ -12,6 +12,7 @@ namespace IDCM.Service.Common
     {
         public GCMSiteMHub(string loginName, string gcmPassword, bool autoLogin = true)
         {
+            this.authInfo = new AuthInfo();
             authInfo.Username = loginName;
             authInfo.Password = gcmPassword;
             authInfo.autoLogin = autoLogin;

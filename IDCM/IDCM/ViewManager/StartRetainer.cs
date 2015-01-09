@@ -25,6 +25,7 @@ namespace IDCM.ViewManager
         {
             startInfo = IDCMEnvironment.getLastStartInfo();
             startView = new StartView();
+            startView.FormClosed += OnStartViewClosed;
         }
 
         public static StartRetainer getInstance()
@@ -69,7 +70,6 @@ namespace IDCM.ViewManager
             if (activeShow)
             {
                 startView.setReferStartInfo(ref startInfo);
-                startView.FormClosed += OnStartViewClosed;
                 startView.Show();
             }
             return true;
@@ -87,9 +87,10 @@ namespace IDCM.ViewManager
                 if (startInfo.Location != null && startInfo.LoginName != null)
                 {
                     Form waitingForm = new WaitingForm();
+                    waitingForm.MdiParent = startView.MdiParent;
                     waitingForm.Show();
+                    waitingForm.BringToFront();
                     waitingForm.Update();
-                    waitingForm.UseWaitCursor = true;
                     if (DataSourceHolder.connectWorkspace(startInfo.Location, startInfo.LoginName))
                     {
                         if (startInfo.GCMPassword != null)

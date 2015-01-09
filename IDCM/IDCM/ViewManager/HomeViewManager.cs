@@ -19,12 +19,11 @@ namespace IDCM.ViewManager
         public HomeViewManager()
         {
             homeView = new HomeView();
-            //LongTermHandleNoter.note(homeView);
-            //frontFindDlg = new LocalFrontFindDlg(homeView.getItemGridView());
-            //frontFindDlg.setCellHit += new LocalFrontFindDlg.SetHit<DataGridViewCell>(setDGVCellHit);
-            //frontFindDlg.cancelCellHit += new LocalFrontFindDlg.CancelHit<DataGridViewCell>(cancelDGVCellHit);
-            //LongTermHandleNoter.note(frontFindDlg);
-            //homeView.setManager(this);
+            homeView.setManager(this);
+            frontFindDlg = new LocalFrontFindDlg(homeView.getItemGridView());
+            frontFindDlg.setCellHit += new LocalFrontFindDlg.SetHit<DataGridViewCell>(setDGVCellHit);
+            frontFindDlg.cancelCellHit += new LocalFrontFindDlg.CancelHit<DataGridViewCell>(cancelDGVCellHit);
+
             //libBuilder = new LocalLibBuilder(homeView.getBaseTree(), homeView.getLibTree());
             //datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
             //searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());
@@ -94,8 +93,7 @@ namespace IDCM.ViewManager
             if (homeView == null || homeView.IsDisposed)
             {
                 homeView = new HomeView();
-                //LongTermHandleNoter.note(homeView);
-                //homeView.setManager(this);
+                homeView.setManager(this);
                 //libBuilder = new LocalLibBuilder(homeView.getBaseTree(), homeView.getLibTree());
                 //datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
                 //searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());

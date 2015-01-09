@@ -17,12 +17,14 @@ namespace IDCM.Service.Utils
         /// <param name="configPath"></param>
         public static void SetAppConfig(string appKey, string appValue, string configPath = null)
         {
+            string exePath =System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            string defaultCfgPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(exePath) + ".config";
+            string cfgPath= configPath == null ? defaultCfgPath : configPath;
 #if DEBUG
-            System.Diagnostics.Debug.Assert(File.Exists(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName + ".config"),
-                System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName + ".config Not Exist!");
+            System.Diagnostics.Debug.Assert(File.Exists(cfgPath), cfgPath + " Not Exist!");
 #endif
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(configPath == null ? System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName + ".config" : configPath);
+            xDoc.Load(cfgPath);
             var xNode = xDoc.SelectSingleNode("//appSettings");
             var xElem = (XmlElement)xNode.SelectSingleNode("//add[@key='" + appKey + "']");
             if (xElem != null) xElem.SetAttribute("value", appValue);
@@ -33,7 +35,7 @@ namespace IDCM.Service.Utils
                 xNewElem.SetAttribute("value", appValue);
                 xNode.AppendChild(xNewElem);
             }
-            xDoc.Save(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName + ".config");
+            xDoc.Save(cfgPath);
         }
         /// <summary>
         /// GetAppConfig
@@ -43,12 +45,14 @@ namespace IDCM.Service.Utils
         /// <returns></returns>
         public static string GetAppConfig(string appKey, string configPath = null)
         {
+            string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            string defaultCfgPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(exePath) + ".config";
+            string cfgPath = configPath == null ? defaultCfgPath : configPath;
 #if DEBUG
-            System.Diagnostics.Debug.Assert(File.Exists(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName + ".config"),
-                System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName + ".config Not Exist!");
+            System.Diagnostics.Debug.Assert(File.Exists(cfgPath), cfgPath + " Not Exist!");
 #endif
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(configPath == null ? System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName + ".config" : configPath);
+            xDoc.Load(cfgPath);
             var xNode = xDoc.SelectSingleNode("//appSettings");
             var xElem = (XmlElement)xNode.SelectSingleNode("//add[@key='" + appKey + "']");
             if (xElem != null)
