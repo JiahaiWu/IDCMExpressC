@@ -11,9 +11,9 @@ using System.Threading;
 
 namespace IDCM.Test
 {
-    public partial class Form1 : Form
+    public partial class QuickTest_Data : Form
     {
-        public Form1()
+        public QuickTest_Data()
         {
             InitializeComponent();
         }
@@ -24,7 +24,7 @@ namespace IDCM.Test
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            System.IO.File.Delete("F:/Test.mrc");
+            //System.IO.File.Delete("F:/Test.mrc");
             //冒烟测试部分
             WorkSpaceManager wsm = new WorkSpaceManager("F:/Test.mrc", "jsdjkfhsdf");
             if (wsm.connect())

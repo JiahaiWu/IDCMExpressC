@@ -37,6 +37,7 @@ namespace IDCM.Data.DAM
                 sqlCSB.Password = password;//设置密码
                 sqlCSB.SyncMode = SynchronizationModes.Off;//启用异步存储模式
                 sqlCSB.Pooling = true;
+                sqlCSB.AsParallel();
                 sqlCSB.DefaultTimeout = SysConstants.MAX_DB_REQUEST_TIME_OUT;
                 ////////////////////////////////////////////////////////////////
                 //sqlCSB.Add("PRAGMA case_sensitive_like", 0);//设置Like查询大小写敏感与否设置

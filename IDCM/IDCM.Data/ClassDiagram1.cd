@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="IDCM.Data.Common.ErrorNote" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIEAAAAAAAAEgAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Common\ErrorNote.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.Core.ColumnMappingHolder" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAgICAABAAAAAAABAAAAAAIAJABA=</HashCode>
+      <FileName>Core\ColumnMappingHolder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.Core.WorkSpaceHelper" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAQAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\WorkSpaceHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.Core.WorkSpaceManagerA" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEAAAABAAAAAAAAAgAAACAEACAAABAAAABABAgAEAIA=</HashCode>
+      <FileName>Core\WorkSpaceManagerA.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.Core.WSStatus" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIABAAAAAQAAEgAAAAAQAAAAEAKAAEAQgAAAAAAA=</HashCode>
+      <FileName>Core\WSStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.DAM.BaseInfoNoteDAM" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAQAAEAAAAAAIAAAAA=</HashCode>
+      <FileName>DAM\BaseInfoNoteDAM.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.DAM.CustomTColDefDAM" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAADAAAAAAAAACAQIEAAAAAAAAAAEARAAACA=</HashCode>
+      <FileName>DAM\CustomTColDefDAM.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.DAM.CustomTColMapDAM" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAEAAAAAAAAAAAQCAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>DAM\CustomTColMapDAM.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.DAM.DAMBase" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIABCAADAAAAAAAAIAAAAAAAIAAiAA=</HashCode>
+      <FileName>DAM\DAMBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.DataSupporter" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAIAACAAAAAAAAAAAAEAAAAAAAAAAAE=</HashCode>
+      <FileName>DataSupporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.WorkSpaceManager" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAIAgCAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>WorkSpaceManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.DHCP.ConnLabel" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DHCP\ConnLabel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IDCM.Data.DHCP.SQLiteConnPicker" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAASAAAAABAAAAAABAAAAAAAAAAACAAAAAAAg=</HashCode>
+      <FileName>DHCP\SQLiteConnPicker.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>
