@@ -77,8 +77,9 @@
     <Compile Include="DAM\CustomTColMapDAM.cs" />
     <Compile Include="DataSupporter.cs" />
     <Compile Include="DHCP\ConnLabel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DHCP\SQLiteConnPicker.cs" />
+    <Compile Include="DHCP\SQLiteConnPool.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\WorkSpaceHelper.cs" />
     <Compile Include="WorkSpaceManager.cs" />
     <Compile Include="Core\WorkSpaceManagerA.cs" />

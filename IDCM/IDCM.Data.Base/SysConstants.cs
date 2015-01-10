@@ -15,8 +15,12 @@ namespace IDCM.Data.Base
         public const int Max_Attr_Count = 1000;
         public const int EXPORT_PAGING_COUNT = 1000;
         /// <summary>
-        /// 最长等待毫秒数（默认为5000ms）
+        /// 最长等待毫秒数
         /// </summary>
-        public static int MAX_DB_REQUEST_TIME_OUT = 5000;
+        public static int MAX_DB_REQUEST_TIME_OUT = 10000;
+        /// <summary>
+        /// 最大数据库连接池连接数
+        /// </summary>
+        public static int MAX_DB_REQUEST_POOL_NUM = 4;
     }
 }

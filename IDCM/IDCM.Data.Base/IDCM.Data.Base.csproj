@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="AbsHandler.cs" />
     <Compile Include="ExportType.cs" />
+    <Compile Include="IDCMDataException.cs" />
+    <Compile Include="IDCMException.cs" />
     <Compile Include="ObjectPair.cs" />
     <Compile Include="StrainListPage.cs" />
     <Compile Include="StrainView.cs" />
