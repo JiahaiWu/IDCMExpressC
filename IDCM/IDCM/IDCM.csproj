@@ -156,6 +156,10 @@
     <Compile Include="Forms\WaitingForm.Designer.cs">
       <DependentUpon>WaitingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\BackProgressIndicator.cs" />
+    <Compile Include="Modules\LocalDataSetBuilder.cs" />
+    <Compile Include="Modules\LocalDBSearchBuilder.cs" />
+    <Compile Include="Modules\LocalCatBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewManager\AuthenticationRetainer.cs" />
@@ -251,9 +255,7 @@
       <Name>IDCM.Service</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Resources\base.gif" />
   </ItemGroup>

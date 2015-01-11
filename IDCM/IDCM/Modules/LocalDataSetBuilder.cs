@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using IDCM.Service.Utils;
 using System.Drawing;
 using System.Data;
 using IDCM.Data.Base;
+using IDCM.Service.Common;
 using IDCM.Data.Base.Utils;
+using IDCM.Service.Utils;
 
-namespace IDCM.HomeModule.Modules
+namespace IDCM.Modules
 {
     class LocalDataSetBuilder
     {
@@ -35,25 +36,25 @@ namespace IDCM.HomeModule.Modules
         }
         #endregion
         #region 实例对象保持部分
-        private long CUR_LID = CatalogNode.REC_ALL;
+        private long CUR_LID = LibraryNodeDAM.REC_ALL;
 
         public long CURRENT_LID
         {
             get { return CUR_LID; }
         }
-        private long CUR_PLID = CatalogNode.REC_ALL;
+        private long CUR_PLID = LibraryNodeDAM.REC_ALL;
 
         public long CURRENT_PLID
         {
             get { return CUR_PLID; }
         }
-
+        
         private long CUR_RID = -1L;
 
         public long CURRENT_RID
         {
             get { return CUR_RID; }
-            set { CUR_RID = value; }
+            set { CUR_RID=value; }
         }
         /// <summary>
         /// 当前表单显示的查询条件缓存
@@ -78,7 +79,7 @@ namespace IDCM.HomeModule.Modules
             if (dgvr.Cells.Count > rIdx)
             {
                 CUR_RID = Convert.ToInt64(dgvr.Cells[rIdx].FormattedValue.ToString());
-                DataTable table = LocalRecordMHub.queryCTDRecord(datasourehod,null, CUR_RID.ToString());
+                DataTable table = CTDRecordDAM.queryCTDRecord(null, CUR_RID.ToString());
                 if (table.Rows.Count > 0)
                 {
                     DataRow dr = table.Rows[0];
@@ -211,7 +212,7 @@ namespace IDCM.HomeModule.Modules
                 CTDRecordDAM.dropCTCRecordLid(filterLids);
             }
         }
-
+        
         /// <summary>
         /// 转换数据对象值到列表显示
         /// </summary>
@@ -243,7 +244,7 @@ namespace IDCM.HomeModule.Modules
             foreach (string attr in viewAttrs)
             {
                 int viewOrder = ColumnMappingHolder.getViewOrder(attr);//返回属性显示位序
-                Console.Write("##" + attr + "->" + viewOrder);
+                Console.Write("##"+attr+"->"+viewOrder);
                 if (viewOrder < ColumnMappingHolder.MaxMainViewCount)
                 {
                     CustomTColDef ctcd = CustomTColDefDAM.getCustomTColDef(attr);
@@ -300,7 +301,7 @@ namespace IDCM.HomeModule.Modules
                 label.BorderStyle = BorderStyle.None;
                 label.BackColor = Color.WhiteSmoke;
                 label.Name = "referLabel_" + ctcd.Attr;
-                string pattr = CVNameConverter.toViewName(ctcd.Attr);
+                string pattr =CVNameConverter.toViewName(ctcd.Attr);
                 label.Text = pattr;
                 label.Font = new Font(label.Font, label.Font.Style ^ FontStyle.Bold);
                 label.Height = 14;
@@ -358,7 +359,7 @@ namespace IDCM.HomeModule.Modules
                     int idx = Convert.ToInt32(ctl.Name.Substring("referPanel_".Length));
 
                     //从viewAttrs[idx]第一位开始，viewAttrs[idx]-2个长度的字符串
-                    string attr = CVNameConverter.toViewName(viewAttrs[idx]);//注意：
+                    string attr =CVNameConverter.toViewName(viewAttrs[idx]);//注意：
                     Control ictl = ctl.Controls[attr];
                     if (ictl != null)
                     {
@@ -385,7 +386,7 @@ namespace IDCM.HomeModule.Modules
                 DataGridViewCell ncell = null;
                 if (itemDGV.SelectedCells != null && itemDGV.SelectedCells.Count > 0)
                 {
-                    if (itemDGV.SelectedCells[0].Displayed)
+                    if(itemDGV.SelectedCells[0].Displayed)
                         ncell = itemDGV.SelectedCells[0];
                 }
                 while ((ncell = nextTextCell(ncell)) != null)
@@ -423,7 +424,7 @@ namespace IDCM.HomeModule.Modules
                 rowIndex = rowIndex + 1;
                 colIndex = 0;
             }
-            if (colIndex < columnCount && rowIndex < rowCount)
+            if (colIndex < columnCount && rowIndex<rowCount)
             {
                 DataGridViewRow dgvr = itemDGV.Rows[rowIndex];
                 if (!dgvr.IsNewRow)
@@ -445,7 +446,7 @@ namespace IDCM.HomeModule.Modules
         /// <param name="dgv"></param>
         public void addNewRecord()
         {
-            long nuid = CTDRecordA.addNewRecord(CUR_LID, CURRENT_PLID);
+            long nuid = CTDRecordDAM.addNewRecord(CUR_LID, CURRENT_PLID);
             if (nuid > 0)
             {
                 int idx = itemDGV.Rows.Add();
@@ -454,7 +455,7 @@ namespace IDCM.HomeModule.Modules
                 itemDGV.Rows[idx].Cells[CTDRecordA.CTD_PLID].Value = CURRENT_PLID;
             }
         }
-
+        
         /// <summary>
         /// 伴随用户修改操作同步更新记录属性信息
         /// </summary>
@@ -490,7 +491,7 @@ namespace IDCM.HomeModule.Modules
                 }
                 if (rid.Length > 0 && cellVal.Length > 0)
                 {
-                    CTDRecordA.updateAttrVal(rid, cellVal, "[" + attrName + "]");
+                    CTDRecordDAM.updateAttrVal(rid, cellVal, "[" + attrName + "]");
                 }
             }
         }

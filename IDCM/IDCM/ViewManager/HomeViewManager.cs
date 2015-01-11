@@ -8,6 +8,9 @@ using IDCM.Forms;
 using IDCM.Service.Common;
 using IDCM.Data.Base;
 using IDCM.Core;
+using IDCM.Modules;
+using IDCM.Service.BGHandler;
+using IDCM.Service.Utils;
 
 namespace IDCM.ViewManager
 {
@@ -22,21 +25,20 @@ namespace IDCM.ViewManager
         {
             homeView = new HomeView();
             homeView.setManager(this);
+
+            homeView.Load += OnHomeView_Load;
+            homeView.Shown += OnHomeView_Shown;
+
             frontFindDlg = new LocalFrontFindDlg(homeView.getItemGridView());
             frontFindDlg.setCellHit += new LocalFrontFindDlg.SetHit<DataGridViewCell>(setDGVCellHit);
             frontFindDlg.cancelCellHit += new LocalFrontFindDlg.CancelHit<DataGridViewCell>(cancelDGVCellHit);
 
-            //libBuilder = new LocalLibBuilder(homeView.getBaseTree(), homeView.getLibTree());
-            //datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
-            //searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());
-            //BackProgressIndicator.addIndicatorBar(homeView.getProgressBar());
+            catBuilder = new LocalCatBuilder(homeView.getBaseTree(), homeView.getLibTree());
+            datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
+            searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());
+            BackProgressIndicator.addIndicatorBar(homeView.getProgressBar());
         }
-        public static HomeViewManager getInstance()
-        {
-            //ManagerI hvm = IDCMAppContext.MainManger.getManager(typeof(HomeViewManager));
-            //return hvm == null ? null : (hvm as HomeViewManager);
-            return null;
-        }
+
         ~HomeViewManager()
         {
             dispose();
@@ -47,9 +49,9 @@ namespace IDCM.ViewManager
         
         //页面窗口实例
         private volatile HomeView homeView = null;
-        //private volatile LocalLibBuilder libBuilder = null;
-        //private volatile LocalDataSetBuilder datasetBuilder = null;
-        //private volatile LocalDBSearchBuilder searchBuilder = null;
+        private volatile LocalCatBuilder catBuilder = null;
+        private volatile LocalDataSetBuilder datasetBuilder = null;
+        private volatile LocalDBSearchBuilder searchBuilder = null;
         private LocalFrontFindDlg frontFindDlg = null;
         
         #endregion
@@ -57,24 +59,24 @@ namespace IDCM.ViewManager
         public override void dispose()
         {
             _isDisposed = true;
-            //if (libBuilder != null)
-            //{
-            //    libBuilder.Dispose();
-            //    libBuilder = null;
-            //}
-            //if (datasetBuilder != null)
-            //{
-            //    datasetBuilder.Dispose();
-            //    datasetBuilder = null;
-            //}
-            //if (searchBuilder != null)
-            //{
-            //    searchBuilder.Dispose();
-            //    searchBuilder = null;
-            //}
+            if (catBuilder != null)
+            {
+                catBuilder.Dispose();
+                catBuilder = null;
+            }
+            if (datasetBuilder != null)
+            {
+                datasetBuilder.Dispose();
+                datasetBuilder = null;
+            }
+            if (searchBuilder != null)
+            {
+                searchBuilder.Dispose();
+                searchBuilder = null;
+            }
             if (homeView != null && !homeView.IsDisposed)
             {
-                //BackProgressIndicator.removeIndicatorBar(homeView.getProgressBar());
+                BackProgressIndicator.removeIndicatorBar(homeView.getProgressBar());
                 homeView.Close();
                 homeView.Dispose();
                 homeView = null;
@@ -96,9 +98,9 @@ namespace IDCM.ViewManager
             {
                 homeView = new HomeView();
                 homeView.setManager(this);
-                //libBuilder = new LocalLibBuilder(homeView.getBaseTree(), homeView.getLibTree());
-                //datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
-                //searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());
+                catBuilder = new LocalCatBuilder(homeView.getBaseTree(), homeView.getLibTree());
+                datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
+                searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());
             }
             if (DataSourceHolder.InWorking)
             {
@@ -151,15 +153,28 @@ namespace IDCM.ViewManager
                 return homeView.Visible;
         }
         #endregion
+        #region 接管视图组件的关键的事件处理区
+        public void OnHomeView_Load(object sender, EventArgs e)
+        {
+            //加载默认的分类目录树展示
+            catBuilder.loadTreeSet();
+            updateCatRecCount();
+        }
+        public void OnHomeView_Shown(object sender, EventArgs e)
+        {
+            //加载用数据记录
+            loadDataSetView(homeView.getBaseTree().Nodes[0]);
+            //resize for data view
+            homeView.getItemGridView().AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+            //dataGridView_items.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
+            homeView.getItemGridView().AllowUserToResizeColumns = true;
+        }
 
+        #endregion
         public void loadDataSetView(TreeNode tnode)
         {
-            //datasetBuilder.loadDataSetView();
-            //noteCurSelectedNode(tnode);
-        }
-        public void loadTreeSet()
-        {
-            //libBuilder.loadTreeSet();
+            datasetBuilder.loadDataSetView();
+            noteCurSelectedNode(tnode);
         }
         /// <summary>
         /// 导入数据文档
@@ -183,37 +198,36 @@ namespace IDCM.ViewManager
         /// <param name="fpath"></param>
         public void exportData(ExportType etype, string fpath)
         {
-            ////DataGridView itemDGV = homeView.getItemGridView();
-            //KeyValuePair<string, int> lastQuery = QueryCmdCache.getLastDGVRQuery();
-            //AbsHandler handler = null;
-            //switch (etype)
-            //{
-            //    case ExportType.Excel:
-            //        handler = new ExcelExportHandler(fpath, lastQuery.Key,lastQuery.Value);
-            //        CmdConsole.call(handler);
-            //        break;
-            //    case ExportType.JSONList:
-            //        handler = new JSONListExportHandler(fpath, lastQuery.Key, lastQuery.Value);
-            //        CmdConsole.call(handler);
-            //        break;
-            //    case ExportType.TSV:
-            //        handler = new TextExportHandler(fpath, lastQuery.Key, lastQuery.Value, "\t");
-            //        CmdConsole.call(handler);
-            //        break;
-            //    case ExportType.CSV:
-            //        handler = new TextExportHandler(fpath, lastQuery.Key, lastQuery.Value, ",");
-            //        CmdConsole.call(handler);
-            //        break;
-            //    default:
-            //        MessageBox.Show("Unsupport export type!");
-            //        break;
-            //}
+            KeyValuePair<string, int> lastQuery = LocalRecordMHub.getLastDGVRQuery();
+            AbsHandler handler = null;
+            switch (etype)
+            {
+                case ExportType.Excel:
+                    handler = new ExcelExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value);
+                    DWorkMHub.callAsyncHandle(handler);
+                    break;
+                case ExportType.JSONList:
+                    handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value);
+                    DWorkMHub.callAsyncHandle(handler);
+                    break;
+                case ExportType.TSV:
+                    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, "\t");
+                    DWorkMHub.callAsyncHandle(handler);
+                    break;
+                case ExportType.CSV:
+                    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
+                    DWorkMHub.callAsyncHandle(handler);
+                    break;
+                default:
+                    MessageBox.Show("Unsupport export type!");
+                    break;
+            }
         }
         /// <summary>
         /// 更新分类目录关联文档数显示
         /// </summary>
         /// <param name="focusNode"></param>
-        public void updateLibRecCount(TreeNode focusNode = null)
+        public void updateCatRecCount(TreeNode focusNode = null)
         {
             //UpdateHomeLibCountHandler ulch = null;
             //if (focusNode == null)
@@ -224,7 +238,7 @@ namespace IDCM.ViewManager
         }
         public void selectViewRecord(DataGridViewRow dgvr)
         {
-            //datasetBuilder.selectViewRecord(dgvr);
+            datasetBuilder.selectViewRecord(dgvr);
         }
         public void trashDataSet(TreeNode filteNode, int newlid = CatalogNode.REC_TRASH)
         {
@@ -250,24 +264,24 @@ namespace IDCM.ViewManager
         }
         public void addGroup(TreeNode treeNode)
         {
-            //libBuilder.addGroup(treeNode);
+            catBuilder.addGroup(treeNode);
         }
         public void addGroupSet(TreeNode treeNode)
         {
-            //libBuilder.addGroupSet(treeNode);
+            catBuilder.addGroupSet(treeNode);
         }
         public void renameNode(TreeNode treeNode, string label)
         {
-            //libBuilder.renameNode(treeNode, label);
+            catBuilder.renameNode(treeNode, label);
         }
 
         public void noteCurSelectedNode(TreeNode node)
         {
-           //bool needUpdateData= libBuilder.noteCurSelectedNode(node);
-           //if (needUpdateData)
-           //{
-           //    updateDataSet(node);
-           //}
+            bool needUpdateData = catBuilder.noteCurSelectedNode(node);
+            if (needUpdateData)
+            {
+                updateDataSet(node);
+            }
         }
         /// <summary>
         /// 根据指定的数据集合加载数据报表显示
@@ -282,22 +296,22 @@ namespace IDCM.ViewManager
         }
         public void showDBDataSearch()
         {
-            //searchBuilder.showDBDataSearch();
+            searchBuilder.showDBDataSearch();
         }
         public void doDBDataSearch()
         {
-            //string whereCmd=searchBuilder.buildWhereCmd();
-            //datasetBuilder.doDBDataSearch(whereCmd);
+            string whereCmd = searchBuilder.buildWhereCmd();
+            datasetBuilder.doDBDataSearch(whereCmd);
         }
         private void setDGVCellHit(DataGridViewCell cell)
         {
             cell.DataGridView.EndEdit();
-            //int colCount = DGVUtil.getTextColumnCount(cell.DataGridView);
-            //DataGridViewCell rightCell = cell.DataGridView.Rows[cell.RowIndex].Cells[colCount - 1];
-            //cell.DataGridView.CurrentCell = rightCell;
-            //cell.DataGridView.CurrentCell = cell;
-            //cell.Selected = true;
-            //cell.DataGridView.BeginEdit(true);
+            int colCount = DGVUtil.getTextColumnCount(cell.DataGridView);
+            DataGridViewCell rightCell = cell.DataGridView.Rows[cell.RowIndex].Cells[colCount - 1];
+            cell.DataGridView.CurrentCell = rightCell;
+            cell.DataGridView.CurrentCell = cell;
+            cell.Selected = true;
+            cell.DataGridView.BeginEdit(true);
         }
         private void cancelDGVCellHit(DataGridViewCell cell)
         {
@@ -318,9 +332,9 @@ namespace IDCM.ViewManager
         }
         public void quickSearch(string findTerm)
         {
-           //DataGridViewCell ncell= datasetBuilder.quickSearch(findTerm);
-           //if(ncell!=null)
-           //    setDGVCellHit(ncell);
+            DataGridViewCell ncell = datasetBuilder.quickSearch(findTerm);
+            if (ncell != null)
+                setDGVCellHit(ncell);
         }
         public void frontSearchNext()
         {
@@ -333,42 +347,26 @@ namespace IDCM.ViewManager
 
         public void addNewRecord()
         {
-            //datasetBuilder.addNewRecord();
+            datasetBuilder.addNewRecord();
         }
         public TreeNode SelectedNode_Current
         {
-            //get { return libBuilder != null ? libBuilder.SelectedNode_Current : null; }
-            get
-            {
-                return null;
-            }
+            get { return catBuilder != null ? catBuilder.SelectedNode_Current : null; }
         }
         public long CURRENT_RID
         {
-            //get { return datasetBuilder.CURRENT_RID; }
-            //set { datasetBuilder.CURRENT_RID=value; }
-            get
-            {
-                return 0;
-            }
+            get { return datasetBuilder.CURRENT_RID; }
+            set { datasetBuilder.CURRENT_RID=value; }
         }
         public long CURRENT_LID
         {
-            //get { return datasetBuilder.CURRENT_LID; }
-            get
-            {
-                return 0;
-            }
+            get { return datasetBuilder.CURRENT_LID; }
         }
         public TreeNode RootNode_unfiled
         {
-            //get
-            //{
-            //    return libBuilder.RootNode_unfiled;
-            //}
             get
             {
-                return null;
+                return catBuilder.RootNode_unfiled;
             }
         }
     }

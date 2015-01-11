@@ -10,7 +10,7 @@ using IDCM.Service.Common;
 
 namespace IDCM.Service.BGHandler
 {
-    class ExcelExportHandler:AbsHandler
+    public class ExcelExportHandler:AbsHandler
     {
         public ExcelExportHandler(DataSourceMHub datasource, string fpath, string cmdstr, int tcount)
         {

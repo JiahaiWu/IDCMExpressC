@@ -35,6 +35,9 @@
     <ApplicationIcon>003_02.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CSharpTest.Net.Library">
+      <HintPath>..\packages\CSharpTest.Net.Library.2.14.126.467\lib\net40\CSharpTest.Net.Library.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=1.38.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Dapper.1.38\lib\net40\Dapper.dll</HintPath>
@@ -59,6 +62,7 @@
     <Compile Include="Core\CTableSetting.cs" />
     <Compile Include="Core\HandleRunStatus.cs" />
     <Compile Include="Core\LocalHandlerProxy.cs" />
+    <Compile Include="Core\QueryCmdCache.cs" />
     <Compile Include="DAM\CustomTColMapDAM.cs" />
     <Compile Include="Core\AsyncMessage.cs" />
     <Compile Include="Core\AsyncMessageNoter.cs" />

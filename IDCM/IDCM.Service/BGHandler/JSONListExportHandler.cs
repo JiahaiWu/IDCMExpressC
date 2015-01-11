@@ -11,7 +11,7 @@ using IDCM.Service.Common;
 
 namespace IDCM.Service.BGHandler
 {
-    class JSONListExportHandler:AbsHandler
+    public class JSONListExportHandler:AbsHandler
     {
         public JSONListExportHandler(DataSourceMHub datasource, string fpath, string cmdstr, int tcount)
         {

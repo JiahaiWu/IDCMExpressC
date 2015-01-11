@@ -45,27 +45,10 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void HomeView_Load(object sender, EventArgs e)
         {
-            //Thread.CurrentThread.Name = "IDCM_HomeView" + HandleToken.nextTempID();
         }
 
         private void HomeView_Shown(object sender, EventArgs e)
         {
-            activeDataView(true);
-        }
-        /// <summary>
-        /// activeHomeView
-        /// </summary>
-        /// <param name="refresh"></param>
-        public void activeDataView(bool refresh=true)
-        {
-            //加载默认的数据报表展示
-            manager.loadTreeSet();
-            manager.loadDataSetView(treeView_base.Nodes[0]);
-            manager.updateLibRecCount();
-            //resize for data view
-            dataGridView_items.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-            //dataGridView_items.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
-            dataGridView_items.AllowUserToResizeColumns = true;
         }
 
         /// <summary>

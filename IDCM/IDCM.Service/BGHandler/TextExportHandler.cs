@@ -11,7 +11,7 @@ using IDCM.Service.Common;
 
 namespace IDCM.Service.BGHandler
 {
-    class TextExportHandler:AbsHandler
+    public class TextExportHandler:AbsHandler
     {
         public TextExportHandler(DataSourceMHub datasource, string fpath, string cmdstr, int tcount, string spliter = " ")
         {

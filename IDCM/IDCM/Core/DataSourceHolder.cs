@@ -102,6 +102,13 @@ namespace IDCM.Core
         {
             get { return dataSource!=null && dataSource.InWorking; }
         }
+        /// <summary>
+        /// 获取连接数据源
+        /// </summary>
+        public static DataSourceMHub DataSource
+        {
+            get { return dataSource; }
+        }
         #region 实例对象保持部分
         /// <summary>
         /// 数据源实例

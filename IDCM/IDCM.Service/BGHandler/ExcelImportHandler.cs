@@ -13,7 +13,7 @@ namespace IDCM.Service.BGHandler
     /// <summary>
     /// 将目标excel文档导入至目标数据库
     /// </summary>
-    class ExcelImportHandler:AbsHandler
+    public class ExcelImportHandler:AbsHandler
     {
         public ExcelImportHandler(string fpath,long lid,long plid)
         {
