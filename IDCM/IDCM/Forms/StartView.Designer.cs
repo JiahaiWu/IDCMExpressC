@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartView));
             this.pictureBox_start = new System.Windows.Forms.PictureBox();
             this.panel_start = new System.Windows.Forms.Panel();
+            this.pictureBox_help = new System.Windows.Forms.PictureBox();
             this.button_download = new System.Windows.Forms.Button();
             this.button_cancel = new System.Windows.Forms.Button();
             this.checkBox_defaultWS = new System.Windows.Forms.CheckBox();
@@ -42,10 +43,9 @@
             this.label_user = new System.Windows.Forms.Label();
             this.textBox_datasource = new System.Windows.Forms.TextBox();
             this.label_dataSource = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).BeginInit();
             this.panel_start.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_help)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox_start
@@ -65,7 +65,7 @@
             this.panel_start.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_start.BackColor = System.Drawing.Color.Transparent;
-            this.panel_start.Controls.Add(this.pictureBox1);
+            this.panel_start.Controls.Add(this.pictureBox_help);
             this.panel_start.Controls.Add(this.button_download);
             this.panel_start.Controls.Add(this.button_cancel);
             this.panel_start.Controls.Add(this.checkBox_defaultWS);
@@ -81,6 +81,17 @@
             this.panel_start.Name = "panel_start";
             this.panel_start.Size = new System.Drawing.Size(606, 100);
             this.panel_start.TabIndex = 1;
+            // 
+            // pictureBox_help
+            // 
+            this.pictureBox_help.Image = global::IDCM.Properties.Resources.help;
+            this.pictureBox_help.Location = new System.Drawing.Point(377, 40);
+            this.pictureBox_help.Name = "pictureBox_help";
+            this.pictureBox_help.Size = new System.Drawing.Size(21, 21);
+            this.pictureBox_help.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox_help.TabIndex = 11;
+            this.pictureBox_help.TabStop = false;
+            this.pictureBox_help.Click += new System.EventHandler(this.pictureBox_help_Click);
             // 
             // button_download
             // 
@@ -195,16 +206,6 @@
             this.label_dataSource.TabIndex = 0;
             this.label_dataSource.Text = "DataSource:";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::IDCM.Properties.Resources.help;
-            this.pictureBox1.Location = new System.Drawing.Point(377, 40);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(21, 21);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 11;
-            this.pictureBox1.TabStop = false;
-            // 
             // StartView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -222,7 +223,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).EndInit();
             this.panel_start.ResumeLayout(false);
             this.panel_start.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_help)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -242,6 +243,6 @@
         private System.Windows.Forms.CheckBox checkBox_defaultWS;
         private System.Windows.Forms.Button button_cancel;
         private System.Windows.Forms.Button button_download;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox_help;
     }
 }

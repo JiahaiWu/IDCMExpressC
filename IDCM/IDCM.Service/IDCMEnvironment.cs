@@ -19,16 +19,16 @@ namespace IDCM.Service
             try
             {
                 string val = null;
-                val = ConfigurationManager.AppSettings.Get(LastWorkSpace);
+                val = ConfigurationManager.AppSettings.Get(SysConstants.LastWorkSpace);
                 if (val != null && val.IndexOf(",") < 0)
                     si.Location = val;
-                val = ConfigurationManager.AppSettings.Get(LWSAsDefault);
+                val = ConfigurationManager.AppSettings.Get(SysConstants.LWSAsDefault);
                 if (val != null && val.IndexOf(",") < 0)
                     si.asDefaultWorkspace = val.Length>0?Convert.ToBoolean(val):false;
-                val = ConfigurationManager.AppSettings.Get(LUID);
+                val = ConfigurationManager.AppSettings.Get(SysConstants.LUID);
                 if (val != null && val.IndexOf(",") < 0 && val.Length > 0)
                     si.LoginName = val;
-                val = ConfigurationManager.AppSettings.Get(LPWD);
+                val = ConfigurationManager.AppSettings.Get(SysConstants.LPWD);
                 if (val != null && val.IndexOf(",") < 0 && val.Length>0)
                 {
                     si.GCMPassword = Base64DESEncrypt.CreateInstance(si.LoginName).Decrypt(val);
@@ -58,25 +58,22 @@ namespace IDCM.Service
         }
         public static void noteStartInfo(string location, bool asDefaultWorkSpace, string loginName, string gcmPassword)
         {
-            //ConfigurationManager.AppSettings.Set(LastWorkSpace, location);
-            //ConfigurationManager.AppSettings.Set(LWSAsDefault, asDefaultWorkSpace.ToString());
-            //ConfigurationManager.AppSettings.Set(LUID, loginName);
-            //ConfigurationManager.AppSettings.Set(LPWD, Base64DESEncrypt.CreateInstance(loginName).Encrypt(gcmPassword));
+            //ConfigurationManager.AppSettings.Set(SysConstants.LastWorkSpace, location);
+            //ConfigurationManager.AppSettings.Set(SysConstants.LWSAsDefault, asDefaultWorkSpace.ToString());
+            //ConfigurationManager.AppSettings.Set(SysConstants.LUID, loginName);
+            //ConfigurationManager.AppSettings.Set(SysConstants.LPWD, Base64DESEncrypt.CreateInstance(loginName).Encrypt(gcmPassword));
 
             string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
 
             string defaultCfgPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + Path.GetFileName(exePath).Replace(".vshost.exe",".exe") + ".config";
-            ConfigurationHelper.SetAppConfig(LastWorkSpace, location, defaultCfgPath);
-            ConfigurationHelper.SetAppConfig(LWSAsDefault, asDefaultWorkSpace.ToString(), defaultCfgPath);
-            ConfigurationHelper.SetAppConfig(LUID, loginName, defaultCfgPath);
-            ConfigurationHelper.SetAppConfig(LPWD, Base64DESEncrypt.CreateInstance(loginName).Encrypt(gcmPassword), defaultCfgPath);
+            ConfigurationHelper.SetAppConfig(SysConstants.LastWorkSpace, location, defaultCfgPath);
+            ConfigurationHelper.SetAppConfig(SysConstants.LWSAsDefault, asDefaultWorkSpace.ToString(), defaultCfgPath);
+            ConfigurationHelper.SetAppConfig(SysConstants.LUID, loginName, defaultCfgPath);
+            ConfigurationHelper.SetAppConfig(SysConstants.LPWD, Base64DESEncrypt.CreateInstance(loginName).Encrypt(gcmPassword), defaultCfgPath);
         }
 
         #region 配置参数参数设定
-        internal const string LastWorkSpace = "LWS";
-        internal const string LWSAsDefault = "LWS_As_Default";
-        internal const string LUID = "LUID";
-        internal const string LPWD = "LPWD";
+
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         #endregion
     }

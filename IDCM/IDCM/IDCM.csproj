@@ -70,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext\AsyncServInvoker.cs" />
-    <Compile Include="AppContext\DataSourceHolder.cs" />
+    <Compile Include="Core\DataSourceHolder.cs" />
     <Compile Include="Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -252,7 +252,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="Modules\" />
   </ItemGroup>
   <ItemGroup>

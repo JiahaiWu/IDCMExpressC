@@ -7,6 +7,7 @@ using IDCM.AppContext;
 using IDCM.Forms;
 using IDCM.Service.Common;
 using IDCM.Service.Common.Core;
+using IDCM.Core;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -108,8 +109,7 @@ namespace IDCM.ViewManager
         private void IDCMForm_Shown(object sender, EventArgs e)
         {
             //启动欢迎页面
-            ManagerI view = ViewManagerHolder.getManager(typeof(StartRetainer));
-            view.initView(true);
+            startWorkSpace();
         }
         /// <summary>
         /// 数据源预处理流程完成事件处理方法
@@ -132,7 +132,15 @@ namespace IDCM.ViewManager
             view.initView(true);
         }
 #endregion
-
+        internal ManagerI getHomeViewManager()
+        {
+            return ViewManagerHolder.getManager(typeof(HomeViewManager));
+        }
+        internal ManagerI getGCMViewManager()
+        {
+            return ViewManagerHolder.getManager(typeof(GCMViewManager));
+        }
+        ///////////////////////////////////////////////////////////////
         ///// <summary>
         ///// 主窗体初始化方法，用于激活新（或旧）实例的界面资源及其动态动态显示
         ///// 注意：
@@ -167,14 +175,34 @@ namespace IDCM.ViewManager
         //    startForm.Close();
         //    startForm.Dispose();
         //}
+        /////////////////////////////////////////////////////////////////
+        //@Deprecated
+
+        /// <summary>
+        /// 启动当前工作空间
+        /// </summary>
+        /// <returns></returns>
+        public bool startWorkSpace()
+        {
+            if (DataSourceHolder.InWorking)
+            {
+                DialogResult res = MessageBox.Show("A workspace is in working, you need close it first.", "Close Workspace Notice", MessageBoxButtons.OK);
+                return false;
+            }
+            ManagerI view = ViewManagerHolder.getManager(typeof(StartRetainer));
+            return view.initView(true);
+        }
         /// <summary>
         /// 关闭当前工作空间，仅保留主框架窗口
         /// </summary>
         /// <returns></returns>
-        public bool closeWorkSpaceHolder()
+        public bool closeWorkSpace()
         {
-            ViewManagerHolder.Dispose();
-            DataSourceHolder.close();
+            if (DataSourceHolder.InWorking)
+            {
+                ViewManagerHolder.Dispose();
+                return DataSourceHolder.close();
+            }
             return true;
         }
         /// <summary>
@@ -188,6 +216,99 @@ namespace IDCM.ViewManager
                 tip = "On Line: " + uname;
             mainForm.setLoginTip(tip);
         }
-        
+        public void showDBDataSearch()
+        {
+            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+            if (mi != null)
+            {
+                HomeViewManager hvManager = (HomeViewManager)mi;
+                if (hvManager != null)
+                {
+                    if (hvManager.isActive())
+                    {
+                        hvManager.showDBDataSearch();
+                    }
+                }
+            }
+            /////////////////////////////////////////////////////
+            //else
+            //{
+            //    mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+            //    if (mi != null)
+            //    {
+            //        GCMViewManager gcmvManager = (GCMViewManager)mi;
+            //        if (gcmvManager != null)
+            //        {
+            //            if (gcmvManager.isActive())
+            //            {
+            //                gcmvManager.showDBDataSearch();
+            //            }
+            //        }
+            //    }
+            //}
+            ///////////////////////////////////////////////////
+        }
+        public void frontDataSearch()
+        {
+            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+            if (mi != null)
+            {
+                HomeViewManager hvManager = (HomeViewManager)mi;
+                if (hvManager != null)
+                {
+                    if (hvManager.isActive())
+                    {
+                        hvManager.frontDataSearch();
+                    }
+                }
+            }
+            else
+            {
+                mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+                if (mi != null)
+                {
+                    GCMViewManager gcmvManager = (GCMViewManager)mi;
+                    if (gcmvManager != null)
+                    {
+                        if (gcmvManager.isActive())
+                        {
+                            /////////////////////////////
+                            //gcmvManager.frontDataSearch();
+                        }
+                    }
+                }
+            }
+        }
+        public void frontSearchNext()
+        {
+            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+            if (mi != null)
+            {
+                HomeViewManager hvManager = (HomeViewManager)mi;
+                if (hvManager != null)
+                {
+                    if (hvManager.isActive())
+                    {
+                        hvManager.frontSearchNext();
+                    }
+                }
+            }
+            else
+            {
+                mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+                if (mi != null)
+                {
+                    GCMViewManager gcmvManager = (GCMViewManager)mi;
+                    if (gcmvManager != null)
+                    {
+                        if (gcmvManager.isActive())
+                        {
+                            //////////////////////////////
+                            //gcmvManager.frontSearchNext();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

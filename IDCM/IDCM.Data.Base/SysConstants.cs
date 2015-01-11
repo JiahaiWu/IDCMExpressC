@@ -14,6 +14,42 @@ namespace IDCM.Data.Base
         public const string DB_SUFFIX = ".mrc";
         public const int Max_Attr_Count = 1000;
         public const int EXPORT_PAGING_COUNT = 1000;
+
+        #region AppSettings
+        public const string LastWorkSpace = "LWS";
+        public const string LWSAsDefault = "LWS_As_Default";
+        public const string LUID = "LUID";
+        public const string LPWD = "LPWD";
+        /// <summary>
+        /// Default Table Setting File
+        /// </summary>
+        public const string CTableDef="CTableDef";
+        /// <summary>
+        /// Default System Setting File Templates
+        /// </summary>
+        public const string CTableTemplate="CTableTemplate";
+        /// <summary>
+        /// 帮助文档资源定位
+        /// </summary>
+        public const string HelpBase = "HelpBase";
+        /// <summary>
+        /// GCM用户登录请求资源地址
+        /// </summary>
+        public const string SignInUri = "SignInUri";
+        /// <summary>
+        /// GCM用户签出请求资源地址
+        /// </summary>
+        public const string SignOffUri = "SignOffUri";
+        /// <summary>
+        /// GCM菌种列表信息查询请求资源地址
+        /// </summary>
+        public const string StrainListUri = "StrainListUri";
+        /// <summary>
+        /// GCM菌种保藏记录详细信息请求资源地址
+        /// </summary>
+        public const string StrainViewUri = "StrainViewUri";
+
+        #endregion
         /// <summary>
         /// 最长等待毫秒数
         /// </summary>

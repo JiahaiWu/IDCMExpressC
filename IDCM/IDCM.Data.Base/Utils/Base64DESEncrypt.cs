@@ -40,13 +40,15 @@ namespace IDCM.Data.Base.Utils
         /// <returns></returns> 
         public string Encrypt(string encryptString)
         {
+            if (encryptString == null)
+                return null;
             byte[] keyBytes = new byte[8];
             for (int i = 0; i < keyBytes.Length; i++)
             {
                 keyBytes[i] = Key[i];
             }
             byte[] keyIV = keyBytes;
-            byte[] inputByteArray = Encoding.UTF8.GetBytes(encryptString);
+            byte[] inputByteArray = encoding.GetBytes(encryptString);
             DESCryptoServiceProvider provider = new DESCryptoServiceProvider();
             MemoryStream mStream = new MemoryStream();
             CryptoStream cStream = new CryptoStream(mStream, provider.CreateEncryptor(keyBytes, keyIV), CryptoStreamMode.Write);
@@ -62,6 +64,8 @@ namespace IDCM.Data.Base.Utils
         /// <returns></returns> 
         public string Decrypt(string decryptString)
         {
+            if (decryptString == null)
+                return null;
             byte[] keyBytes = new byte[8];
             for (int i = 0; i < keyBytes.Length; i++)
             {
@@ -74,7 +78,7 @@ namespace IDCM.Data.Base.Utils
             CryptoStream cStream = new CryptoStream(mStream, provider.CreateDecryptor(keyBytes, keyIV), CryptoStreamMode.Write);
             cStream.Write(inputByteArray, 0, inputByteArray.Length);
             cStream.FlushFinalBlock();
-            return Encoding.UTF8.GetString(mStream.ToArray());
+            return encoding.GetString(mStream.ToArray());
         }
 
         public static Base64DESEncrypt CreateInstance(string key = null, char append = '\0')

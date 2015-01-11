@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using IDCM.Data.Base.Utils;
+using IDCM.Data.Base;
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
  * A desktop software package for microbial resources researchers.
@@ -42,8 +44,11 @@ namespace IDCM
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                dynamic xargs = commandArgScreening(args);
-                Application.Run(new IDCMAppContext(xargs));
+                Dictionary<string, string> preActions=commandArgScreening(args);
+                if (preActions.Count > 0)
+                    prepareAppContext(preActions);
+                IDCMAppContext appContext = new IDCMAppContext();
+                Application.Run(appContext);
             }
             catch (Exception ex)
             {
@@ -57,10 +62,10 @@ namespace IDCM
         /// 控制台请求参数初筛
         /// </summary>
         /// <param name="args">应用程序启动时命令行参数</param>
-        /// <returns>返回过滤后的“有效”命令行参数表达</returns>
-        private static dynamic commandArgScreening(string[] args)
+        /// <returns>返回过滤后的“有效”命令-参数表达式集合</returns>
+        private static Dictionary<string,string> commandArgScreening(string[] args)
         {
-            string ws = null;
+            Dictionary<string, string> actions = new Dictionary<string, string>();
 #if DEBUG
             System.Diagnostics.Debug.Assert(args != null);
 #endif
@@ -68,14 +73,36 @@ namespace IDCM
             {
                 for (int i = 0; i < args.Length - 1; i++)
                 {
-                    if (args[i].Equals("-ws"))
+                    if (args[i].StartsWith("-"))
                     {
-                        ws = args[i + 1].Trim(new char[] { '"' });
+                        string cmd = args[i].Substring(1);
+                        if (cmd.Length>0 && prepareAbleCmds.Contains(cmd.ToLower()))
+                        {
+                            string param = args[i + 1].Trim(new char[] { '"','\'' });
+                            actions[cmd.ToLower()] = param;
+                        }
                     }
                 }
             }
-            return ws;
+            return actions;
         }
+        /// <summary>
+        /// 命令行参数预处理
+        /// </summary>
+        /// <param name="preActions"></param>
+        private static void prepareAppContext(Dictionary<string, string> preActions)
+        {
+            foreach (KeyValuePair<string, string> kvpair in preActions)
+            {
+                if(kvpair.Key.Equals(CMD_RESET))
+                {
+                    ConfigurationHelper.SetAppConfig(kvpair.Value, "");
+                }
+            }
+        }
+
+        private const string CMD_RESET = "reset";
+        private static string[] prepareAbleCmds = new string[] { CMD_RESET };
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
     }

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using IDCM.Data.Base;
 using IDCM.Service.BGHandler;
 
-namespace IDCM.AppContext
+namespace IDCM.Core
 {
     /// <summary>
     /// 工作空间保持及验证工具类
@@ -65,11 +65,12 @@ namespace IDCM.AppContext
             {
                 if (dataSource.prepare())
                 {
-                    log.Debug("Prepare datasource succeed.");
+                    log.Info("Prepare datasource succeed.");
                     return true;
                 }else
                 {
-                    MessageBox.Show("Failed to open the data source. ");
+                    log.Error(new IDCMServCommonException("Failed to open the data source. Cause:"+dataSource.LastError));
+                    MessageBox.Show("Failed to open the data source. Cause:"+dataSource.LastError);
                 }
             }
             return false;

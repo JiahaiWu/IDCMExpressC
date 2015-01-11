@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace IDCM.Service.Utils
 {
-    class ToolStripItemAsyncUtil
+    public class ToolStripItemAsyncUtil
     {
         /// <summary>
         /// 异步调用具有特定名称的UI控件设置文本

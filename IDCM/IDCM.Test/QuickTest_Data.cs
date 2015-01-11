@@ -52,19 +52,19 @@ namespace IDCM.Test
                 if (wsm.prepare())
                 {
                     ParameterizedThreadStart pts = new ParameterizedThreadStart(DBQueryTest);
-                    Thread t1 = new Thread(pts);
-                    Thread t2 = new Thread(pts);
-                    Thread t3 = new Thread(pts);
-                    Thread t4 = new Thread(pts);
-                    Thread t5 = new Thread(pts);
-
+                    Thread[] threads = new Thread[10];
+                    int tx = 0;
+                    while (tx < threads.Length)
+                    {
+                        threads[tx]=new Thread(pts);
+                        tx++;
+                    }
                     string ts = DateTime.Now.Ticks.ToString();
-                    t1.Start(new object[] { wsm, "1",ts});
-                    t2.Start(new object[] { wsm, "2",ts });
-                    t3.Start(new object[] { wsm, "3", ts });
-                    t4.Start(new object[] { wsm, "4", ts });
-                    t5.Start(new object[] { wsm, "5", ts });
-                    
+                    while (tx > 0)
+                    {
+                        tx--;
+                        threads[tx].Start(new object[] { wsm, tx.ToString(), ts });
+                    }
                     this.richTextBox1.Text += "线程池请求测试部分 通过。\n";
                 }
             }

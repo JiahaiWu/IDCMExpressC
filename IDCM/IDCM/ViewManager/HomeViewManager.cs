@@ -5,7 +5,9 @@ using System.Text;
 using System.Windows.Forms;
 using IDCM.AppContext;
 using IDCM.Forms;
+using IDCM.Service.Common;
 using IDCM.Data.Base;
+using IDCM.Core;
 
 namespace IDCM.ViewManager
 {
@@ -98,21 +100,21 @@ namespace IDCM.ViewManager
                 //datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
                 //searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());
             }
-            //if (CustomTColDefDAM.checkTableSetting())
-            //{
-            //    if (activeShow)
-            //    {
-            //        homeView.WindowState = FormWindowState.Maximized;
-            //        homeView.Show();
-            //        homeView.Activate();
-            //    }
-            //    else
-            //    {
-            //        homeView.Hide();
-            //    }
-            //    return true;
-            //}
-            //dispose();
+            if (DataSourceHolder.InWorking)
+            {
+                if (activeShow)
+                {
+                    homeView.WindowState = FormWindowState.Maximized;
+                    homeView.Show();
+                    homeView.Activate();
+                }
+                else
+                {
+                    homeView.Hide();
+                }
+                return true;
+            }
+            dispose();
             return false;
         }
         public override void setMaxToNormal()

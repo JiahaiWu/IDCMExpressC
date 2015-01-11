@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Data.SQLite;
-using System.Data;
 using System.Data.Common;
-using System.Data.SQLite;
 using System.Threading;
-using System.Collections.Concurrent;
 using IDCM.Data.Base;
+using System.Collections.Concurrent;
 
 namespace IDCM.Data.DHCP
 {

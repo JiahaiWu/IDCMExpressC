@@ -15,7 +15,7 @@ namespace IDCM.Service.Common.Core
         {
             try
             {
-                string cTableDefpath = ConfigurationManager.AppSettings["CTableDef"];
+                string cTableDefpath = ConfigurationManager.AppSettings[SysConstants.CTableDef];
                 List<CustomTColDef> ctcds = getCustomTableDef(cTableDefpath);
                 overwriteAllCustomTColDef(ctcds);
             }

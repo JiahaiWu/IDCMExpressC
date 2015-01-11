@@ -43,8 +43,7 @@ namespace IDCM.AppContext
         /// 4. 任务轮询监视器monitor的监听时间默认为2s。
         /// @author JiahaiWu 2014-12
         /// </summary>
-        /// <param name="workspacePath">目标工作空间路径（可选）</param>
-        public IDCMAppContext(string workspacePath = null)
+        public IDCMAppContext()
         {
             if (!hasInited)
             {
