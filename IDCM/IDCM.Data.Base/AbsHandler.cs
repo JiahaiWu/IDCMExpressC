@@ -54,7 +54,7 @@ namespace IDCM.Data.Base
         /// 添加后台任务执行结束后的串联执行任务
         /// </summary>
         /// <param name="nextHandler"></param>
-        protected virtual void addHandler(AbsHandler nextHandler)
+        public virtual void addHandler(AbsHandler nextHandler)
         {
             if (nextHandler == null)
                 return;
@@ -63,7 +63,7 @@ namespace IDCM.Data.Base
             nextHandlers.Enqueue(nextHandler);
         }
 
-        private Queue<AbsHandler> nextHandlers = null;
+        protected Queue<AbsHandler> nextHandlers = null;
         protected static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
     }
 }

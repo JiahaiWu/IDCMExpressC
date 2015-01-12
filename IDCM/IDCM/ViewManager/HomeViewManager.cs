@@ -13,6 +13,7 @@ using IDCM.Service.BGHandler;
 using IDCM.Service.Utils;
 using IDCM.Core;
 
+
 namespace IDCM.ViewManager
 {
     /// <summary>
@@ -185,12 +186,12 @@ namespace IDCM.ViewManager
         {
             if (fpath.ToLower().EndsWith("xls") || fpath.ToLower().EndsWith(".xlsx"))
             {
-                //ExcelImportHandler eih = new ExcelImportHandler(fpath, LibraryNodeDAM.REC_UNFILED, LibraryNodeDAM.REC_ALL);
-                //eih.addHandler(new UpdateHomeDataViewHandler(libBuilder.RootNode_unfiled, homeView.getItemGridView()));
-                //UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
-                //eih.addHandler(uhlch);
-                //uhlch.addHandler(new SelectDataRowHandler(homeView.getItemGridView(), homeView.getAttachTabControl()));
-                //CmdConsole.call(eih, CmdConsole.CmdReqOption.L);
+                ExcelImportHandler eih = new ExcelImportHandler(fpath, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
+                eih.addHandler(new UpdateHomeDataViewHandler(DataSourceHolder.DataSource, catBuilder.RootNode_unfiled, homeView.getItemGridView()));
+                UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, homeView.getLibTree(), homeView.getBaseTree());
+                eih.addHandler(uhlch);
+                uhlch.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
+                DWorkMHub.callAsyncHandle(eih);
             }
         }
         /// <summary>
@@ -230,12 +231,12 @@ namespace IDCM.ViewManager
         /// <param name="focusNode"></param>
         public void updateCatRecCount(TreeNode focusNode = null)
         {
-            //UpdateHomeLibCountHandler ulch = null;
-            //if (focusNode == null)
-            //    ulch = new UpdateHomeLibCountHandler(homeView.getLibTree(),homeView.getBaseTree());
-            //else
-            //    ulch = new UpdateHomeLibCountHandler(focusNode);
-            //CmdConsole.call(ulch);
+            UpdateHomeLibCountHandler ulch = null;
+            if (focusNode == null)
+                ulch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, homeView.getLibTree(), homeView.getBaseTree());
+            else
+                ulch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, focusNode);
+            DWorkMHub.callAsyncHandle(ulch);
         }
         public void selectViewRecord(DataGridViewRow dgvr)
         {
@@ -243,25 +244,27 @@ namespace IDCM.ViewManager
         }
         public void trashDataSet(TreeNode filteNode, int newlid = CatalogNode.REC_TRASH)
         {
-            //if(filteNode.Equals(libBuilder.RootNode_trash))
-            //{
-            //    datasetBuilder.dropDataSet(filteNode);
-            //}else{
-            //    datasetBuilder.trashDataSet(filteNode, newlid);
-            //}
-            //UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(filteNode, homeView.getItemGridView());
-            //UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
-            //uhdvh.addHandler(uhlch);
-            //CmdConsole.call(uhdvh, CmdConsole.CmdReqOption.L);
+            if (filteNode.Equals(catBuilder.RootNode_trash))
+            {
+                datasetBuilder.dropDataSet(filteNode);
+            }
+            else
+            {
+                datasetBuilder.trashDataSet(filteNode, newlid);
+            }
+            UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(DataSourceHolder.DataSource, filteNode, homeView.getItemGridView());
+            UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, homeView.getLibTree(), homeView.getBaseTree());
+            uhdvh.addHandler(uhlch);
+            DWorkMHub.callAsyncHandle(uhdvh);
         }
         public void deleteNode(TreeNode treeNode)
         {
-            //datasetBuilder.trashDataSet(treeNode, LibraryNodeDAM.REC_TRASH);
-            //libBuilder.deleteNode(treeNode);
-            //UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(libBuilder.RootNode_all, homeView.getItemGridView());
-            //UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(homeView.getLibTree(), homeView.getBaseTree());
-            //uhdvh.addHandler(uhlch);
-            //CmdConsole.call(uhdvh, CmdConsole.CmdReqOption.L);
+            datasetBuilder.trashDataSet(treeNode, CatalogNode.REC_TRASH);
+            catBuilder.deleteNode(treeNode);
+            UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(DataSourceHolder.DataSource,catBuilder.RootNode_all, homeView.getItemGridView());
+            UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, homeView.getLibTree(), homeView.getBaseTree());
+            uhdvh.addHandler(uhlch);
+            DWorkMHub.callAsyncHandle(uhdvh);
         }
         public void addGroup(TreeNode treeNode)
         {
@@ -289,11 +292,11 @@ namespace IDCM.ViewManager
         /// </summary>
         public void updateDataSet(TreeNode filterNode)
         {
-            //datasetBuilder.noteDataSetLib(filterNode); //待考虑顺序问题///////////
-            //UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(filterNode, homeView.getItemGridView());
-            //uhdvh.addHandler(new SelectDataRowHandler(homeView.getItemGridView(), homeView.getAttachTabControl()));
-            //uhdvh.addHandler(new UpdateHomeLibCountHandler(filterNode));
-            //CmdConsole.call(uhdvh);
+            datasetBuilder.noteDataSetLib(filterNode); //待考虑顺序问题///////////
+            UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(DataSourceHolder.DataSource,filterNode, homeView.getItemGridView());
+            uhdvh.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
+            uhdvh.addHandler(new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, filterNode));
+            DWorkMHub.callAsyncHandle(uhdvh);
         }
         public void showDBDataSearch()
         {

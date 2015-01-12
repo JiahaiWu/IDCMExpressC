@@ -32,7 +32,10 @@ namespace IDCM.Service.BGHandler
             res = ExcelDataImporter.parseExcelData(xlsPath, lid, plid);
             return new object[] { res, xlsPath };
         }
-
+        public override void addHandler(AbsHandler nextHandler)
+        {
+            base.addHandler(nextHandler);
+        }
         private string xlsPath = null;
         private long lid = -1;
         private long plid = -1;

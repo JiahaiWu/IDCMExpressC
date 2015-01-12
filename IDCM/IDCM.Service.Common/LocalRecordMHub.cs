@@ -225,5 +225,9 @@ namespace IDCM.Service.Common
         {
             return CatalogNodeDAM.getSearchMap(datasource.WSM);
         }
+        public bool doUpdateProcess(DataSourceMHub datasource, LinkedList<CustomTColDef> newCtcds)
+        {
+            return TemplateUpdater.doUpdateProcess(datasource.WSM, newCtcds);
+        }
     }
 }

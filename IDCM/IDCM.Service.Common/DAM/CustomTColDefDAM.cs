@@ -144,7 +144,7 @@ namespace IDCM.Service.Common.DAM
             }
             return customList;
         }
-        public static void appendCustomTColDef(CustomTColDef ctcd,WorkSpaceManager wsm)
+        public static void appendCustomTColDef(WorkSpaceManager wsm,CustomTColDef ctcd)
         {
             //alter table
             CustomTColMapDAM.alterCustomTable_add(wsm,ctcd);
@@ -153,7 +153,7 @@ namespace IDCM.Service.Common.DAM
             //add to ctcdcache
             ctcdCache.Add(ctcd.Attr, ctcd);
         }
-        public static void updateCustomTColDef(CustomTColDef ctcd,WorkSpaceManager wsm)
+        public static void updateCustomTColDef(WorkSpaceManager wsm,CustomTColDef ctcd)
         {
             CustomTColDef pctcd = ctcdCache[ctcd.Attr];
             if (!pctcd.Corder.Equals(ctcd.Corder))

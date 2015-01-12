@@ -12,6 +12,7 @@ using IDCM.Service.Common;
 using System.Configuration;
 using IDCM.Data.Base;
 using IDCM.Core;
+using IDCM.Service.DataTransfer;
 
 namespace IDCM.ViewManager
 {
@@ -130,9 +131,7 @@ namespace IDCM.ViewManager
         }
         public void OnStartViewRequestHelp(object sender, HelpEventArgs e)
         {
-            string helpBase = ConfigurationManager.AppSettings.Get(SysConstants.HelpBase);
-            //浏览器跳转到帮助说明文档
-            //有待补充
+            HelpDocRequester.requestHelpDoc(HelpDocConstants.StartViewTag);
         }
 
         public override bool isDisposed()
