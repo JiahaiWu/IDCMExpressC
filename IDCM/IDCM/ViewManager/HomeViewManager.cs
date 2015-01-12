@@ -7,10 +7,11 @@ using IDCM.AppContext;
 using IDCM.Forms;
 using IDCM.Service.Common;
 using IDCM.Data.Base;
-using IDCM.Core;
+using IDCM.Service;
 using IDCM.Modules;
 using IDCM.Service.BGHandler;
 using IDCM.Service.Utils;
+using IDCM.Core;
 
 namespace IDCM.ViewManager
 {

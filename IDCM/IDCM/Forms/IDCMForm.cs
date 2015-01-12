@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Configuration;
 using IDCM.ViewManager;
-using IDCM.Core;
+using IDCM.Service;
 using IDCM.Service.Utils;
 
 namespace IDCM.Forms

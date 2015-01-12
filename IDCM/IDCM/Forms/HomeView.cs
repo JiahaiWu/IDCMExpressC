@@ -91,23 +91,23 @@ namespace IDCM.Forms
             {
                 treeView_library.SelectedNode = e.Node;
                 manager.noteCurSelectedNode(e.Node);
-                //左键
-                if (e.Button == MouseButtons.Left)
-                {
-                }
-                //右键
-                if (e.Button == MouseButtons.Right)
-                {
-                    LocalCatBuilder.filterContextMenuItems(contextMenuStrip_lib, e.Node);
-                    foreach (ToolStripItem tsItem in contextMenuStrip_lib.Items)
-                    {
-                        if (tsItem is ToolStripSeparator)
-                            continue;
-                        ControlUtil.ClearEvent(tsItem, "Click");
-                        tsItem.Click += delegate(object tsender, EventArgs te) { toolStripMenuItem_lib_Click(tsender, te, e.Node); };
-                    }
-                    contextMenuStrip_lib.Show(treeView_library, e.X, e.Y);
-                }
+                ////左键
+                //if (e.Button == MouseButtons.Left)
+                //{
+                //}
+                ////右键
+                //if (e.Button == MouseButtons.Right)
+                //{
+                //    LocalCatBuilder.filterContextMenuItems(contextMenuStrip_lib, e.Node);
+                //    foreach (ToolStripItem tsItem in contextMenuStrip_lib.Items)
+                //    {
+                //        if (tsItem is ToolStripSeparator)
+                //            continue;
+                //        ControlUtil.ClearEvent(tsItem, "Click");
+                //        tsItem.Click += delegate(object tsender, EventArgs te) { toolStripMenuItem_lib_Click(tsender, te, e.Node); };
+                //    }
+                //    contextMenuStrip_lib.Show(treeView_library, e.X, e.Y);
+                //}
             }
         }
         protected void toolStripMenuItem_base_Click(object sender, EventArgs e, TreeNode node)

@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using IDCM.AppContext;
 using IDCM.Forms;
+using IDCM.Service;
 
 namespace IDCM.ViewManager
 {

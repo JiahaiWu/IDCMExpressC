@@ -156,6 +156,7 @@
       <DependentUpon>WaitingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Modules\BackProgressIndicator.cs" />
+    <Compile Include="Core\DataSourceHolder.cs" />
     <Compile Include="Modules\LocalDataSetBuilder.cs" />
     <Compile Include="Modules\LocalDBSearchBuilder.cs" />
     <Compile Include="Modules\LocalCatBuilder.cs" />
@@ -166,8 +167,6 @@
     <Compile Include="ViewManager\HomeViewManager.cs" />
     <Compile Include="ViewManager\IDCMFormManger.cs" />
     <Compile Include="ViewManager\LibFieldManager.cs" />
-    <Compile Include="ViewManager\ManagerA.cs" />
-    <Compile Include="ViewManager\ManagerI.cs" />
     <Compile Include="ViewManager\StartRetainer.cs" />
     <Compile Include="ViewManager\ViewManagerHolder.cs" />
     <EmbeddedResource Include="Forms\AboutDlg.resx">

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections.Concurrent;
+using IDCM.Service;
 
 namespace IDCM.ViewManager
 {

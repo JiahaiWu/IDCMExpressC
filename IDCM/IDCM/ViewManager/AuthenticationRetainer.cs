@@ -6,6 +6,7 @@ using IDCM.AppContext;
 using System.Windows.Forms;
 using IDCM.Data.Base;
 using IDCM.Forms;
+using IDCM.Service;
 
 namespace IDCM.ViewManager
 {
