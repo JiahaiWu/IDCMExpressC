@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using IDCM.Service.Utils;
+using IDCM.Service.Common;
+using IDCM.Core;
 
 namespace IDCM.Modules
 {
@@ -103,7 +106,7 @@ namespace IDCM.Modules
             if (splter.Panel1Collapsed == true)
             {
                 int defaultRowCount = 2;
-                Dictionary<string,int> viewDBMap = ColumnMappingHolder.getCustomViewDBMapping();
+                Dictionary<string,int> viewDBMap =LocalRecordMHub.getCustomViewDBMapping(DataSourceHolder.DataSource);
                 for (int i = panelList.Count(); i>0; i--)
                 {
                     Control panel = panelList[i-1];
@@ -137,7 +140,7 @@ namespace IDCM.Modules
         }
         public void refreshLibSearchList(object sender, EventArgs e)
         {
-            Dictionary<string, int> libSearchMap = LibraryNodeDAM.getSearchMap();
+            Dictionary<string, int> libSearchMap = LocalRecordMHub.getSearchMap(DataSourceHolder.DataSource);
             (sender as ComboBox).DataSource = new BindingSource(libSearchMap, null);
             (sender as ComboBox).DisplayMember = "Key";
             (sender as ComboBox).ValueMember = "Value";

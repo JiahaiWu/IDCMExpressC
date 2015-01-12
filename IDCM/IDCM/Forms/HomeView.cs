@@ -237,7 +237,7 @@ namespace IDCM.Forms
             manager.renameNode(e.Node, e.Label);
             e.Node.EndEdit(false);
             treeView_library.LabelEdit = false;
-            manager.updateLibRecCount(e.Node);
+            manager.updateCatRecCount(e.Node);
         }
         private void treeView_library_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
@@ -291,7 +291,7 @@ namespace IDCM.Forms
             if (dataGridView_items.Rows.Count > 0 && dataGridView_items.Rows[dataGridView_items.Rows.Count - 1].IsNewRow)
                 return;
             manager.addNewRecord();
-            manager.updateLibRecCount();
+            manager.updateCatRecCount();
         }
         /// <summary>
         /// 删除记录

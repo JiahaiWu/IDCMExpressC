@@ -9,6 +9,7 @@ using IDCM.Data.Base;
 using IDCM.Service.Common;
 using IDCM.Data.Base.Utils;
 using IDCM.Service.Utils;
+using IDCM.Core;
 
 namespace IDCM.Modules
 {
@@ -36,13 +37,13 @@ namespace IDCM.Modules
         }
         #endregion
         #region 实例对象保持部分
-        private long CUR_LID = LibraryNodeDAM.REC_ALL;
+        private long CUR_LID = CatalogNode.REC_ALL;
 
         public long CURRENT_LID
         {
             get { return CUR_LID; }
         }
-        private long CUR_PLID = LibraryNodeDAM.REC_ALL;
+        private long CUR_PLID = CatalogNode.REC_ALL;
 
         public long CURRENT_PLID
         {
@@ -79,11 +80,11 @@ namespace IDCM.Modules
             if (dgvr.Cells.Count > rIdx)
             {
                 CUR_RID = Convert.ToInt64(dgvr.Cells[rIdx].FormattedValue.ToString());
-                DataTable table = CTDRecordDAM.queryCTDRecord(null, CUR_RID.ToString());
+                DataTable table = LocalRecordMHub.queryCTDRecord(null, CUR_RID.ToString());
                 if (table.Rows.Count > 0)
                 {
                     DataRow dr = table.Rows[0];
-                    List<string> viewAttrs = ColumnMappingHolder.getViewAttrs();
+                    List<string> viewAttrs = LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource);
                     showReferences(viewAttrs, dr);
                 }
             }
@@ -97,8 +98,8 @@ namespace IDCM.Modules
         /// <param name="colMap"></param>
         public void loadDataSetView()
         {
-            List<string> viewAttrs = ColumnMappingHolder.getViewAttrs();//获取所有属性名称集合
-            lock (ShareSyncLockers.LocalDataGridView_Lock)
+            List<string> viewAttrs = LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource);//获取所有属性名称集合
+            lock (LocalDataGridView_Lock)
             {
                 if (itemDGV.ColumnCount > 0)
                 {
@@ -138,9 +139,9 @@ namespace IDCM.Modules
         /// <param name="lid"></param>
         public void trashDataSet(TreeNode filteNode, int newlid = CatalogNode.REC_TRASH)
         {
-            List<string> viewAttrs = ColumnMappingHolder.getViewAttrs();
+            List<string> viewAttrs = LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource);
             long lid = Convert.ToInt64(filteNode.Name);
-            lock (ShareSyncLockers.LocalDataGridView_Lock)
+            lock (LocalDataGridView_Lock)
             {
                 if (filteNode.Level > 0)
                 {
@@ -157,7 +158,7 @@ namespace IDCM.Modules
                 string filterLids = lid.ToString();
                 if (lid > 0)
                 {
-                    long[] lids = LibraryNodeDAM.extractToLids(lid);
+                    long[] lids = LocalRecordMHub.extractToLids(DataSourceHolder.DataSource,lid);
                     if (lids != null)
                     {
                         filterLids = "";
@@ -169,7 +170,7 @@ namespace IDCM.Modules
                     }
                 }
                 //数据归档更新
-                CTDRecordDAM.updateCTCRecordLid(newlid, CatalogNode.REC_ALL, filterLids);
+                LocalRecordMHub.updateCTCRecordLid(DataSourceHolder.DataSource, newlid, CatalogNode.REC_ALL, filterLids);
             }
         }
         /// <summary>
@@ -178,9 +179,9 @@ namespace IDCM.Modules
         /// <param name="filteNode"></param>
         public void dropDataSet(TreeNode filteNode)
         {
-            List<string> viewAttrs = ColumnMappingHolder.getViewAttrs();
+            List<string> viewAttrs = LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource);
             long lid = Convert.ToInt64(filteNode.Name);
-            lock (ShareSyncLockers.LocalDataGridView_Lock)
+            lock (LocalDataGridView_Lock)
             {
                 if (filteNode.Level > 0)
                 {
@@ -197,7 +198,7 @@ namespace IDCM.Modules
                 string filterLids = lid.ToString();
                 if (lid > 0)
                 {
-                    long[] lids = LibraryNodeDAM.extractToLids(lid);
+                    long[] lids = LocalRecordMHub.extractToLids(DataSourceHolder.DataSource,lid);
                     if (lids != null)
                     {
                         filterLids = "";
@@ -209,7 +210,7 @@ namespace IDCM.Modules
                     }
                 }
                 //数据归档更新
-                CTDRecordDAM.dropCTCRecordLid(filterLids);
+                LocalRecordMHub.dropCTCRecordLid(DataSourceHolder.DataSource, filterLids);
             }
         }
         
@@ -227,7 +228,7 @@ namespace IDCM.Modules
 #if DEBUG
                 //Console.WriteLine("[DEBUG](loadCTableData) " + attr + "-->" + CustomTColMapDA.getDBOrder(attr) + ">>" + dr[CustomTColMapDA.getDBOrder(attr)].ToString());
 #endif
-                vals[index] = dr[ColumnMappingHolder.getDBOrder(attr)].ToString();
+                vals[index] = dr[LocalRecordMHub.getDBOrder(DataSourceHolder.DataSource, attr)].ToString();
                 ++index;
             }
             DGVAsyncUtil.syncAddRow(itemDGV, vals);
@@ -243,12 +244,12 @@ namespace IDCM.Modules
             //创建显性列属性
             foreach (string attr in viewAttrs)
             {
-                int viewOrder = ColumnMappingHolder.getViewOrder(attr);//返回属性显示位序
+                int viewOrder = LocalRecordMHub.getViewOrder(DataSourceHolder.DataSource, attr);//返回属性显示位序
                 Console.Write("##"+attr+"->"+viewOrder);
-                if (viewOrder < ColumnMappingHolder.MaxMainViewCount)
+                if (viewOrder < CustomTColMap.MaxMainViewCount)
                 {
-                    CustomTColDef ctcd = CustomTColDefDAM.getCustomTColDef(attr);
-                    Type colType = AttrTypeConverter.getDGVColType(ctcd.AttrType);
+                    CustomTColDef ctcd = LocalRecordMHub.getCustomTColDef(DataSourceHolder.DataSource,attr);
+                    Type colType = RecordControlTypeConverter.getDGVColType(ctcd.AttrType);
                     DataGridViewColumn dgvCol = Activator.CreateInstance(colType) as DataGridViewColumn;
                     dgvCol.Name = ctcd.Attr;
                     dgvCol.HeaderText = CVNameConverter.toViewName(ctcd.Attr);
@@ -259,7 +260,7 @@ namespace IDCM.Modules
                     }
                     DGVAsyncUtil.syncAddCol(itemDGV, dgvCol);
                     if (viewOrder != dgvCol.Index)
-                        ColumnMappingHolder.updateViewOrder(attr, dgvCol.Index);
+                        LocalRecordMHub.updateViewOrder(DataSourceHolder.DataSource,attr, dgvCol.Index);
                 }
             }
         }
@@ -283,12 +284,12 @@ namespace IDCM.Modules
             int idx = 0;
             foreach (string attr in viewAttrs)
             {
-                if (ColumnMappingHolder.getViewOrder(attr) < ColumnMappingHolder.MaxMainViewCount)
+                if (LocalRecordMHub.getViewOrder(DataSourceHolder.DataSource, attr) < CustomTColMap.MaxMainViewCount)
                 {
                     ++idx;
                     continue;
                 }
-                CustomTColDef ctcd = CustomTColDefDAM.getCustomTColDef(attr);
+                CustomTColDef ctcd = LocalRecordMHub.getCustomTColDef(DataSourceHolder.DataSource, attr);
                 Panel panel = new Panel();
                 panel.Name = "referPanel_" + idx;
                 panel.Dock = DockStyle.Top;
@@ -307,7 +308,7 @@ namespace IDCM.Modules
                 label.Height = 14;
                 label.Dock = DockStyle.Top;
                 panel.Controls.Add(label);
-                Type ctype = AttrTypeConverter.getControlType(ctcd.AttrType);
+                Type ctype = RecordControlTypeConverter.getControlType(ctcd.AttrType);
                 Control control = Activator.CreateInstance(ctype) as Control;
                 if (control is TextBox)
                 {
@@ -446,7 +447,7 @@ namespace IDCM.Modules
         /// <param name="dgv"></param>
         public void addNewRecord()
         {
-            long nuid = CTDRecordDAM.addNewRecord(CUR_LID, CURRENT_PLID);
+            long nuid = LocalRecordMHub.addNewRecord(DataSourceHolder.DataSource,CUR_LID, CURRENT_PLID);
             if (nuid > 0)
             {
                 int idx = itemDGV.Rows.Add();
@@ -491,7 +492,7 @@ namespace IDCM.Modules
                 }
                 if (rid.Length > 0 && cellVal.Length > 0)
                 {
-                    CTDRecordDAM.updateAttrVal(rid, cellVal, "[" + attrName + "]");
+                    LocalRecordMHub.updateAttrVal(DataSourceHolder.DataSource,rid, cellVal, "[" + attrName + "]");
                 }
             }
         }
@@ -507,5 +508,9 @@ namespace IDCM.Modules
         {
             get { return attachTC; }
         }
+        /// <summary>
+        /// 本地表单数据视图控件的独占保持的共享锁对象
+        /// </summary>
+        public static object LocalDataGridView_Lock = new object();
     }
 }

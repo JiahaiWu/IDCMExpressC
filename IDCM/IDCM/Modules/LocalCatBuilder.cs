@@ -7,6 +7,9 @@ using System.Resources;
 using System.Data;
 using System.Drawing;
 using IDCM.AppContext;
+using IDCM.Data.Base;
+using IDCM.Service.Common;
+using IDCM.Core;
 
 namespace IDCM.Modules
 {
@@ -117,28 +120,28 @@ namespace IDCM.Modules
         {
             // 添加默认的三个根节点（All Strains，Unfiled，Trash）其Name应为负数值的字符串表示
             rootNode_all = new TreeNode("All Strains", 0, 0);
-            rootNode_all.Name = LibraryNodeDAM.REC_ALL.ToString();
+            rootNode_all.Name = CatalogNode.REC_ALL.ToString();
             rootNode_unfiled = new TreeNode("Unfiled", 0, 0);
-            rootNode_unfiled.Name = LibraryNodeDAM.REC_UNFILED.ToString();
+            rootNode_unfiled.Name = CatalogNode.REC_UNFILED.ToString();
             rootNode_trash = new TreeNode("Trash", 0, 0);
-            rootNode_trash.Name = LibraryNodeDAM.REC_TRASH.ToString();
+            rootNode_trash.Name = CatalogNode.REC_TRASH.ToString();
             baseTree.Nodes.Add(rootNode_all);
             baseTree.Nodes.Add(rootNode_unfiled);
             baseTree.Nodes.Add(rootNode_trash);
             /////////////////////////////////////////////////////////////////
-            List<LibraryNode> pnodes = LibraryNodeDAM.findParentNodes();//SELECT * FROM LibraryNode
+            List<CatalogNode> pnodes = LocalRecordMHub.findParentNodes(DataSourceHolder.DataSource);//SELECT * FROM LibraryNode
 
             //如果为空，则创建一个分组为空的节点，更新到数据库
             if (pnodes == null || pnodes.Count == 0)
             {
-                LibraryNode node = new LibraryNode("My Group Set (Temp)", "GroupSet", "My Group Set (Temp)", -1);
-                LibraryNodeDAM.saveLibraryNode(node);
+                CatalogNode node = new CatalogNode("My Group Set (Temp)", "GroupSet", "My Group Set (Temp)", -1);
+                LocalRecordMHub.saveLibraryNode(DataSourceHolder.DataSource,node);
                 long newlid = node.Lid;
-                pnodes = LibraryNodeDAM.findParentNodes();
+                pnodes = LocalRecordMHub.findParentNodes(DataSourceHolder.DataSource);
             }
 
             //如果节点不为空，遍历节点，创建TreeNode
-            foreach (LibraryNode dr in pnodes)
+            foreach (CatalogNode dr in pnodes)
             {
                 TreeNode gsNode = new TreeNode(dr.Name, 1, 1);
                 gsNode.Name = dr.Lid.ToString();//把节点名称设置为节点ID
@@ -151,12 +154,12 @@ namespace IDCM.Modules
                 long pid=Convert.ToInt64(lnode.Name);//获取节点名称(ID)
 
                 //根据ID 查LibraryNode 根据分组 order by lorder
-                List<LibraryNode> subnodes = LibraryNodeDAM.findSubNodes(pid);
+                List<CatalogNode> subnodes = LocalRecordMHub.findSubNodes(DataSourceHolder.DataSource,pid);
 
                 //如果节点下有子节点，把子几点添加到父节点上
                 if (subnodes != null)
                 {
-                    foreach (LibraryNode node in subnodes)
+                    foreach (CatalogNode node in subnodes)
                     {
                         TreeNode gsubNode = new TreeNode(node.Name, 2, 2);
                         gsubNode.Name = node.Lid.ToString();
@@ -172,7 +175,7 @@ namespace IDCM.Modules
         internal void deleteNode(TreeNode treeNode)
         {
             long referNameId = Convert.ToInt64(treeNode.Name);
-            int res=LibraryNodeDAM.delNodeCascaded(referNameId);
+            int res = LocalRecordMHub.delNodeCascaded(DataSourceHolder.DataSource, referNameId);
             treeNode.Remove();
         }
         /// <summary>
@@ -181,7 +184,7 @@ namespace IDCM.Modules
         /// <param name="treeView_library"></param>
         internal void addGroupSet(TreeNode treeNode)
         {
-            LibraryNode lnode = new LibraryNode("New Group Set", "GroupSet");
+            CatalogNode lnode = new CatalogNode("New Group Set", "GroupSet");
             TreeNode gsNode = new TreeNode(lnode.Name, 1, 1);
             TreeNode tpnode = treeNode != null ? treeNode : selectedNode_Current;
 #if DEBUG
@@ -197,7 +200,7 @@ namespace IDCM.Modules
 
             lnode.Pid=-1;
             lnode.Lorder=insertIndex;
-            LibraryNodeDAM.insertLibraryNode(lnode);
+            LocalRecordMHub.insertLibraryNode(DataSourceHolder.DataSource, lnode);
             gsNode.Name = lnode.Lid.ToString();
             ///////////////////////////
             libTree.LabelEdit = true;
@@ -220,10 +223,10 @@ namespace IDCM.Modules
                 insetIndex = tpnode.Index + 1;
             }
             long referNameId = Convert.ToInt64(tpnode.Name);
-            LibraryNode pnode = LibraryNodeDAM.findLibraryNode(referNameId);
+            CatalogNode pnode = LocalRecordMHub.findLibraryNode(DataSourceHolder.DataSource, referNameId);
             if (pnode != null)
             {
-                LibraryNode lnode = new LibraryNode("New Group", "Group");
+                CatalogNode lnode = new CatalogNode("New Group", "Group");
                 lnode.Pid = pnode.Lid;
                 TreeNode gsNode = new TreeNode(lnode.Name, 2, 2);
                 if(insetIndex>=0)
@@ -232,7 +235,7 @@ namespace IDCM.Modules
                     tpnode.Nodes.Add(gsNode);
                 gsNode.EnsureVisible();
                 lnode.Lorder = insetIndex;
-                LibraryNodeDAM.insertLibraryNode(lnode);
+                LocalRecordMHub.insertLibraryNode(DataSourceHolder.DataSource, lnode);
                 gsNode.Name = lnode.Lid.ToString();
                 libTree.LabelEdit = true;
                 gsNode.BeginEdit();
@@ -248,7 +251,7 @@ namespace IDCM.Modules
                 treeNode.EndEdit(true);
             else
             {
-                LibraryNodeDAM.updateLibraryNode(treeNode.Name, "Name", label);
+                LocalRecordMHub.updateLibraryNode(DataSourceHolder.DataSource, treeNode.Name, "Name", label);
             }
         }
         
