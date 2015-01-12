@@ -176,10 +176,10 @@ namespace IDCM.Data.Core
         public static void updateViewOrder(ConnLabel sconn, string attr, int viewOrder, bool isRequired)
         {
             int vOrder = viewOrder;
-            if (isRequired == false && viewOrder < CustomTColMapDAM.MaxMainViewCount)
-                vOrder = viewOrder + CustomTColMapDAM.MaxMainViewCount;
-            else if (viewOrder > CustomTColMapDAM.MaxMainViewCount)
-                vOrder = viewOrder - CustomTColMapDAM.MaxMainViewCount;
+            if (isRequired == false && viewOrder < CustomTColMap.MaxMainViewCount)
+                vOrder = viewOrder + CustomTColMap.MaxMainViewCount;
+            else if (viewOrder > CustomTColMap.MaxMainViewCount)
+                vOrder = viewOrder - CustomTColMap.MaxMainViewCount;
             updateViewOrder(sconn, attr, vOrder);
         }
         /// <summary>

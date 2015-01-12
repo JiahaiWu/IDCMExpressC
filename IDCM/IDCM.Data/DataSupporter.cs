@@ -149,5 +149,42 @@ namespace IDCM.Data
                 return res[0];
             return -2;
         }
+
+        /// <summary>
+        /// 获取预览字段集序列
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> getViewAttrs(WorkSpaceManager wsm, bool withInnerField = true)
+        {
+            return ColumnMappingHolder.getViewAttrs(wsm.getConnection(),withInnerField);
+        }
+        /// <summary>
+        /// 获取存储字段序列值(如查找失败返回-1)
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <returns></returns>
+        public static int getDBOrder(WorkSpaceManager wsm, string attr)
+        {
+            return ColumnMappingHolder.getDBOrder(wsm.getConnection(), attr);
+        }
+        /// <summary>
+        /// 获取预览字段位序值(如查找失败返回-1)
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <returns></returns>
+        public static int getViewOrder(WorkSpaceManager wsm, string attr)
+        {
+            return ColumnMappingHolder.getViewOrder(wsm.getConnection(), attr);
+        }
+        /// <summary>
+        /// 更新预览字段位序值
+        /// </summary>
+        /// <param name="attr"></param>
+        /// <param name="viewOrder"></param>
+        public static void updateViewOrder(WorkSpaceManager wsm, string attr, int viewOrder, bool isRequired)
+        {
+            ColumnMappingHolder.updateViewOrder(wsm.getConnection(), attr, viewOrder, isRequired);
+        }
+
     }
 }

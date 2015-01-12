@@ -88,6 +88,7 @@
     <Compile Include="Utils\DateTimePikcerAsyncUtil.cs" />
     <Compile Include="Utils\DGVAsyncUtil.cs" />
     <Compile Include="Utils\DGVUtil.cs" />
+    <Compile Include="Utils\RecordControlTypeConverter.cs" />
     <Compile Include="Utils\ToolStripItemAsyncUtil.cs" />
     <Compile Include="Utils\TreeViewAsyncUtil.cs" />
   </ItemGroup>

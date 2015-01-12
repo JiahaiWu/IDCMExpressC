@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace IDCM.Service.Utils
 {
-    class DGVAsyncUtil
+    public class DGVAsyncUtil
     {
         public static void syncAddCol(DataGridView dgv,DataGridViewColumn dgvCol)
         {

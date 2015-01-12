@@ -42,7 +42,7 @@ namespace IDCM.Data.DAM
                 }
                 else
                 {
-                    int viewOrder = 2 + (ctcd.IsRequire ? index : MaxMainViewCount + index);
+                    int viewOrder = 2 + (ctcd.IsRequire ? index : CustomTColMap.MaxMainViewCount + index);
                     noteCmds.Add(ctcd.Attr, "insert into " + typeof(CustomTColMap).Name + "(attr,mapOrder,viewOrder) values('" + ctcd.Attr + "'," + index + "," + viewOrder + ")");
                 }
                 //////////////////////////////////////////////
@@ -96,9 +96,6 @@ namespace IDCM.Data.DAM
         }
       
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
-        /// <summary>
-        /// 主表域最大显示字段数
-        /// </summary>
-        public const int MaxMainViewCount = 1000;
+        
     }
 }

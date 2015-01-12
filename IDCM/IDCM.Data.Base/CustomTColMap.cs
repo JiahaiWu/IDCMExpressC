@@ -19,5 +19,9 @@ namespace IDCM.Data.Base
         /// 数据展示映射位序(正值视为有效，负值视为隐藏)
         /// </summary>
         public int ViewOrder { get; set; }
+        /// <summary>
+        /// 主表域最大显示字段数
+        /// </summary>
+        public const int MaxMainViewCount = 1000;
     }
 }
