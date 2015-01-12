@@ -251,7 +251,7 @@ namespace IDCM.Modules
                 treeNode.EndEdit(true);
             else
             {
-                LocalRecordMHub.updateLibraryNode(DataSourceHolder.DataSource, treeNode.Name, "Name", label);
+                LocalRecordMHub.updateCatalogNode(DataSourceHolder.DataSource, treeNode.Name, "Name", label);
             }
         }
         

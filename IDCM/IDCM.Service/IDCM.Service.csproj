@@ -73,6 +73,7 @@
     <Compile Include="BGHandler\JSONListExportHandler.cs" />
     <Compile Include="BGHandler\SignInHandler.cs" />
     <Compile Include="BGHandler\TextExportHandler.cs" />
+    <Compile Include="DataSourceHolder.cs" />
     <Compile Include="DataTransfer\ExcelDataImporter.cs" />
     <Compile Include="DataTransfer\ExcelExporter.cs" />
     <Compile Include="DataTransfer\JSONListExporter.cs" />
@@ -111,6 +112,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="003_03.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UIM\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

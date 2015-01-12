@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace IDCM.Service.Common.Core
+namespace IDCM.Data.Base
 {
     /// <summary>
     /// 异步消息类型及附属参数的封装类
@@ -12,6 +12,8 @@ namespace IDCM.Service.Common.Core
     {
         public static readonly AsyncMessage DataPrepared = new AsyncMessage(MsgType.DataPrepared, "Data Prepared");
         public static readonly AsyncMessage RetryQuickStartConnect = new AsyncMessage(MsgType.RetryQuickStartConnect, "Retry Quick Start Connect");
+        public static readonly AsyncMessage RequestHomeView = new AsyncMessage(MsgType.RequestHomeView, "Request Home View");
+        public static readonly AsyncMessage RequestGCMView = new AsyncMessage(MsgType.RequestGCMView, "Request GCM View");
 
         /// <summary>
         /// For iterator 
@@ -22,6 +24,8 @@ namespace IDCM.Service.Common.Core
             {
                 yield return DataPrepared;
                 yield return RetryQuickStartConnect;
+                yield return RequestHomeView;
+                yield return RequestGCMView;
             }
         }
         private readonly string msgTag;
@@ -59,6 +63,8 @@ namespace IDCM.Service.Common.Core
     public enum MsgType
     {
         DataPrepared = 0,
-        RetryQuickStartConnect = 1
+        RetryQuickStartConnect = 1,
+        RequestHomeView=2,
+        RequestGCMView=3
     }
 }

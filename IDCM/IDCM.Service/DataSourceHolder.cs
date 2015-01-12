@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using IDCM.Data.Base;
 using IDCM.Service.BGHandler;
 
-namespace IDCM.Core
+namespace IDCM.Service
 {
     /// <summary>
     /// 工作空间保持及验证工具类

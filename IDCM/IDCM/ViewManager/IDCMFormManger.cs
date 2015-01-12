@@ -8,6 +8,7 @@ using IDCM.Forms;
 using IDCM.Service.Common;
 using IDCM.Service.Common.Core;
 using IDCM.Core;
+using IDCM.Data.Base;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -111,16 +112,7 @@ namespace IDCM.ViewManager
             //启动欢迎页面
             startWorkSpace();
         }
-        /// <summary>
-        /// 数据源预处理流程完成事件处理方法
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        internal void OnDataPrepared(object sender, IDCMAsyncEventArgs e)
-        {
-            ManagerI view = ViewManagerHolder.getManager(typeof(HomeViewManager));
-            view.initView(true);
-        }
+
         /// <summary>
         /// 再次打开默认的登录启动页面展示
         /// </summary>
@@ -128,8 +120,33 @@ namespace IDCM.ViewManager
         /// <param name="e"></param>
         internal void OnRetryQuickStartConnect(object sender, IDCMAsyncEventArgs e)
         {
-            ManagerI view = ViewManagerHolder.getManager(typeof(StartRetainer));
-            view.initView(true);
+            ViewManagerHolder.activeChildView(typeof(HomeViewManager), true);
+        }
+        /// <summary>
+        /// 数据源预处理流程完成事件处理方法
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal void OnDataPrepared(object sender, IDCMAsyncEventArgs e)
+        {
+            Form waitingForm = new WaitingForm();
+            waitingForm.MdiParent = mainForm;
+            waitingForm.Show();
+            waitingForm.BringToFront();
+            waitingForm.Update();
+            ViewManagerHolder.activeChildView(typeof(HomeViewManager), false);
+            ViewManagerHolder.activeChildView(typeof(HomeViewManager), false);
+            DWorkMHub.note(AsyncMessage.RequestHomeView);
+            waitingForm.Close();
+            waitingForm.Dispose();
+        }
+        internal void OnActiveHomeView(object sender, IDCMAsyncEventArgs e)
+        {
+            ViewManagerHolder.activeChildView(typeof(HomeViewManager), true);
+        }
+        internal void OnActiveGCMView(object sender, IDCMAsyncEventArgs e)
+        {
+            ViewManagerHolder.activeChildView(typeof(GCMViewManager), true);
         }
 #endregion
         internal ManagerI getHomeViewManager()

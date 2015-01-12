@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using IDCM.ViewManager;
 using IDCM.Service.Common;
-using IDCM.Service.Common.Core;
+using IDCM.Data.Base;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -57,6 +57,8 @@ namespace IDCM.AppContext
                 //bind Async Service to AsyncServInvoker
                 servInvoker.OnDataPrepared += mainManger.OnDataPrepared;
                 servInvoker.OnRetryQuickStartConnect += mainManger.OnRetryQuickStartConnect;
+                servInvoker.OnRequestHomeView += mainManger.OnActiveHomeView;
+                servInvoker.OnRequestGCMView += mainManger.OnActiveGCMView;
                 //Run HandleInstanceMonitor
                 handleMonitor.Interval = 1000;
                 handleMonitor.Tick += OnHMHeartBreak;

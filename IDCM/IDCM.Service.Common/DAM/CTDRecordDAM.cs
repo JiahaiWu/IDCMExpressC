@@ -133,13 +133,30 @@ namespace IDCM.Service.Common.DAM
             return dict;
         }
         /// <summary>
+        /// 更新目标数据的归档目录属性信息
+        /// </summary>
+        /// <param name="newlid"></param>
+        /// <param name="newplid"></param>
+        /// <param name="rid"></param>
+        /// <returns></returns>
+        public static int updateCTCRecordLid(WorkSpaceManager wsm,int newlid, int newplid = CatalogNode.REC_UNFILED, long rid = -1)
+        {
+            if (rid > 0)
+            {
+                string cmd = " update " + CTDRecordA.table_name + " set " + CTDRecordA.CTD_LID + "=" + newlid + "," + CTDRecordA.CTD_PLID + "=" + newplid
+                    + " where " + CTDRecordA.CTD_RID + "=" + rid;
+                return DataSupporter.executeSQL(wsm,cmd);
+            }
+            return -1;
+        }
+        /// <summary>
         /// 更新目标记录的归档目录属性信息
         /// </summary>
         /// <param name="newlid"></param>
         /// <param name="newplid"></param>
         /// <param name="nodeIds"></param>
         /// <param name="rids"></param>
-        public static void updateCTCRecordLid(WorkSpaceManager wsm, int newlid, int newplid = CatalogNode.REC_UNFILED, string nodeIds = null, string rids = null)
+        public static int updateCTCRecordLid(WorkSpaceManager wsm, int newlid, int newplid = CatalogNode.REC_UNFILED, string nodeIds = null, string rids = null)
         {
             StringBuilder cmdBuilder = new StringBuilder("update " + CTDRecordA.table_name + " set " + CTDRecordA.CTD_LID + "=" + newlid + "," + CTDRecordA.CTD_PLID + "=" + newplid);
             if (nodeIds != null || rids != null)
@@ -177,7 +194,7 @@ namespace IDCM.Service.Common.DAM
                 if (rids != null)
                     cmdBuilder.Append(" ").Append(CTDRecordA.CTD_RID).Append(" in (").Append(rids).Append(") ");
             }
-            DataSupporter.executeSQL(wsm, cmdBuilder.ToString());
+            return DataSupporter.executeSQL(wsm, cmdBuilder.ToString());
         }
         /// <summary>
         /// 彻底删除目标归档目录的数据记录
@@ -271,23 +288,7 @@ namespace IDCM.Service.Common.DAM
             string cmd = "delete from " + CTDRecordA.table_name + " where " + CTDRecordA.CTD_RID + "=" + rid;
             return DataSupporter.executeSQL(wsm, cmd);
         }
-        /// <summary>
-        /// 更新目标数据的归档目录属性信息
-        /// </summary>
-        /// <param name="newlid"></param>
-        /// <param name="newplid"></param>
-        /// <param name="rid"></param>
-        /// <returns></returns>
-        public static int updateCTCRecordLid(WorkSpaceManager wsm, int newlid, int newplid = CatalogNode.REC_UNFILED, long rid = -1)
-        {
-            if (rid > 0)
-            {
-                string cmd = " update " + CTDRecordA.table_name + " set " + CTDRecordA.CTD_LID + "=" + newlid + "," + CTDRecordA.CTD_PLID + "=" + newplid
-                    + " where " + CTDRecordA.CTD_RID + "=" + rid;
-                return DataSupporter.executeSQL(wsm, cmd);
-            }
-            return -1;
-        }
+
         /// <summary>
         /// 
         /// </summary>

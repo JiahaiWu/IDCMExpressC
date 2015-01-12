@@ -70,7 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext\AsyncServInvoker.cs" />
-    <Compile Include="Core\DataSourceHolder.cs" />
     <Compile Include="Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbsHandler.cs" />
+    <Compile Include="AsyncMessage.cs" />
     <Compile Include="ExportType.cs" />
     <Compile Include="IDCMDataException.cs" />
     <Compile Include="IDCMException.cs" />

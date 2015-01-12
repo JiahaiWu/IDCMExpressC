@@ -330,6 +330,40 @@ namespace IDCM.ViewManager
             frontFindDlg.Visible = true;
             frontFindDlg.Activate();
         }
+        /// <summary>
+        /// 更新目标记录的归档目录属性信息
+        /// </summary>
+        /// <param name="newlid"></param>
+        /// <param name="newplid"></param>
+        /// <param name="nodeIds"></param>
+        /// <param name="rids"></param>
+        public int updateCTCRecordLid(int newlid, int newplid = CatalogNode.REC_UNFILED, long rid = -1)
+        {
+           return LocalRecordMHub.updateCTCRecordLid(DataSourceHolder.DataSource, newlid, newplid, rid);
+        }
+        /// <summary>
+        /// 删除记录
+        /// </summary>
+        /// <param name="uid"></param>
+        public int deleteRec(long rid)
+        {
+            return LocalRecordMHub.deleteRec(DataSourceHolder.DataSource, rid);
+        }
+        /// <summary>
+        /// 更新数据记录
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="cellVal"></param>
+        /// <param name="attrName"></param>
+        /// <returns></returns>
+        public int updateAttrVal(string rid, string cellVal, string attrName)
+        {
+            return LocalRecordMHub.updateAttrVal(DataSourceHolder.DataSource, rid, cellVal, attrName);
+        }
+        public void activeGCMView()
+        {
+            DWorkMHub.note(AsyncMessage.RequestGCMView);
+        }
         public void quickSearch(string findTerm)
         {
             DataGridViewCell ncell = datasetBuilder.quickSearch(findTerm);

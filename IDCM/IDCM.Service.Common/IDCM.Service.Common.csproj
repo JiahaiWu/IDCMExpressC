@@ -64,7 +64,6 @@
     <Compile Include="Core\LocalHandlerProxy.cs" />
     <Compile Include="Core\QueryCmdCache.cs" />
     <Compile Include="DAM\CustomTColMapDAM.cs" />
-    <Compile Include="Core\AsyncMessage.cs" />
     <Compile Include="Core\AsyncMessageNoter.cs" />
     <Compile Include="Core\BGWorkerInvoker.cs" />
     <Compile Include="Core\HandleHolderI.cs" />

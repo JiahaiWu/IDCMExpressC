@@ -56,16 +56,35 @@ namespace IDCM.Service.Common
         {
             return CatalogNodeDAM.extractToLids(datasource.WSM, lid);
         }
-                /// <summary>
+        /// <summary>
+        /// 删除记录
+        /// </summary>
+        /// <param name="uid"></param>
+        public static int deleteRec(DataSourceMHub datasource, long rid)
+        {
+            return CTDRecordDAM.deleteRec(datasource.WSM, rid);
+        }
+        /// <summary>
         /// 更新目标记录的归档目录属性信息
         /// </summary>
         /// <param name="newlid"></param>
         /// <param name="newplid"></param>
         /// <param name="nodeIds"></param>
         /// <param name="rids"></param>
-        public static void updateCTCRecordLid(DataSourceMHub datasource,int newlid, int newplid = CatalogNode.REC_UNFILED, string nodeIds = null, string rids = null)
+        public static int updateCTCRecordLid(DataSourceMHub datasource,int newlid, int newplid = CatalogNode.REC_UNFILED, string nodeIds = null, string rids = null)
         {
-            CTDRecordDAM.updateCTCRecordLid(datasource.WSM, newlid, newplid, nodeIds, rids);
+            return CTDRecordDAM.updateCTCRecordLid(datasource.WSM, newlid, newplid, nodeIds, rids);
+        }
+        /// <summary>
+        /// 更新目标数据的归档目录属性信息
+        /// </summary>
+        /// <param name="newlid"></param>
+        /// <param name="newplid"></param>
+        /// <param name="rid"></param>
+        /// <returns></returns>
+        public static int updateCTCRecordLid(DataSourceMHub datasource, int newlid, int newplid = CatalogNode.REC_UNFILED, long rid = -1)
+        {
+            return CTDRecordDAM.updateCTCRecordLid(datasource.WSM, newlid, newplid, rid);
         }
         /// <summary>
         /// 彻底删除目标归档目录的数据记录
@@ -194,7 +213,7 @@ namespace IDCM.Service.Common
         /// <param name="setName"></param>
         /// <param name="setVal"></param>
         /// <returns></returns>
-        public static int updateLibraryNode(DataSourceMHub datasource,string lids, string setName, object setVal)
+        public static int updateCatalogNode(DataSourceMHub datasource, string lids, string setName, object setVal)
         {
             return CatalogNodeDAM.updateCatalogNode(datasource.WSM, lids, setName, setVal);
         }

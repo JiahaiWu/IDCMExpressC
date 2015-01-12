@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using IDCM.ViewManager;
-using IDCM.Service.Common.Core;
+using IDCM.Data.Base;
 
 namespace IDCM.AppContext
 {
@@ -27,6 +27,12 @@ namespace IDCM.AppContext
                 case MsgType.RetryQuickStartConnect:
                     OnRetryQuickStartConnect(this,new IDCMAsyncEventArgs(msg.MsgTag,msg.Parameters));
                     break;
+                case MsgType.RequestHomeView:
+                    OnRequestHomeView(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
+                    break;
+                case MsgType.RequestGCMView:
+                    OnRequestGCMView(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
+                    break;
                 default:
                     log.Warn("Unhandled asynchronous message.  @msgTag=" + msg.MsgTag);
                     break;
@@ -34,6 +40,8 @@ namespace IDCM.AppContext
         }
 
         //定义数据源加载完成事件
+        public event IDCMAsyncRequest OnRequestHomeView;
+        public event IDCMAsyncRequest OnRequestGCMView;
         public event IDCMAsyncRequest OnDataPrepared;
         public event IDCMAsyncRequest OnRetryQuickStartConnect;
 

@@ -98,15 +98,15 @@ namespace IDCM.Forms
                 //右键
                 if (e.Button == MouseButtons.Right)
                 {
-                    //LocalLibBuilder.filterContextMenuItems(contextMenuStrip_lib, e.Node);
-                    //foreach (ToolStripItem tsItem in contextMenuStrip_lib.Items)
-                    //{
-                    //    if (tsItem is ToolStripSeparator)
-                    //        continue;
-                    //    ControlUtil.ClearEvent(tsItem, "Click");
-                    //    tsItem.Click += delegate(object tsender, EventArgs te) { toolStripMenuItem_lib_Click(tsender, te, e.Node); };
-                    //}
-                    //contextMenuStrip_lib.Show(treeView_library, e.X, e.Y);
+                    LocalCatBuilder.filterContextMenuItems(contextMenuStrip_lib, e.Node);
+                    foreach (ToolStripItem tsItem in contextMenuStrip_lib.Items)
+                    {
+                        if (tsItem is ToolStripSeparator)
+                            continue;
+                        ControlUtil.ClearEvent(tsItem, "Click");
+                        tsItem.Click += delegate(object tsender, EventArgs te) { toolStripMenuItem_lib_Click(tsender, te, e.Node); };
+                    }
+                    contextMenuStrip_lib.Show(treeView_library, e.X, e.Y);
                 }
             }
         }
@@ -241,44 +241,44 @@ namespace IDCM.Forms
         }
         private void treeView_library_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
-            //if (e.Node.Equals(manager.SelectedNode_Current))
-            //{
-            //    e.Graphics.FillRectangle(Brushes.LightYellow, e.Bounds.Left, e.Bounds.Top, e.Node.TreeView.Width - e.Bounds.Left-2, e.Bounds.Height);
-            //}
-            //else
-            //{
-            //    e.Graphics.FillRectangle(Brushes.Transparent, e.Bounds.Left, e.Bounds.Top, e.Node.TreeView.Width - e.Bounds.Left-2, e.Bounds.Height);
-            //}
-            ////由系統繪制
-            //e.Graphics.DrawString(e.Node.Text, e.Node.TreeView.Font, Brushes.Black, e.Bounds.Left, e.Bounds.Top);
-            //////e.DrawDefault = true;
-            //if (e.Node.Tag != null)
-            //{
-            //    string newMail = string.Format(" ({0})", e.Node.Tag.ToString());
-            //    e.Graphics.DrawString(newMail, e.Node.TreeView.Font, Brushes.Blue, e.Bounds.Right, e.Bounds.Top);
-            //}
-            ////e.Node.Expand();
+            if (e.Node.Equals(manager.SelectedNode_Current))
+            {
+                e.Graphics.FillRectangle(Brushes.LightYellow, e.Bounds.Left, e.Bounds.Top, e.Node.TreeView.Width - e.Bounds.Left - 2, e.Bounds.Height);
+            }
+            else
+            {
+                e.Graphics.FillRectangle(Brushes.Transparent, e.Bounds.Left, e.Bounds.Top, e.Node.TreeView.Width - e.Bounds.Left - 2, e.Bounds.Height);
+            }
+            //由系統繪制
+            e.Graphics.DrawString(e.Node.Text, e.Node.TreeView.Font, Brushes.Black, e.Bounds.Left, e.Bounds.Top);
+            ////e.DrawDefault = true;
+            if (e.Node.Tag != null)
+            {
+                string newMail = string.Format(" ({0})", e.Node.Tag.ToString());
+                e.Graphics.DrawString(newMail, e.Node.TreeView.Font, Brushes.Blue, e.Bounds.Right, e.Bounds.Top);
+            }
+            //e.Node.Expand();
         }
 
         private void treeView_base_DrawNode(object sender, DrawTreeNodeEventArgs e)
         {
-            //if (e.Node.Equals(manager.SelectedNode_Current))
-            //{
-            //    e.Graphics.FillRectangle(Brushes.LightYellow, e.Bounds.Left, e.Bounds.Top, e.Node.TreeView.Width - e.Bounds.Left-2, e.Bounds.Height);
-            //}
-            //else
-            //{
-            //    e.Graphics.FillRectangle(Brushes.Transparent, e.Bounds.Left, e.Bounds.Top, e.Node.TreeView.Width - e.Bounds.Left-2, e.Bounds.Height);
-            //}
-            ////由系統繪制
-            //e.Graphics.DrawString(e.Node.Text, e.Node.TreeView.Font, Brushes.Black, e.Bounds.Left, e.Bounds.Top);
-            //////e.DrawDefault = true;
-            //if (e.Node.Tag != null)
-            //{
-            //    string newMail = string.Format(" ({0})", e.Node.Tag.ToString());
-            //    e.Graphics.DrawString(newMail, e.Node.TreeView.Font, Brushes.Blue, e.Bounds.Right, e.Bounds.Top);
-            //}
-            ////e.Node.Expand();
+            if (e.Node.Equals(manager.SelectedNode_Current))
+            {
+                e.Graphics.FillRectangle(Brushes.LightYellow, e.Bounds.Left, e.Bounds.Top, e.Node.TreeView.Width - e.Bounds.Left - 2, e.Bounds.Height);
+            }
+            else
+            {
+                e.Graphics.FillRectangle(Brushes.Transparent, e.Bounds.Left, e.Bounds.Top, e.Node.TreeView.Width - e.Bounds.Left - 2, e.Bounds.Height);
+            }
+            //由系統繪制
+            e.Graphics.DrawString(e.Node.Text, e.Node.TreeView.Font, Brushes.Black, e.Bounds.Left, e.Bounds.Top);
+            ////e.DrawDefault = true;
+            if (e.Node.Tag != null)
+            {
+                string newMail = string.Format(" ({0})", e.Node.Tag.ToString());
+                e.Graphics.DrawString(newMail, e.Node.TreeView.Font, Brushes.Blue, e.Bounds.Right, e.Bounds.Top);
+            }
+            //e.Node.Expand();
         }
         
         /// <summary>
@@ -300,28 +300,28 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void toolStripButton_del_Click(object sender, EventArgs e)
         {
-            //foreach (DataGridViewRow row in dataGridView_items.SelectedRows)
-            //{
-            //    DataGridViewCell idCell = row.Cells[CTDRecordA.CTD_RID];
-            //    if (idCell != null)
-            //    {
-            //        long uid = Convert.ToInt64(idCell.FormattedValue.ToString());
-            //        {
-            //            int ic =-1;
-            //            if (manager.CURRENT_LID != LibraryNodeDAM.REC_TRASH && manager.CURRENT_LID != CatalogNode.REC_TEMP)
-            //            {
-            //                ic = CTDRecordA.updateCTCRecordLid(CatalogNode.REC_TRASH, CatalogNode.REC_UNFILED, uid);
-            //            }
-            //            else
-            //            {
-            //                ic = CTDRecordA.deleteRec(uid);
-            //            }
-            //            if (ic > 0)
-            //                dataGridView_items.Rows.Remove(row);
-            //        }
-            //    }
-            //}
-            //manager.updateLibRecCount();
+            foreach (DataGridViewRow row in dataGridView_items.SelectedRows)
+            {
+                DataGridViewCell idCell = row.Cells[CTDRecordA.CTD_RID];
+                if (idCell != null)
+                {
+                    long uid = Convert.ToInt64(idCell.FormattedValue.ToString());
+                    {
+                        int ic = -1;
+                        if (manager.CURRENT_LID != CatalogNode.REC_TRASH && manager.CURRENT_LID != CatalogNode.REC_TEMP)
+                        {
+                            ic = manager.updateCTCRecordLid(CatalogNode.REC_TRASH, CatalogNode.REC_UNFILED, uid);
+                        }
+                        else
+                        {
+                            ic = manager.deleteRec(uid);
+                        }
+                        if (ic > 0)
+                            dataGridView_items.Rows.Remove(row);
+                    }
+                }
+            }
+            manager.updateCatRecCount();
         }
         /// <summary>
         /// 单元格的值改变后，执行更新或插入操作
@@ -338,15 +338,15 @@ namespace IDCM.Forms
                 {
                     string cellVal = cell.FormattedValue.ToString();
                     string attrName = dataGridView_items.Columns[e.ColumnIndex].Name;
-                    //if (idCell.Value != null)
-                    //{
-                    //    string uid = idCell.FormattedValue.ToString();
-                    //    CTDRecordDAM.updateAttrVal(uid, cellVal, attrName);
-                    //}
-                    //else
-                    //{
-                    //    Console.WriteLine("Error!!!");
-                    //}
+                    if (idCell.Value != null)
+                    {
+                        string uid = idCell.FormattedValue.ToString();
+                        manager.updateAttrVal(uid, cellVal, attrName);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error!!!");
+                    }
                 }
             }
         }
@@ -406,11 +406,11 @@ namespace IDCM.Forms
             if(dataGridView_items.Rows.Count>0)
             {
                 DataGridViewRow dgvr = dataGridView_items.CurrentRow;
-                //string rid = dgvr.Cells[CTDRecordA.CTD_RID].FormattedValue.ToString();
-                //if (rid.Length > 0 && !rid.Equals(manager.CURRENT_RID.ToString()))
-                //{
-                //    manager.selectViewRecord(dgvr);
-                //}
+                string rid = dgvr.Cells[CTDRecordA.CTD_RID].FormattedValue.ToString();
+                if (rid.Length > 0 && !rid.Equals(manager.CURRENT_RID.ToString()))
+                {
+                    manager.selectViewRecord(dgvr);
+                }
             }
         }
         private void toolStripTextBox_quickSearch_TextChanged(object sender, EventArgs e)
@@ -487,25 +487,25 @@ namespace IDCM.Forms
             Point point = treeView_library.PointToClient(new Point(e.X, e.Y));
             //获得在鼠标释放处的节点  
             TreeNode targetNode = treeView_library.GetNodeAt(point);
-            //if (targetNode != null && targetNode.Parent != null)
-            //{
-            //    if (e.Data.GetDataPresent(typeof(DataGridViewSelectedRowCollection)))
-            //    {
-            //        DataGridViewSelectedRowCollection rowCollection = e.Data.GetData(typeof(DataGridViewSelectedRowCollection)) as DataGridViewSelectedRowCollection;
-            //        if (rowCollection != null)
-            //        {
-            //            foreach (DataGridViewRow row in rowCollection)
-            //            {
-            //                int lid = Convert.ToInt32(targetNode.Name);
-            //                int plid = Convert.ToInt32(targetNode.Parent.Name);
-            //                long rid = Convert.ToInt64(row.Cells[CTDRecordA.CTD_RID].Value.ToString());
-            //                CTDRecordDAM.updateCTCRecordLid(lid, plid, rid);
-            //            }
-            //            manager.updateLibRecCount();
-            //        }
-            //    }
-            //    manager.updateDataSet(targetNode);
-            //}
+            if (targetNode != null && targetNode.Parent != null)
+            {
+                if (e.Data.GetDataPresent(typeof(DataGridViewSelectedRowCollection)))
+                {
+                    DataGridViewSelectedRowCollection rowCollection = e.Data.GetData(typeof(DataGridViewSelectedRowCollection)) as DataGridViewSelectedRowCollection;
+                    if (rowCollection != null)
+                    {
+                        foreach (DataGridViewRow row in rowCollection)
+                        {
+                            int lid = Convert.ToInt32(targetNode.Name);
+                            int plid = Convert.ToInt32(targetNode.Parent.Name);
+                            long rid = Convert.ToInt64(row.Cells[CTDRecordA.CTD_RID].Value.ToString());
+                            manager.updateCTCRecordLid(lid, plid, rid);
+                        }
+                        manager.updateCatRecCount();
+                    }
+                }
+                manager.updateDataSet(targetNode);
+            }
         }
         /// <summary>
         /// 设置Datagridview显示行号
@@ -652,7 +652,7 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void toolStripButton_gcm_Click(object sender, EventArgs e)
         {
-            //IDCMFormManger.getInstance().activeChildView(typeof(GCMViewManager), true);
+            manager.activeGCMView();
         }
         /// <summary>
         /// 云备份
