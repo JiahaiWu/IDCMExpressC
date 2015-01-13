@@ -21,6 +21,15 @@ namespace IDCM.Service.Common
             return CTDRecordDAM.queryCTDRecordByHistSQL(datasource.WSM, cmdstr, lcount, offset);
         }
         /// <summary>
+        /// 查询记录计数值
+        /// </summary>
+        /// <param name="nodeIds"></param>
+        /// <returns></returns>
+        public static Dictionary<int, long> countCTDRecord(DataSourceMHub datasource, string nodeIds = null)
+        {
+            return CTDRecordDAM.countCTDRecord(datasource.WSM, nodeIds);
+        }
+        /// <summary>
         /// 最近的用户发起的数据表单查询条件及聚合结果数量的记录
         /// </summary>
         /// <param name="cmdstr"></param>
@@ -28,6 +37,14 @@ namespace IDCM.Service.Common
         public static KeyValuePair<string, int> getLastDGVRQuery()
         {
             return QueryCmdCache.getLastDGVRQuery();
+        }
+        /// <summary>
+        /// 数据表单查询条件语句缓存
+        /// </summary>
+        /// <param name="cmdstr"></param>
+        public static void cacheDGVQuery(string cmdstr, int tcount)
+        {
+            QueryCmdCache.cacheDGVQuery(cmdstr, tcount);
         }
         /// <summary>
         /// 查询记录
@@ -38,6 +55,16 @@ namespace IDCM.Service.Common
         public static DataTable queryCTDRecord(DataSourceMHub datasource, string nodeIds = null, string rids = null)
         {
             return CTDRecordDAM.queryCTDRecord(datasource.WSM, nodeIds, rids);
+        }
+        /// <summary>
+        /// 查询记录
+        /// </summary>
+        /// <param name="nodeIds"></param>
+        /// <param name="rids"></param>
+        /// <returns></returns>
+        public static DataTable queryCTDRecord(DataSourceMHub datasource, string nodeIds, string rids, out string cmdstr)
+        {
+            return CTDRecordDAM.queryCTDRecord(datasource.WSM, nodeIds, rids,out cmdstr);
         }
         /// <summary>
         /// 获取预览字段集序列
@@ -225,7 +252,7 @@ namespace IDCM.Service.Common
         {
             return CatalogNodeDAM.getSearchMap(datasource.WSM);
         }
-        public bool doUpdateProcess(DataSourceMHub datasource, LinkedList<CustomTColDef> newCtcds)
+        public static bool doUpdateProcess(DataSourceMHub datasource, LinkedList<CustomTColDef> newCtcds)
         {
             return TemplateUpdater.doUpdateProcess(datasource.WSM, newCtcds);
         }

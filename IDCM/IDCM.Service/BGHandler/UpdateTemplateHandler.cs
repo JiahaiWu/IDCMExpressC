@@ -46,32 +46,9 @@ namespace IDCM.Service.BGHandler
             if (error != null)
             {
                 MessageBox.Show("ERROR::" + error.Message + "\n" + error.StackTrace);
-                return;
             }
-            if (IDCMAppContext.MainManger != null)
-            {
-                IDCMAppContext.MainManger.getManager(typeof(HomeViewManager)).dispose();
-                IDCMAppContext.MainManger.activeChildView(typeof(HomeViewManager), true);
-            }
-            else
-                MessageBox.Show("ERROR::IDCMAppContext.MainManger is NULL.\n");
-        }
-        /// <summary>
-        /// 后台任务执行过程中的状态反馈代码段
-        /// </summary>
-        /// <param name="worker"></param>
-        /// <param name="progressPercentage"></param>
-        /// <param name="args"></param>
-        public override void progressChanged(BackgroundWorker worker, int progressPercentage, List<Object> args)
-        {
-            if (progressPercentage == 0)
-            {
-                FrontProgressPrompt.startFrontProgress();
-            }
-            if (progressPercentage == 100)
-            {
-                FrontProgressPrompt.endFrontProgress();
-            }
+            //重启数据源
+            DWorkMHub.note(AsyncMessage.RetryDataPrepare);
         }
 
         private LinkedList<CustomTColDef> customTCDList = null;

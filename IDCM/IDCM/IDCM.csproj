@@ -157,6 +157,7 @@
     </Compile>
     <Compile Include="Modules\BackProgressIndicator.cs" />
     <Compile Include="Core\DataSourceHolder.cs" />
+    <Compile Include="Modules\FrontProgressPrompt.cs" />
     <Compile Include="Modules\LocalDataSetBuilder.cs" />
     <Compile Include="Modules\LocalDBSearchBuilder.cs" />
     <Compile Include="Modules\LocalCatBuilder.cs" />

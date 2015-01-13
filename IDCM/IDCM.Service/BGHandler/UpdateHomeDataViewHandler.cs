@@ -37,7 +37,8 @@ namespace IDCM.Service.BGHandler
         public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
             bool res = false;
-            if(!failFast || filterNode.Name.Equals(HomeViewManager.getInstance().CURRENT_LID.ToString()))
+            ///if(!failFast || filterNode.Name.Equals(HomeViewManager.getInstance().CURRENT_LID.ToString()))
+            if(!failFast)
             {
                 List<string> viewAttrs = LocalRecordMHub.getViewAttrs(datasource);
                 long lid = Convert.ToInt64(filterNode.Name);
@@ -59,7 +60,7 @@ namespace IDCM.Service.BGHandler
                 string cmdstr=null;
                 //数据查询与装载
                 DataTable records = LocalRecordMHub.queryCTDRecord(datasource,filterLids, null, out cmdstr);
-                QueryCmdCache.cacheDGVQuery(cmdstr, records.Rows.Count);
+                LocalRecordMHub.cacheDGVQuery(cmdstr, records.Rows.Count);
                 if (records != null && records.Rows.Count > 0)
                 {
                     foreach (DataRow dr in records.Rows)

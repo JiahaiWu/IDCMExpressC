@@ -59,6 +59,7 @@ namespace IDCM.AppContext
                 servInvoker.OnRetryQuickStartConnect += mainManger.OnRetryQuickStartConnect;
                 servInvoker.OnRequestHomeView += mainManger.OnActiveHomeView;
                 servInvoker.OnRequestGCMView += mainManger.OnActiveGCMView;
+                servInvoker.OnRetryDataPrepare += mainManger.OnRetryDataPrepare;
                 //Run HandleInstanceMonitor
                 handleMonitor.Interval = 1000;
                 handleMonitor.Tick += OnHMHeartBreak;

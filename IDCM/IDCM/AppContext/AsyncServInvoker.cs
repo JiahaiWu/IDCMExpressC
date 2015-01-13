@@ -33,6 +33,9 @@ namespace IDCM.AppContext
                 case MsgType.RequestGCMView:
                     OnRequestGCMView(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
                     break;
+                case MsgType.RetryDataPrepare:
+                    OnRetryDataPrepare(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
+                    break;
                 default:
                     log.Warn("Unhandled asynchronous message.  @msgTag=" + msg.MsgTag);
                     break;
@@ -40,11 +43,11 @@ namespace IDCM.AppContext
         }
 
         //定义数据源加载完成事件
-        public event IDCMAsyncRequest OnRequestHomeView;
-        public event IDCMAsyncRequest OnRequestGCMView;
-        public event IDCMAsyncRequest OnDataPrepared;
-        public event IDCMAsyncRequest OnRetryQuickStartConnect;
-
+        internal event IDCMAsyncRequest OnRequestHomeView;
+        internal event IDCMAsyncRequest OnRequestGCMView;
+        internal event IDCMAsyncRequest OnDataPrepared;
+        internal event IDCMAsyncRequest OnRetryQuickStartConnect;
+        internal event IDCMAsyncRequest OnRetryDataPrepare;
         #endregion
 
         //异步消息事件委托形式化声明

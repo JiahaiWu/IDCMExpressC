@@ -87,7 +87,7 @@ namespace IDCM.Service.BGHandler
             if (dgvr.Cells.Count > rIdx)
             {
                 long rid= Convert.ToInt64(dgvr.Cells[rIdx].FormattedValue.ToString());
-                ((HomeViewManager)HomeViewManager.getInstance()).CURRENT_RID = rid;
+                ///////((HomeViewManager)HomeViewManager.getInstance()).CURRENT_RID = rid;
                 DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, Convert.ToString(rid));
                 if (table.Rows.Count > 0)
                 {

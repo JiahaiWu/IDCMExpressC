@@ -149,6 +149,10 @@ namespace IDCM.ViewManager
         {
             ViewManagerHolder.activeChildView(typeof(GCMViewManager), true);
         }
+        internal void OnRetryDataPrepare(object sender, IDCMAsyncEventArgs e)
+        {
+            //Unimplement!
+        }
 #endregion
         internal ManagerI getHomeViewManager()
         {

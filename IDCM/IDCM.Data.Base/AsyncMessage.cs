@@ -14,6 +14,7 @@ namespace IDCM.Data.Base
         public static readonly AsyncMessage RetryQuickStartConnect = new AsyncMessage(MsgType.RetryQuickStartConnect, "Retry Quick Start Connect");
         public static readonly AsyncMessage RequestHomeView = new AsyncMessage(MsgType.RequestHomeView, "Request Home View");
         public static readonly AsyncMessage RequestGCMView = new AsyncMessage(MsgType.RequestGCMView, "Request GCM View");
+        public static readonly AsyncMessage RetryDataPrepare = new AsyncMessage(MsgType.RetryDataPrepare, "Retry Data Prepare Operation");
 
         /// <summary>
         /// For iterator 
@@ -65,6 +66,7 @@ namespace IDCM.Data.Base
         DataPrepared = 0,
         RetryQuickStartConnect = 1,
         RequestHomeView=2,
-        RequestGCMView=3
+        RequestGCMView=3,
+        RetryDataPrepare=4
     }
 }
