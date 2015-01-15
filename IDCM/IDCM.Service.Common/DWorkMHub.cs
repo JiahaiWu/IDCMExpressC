@@ -134,5 +134,10 @@ namespace IDCM.Service.Common
             BGWorkerInvoker.abortHandlerByType(servInstance.GetType());
             return true;
         }
+
+        public static HandleRunInfo[] getRunInfoList()
+        {
+            return LongTermHandleNoter.getHandleList();
+        }
     }
 }

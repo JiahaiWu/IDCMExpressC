@@ -105,24 +105,6 @@ namespace IDCM.Forms
 
         }
 
-        private void GCMView_Shown(object sender, EventArgs e)
-        {
-            activeDataView(true);
-        }
-        /// <summary>
-        /// activeHomeView
-        /// </summary>
-        /// <param name="refresh"></param>
-        public void activeDataView(bool refresh = true)
-        {
-            //加载默认的数据报表展示
-            manager.loadDataSetView();
-            manager.updateRecordView();
-            //resize for data view
-            dataGridView_items.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-            //dataGridView_items.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
-            dataGridView_items.AllowUserToResizeColumns = true;
-        }
 
     }
 }

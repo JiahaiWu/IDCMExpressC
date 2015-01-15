@@ -109,6 +109,10 @@ namespace IDCM.Core
         {
             get { return dataSource; }
         }
+        public static GCMSiteMHub GCMHolder
+        { 
+            get { return gcmHolder; } 
+        }
         #region 实例对象保持部分
         /// <summary>
         /// 数据源实例
@@ -118,5 +122,7 @@ namespace IDCM.Core
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         #endregion
+
+        
     }
 }

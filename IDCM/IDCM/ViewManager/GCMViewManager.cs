@@ -7,6 +7,12 @@ using IDCM.AppContext;
 using IDCM.Forms;
 using IDCM.Service.Utils;
 using IDCM.Service;
+using IDCM.Service.Common;
+using IDCM.Service.BGHandler;
+using IDCM.Core;
+using IDCM.Modules;
+using IDCM.Data.Base;
+using IDCM.Service.UIM;
 
 namespace IDCM.ViewManager
 {
@@ -16,22 +22,21 @@ namespace IDCM.ViewManager
         public GCMViewManager()
         {
             gcmView = new GCMView();
-            //LongTermHandleNoter.note(gcmView);
+            gcmView.Shown += OnGcmView_Shown;
+            gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;
+            gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;
             //frontFindDlg = new GCMFrontFindDlg(gcmView.getItemGridView());
             //frontFindDlg.setCellHit += new GCMFrontFindDlg.SetHit<DataGridViewCell>(DGVUtil.setDGVCellHit);
             //frontFindDlg.cancelCellHit += new GCMFrontFindDlg.CancelHit<DataGridViewCell>(DGVUtil.cancelDGVCellHit);
-            //LongTermHandleNoter.note(frontFindDlg);
-            //gcmView.setManager(this);
             //recBuilder = new GCMRecordBuilder(gcmView.getRecordTree(),gcmView.getRecordList());
-            //datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
+            datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
             //searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
-            //BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
+            BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
         }
         public static HomeViewManager getInstance()
         {
-            //ManagerI hvm = IDCMAppContext.MainManger.getManager(typeof(HomeViewManager));
-            //return hvm == null ? null : (hvm as HomeViewManager);
-            return null;
+            ManagerI gcm = ViewManagerHolder.getManager(typeof(GCMViewManager));
+            return gcm == null ? null : (gcm as HomeViewManager);
         }
         ~GCMViewManager()
         {
@@ -44,9 +49,9 @@ namespace IDCM.ViewManager
         //页面窗口实例
         private volatile GCMView gcmView = null;
         //private volatile GCMRecordBuilder recBuilder = null;
-        //private volatile GCMDataSetBuilder datasetBuilder = null;
+        private volatile GCMDataSetBuilder datasetBuilder = null;
         //private volatile GCMSearchBuilder searchBuilder = null;
-        private GCMFrontFindDlg frontFindDlg = null;
+        //private GCMFrontFindDlg frontFindDlg = null;
         
         #endregion
         #region 接口实例化部分
@@ -58,11 +63,11 @@ namespace IDCM.ViewManager
             //    recBuilder.Dispose();
             //    recBuilder = null;
             //}
-            //if (datasetBuilder != null)
-            //{
-            //    datasetBuilder.Dispose();
-            //    datasetBuilder = null;
-            //}
+            if (datasetBuilder != null)
+            {
+                datasetBuilder.Dispose();
+                datasetBuilder = null;
+            }
             //if (searchBuilder != null)
             //{
             //    searchBuilder.Dispose();
@@ -70,17 +75,17 @@ namespace IDCM.ViewManager
             //}
             if (gcmView != null && !gcmView.IsDisposed)
             {
-                //BackProgressIndicator.removeIndicatorBar(gcmView.getProgressBar());
+                BackProgressIndicator.removeIndicatorBar(gcmView.getProgressBar());
                 gcmView.Close();
                 gcmView.Dispose();
                 gcmView = null;
             }
-            if (frontFindDlg != null && !frontFindDlg.IsDisposed)
-            {
-                frontFindDlg.Close();
-                frontFindDlg.Dispose();
-                frontFindDlg = null;
-            }
+            //if (frontFindDlg != null && !frontFindDlg.IsDisposed)
+            //{
+            //    frontFindDlg.Close();
+            //    frontFindDlg.Dispose();
+            //    frontFindDlg = null;
+            //}
         }
         /// <summary>
         /// 对象实例化初始化方法
@@ -91,32 +96,34 @@ namespace IDCM.ViewManager
             if (gcmView == null || gcmView.IsDisposed)
             {
                 gcmView = new GCMView();
-                //LongTermHandleNoter.note(gcmView);
-                //gcmView.setManager(this);
+                gcmView.Shown += OnGcmView_Shown;
+                gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;
+                gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;
                 //recBuilder = new GCMRecordBuilder(gcmView.getRecordTree(), gcmView.getRecordList());
-                //datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
+                datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
+                BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());
                 //searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             }
-            //AuthInfo auth= AuthenticationRetainer.getInstance().getLoginAuthInfo();
-            //if (auth != null && auth.LoginFlag)
-            //{
-            //    if (activeShow)
-            //    {
-            //        gcmView.WindowState = FormWindowState.Maximized;
-            //        gcmView.Show();
-            //        gcmView.Activate();
-            //    }
-            //    else
-            //    {
-            //        gcmView.Hide();
-            //    }
-            //    return true;
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Please sign in before open the GCMView.");
-            //}
-            //dispose();
+            AuthInfo auth = DataSourceHolder.GCMHolder.getSignedAuthInfo();
+            if (auth != null && auth.LoginFlag)
+            {
+                if (activeShow)
+                {
+                    gcmView.WindowState = FormWindowState.Maximized;
+                    gcmView.Show();
+                    gcmView.Activate();
+                }
+                else
+                {
+                    gcmView.Hide();
+                }
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Please sign in before open the GCMView.");
+            }
+            dispose();
             return false;
         }
         public override void setMaxToNormal()
@@ -158,9 +165,9 @@ namespace IDCM.ViewManager
         /// </summary>
         public void loadDataSetView()
         {
-            //LoadGCMDataHandler lgdh = new LoadGCMDataHandler(gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList(), datasetBuilder.getLoadedNoter());
-            //CmdConsole.call(lgdh, CmdConsole.CmdReqOption.L);
-            ////datasetBuilder.loadDataSetView();
+            LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList(), datasetBuilder.getLoadedNoter());
+            DWorkMHub.callAsyncHandle(lgdh);
+            //datasetBuilder.loadDataSetView();
         }
         /// <summary>
         /// 更新具体记录的显示
@@ -168,6 +175,34 @@ namespace IDCM.ViewManager
         public void updateRecordView()
         {
 
+        }
+
+        /// <summary>
+        /// activeHomeView
+        /// </summary>
+        /// <param name="refresh"></param>
+        public void OnGcmView_Shown(object sender, EventArgs e)
+        {
+           //加载默认的数据报表展示
+           loadDataSetView();
+           updateRecordView();
+           //resize for data view
+           gcmView.getItemGridView().AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+           gcmView.getItemGridView().AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
+           gcmView.getItemGridView().AllowUserToResizeColumns = true;
+        }
+
+        public void OnGcmDataGridViewItems_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow dgvRow = gcmView.getItemGridView().CurrentRow;
+            String strainid = dgvRow.Cells["id"].FormattedValue.ToString();
+            LoadGCMStrainViewHandler lsvh = new LoadGCMStrainViewHandler(DataSourceHolder.GCMHolder,strainid, gcmView.getRecordTree(), gcmView.getRecordList());
+            DWorkMHub.callAsyncHandle(lsvh);
+        }
+
+        public void OnGcmTreeViewRecord_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            LoadGCMRecordNodeDetailed.loadData(e.Node, gcmView.getRecordList());     
         }
     }
 }

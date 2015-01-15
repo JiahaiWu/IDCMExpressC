@@ -394,7 +394,7 @@ namespace IDCM.Service.Common.Core
                 if (thread == null)
                     return null;
                 TimeSpan span = DateTime.Now - from;
-                HandleRunInfo hri = new HandleRunInfo(thread.Name, status.ToString(), span.Milliseconds);
+                HandleRunInfo hri = new HandleRunInfo(thread.Name, status.ToString(), span.Ticks);
                 hri.Description = desc;
                 hri.handleType = typeof(Thread).Name;
                 return hri;
@@ -451,7 +451,7 @@ namespace IDCM.Service.Common.Core
                 if (form == null)
                     return null;
                 TimeSpan span = DateTime.Now - from;
-                HandleRunInfo hri = new HandleRunInfo(form.Name, status.ToString(), span.Milliseconds);
+                HandleRunInfo hri = new HandleRunInfo(form.Name, status.ToString(), span.Ticks);
                 hri.Description = desc;
                 hri.handleType = typeof(Form).Name;
                 return hri;
