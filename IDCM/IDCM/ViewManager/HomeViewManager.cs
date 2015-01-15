@@ -354,6 +354,15 @@ namespace IDCM.ViewManager
             return LocalRecordMHub.deleteRec(DataSourceHolder.DataSource, rid);
         }
         /// <summary>
+        /// 根据当前焦点的TreeNode筛选可用的右键菜单显示列表项
+        /// </summary>
+        /// <param name="cms"></param>
+        /// <param name="snode"></param>
+        public void filterContextMenuItems(ContextMenuStrip cms, TreeNode snode)
+        {
+            LocalCatBuilder.filterContextMenuItems(cms, snode);
+        }
+        /// <summary>
         /// 更新数据记录
         /// </summary>
         /// <param name="uid"></param>

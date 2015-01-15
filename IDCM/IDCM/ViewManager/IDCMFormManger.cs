@@ -238,6 +238,26 @@ namespace IDCM.ViewManager
                 tip = "On Line: " + uname;
             mainForm.setLoginTip(tip);
         }
+        public bool activeTemplateView()
+        {
+            ManagerI view = ViewManagerHolder.getManager(typeof(LibFieldManager));
+            return view.initView(true);
+        }
+        public bool activeAuthView()
+        {
+            ManagerI view = ViewManagerHolder.getManager(typeof(AuthenticationRetainer));
+            return view.initView(true);
+        }
+        public bool activeBackTaskInfoView()
+        {
+            ////////////////////////////////////////////////////////
+            //ManagerI view = ViewManagerHolder.getManager(typeof(StackInfoManager));
+            //return view.initView(true);
+            ////////////////////////////////////
+            //UnImplement!
+            return false;
+        }
+        
         public void showDBDataSearch()
         {
             ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
@@ -327,6 +347,37 @@ namespace IDCM.ViewManager
                         {
                             //////////////////////////////
                             //gcmvManager.frontSearchNext();
+                        }
+                    }
+                }
+            }
+        }
+        public void frontSearchPrev()
+        {
+            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+            if (mi != null)
+            {
+                HomeViewManager hvManager = (HomeViewManager)mi;
+                if (hvManager != null)
+                {
+                    if (hvManager.isActive())
+                    {
+                        hvManager.frontSearchPrev();
+                    }
+                }
+            }
+            else
+            {
+                mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+                if (mi != null)
+                {
+                    GCMViewManager gcmvManager = (GCMViewManager)mi;
+                    if (gcmvManager != null)
+                    {
+                        if (gcmvManager.isActive())
+                        {
+                            //////////////////////////////
+                            //gcmvManager.frontSearchPrev();
                         }
                     }
                 }

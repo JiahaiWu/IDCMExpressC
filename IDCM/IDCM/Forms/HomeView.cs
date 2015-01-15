@@ -32,8 +32,10 @@ namespace IDCM.Forms
             dataGridView_items.AllowUserToAddRows = false;
             dataGridView_items.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView_items.EditMode = DataGridViewEditMode.EditOnKeystroke;
+            //////////////////////////////////////////////////////////
             ////dataGridView_items.TopLeftHeaderCell = new DataGridViewTopLeftHeaderCell();
             ////dataGridView_items.AdjustedTopLeftHeaderBorderStyle = DataGridViewTopLeftHeaderCell.MeasureTextPreferredSize();
+            ////////////////////////////////////////////////////////
             
             treeView_base.ImageList = imageList_lib;
             treeView_library.ImageList = imageList_lib;
@@ -91,23 +93,23 @@ namespace IDCM.Forms
             {
                 treeView_library.SelectedNode = e.Node;
                 manager.noteCurSelectedNode(e.Node);
-                ////左键
-                //if (e.Button == MouseButtons.Left)
-                //{
-                //}
-                ////右键
-                //if (e.Button == MouseButtons.Right)
-                //{
-                //    LocalCatBuilder.filterContextMenuItems(contextMenuStrip_lib, e.Node);
-                //    foreach (ToolStripItem tsItem in contextMenuStrip_lib.Items)
-                //    {
-                //        if (tsItem is ToolStripSeparator)
-                //            continue;
-                //        ControlUtil.ClearEvent(tsItem, "Click");
-                //        tsItem.Click += delegate(object tsender, EventArgs te) { toolStripMenuItem_lib_Click(tsender, te, e.Node); };
-                //    }
-                //    contextMenuStrip_lib.Show(treeView_library, e.X, e.Y);
-                //}
+                //左键
+                if (e.Button == MouseButtons.Left)
+                {
+                }
+                //右键
+                if (e.Button == MouseButtons.Right)
+                {
+                    manager.filterContextMenuItems(contextMenuStrip_lib, e.Node);
+                    foreach (ToolStripItem tsItem in contextMenuStrip_lib.Items)
+                    {
+                        if (tsItem is ToolStripSeparator)
+                            continue;
+                        ControlUtil.ClearEvent(tsItem, "Click");
+                        tsItem.Click += delegate(object tsender, EventArgs te) { toolStripMenuItem_lib_Click(tsender, te, e.Node); };
+                    }
+                    contextMenuStrip_lib.Show(treeView_library, e.X, e.Y);
+                }
             }
         }
         protected void toolStripMenuItem_base_Click(object sender, EventArgs e, TreeNode node)
@@ -613,7 +615,7 @@ namespace IDCM.Forms
         private void toolStripTextBox_quickSearch_Enter(object sender, EventArgs e)
         {
             this.toolStripTextBox_quickSearch.Text = "";
-            //this.toolStripTextBox_quickSearch.Owner.Update();
+            this.toolStripTextBox_quickSearch.Owner.Update();
         }
 
         private void toolStripTextBox_quickSearch_Leave(object sender, EventArgs e)

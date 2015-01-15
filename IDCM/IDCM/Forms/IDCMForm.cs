@@ -90,7 +90,7 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void templatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //manager.activeChildView(typeof(LibFieldManager), true);
+            manager.activeTemplateView();
         }
         
         /// <summary>
@@ -100,7 +100,12 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void authToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //ViewManagerHolder.activeChildView(typeof(AuthenticationRetainer), true);
+            manager.activeAuthView();
+        }
+
+        private void showBackTaskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            manager.activeBackTaskInfoView();
         }
         /******************************************************************
          * 键盘事件处理方法
@@ -125,18 +130,18 @@ namespace IDCM.Forms
                 case Keys.Alt | Keys.H://打开Help菜单项
                     this.ToolStripMenuItem_help.ShowDropDown();
                     break;
-                //case Keys.Control | Keys.F://打开查找菜单
-                //    manager.showDBDataSearch();
-                //    break;
-                //case Keys.Control | Keys.Shift | Keys.F://打开前端记录查找菜单
-                //    manager.frontDataSearch();
-                //    break;
-                //case Keys.Control | Keys.Shift | Keys.N:
-                //    manager.frontSearchNext();
-                //    break;
-                //case Keys.Control | Keys.Shift | Keys.P:
-                //    manager.frontSearchPrev();
-                //    break;
+                case Keys.Control | Keys.F://打开查找菜单
+                    manager.showDBDataSearch();
+                    break;
+                case Keys.Control | Keys.Shift | Keys.F://打开前端记录查找菜单
+                    manager.frontDataSearch();
+                    break;
+                case Keys.Control | Keys.Shift | Keys.N:
+                    manager.frontSearchNext();
+                    break;
+                case Keys.Control | Keys.Shift | Keys.P:
+                    manager.frontSearchPrev();
+                    break;
                 default:
                     return base.ProcessCmdKey(ref msg, keyData);
             }
@@ -219,10 +224,6 @@ namespace IDCM.Forms
             manager.closeWorkSpace();
         }
 
-        private void showBackTaskToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //manager.activeChildView(typeof(StackInfoManager), true);
-        }
 
     }
 }
