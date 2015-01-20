@@ -136,7 +136,7 @@ namespace IDCM.ViewManager
             waitingForm.BringToFront();
             waitingForm.Update();
             ViewManagerHolder.activeChildView(typeof(HomeViewManager), false);
-            ViewManagerHolder.activeChildView(typeof(HomeViewManager), false);
+            //ViewManagerHolder.activeChildView(typeof(HomeViewManager), false);
             DWorkMHub.note(AsyncMessage.RequestHomeView);
             waitingForm.Close();
             waitingForm.Dispose();
@@ -147,6 +147,14 @@ namespace IDCM.ViewManager
         }
         internal void OnActiveGCMView(object sender, IDCMAsyncEventArgs e)
         {
+            //////////////////////////////////////////////////////////////
+            //判断用户登陆成功后方可激活GCM视图
+            if (DataSourceHolder.GCMHolder.getSignedAuthInfo() == null)
+            {
+                MessageBox.Show("Please sign in before open the GCMView.");
+                return;
+            }
+            //////////////////////////////////////////////////////////////
             ViewManagerHolder.activeChildView(typeof(GCMViewManager), true);
         }
         internal void OnRetryDataPrepare(object sender, IDCMAsyncEventArgs e)

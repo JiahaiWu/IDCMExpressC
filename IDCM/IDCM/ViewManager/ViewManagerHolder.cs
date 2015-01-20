@@ -25,7 +25,11 @@ namespace IDCM.ViewManager
             if (obj == null || obj.isDisposed())
             {
 #if DEBUG
-                System.Diagnostics.Debug.Assert(manager.IsSubclassOf(typeof(ManagerA)));
+                /////////////////////////////////////////////////////////////////////////////
+                //当manager实现的是ManagerI的话断言失败
+                //System.Diagnostics.Debug.Assert(manager.IsSubclassOf(typeof(ManagerA)));
+                /////////////////////////////////////////////////////////////////////////////
+                System.Diagnostics.Debug.Assert(manager.IsSubclassOf(typeof(ManagerA)) || manager.GetInterface("ManagerI")!=null);
 #endif
                 obj = Activator.CreateInstance(manager) as ManagerI;
                 subManagers[manager] = obj;

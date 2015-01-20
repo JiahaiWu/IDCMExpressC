@@ -52,6 +52,7 @@ namespace IDCM.ViewManager
         private volatile GCMDataSetBuilder datasetBuilder = null;
         //private volatile GCMSearchBuilder searchBuilder = null;
         //private GCMFrontFindDlg frontFindDlg = null;
+        private bool processing = false;
         
         #endregion
         #region 接口实例化部分
@@ -105,26 +106,17 @@ namespace IDCM.ViewManager
                 //searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             }
             AuthInfo auth = DataSourceHolder.GCMHolder.getSignedAuthInfo();
-            if (auth != null && auth.LoginFlag)
+            if (activeShow)
             {
-                if (activeShow)
-                {
-                    gcmView.WindowState = FormWindowState.Maximized;
-                    gcmView.Show();
-                    gcmView.Activate();
-                }
-                else
-                {
-                    gcmView.Hide();
-                }
-                return true;
+                gcmView.WindowState = FormWindowState.Maximized;
+                gcmView.Show();
+                gcmView.Activate();
             }
             else
             {
-                MessageBox.Show("Please sign in before open the GCMView.");
+                gcmView.Hide();
             }
-            dispose();
-            return false;
+            return true;
         }
         public override void setMaxToNormal()
         {
@@ -194,10 +186,10 @@ namespace IDCM.ViewManager
 
         public void OnGcmDataGridViewItems_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewRow dgvRow = gcmView.getItemGridView().CurrentRow;
-            String strainid = dgvRow.Cells["id"].FormattedValue.ToString();
-            LoadGCMStrainViewHandler lsvh = new LoadGCMStrainViewHandler(DataSourceHolder.GCMHolder,strainid, gcmView.getRecordTree(), gcmView.getRecordList());
-            DWorkMHub.callAsyncHandle(lsvh);
+                DataGridViewRow dgvRow = gcmView.getItemGridView().CurrentRow;
+                String strainid = dgvRow.Cells["id"].FormattedValue.ToString();
+                LoadGCMStrainViewHandler lsvh = new LoadGCMStrainViewHandler(DataSourceHolder.GCMHolder,strainid, gcmView.getRecordTree(), gcmView.getRecordList());
+                DWorkMHub.callAsyncHandle(lsvh);
         }
 
         public void OnGcmTreeViewRecord_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
