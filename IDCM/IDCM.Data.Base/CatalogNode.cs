@@ -12,7 +12,7 @@ namespace IDCM.Data.Base
         public const int REC_TRASH = -4;
         public const int REC_TEMP = -8;
 
-        public enum LibraryNodeType { GroupSet = 0, Group = 1, SmartGroup = 2 };
+        public enum CatalogNodeType { GroupSet = 0, Group = 1, SmartGroup = 2 };
 
         public CatalogNode()
         {

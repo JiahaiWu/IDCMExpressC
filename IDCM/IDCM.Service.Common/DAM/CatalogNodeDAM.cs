@@ -33,7 +33,7 @@ namespace IDCM.Service.Common.DAM
         /// </summary>
         /// <param name="lid"></param>
         /// <returns></returns>
-        public static CatalogNode findLibraryNode(WorkSpaceManager wsm, long lid)
+        public static CatalogNode findCatalogNode(WorkSpaceManager wsm, long lid)
         {
             string cmd = "SELECT * FROM " + typeof(CatalogNode).Name + " where lid=" + lid;
             List<CatalogNode> res= DataSupporter.ListSQLQuery<CatalogNode>(wsm, cmd);
@@ -59,13 +59,13 @@ namespace IDCM.Service.Common.DAM
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static int saveLibraryNode(WorkSpaceManager wsm,CatalogNode instance)
+        public static int saveCatalogNode(WorkSpaceManager wsm,CatalogNode instance)
         {
             int ic = -1;
             if (instance.Lid < 1)
             {
                 instance.Lid = DataSupporter.nextSeqID(wsm);//update BaseInfoNote set seqId 返回更新的seqId
-                string cmd = "insert into LibraryNode(lid,name,type,pid,lorder) values("
+                string cmd = "insert into CatalogNode(lid,name,type,pid,lorder) values("
                     + instance.Lid + ",'" + instance.Name + "','" + instance.Type + "'," + (instance.Pid > 0 ? instance.Pid.ToString() : "-1") + "," + instance.Lorder + ");";
                 ic = DataSupporter.executeSQL(wsm, cmd);
             }
@@ -76,11 +76,11 @@ namespace IDCM.Service.Common.DAM
         }
         /// <summary>
         /// 保存新节点记录,包含同级后续节点位序值后移操作。
-        /// @Note 请注意和saveLibraryNode区别使用，本方法主要用于特定节点插入情形，而批量归档节点插入模式。
+        /// @Note 请注意和saveCatalogNode区别使用，本方法主要用于特定节点插入情形，而批量归档节点插入模式。
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static int insertLibraryNode(WorkSpaceManager wsm, CatalogNode instance)
+        public static int insertCatalogNode(WorkSpaceManager wsm, CatalogNode instance)
         {
             int ic = -1;
             if (instance.Lid < 1)
@@ -130,7 +130,7 @@ namespace IDCM.Service.Common.DAM
         /// <returns></returns>
         public static int updateCatalogNode(WorkSpaceManager wsm, string lids, string setName, object setVal)
         {
-            string cmd = "update LibraryNode set "
+            string cmd = "update CatalogNode set "
                 + setName + "=" + (setVal.GetType().Name.StartsWith("Int") ? setVal : "'" + setVal + "'")
                 + " where Lid in (" + lids + ")";
             return DataSupporter.executeSQL(wsm, cmd);
