@@ -13,6 +13,7 @@ using System.IO;
 using System.Windows.Forms;
 using IDCM.Data.Base;
 using IDCM.Data.Base.Utils;
+using IDCM.Service.Common;
 
 namespace IDCM.Service.DataTransfer
 {
@@ -25,7 +26,7 @@ namespace IDCM.Service.DataTransfer
         /// </summary>
         /// <param name="fpath"></param>
         /// <returns>返回请求流程是否执行完成</returns>
-        public static bool parseExcelData(string fpath, long lid, long plid)
+        public static bool parseExcelData(DataSourceMHub datasource, string fpath, ref Dictionary<string, string> dataMapping, long lid, long plid)
         {
             if (fpath == null || fpath.Length < 1)
                 return false;
@@ -39,7 +40,7 @@ namespace IDCM.Service.DataTransfer
                     ISheet dataSheet = workbook.GetSheet("Core Datasets");
                     if (dataSheet == null)
                         dataSheet = workbook.GetSheetAt(0);
-                    parseSheetInfo(dataSheet, Convert.ToString(lid, 10), Convert.ToString(plid, 10));
+                    parseSheetInfo(datasource,dataSheet, ref dataMapping, Convert.ToString(lid, 10), Convert.ToString(plid, 10));
                 }
             }
             catch (Exception ex)
@@ -54,7 +55,7 @@ namespace IDCM.Service.DataTransfer
         /// </summary>
         /// <param name="sheet"></param>
         /// <param name="dgv"></param>
-        public static void parseSheetInfo(ISheet sheet, string lid, string plid)
+        public static void parseSheetInfo(DataSourceMHub datasource, ISheet sheet, ref Dictionary<string, string> dataMapping, string lid, string plid)
         {
             int skipIdx = 1;
             if (sheet == null || sheet.LastRowNum < skipIdx) //no data
@@ -77,45 +78,35 @@ namespace IDCM.Service.DataTransfer
                     xlscols.Add(null);
                 }
             }
-            /////////////////////////////////////////////////////////////////
-            //AttrMapOptionDlg amoDlg = new AttrMapOptionDlg();
-            //Dictionary<string, string> dataMapping = new Dictionary<string, string>();
-            //amoDlg.setInitCols(xlscols, ColumnMappingHolder.getViewAttrs(false), ref dataMapping);
-            //amoDlg.ShowDialog();
-            /////////////////////////////////////////////
-            //if (amoDlg.DialogResult == DialogResult.OK)
-            //{
-            //    amoDlg.Dispose();
-            //    for (int i = skipIdx; i <= rowSize; ++i)
-            //    {
-            //        IRow row = sheet.GetRow(i);
-            //        if (row == null) continue; //没有数据的行默认是null　
-            //        ICell headCell = row.GetCell(row.FirstCellNum);
-            //        if (headCell == null || headCell.ToString().Length == 0 || headCell.ToString().Equals("end!"))
-            //            break;
-            //        Dictionary<string, string> mapValues = new Dictionary<string, string>();
-            //        for (int j = row.FirstCellNum; j < columnSize; j++)
-            //        {
-            //            if (row.GetCell(j) != null && xlscols[j] != null)
-            //            {
-            //                string cellData = row.GetCell(j).ToString().Trim();
-            //                string mapName = null;
-            //                dataMapping.TryGetValue(xlscols[j], out mapName);
-            //                if (mapName != null)
-            //                {
-            //                    mapValues[mapName] = cellData;
-            //                }
-            //            }
-            //        }
-            //        mapValues[CTDRecordA.CTD_LID] = lid;
-            //        mapValues[CTDRecordA.CTD_PLID] = plid;
-            //        long nuid = CTDRecordDAM.mergeRecord(mapValues);
-            //    }
-            //}
-            //else
-            //    amoDlg.Dispose();
-            //////////////////////////////////////////////////
-            //事务逻辑拆分不够恰当，暂行阻断，有待补充
+            ///////////////////////////////////////////////////////////////
+            if (dataMapping!=null && dataMapping.Count > 0)
+            {
+                for (int i = skipIdx; i <= rowSize; ++i)
+                {
+                    IRow row = sheet.GetRow(i);
+                    if (row == null) continue; //没有数据的行默认是null　
+                    ICell headCell = row.GetCell(row.FirstCellNum);
+                    if (headCell == null || headCell.ToString().Length == 0 || headCell.ToString().Equals("end!"))
+                        break;
+                    Dictionary<string, string> mapValues = new Dictionary<string, string>();
+                    for (int j = row.FirstCellNum; j < columnSize; j++)
+                    {
+                        if (row.GetCell(j) != null && xlscols[j] != null)
+                        {
+                            string cellData = row.GetCell(j).ToString().Trim();
+                            string mapName = null;
+                            dataMapping.TryGetValue(xlscols[j], out mapName);
+                            if (mapName != null)
+                            {
+                                mapValues[mapName] = cellData;
+                            }
+                        }
+                    }
+                    mapValues[CTDRecordA.CTD_LID] = lid;
+                    mapValues[CTDRecordA.CTD_PLID] = plid;
+                    long nuid = LocalRecordMHub.mergeRecord(datasource,mapValues);
+                }
+            }
         }
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();

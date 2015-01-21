@@ -194,7 +194,7 @@ namespace IDCM.ViewManager
 
         public void OnGcmTreeViewRecord_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            LoadGCMRecordNodeDetailed.loadData(e.Node, gcmView.getRecordList());     
+            LoadGCMRecordNodeDetail.loadData(e.Node, gcmView.getRecordList());     
         }
     }
 }

@@ -10,6 +10,11 @@ using IDCM.Service.Common;
 using IDCM.Data.Base.Utils;
 using IDCM.Service.Utils;
 using IDCM.Core;
+using System.IO;
+using NPOI.XSSF.UserModel;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using IDCM.Forms;
 
 namespace IDCM.Modules
 {
@@ -294,12 +299,12 @@ namespace IDCM.Modules
                 panel.Name = "referPanel_" + idx;
                 panel.Dock = DockStyle.Top;
                 panel.Margin = new Padding(0, 5, 0, 0);
-                panel.BorderStyle = BorderStyle.None;
+                panel.BorderStyle = System.Windows.Forms.BorderStyle.None;
                 panel.Height = 45;
                 //panel.BorderStyle = BorderStyle.FixedSingle;
                 TextBox label = new TextBox();
                 label.ReadOnly = true;
-                label.BorderStyle = BorderStyle.None;
+                label.BorderStyle = System.Windows.Forms.BorderStyle.None;
                 label.BackColor = Color.WhiteSmoke;
                 label.Name = "referLabel_" + ctcd.Attr;
                 string pattr =CVNameConverter.toViewName(ctcd.Attr);
@@ -312,7 +317,7 @@ namespace IDCM.Modules
                 Control control = Activator.CreateInstance(ctype) as Control;
                 if (control is TextBox)
                 {
-                    (control as TextBox).BorderStyle = BorderStyle.Fixed3D;
+                    (control as TextBox).BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
                 }
                 control.Name = pattr;
                 control.Dock = DockStyle.Bottom;
@@ -496,6 +501,74 @@ namespace IDCM.Modules
                 }
             }
         }
+        /// <summary>
+        /// 解析指定的Excel文档，验证数据转换的属性映射条件.
+        /// </summary>
+        /// <param name="fpath"></param>
+        /// <returns></returns>
+        public bool checkForExcelImport(string fpath,ref Dictionary<string, string> dataMapping)
+        {
+            if (fpath == null || fpath.Length < 1)
+                return false;
+            string fullPath = System.IO.Path.GetFullPath(fpath);
+            IWorkbook workbook = null;
+            try
+            {
+                using (FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read))
+                {
+                    workbook = WorkbookFactory.Create(fs);
+                    ISheet dataSheet = workbook.GetSheet("Core Datasets");
+                    if (dataSheet == null)
+                        dataSheet = workbook.GetSheetAt(0);
+                    return fetchSheetMappingInfo(dataSheet, ref dataMapping) && dataMapping.Count>0;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Info("ERROR: Excel文件导入失败！ ", ex);
+                MessageBox.Show("ERROR: Excel文件导入失败！ " + ex.Message + "\n" + ex.StackTrace);
+            }
+            return false;
+        }
+        /// <summary>
+        /// 通过NPOI读取Excel文档，转换可识别内容至本地数据库中
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="dgv"></param>
+        private static bool fetchSheetMappingInfo(ISheet sheet, ref Dictionary<string, string> dataMapping)
+        {
+            int skipIdx = 1;
+            if (sheet == null || sheet.LastRowNum < skipIdx) //no data
+                return false;
+            /////////////////////////////////////////////////////////
+            IRow titleRow = sheet.GetRow(skipIdx - 1);
+            int columnSize = titleRow.LastCellNum;
+            int rowSize = sheet.LastRowNum;
+            List<string> xlscols = new List<string>(columnSize);
+            for (int i = titleRow.FirstCellNum; i < columnSize; i++)
+            {
+                ICell titleCell = titleRow.GetCell(i);
+                if (titleCell != null && titleCell.ToString().Length > 0)
+                {
+                    string cellData = titleCell.ToString();
+                    xlscols.Add(CVNameConverter.toViewName(cellData.Trim().ToLower()));
+                }
+                else
+                {
+                    xlscols.Add(null);
+                }
+            }
+            ///////////////////////////////////////////////////////////////
+            using (AttrMapOptionDlg amoDlg = new AttrMapOptionDlg())
+            {
+                amoDlg.setInitCols(xlscols, LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource,false), ref dataMapping);
+                amoDlg.ShowDialog();
+                ///////////////////////////////////////////
+                if (amoDlg.DialogResult == DialogResult.OK)
+                    return true;
+            }
+            return false;
+        }
         private DataGridView itemDGV;
 
         public DataGridView ItemDGV
@@ -508,6 +581,7 @@ namespace IDCM.Modules
         {
             get { return attachTC; }
         }
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 本地表单数据视图控件的独占保持的共享锁对象
         /// </summary>

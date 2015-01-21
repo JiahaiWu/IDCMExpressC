@@ -54,7 +54,7 @@ namespace IDCM.Service.UIM
                 //TreeViewAsyncUtil.syncAddNode(recordTree, node);
                 treeView.Nodes.Add(node);
             }
-            LoadGCMRecordNodeDetailed.loadData(treeView.Nodes[0], recordView);
+            LoadGCMRecordNodeDetail.loadData(treeView.Nodes[0], recordView);
             return treeView;
         }
     }

@@ -84,7 +84,7 @@ namespace IDCM.Service.BGHandler
         protected void selectViewRecord(DataGridViewRow dgvr, List<string> viewAttrs)
         {
             int rIdx = dgvr.DataGridView.Columns[CTDRecordA.CTD_RID.ToString()].Index;
-            if (dgvr.Cells.Count > rIdx)
+            if (dgvr.Cells.Count > rIdx && dgvr.Cells[rIdx].FormattedValue.ToString().Length>0)
             {
                 long rid= Convert.ToInt64(dgvr.Cells[rIdx].FormattedValue.ToString());
                 ///////((HomeViewManager)HomeViewManager.getInstance()).CURRENT_RID = rid;

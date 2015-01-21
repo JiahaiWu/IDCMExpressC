@@ -105,6 +105,15 @@ namespace IDCM.Service.Common
             return CTDRecordDAM.deleteRec(datasource.WSM, rid);
         }
         /// <summary>
+        /// 添加新数据记录或覆盖更新已存在主键的数据值
+        /// </summary>
+        /// <param name="mapValues"></param>
+        /// <returns></returns>
+        public static long mergeRecord(DataSourceMHub datasource, Dictionary<string, string> mapValues)
+        {
+            return CTDRecordDAM.mergeRecord(datasource.WSM, mapValues);
+        }
+        /// <summary>
         /// 更新目标记录的归档目录属性信息
         /// </summary>
         /// <param name="newlid"></param>
