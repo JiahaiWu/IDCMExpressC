@@ -36,6 +36,9 @@ namespace IDCM.AppContext
                 case MsgType.RetryDataPrepare:
                     OnRetryDataPrepare(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
                     break;
+                case MsgType.UpdateGCMSignTip:
+                    OnUpdateGCMSignTip(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
+                    break;
                 default:
                     log.Warn("Unhandled asynchronous message.  @msgTag=" + msg.MsgTag);
                     break;
@@ -48,6 +51,7 @@ namespace IDCM.AppContext
         internal event IDCMAsyncRequest OnDataPrepared;
         internal event IDCMAsyncRequest OnRetryQuickStartConnect;
         internal event IDCMAsyncRequest OnRetryDataPrepare;
+        internal event IDCMAsyncRequest OnUpdateGCMSignTip;
         #endregion
 
         //异步消息事件委托形式化声明

@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using IDCM.Data.Base;
 using IDCM.Forms;
 using IDCM.Service;
+using IDCM.Service.Common;
+using IDCM.Core;
 
 namespace IDCM.ViewManager
 {
@@ -19,11 +21,6 @@ namespace IDCM.ViewManager
         #region 构造&析构
         public AuthenticationRetainer()
         {
-            signMonitor = new System.Windows.Forms.Timer();
-            signMonitor.Interval = 600000;
-            signMonitor.Tick += OnSignInHold;
-            signMonitor.Start();
-            new System.Threading.Thread(delegate() { OnSignInHold(null, null); }).Start();
         }
 
         public static AuthenticationRetainer getInstance()
@@ -37,12 +34,7 @@ namespace IDCM.ViewManager
         }
         #endregion
         #region 实例对象保持部分
-
-        /// <summary>
-        /// SignIn hold Monitor
-        /// </summary>
-        private System.Windows.Forms.Timer signMonitor = null;
-        private AuthInfo authInfo =null;
+        private GCMSiteMHub gcmMHub;
         #endregion
         #region 接口实例化部分
         public void setMaxToNormal()
@@ -56,12 +48,6 @@ namespace IDCM.ViewManager
         }
         public void dispose()
         {
-            if (signMonitor != null && !signMonitor.Enabled)
-            {
-                signMonitor.Stop();
-                signMonitor.Dispose();
-                signMonitor = null;
-            }
         }
         public bool isActive()
         {
@@ -78,16 +64,10 @@ namespace IDCM.ViewManager
         /// <returns></returns>
         public bool initView(bool activeShow = true)
         {
-            if (signMonitor == null)
-            {
-                signMonitor = new System.Windows.Forms.Timer();
-                signMonitor.Interval = 600000;
-                signMonitor.Tick += OnSignInHold;
-                signMonitor.Start();
-            }
             if (activeShow)
             {
-                if (checkLoginStatus())
+                AuthInfo authInfo=getLoginAuthInfo();
+                if (authInfo != null && authInfo.LoginFlag == true) //登录成功
                 {
                     LoginStatusDlg loginStatus = new LoginStatusDlg();
                     loginStatus.setSignInInfo(authInfo.Username, authInfo.Timestamp);
@@ -99,90 +79,27 @@ namespace IDCM.ViewManager
                     SignInDlg signin = new SignInDlg();
                     signin.setReferAuthInfo(authInfo);
                     DialogResult res = signin.ShowDialog();
-                    authInfo=signin.getAuthInfo();
+                    authInfo = getLoginAuthInfo();
                     signin.Dispose();
-                    if (authInfo.LoginFlag)
-                    {
-                        //AuthInfoDAM.updateLastAuthInfo(authInfo);
-                        IDCMFormManger.getInstance().updateUserStatus(authInfo.Username);
-                    }
-                    else
-                        IDCMFormManger.getInstance().updateUserStatus(null);
+                    string tip = authInfo.LoginFlag ? authInfo.Username : null;
+                    DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip,new string[]{tip}));
                 }
             }
             return true;
         }
         #endregion
-        /// <summary>
-        /// 尝试发起即时的网络请求操作
-        /// </summary>
-        /// <returns></returns>
-        protected bool checkLoginStatus()
-        {
-            if (authInfo == null)
-            {
-                authInfo = new AuthInfo();
-            }
-            else
-            {
-                long elapsedTicks = DateTime.Now.Ticks - authInfo.Timestamp;
-                TimeSpan elapsedSpan = new TimeSpan(elapsedTicks);
-                if (elapsedSpan.TotalMinutes > 15)
-                {
-                    if (authInfo.Username != null && authInfo.Password != null)
-                    {
-                        //authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 2000, authInfo.autoLogin);
-                    }
-                    return false;
-                }
-            }
-            return authInfo.LoginFlag;
-        }
+
         /// <summary>
         /// 获取有效登录用户身份信息，如果登录状态无效则返回null
         /// </summary>
         /// <returns></returns>
         public AuthInfo getLoginAuthInfo()
         {
-            if (authInfo != null)
+            if (gcmMHub != null)
             {
-                long elapsedTicks = DateTime.Now.Ticks - authInfo.Timestamp;
-                TimeSpan elapsedSpan = new TimeSpan(elapsedTicks);
-                if (elapsedSpan.TotalMinutes > 15)
-                {
-                    if (authInfo.Username != null && authInfo.Password != null)
-                    {
-                        //authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 2000, authInfo.autoLogin);
-                    }
-                }
-                return (authInfo != null && authInfo.LoginFlag) ? authInfo : null;
+                gcmMHub.getSignedAuthInfo();
             }
             return null;
-        }
-        /// <summary>
-        /// 登录状态验证与保持
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnSignInHold(object sender, EventArgs e)
-        {
-#if DEBUG
-            Console.WriteLine("* Sign in hold For Login()");
-#endif
-            //if (authInfo == null)
-            //    authInfo = AuthInfoDAM.queryLastAuthInfo();
-            //if (authInfo != null && authInfo.autoLogin && authInfo.Username != null && authInfo.Password != null)
-            //{
-            //    authInfo = SignInExecutor.SignIn(authInfo.Username, authInfo.Password, 10000, authInfo.autoLogin);
-            //    authInfo.autoLogin = true;
-            //    if (authInfo.LoginFlag)
-            //    {
-            //        AuthInfoDAM.updateLastAuthInfo(authInfo);
-            //        IDCMFormManger.getInstance().updateUserStatus(authInfo.Username);
-            //    }
-            //    else
-            //        IDCMFormManger.getInstance().updateUserStatus(null);
-            //}
         }
     }
 }

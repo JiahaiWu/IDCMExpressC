@@ -72,6 +72,22 @@ namespace IDCM.ViewManager
         {
         }
         /// <summary>
+        /// 重置一个数据源的启动对象实例
+        /// </summary>
+        /// <returns></returns>
+        public void resetStartInfo(StartInfo si)
+        {
+            startInfo = si; 
+        }
+        /// <summary>
+        /// 重置一个数据源的启动对象实例的默认启动行为
+        /// </summary>
+        /// <returns></returns>
+        public void resetAsDefaultWorkspace(bool asDefault=false)
+        {
+            startInfo.asDefaultWorkspace=asDefault;
+        }
+        /// <summary>
         /// 对象实例化，显示用户界面方法
         /// </summary>
         /// <param name="activeShow"></param>
