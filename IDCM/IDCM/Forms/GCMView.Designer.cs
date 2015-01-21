@@ -784,6 +784,7 @@
             this.listView_record.Size = new System.Drawing.Size(296, 98);
             this.listView_record.TabIndex = 0;
             this.listView_record.UseCompatibleStateImageBehavior = false;
+            this.listView_record.View = System.Windows.Forms.View.Details;
             // 
             // treeView_record
             // 
@@ -805,7 +806,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GCMView";
             this.Text = "GCMView";
-            this.Shown += new System.EventHandler(this.GCMView_Shown);
             this.statusStrip_bottom.ResumeLayout(false);
             this.statusStrip_bottom.PerformLayout();
             this.toolStrip_gcm.ResumeLayout(false);

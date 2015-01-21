@@ -105,7 +105,8 @@ namespace IDCM.Forms
 
         private void showBackTaskToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            manager.activeBackTaskInfoView();
+            TaskInfoDlg taskInfoDlg = new TaskInfoDlg();
+            taskInfoDlg.Show();
         }
         /******************************************************************
          * 键盘事件处理方法

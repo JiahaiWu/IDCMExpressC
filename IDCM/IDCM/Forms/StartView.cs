@@ -79,6 +79,7 @@ namespace IDCM.Forms
                 MessageBox.Show("The 'LoginName' should not be empty while 'GCMPassword' is not empty, or you can use empty value for both text box。\n"
                     + "The 'GCMPassword' and 'LoginName' will be used for GCM data synchronization service by Network, and the 'LoginName' used as check code for existing data source.\n"
                     +"Use real GCM account for login is recommended.");
+                return;
             }
             this.startInfo.Location = this.textBox_datasource.Text.Trim();
             this.startInfo.LoginName = this.textBox_loginName.Text;

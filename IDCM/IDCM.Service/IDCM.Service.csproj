@@ -71,6 +71,8 @@
     <Compile Include="BGHandler\ExcelExportHandler.cs" />
     <Compile Include="BGHandler\ExcelImportHandler.cs" />
     <Compile Include="BGHandler\JSONListExportHandler.cs" />
+    <Compile Include="BGHandler\LoadGCMDataHandler.cs" />
+    <Compile Include="BGHandler\LoadGCMStrainViewHandler.cs" />
     <Compile Include="BGHandler\SelectDataRowHandler.cs" />
     <Compile Include="BGHandler\SignInHandler.cs" />
     <Compile Include="BGHandler\TextExportHandler.cs" />
@@ -89,12 +91,16 @@
     <Compile Include="POO\HelpDocConstants.cs" />
     <Compile Include="POO\StartInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIM\LoadGCMItems.cs" />
+    <Compile Include="UIM\LoadGCMRecordNode.cs" />
+    <Compile Include="UIM\LoadGCMRecordNodeDetailed.cs" />
     <Compile Include="Utils\ComboxAsyncUitl.cs" />
     <Compile Include="Utils\ControlAsyncUtil.cs" />
     <Compile Include="Utils\ControlUtil.cs" />
     <Compile Include="Utils\DateTimePikcerAsyncUtil.cs" />
     <Compile Include="Utils\DGVAsyncUtil.cs" />
     <Compile Include="Utils\DGVUtil.cs" />
+    <Compile Include="Utils\ListViewAsyncUtil.cs" />
     <Compile Include="Utils\RecordControlTypeConverter.cs" />
     <Compile Include="Utils\ToolStripItemAsyncUtil.cs" />
     <Compile Include="Utils\TreeViewAsyncUtil.cs" />
@@ -119,9 +125,7 @@
   <ItemGroup>
     <Content Include="003_03.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UIM\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

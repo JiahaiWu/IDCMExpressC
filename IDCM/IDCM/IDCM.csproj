@@ -149,6 +149,12 @@
     <Compile Include="Forms\StartView.Designer.cs">
       <DependentUpon>StartView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TaskInfoDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TaskInfoDlg.designer.cs">
+      <DependentUpon>TaskInfoDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\WaitingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +164,7 @@
     <Compile Include="Modules\BackProgressIndicator.cs" />
     <Compile Include="Core\DataSourceHolder.cs" />
     <Compile Include="Modules\FrontProgressPrompt.cs" />
+    <Compile Include="Modules\GCMDataSetBuilder.cs" />
     <Compile Include="Modules\LocalDataSetBuilder.cs" />
     <Compile Include="Modules\LocalDBSearchBuilder.cs" />
     <Compile Include="Modules\LocalCatBuilder.cs" />
@@ -208,6 +215,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartView.resx">
       <DependentUpon>StartView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TaskInfoDlg.resx">
+      <DependentUpon>TaskInfoDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WaitingForm.resx">
       <DependentUpon>WaitingForm.cs</DependentUpon>
