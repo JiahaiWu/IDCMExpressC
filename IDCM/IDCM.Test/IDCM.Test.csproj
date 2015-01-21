@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>IDCM.Test.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DGVSelectAndPaste.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DGVSelectAndPaste.Designer.cs">
+      <DependentUpon>DGVSelectAndPaste.cs</DependentUpon>
+    </Compile>
     <Compile Include="QuickTest_Data.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -52,6 +61,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DGVSelectAndPaste.resx">
+      <DependentUpon>DGVSelectAndPaste.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="QuickTest_Data.resx">
       <DependentUpon>QuickTest_Data.cs</DependentUpon>
     </EmbeddedResource>
