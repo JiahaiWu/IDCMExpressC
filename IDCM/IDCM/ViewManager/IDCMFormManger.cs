@@ -245,19 +245,41 @@ namespace IDCM.ViewManager
             ManagerI view = ViewManagerHolder.getManager(typeof(LibFieldManager));
             return view.initView(true);
         }
+        /// <summary>
+        /// 显示用户登录或已登录用户的身份信息
+        /// </summary>
+        /// <returns></returns>
         public bool activeAuthView()
         {
-            ManagerI view = ViewManagerHolder.getManager(typeof(AuthenticationRetainer));
-            return view.initView(true);
+            AuthInfo authInfo = DataSourceHolder.getLoginAuthInfo();
+            if (authInfo != null && authInfo.LoginFlag == true) //登录成功
+            {
+                LoginStatusDlg loginStatus = new LoginStatusDlg();
+                loginStatus.setSignInInfo(authInfo.Username, authInfo.Timestamp);
+                loginStatus.ShowDialog();
+                loginStatus.Dispose();
+            }
+            else
+            {
+                SignInDlg signin = new SignInDlg();
+                signin.setReferAuthInfo(authInfo);
+                DialogResult res = signin.ShowDialog();
+                authInfo = DataSourceHolder.getLoginAuthInfo();
+                signin.Dispose();
+                string tip = authInfo.LoginFlag ? authInfo.Username : null;
+                DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip, new string[] { tip }));
+            }
+            return true;
         }
+        /// <summary>
+        /// 显示后台运行任务的概要信息
+        /// </summary>
+        /// <returns></returns>
         public bool activeBackTaskInfoView()
         {
-            ////////////////////////////////////////////////////////
-            //ManagerI view = ViewManagerHolder.getManager(typeof(StackInfoManager));
-            //return view.initView(true);
-            ////////////////////////////////////
-            //UnImplement!
-            return false;
+            TaskInfoDlg taskInfoDlg = new TaskInfoDlg();
+            taskInfoDlg.Show();
+            return true;
         }
         
         public void showDBDataSearch()
@@ -274,26 +296,10 @@ namespace IDCM.ViewManager
                     }
                 }
             }
-            /////////////////////////////////////////////////////
-            //else
-            //{
-            //    mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
-            //    if (mi != null)
-            //    {
-            //        GCMViewManager gcmvManager = (GCMViewManager)mi;
-            //        if (gcmvManager != null)
-            //        {
-            //            if (gcmvManager.isActive())
-            //            {
-            //                gcmvManager.showDBDataSearch();
-            //            }
-            //        }
-            //    }
-            //}
-            ///////////////////////////////////////////////////
         }
         public void frontDataSearch()
         {
+            bool useHomeView = false;
             ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
             if (mi != null)
             {
@@ -302,11 +308,12 @@ namespace IDCM.ViewManager
                 {
                     if (hvManager.isActive())
                     {
+                        useHomeView = true;
                         hvManager.frontDataSearch();
                     }
                 }
             }
-            else
+            if (useHomeView == false)
             {
                 mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
                 if (mi != null)
@@ -325,6 +332,7 @@ namespace IDCM.ViewManager
         }
         public void frontSearchNext()
         {
+            bool useHomeView = false;
             ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
             if (mi != null)
             {
@@ -333,11 +341,12 @@ namespace IDCM.ViewManager
                 {
                     if (hvManager.isActive())
                     {
+                        useHomeView = true;
                         hvManager.frontSearchNext();
                     }
                 }
             }
-            else
+            if (useHomeView == false)
             {
                 mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
                 if (mi != null)
@@ -356,6 +365,7 @@ namespace IDCM.ViewManager
         }
         public void frontSearchPrev()
         {
+            bool useHomeView = false;
             ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
             if (mi != null)
             {
@@ -364,11 +374,12 @@ namespace IDCM.ViewManager
                 {
                     if (hvManager.isActive())
                     {
+                        useHomeView = true;
                         hvManager.frontSearchPrev();
                     }
                 }
             }
-            else
+            if (useHomeView == false)
             {
                 mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
                 if (mi != null)

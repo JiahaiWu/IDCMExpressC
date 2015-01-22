@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext\AsyncServInvoker.cs" />
+    <Compile Include="Core\ShareSyncLockers.cs" />
     <Compile Include="Forms\AboutDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,12 +186,12 @@
     <Compile Include="Core\DataSourceHolder.cs" />
     <Compile Include="Modules\FrontProgressPrompt.cs" />
     <Compile Include="Modules\GCMDataSetBuilder.cs" />
+    <Compile Include="Modules\LibFieldBuilder.cs" />
     <Compile Include="Modules\LocalDataSetBuilder.cs" />
     <Compile Include="Modules\LocalDBSearchBuilder.cs" />
     <Compile Include="Modules\LocalCatBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewManager\AuthenticationRetainer.cs" />
     <Compile Include="ViewManager\GCMViewManager.cs" />
     <Compile Include="ViewManager\HomeViewManager.cs" />
     <Compile Include="ViewManager\IDCMFormManger.cs" />

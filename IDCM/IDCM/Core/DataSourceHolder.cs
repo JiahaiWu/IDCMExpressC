@@ -94,7 +94,17 @@ namespace IDCM.Core
             }
             return res;
         }
-
+        /// <summary>
+        /// 尝试获取登录用户身份信息，如果缓存状态无效则返回新对象
+        /// </summary>
+        /// <returns></returns>
+        public static AuthInfo getLoginAuthInfo()
+        {
+            AuthInfo auth = gcmHolder == null ? gcmHolder.getSignedAuthInfo() : new AuthInfo();
+            if (auth == null)
+                auth = new AuthInfo();
+            return auth;
+        }
         /// <summary>
         /// 返回是否处于数据源连接保持中
         /// </summary>
@@ -109,6 +119,9 @@ namespace IDCM.Core
         {
             get { return dataSource; }
         }
+        /// <summary>
+        /// 获取GCM连接资源
+        /// </summary>
         public static GCMSiteMHub GCMHolder
         { 
             get { return gcmHolder; } 

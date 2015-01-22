@@ -7,6 +7,7 @@ using System.Data;
 using IDCM.Service.Common.Core;
 using IDCM.Data;
 using IDCM.Data.Base;
+using System.Configuration;
 
 namespace IDCM.Service.Common
 {
@@ -283,6 +284,24 @@ namespace IDCM.Service.Common
         public static bool doUpdateProcess(DataSourceMHub datasource, LinkedList<CustomTColDef> newCtcds)
         {
             return TemplateUpdater.doUpdateProcess(datasource.WSM, newCtcds);
+        }
+        /// <summary>
+        /// 查询所有数据表自定义属性记录
+        /// </summary>
+        /// <returns></returns>
+        public static LinkedList<CustomTColDef> loadCustomAll(DataSourceMHub datasource)
+        {
+            return CustomTColDefDAM.loadCustomAll(datasource.WSM);
+        }
+        /// <summary>
+        /// 获取字段模板
+        /// </summary>
+        /// <param name="settingPath"></param>
+        /// <returns></returns>
+        public static Dictionary<string, List<CustomTColDef>> getTableTemplateDef(string settingPath=null)
+        {
+            string templPath = settingPath!=null?settingPath:ConfigurationManager.AppSettings["CTableTemplate"];
+            return CTableSetting.getTableTemplateDef(templPath);
         }
     }
 }

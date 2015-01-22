@@ -14,6 +14,9 @@ namespace IDCM.Data.Base
         public static readonly AsyncMessage RetryQuickStartConnect = new AsyncMessage(MsgType.RetryQuickStartConnect, "Retry Quick Start Connect");
         public static readonly AsyncMessage RequestHomeView = new AsyncMessage(MsgType.RequestHomeView, "Request Home View");
         public static readonly AsyncMessage RequestGCMView = new AsyncMessage(MsgType.RequestGCMView, "Request GCM View");
+        /// <summary>
+        /// 重启数据源事件消息
+        /// </summary>
         public static readonly AsyncMessage RetryDataPrepare = new AsyncMessage(MsgType.RetryDataPrepare, "Retry Data Prepare Operation");
         public static readonly AsyncMessage UpdateGCMSignTip = new AsyncMessage(MsgType.UpdateGCMSignTip, "Update GCM Sign Tip");
         /// <summary>

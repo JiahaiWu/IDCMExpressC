@@ -408,10 +408,14 @@ namespace IDCM.Forms
             if(dataGridView_items.Rows.Count>0)
             {
                 DataGridViewRow dgvr = dataGridView_items.CurrentRow;
-                string rid = dgvr.Cells[CTDRecordA.CTD_RID].FormattedValue.ToString();
-                if (rid.Length > 0 && !rid.Equals(manager.CURRENT_RID.ToString()))
+                DataGridViewCell dgvc = dgvr.Cells[CTDRecordA.CTD_RID];
+                if (dgvc != null)
                 {
-                    manager.selectViewRecord(dgvr);
+                    string rid = dgvc.FormattedValue.ToString();
+                    if (rid.Length > 0 && !rid.Equals(manager.CURRENT_RID.ToString()))
+                    {
+                        manager.selectViewRecord(dgvr);
+                    }
                 }
             }
         }

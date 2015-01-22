@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using IDCM.AppContext;
 using IDCM.Forms;
 using IDCM.Service;
+using IDCM.Modules;
 
 namespace IDCM.ViewManager
 {
@@ -15,15 +16,8 @@ namespace IDCM.ViewManager
         public LibFieldManager()
         {
             libFieldView = new LibFieldSettingView();
-            //LongTermHandleNoter.note(libFieldView);
-            //libFieldView.setManager(this);
-            //filedBuilder = new LibFieldBuilder(libFieldView.getTemplateChx(), libFieldView.getFieldDGV());
-        }
-        public static LibFieldManager getInstance()
-        {
-            //ManagerI hvm = IDCMAppContext.MainManger.getManager(typeof(LibFieldManager));
-            //return hvm == null ? null : (hvm as LibFieldManager);
-            return null;
+            libFieldView.setManager(this);
+            filedBuilder = new LibFieldBuilder(libFieldView.getTemplateChx(), libFieldView.getFieldDGV());
         }
         ~LibFieldManager()
         {
@@ -35,23 +29,23 @@ namespace IDCM.ViewManager
         
         //页面窗口实例
         private volatile LibFieldSettingView libFieldView = null;
-        //private volatile LibFieldBuilder filedBuilder = null;
+        private volatile LibFieldBuilder filedBuilder = null;
 
-        //internal LibFieldBuilder FiledBuilder
-        //{
-        //    get { return filedBuilder; }
-        //}
+        internal LibFieldBuilder FiledBuilder
+        {
+            get { return filedBuilder; }
+        }
         #endregion
         #region 接口实例化部分
         public override void dispose()
         {
             _isDisposed = true;
 
-            //if (filedBuilder != null)
-            //{
-            //    filedBuilder.Dispose();
-            //    filedBuilder = null;
-            //}
+            if (filedBuilder != null)
+            {
+                filedBuilder.Dispose();
+                filedBuilder = null;
+            }
             if (libFieldView != null && !libFieldView.IsDisposed)
             {
                 libFieldView.Close();
@@ -69,9 +63,8 @@ namespace IDCM.ViewManager
             if (libFieldView == null || libFieldView.IsDisposed)
             {
                 libFieldView = new LibFieldSettingView();
-                //LongTermHandleNoter.note(libFieldView);
-                //libFieldView.setManager(this);
-                //filedBuilder = new LibFieldBuilder(libFieldView.getTemplateChx(), libFieldView.getFieldDGV());
+                libFieldView.setManager(this);
+                filedBuilder = new LibFieldBuilder(libFieldView.getTemplateChx(), libFieldView.getFieldDGV());
             }
             if (activeShow)
             {
@@ -121,28 +114,27 @@ namespace IDCM.ViewManager
 
         public void selectTemplate(int sIndex)
         {
-            //filedBuilder.selectTemplate(sIndex);
+            filedBuilder.selectTemplate(sIndex);
         }
         public void submitSetting()
         {
-            //filedBuilder.submitCustomSetting();
+            filedBuilder.submitCustomSetting();
         }
         public bool checkFields()
         {
-            //return filedBuilder.checkFieldsInCustom();
-            return false;
+            return filedBuilder.checkFieldsInCustom();
         }
         public void appendField(DataGridViewRow dgvr, string groupName)
         {
-            //filedBuilder.appendField(dgvr, groupName);
+            filedBuilder.appendField(dgvr, groupName);
         }
         public void removeField(DataGridViewRow dgvr)
         {
-            //filedBuilder.removeField(dgvr);
+            filedBuilder.removeField(dgvr);
         }
         public void overwriteField(DataGridViewRow dgvr, string groupName)
         {
-            //filedBuilder.overwriteField(dgvr, groupName);
+            filedBuilder.overwriteField(dgvr, groupName);
         }
     }
 }
