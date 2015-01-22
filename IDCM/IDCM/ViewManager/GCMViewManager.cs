@@ -25,12 +25,12 @@ namespace IDCM.ViewManager
             gcmView.Shown += OnGcmView_Shown;
             gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;
             gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;
-            //frontFindDlg = new GCMFrontFindDlg(gcmView.getItemGridView());
-            //frontFindDlg.setCellHit += new GCMFrontFindDlg.SetHit<DataGridViewCell>(DGVUtil.setDGVCellHit);
-            //frontFindDlg.cancelCellHit += new GCMFrontFindDlg.CancelHit<DataGridViewCell>(DGVUtil.cancelDGVCellHit);
+            frontFindDlg = new GCMFrontFindDlg(gcmView.getItemGridView());
+            frontFindDlg.setCellHit += new GCMFrontFindDlg.SetHit<DataGridViewCell>(DGVUtil.setDGVCellHit);
+            frontFindDlg.cancelCellHit += new GCMFrontFindDlg.CancelHit<DataGridViewCell>(DGVUtil.cancelDGVCellHit);
             //recBuilder = new GCMRecordBuilder(gcmView.getRecordTree(),gcmView.getRecordList());
             datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
-            //searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
+            searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
         }
         public static HomeViewManager getInstance()
@@ -50,9 +50,8 @@ namespace IDCM.ViewManager
         private volatile GCMView gcmView = null;
         //private volatile GCMRecordBuilder recBuilder = null;
         private volatile GCMDataSetBuilder datasetBuilder = null;
-        //private volatile GCMSearchBuilder searchBuilder = null;
-        //private GCMFrontFindDlg frontFindDlg = null;
-        private bool processing = false;
+        private volatile GCMSearchBuilder searchBuilder = null;
+        private GCMFrontFindDlg frontFindDlg = null;
         
         #endregion
         #region 接口实例化部分
@@ -81,12 +80,12 @@ namespace IDCM.ViewManager
                 gcmView.Dispose();
                 gcmView = null;
             }
-            //if (frontFindDlg != null && !frontFindDlg.IsDisposed)
-            //{
-            //    frontFindDlg.Close();
-            //    frontFindDlg.Dispose();
-            //    frontFindDlg = null;
-            //}
+            if (frontFindDlg != null && !frontFindDlg.IsDisposed)
+            {
+                frontFindDlg.Close();
+                frontFindDlg.Dispose();
+                frontFindDlg = null;
+            }
         }
         /// <summary>
         /// 对象实例化初始化方法
@@ -195,6 +194,19 @@ namespace IDCM.ViewManager
         public void OnGcmTreeViewRecord_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             LoadGCMRecordNodeDetailed.loadData(e.Node, gcmView.getRecordList());     
+        }
+
+        internal void frontDataSearch()
+        {
+            if (frontFindDlg == null || frontFindDlg.IsDisposed)
+            {
+                frontFindDlg = new GCMFrontFindDlg(gcmView.getItemGridView());
+                frontFindDlg.setCellHit += new GCMFrontFindDlg.SetHit<DataGridViewCell>(DGVUtil.setDGVCellHit);
+                frontFindDlg.cancelCellHit += new GCMFrontFindDlg.CancelHit<DataGridViewCell>(DGVUtil.cancelDGVCellHit);
+            }
+            frontFindDlg.Show();
+            frontFindDlg.Visible = true;
+            frontFindDlg.Activate();
         }
     }
 }

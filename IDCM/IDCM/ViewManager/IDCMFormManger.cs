@@ -280,23 +280,21 @@ namespace IDCM.ViewManager
                     }
                 }
             }
-            /////////////////////////////////////////////////////
-            //else
-            //{
-            //    mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
-            //    if (mi != null)
-            //    {
-            //        GCMViewManager gcmvManager = (GCMViewManager)mi;
-            //        if (gcmvManager != null)
-            //        {
-            //            if (gcmvManager.isActive())
-            //            {
-            //                gcmvManager.showDBDataSearch();
-            //            }
-            //        }
-            //    }
-            //}
-            ///////////////////////////////////////////////////
+            else
+            {
+                mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+                if (mi != null)
+                {
+                    GCMViewManager gcmvManager = (GCMViewManager)mi;
+                    if (gcmvManager != null)
+                    {
+                        if (gcmvManager.isActive())
+                        {
+                            //gcmvManager.showDBDataSearch();
+                        }
+                    }
+                }
+            }
         }
         public void frontDataSearch()
         {
@@ -322,8 +320,7 @@ namespace IDCM.ViewManager
                     {
                         if (gcmvManager.isActive())
                         {
-                            /////////////////////////////
-                            //gcmvManager.frontDataSearch();
+                            gcmvManager.frontDataSearch();
                         }
                     }
                 }
