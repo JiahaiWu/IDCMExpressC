@@ -267,7 +267,7 @@ namespace IDCM.ViewManager
                 authInfo = DataSourceHolder.getLoginAuthInfo();
                 signin.Dispose();
                 string tip = authInfo.LoginFlag ? authInfo.Username : null;
-                DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip, new string[] { tip }));
+                DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip,tip==null?null: new string[] { tip }));
             }
             return true;
         }
