@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using IDCM.Core;
 
 namespace IDCM.Forms
 {
@@ -25,6 +26,7 @@ namespace IDCM.Forms
 
         private void button_singout_Click(object sender, EventArgs e)
         {
+            DataSourceHolder.disconnectGCM(true);
             this.Close();
         }
 

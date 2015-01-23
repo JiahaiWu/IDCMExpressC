@@ -32,8 +32,8 @@ namespace IDCM.Service
                 if (val != null && val.IndexOf(",") < 0 && val.Length>0)
                 {
                     si.GCMPassword = Base64DESEncrypt.CreateInstance(si.LoginName).Decrypt(val);
+                    si.rememberPassword = true;
                 }
-
                 if (si.Location == null)
                 {
                     string initDir = "";

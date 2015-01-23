@@ -18,7 +18,8 @@ namespace IDCM.Data.Base.Utils
         public static void SetAppConfig(string appKey, string appValue, string configPath = null)
         {
             string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            string defaultCfgPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(exePath) + ".config";
+            string defaultCfgPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(exePath);
+            defaultCfgPath = defaultCfgPath .EndsWith(".exe")?defaultCfgPath+".config":defaultCfgPath+ ".exe.config";
             string cfgPath = configPath == null ? defaultCfgPath : configPath;
 #if DEBUG
             System.Diagnostics.Debug.Assert(File.Exists(cfgPath), cfgPath + " Not Exist!");
@@ -46,7 +47,8 @@ namespace IDCM.Data.Base.Utils
         public static string GetAppConfig(string appKey, string configPath = null)
         {
             string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            string defaultCfgPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(exePath) + ".config";
+            string defaultCfgPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + Path.GetFileNameWithoutExtension(exePath);
+            defaultCfgPath = defaultCfgPath.EndsWith(".exe") ? defaultCfgPath + ".config" : defaultCfgPath + ".exe.config";
             string cfgPath = configPath == null ? defaultCfgPath : configPath;
 #if DEBUG
             System.Diagnostics.Debug.Assert(File.Exists(cfgPath), cfgPath + " Not Exist!");

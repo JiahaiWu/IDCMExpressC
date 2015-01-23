@@ -37,39 +37,35 @@ namespace IDCM.Service.BGHandler
         public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
             bool res = false;
-            ///if(!failFast || filterNode.Name.Equals(HomeViewManager.getInstance().CURRENT_LID.ToString()))
-            if(!failFast)
+            List<string> viewAttrs = LocalRecordMHub.getViewAttrs(datasource);
+            long lid = Convert.ToInt64(filterNode.Name);
+            DGVAsyncUtil.syncRemoveAllRow(dgv);
+            string filterLids = lid.ToString();
+            if (lid > 0)
             {
-                List<string> viewAttrs = LocalRecordMHub.getViewAttrs(datasource);
-                long lid = Convert.ToInt64(filterNode.Name);
-                DGVAsyncUtil.syncRemoveAllRow(dgv);
-                string filterLids = lid.ToString();
-                if (lid > 0)
+                long[] lids = LocalRecordMHub.extractToLids(datasource, lid);
+                if (lids != null)
                 {
-                    long[] lids = LocalRecordMHub.extractToLids(datasource,lid);
-                    if (lids != null)
+                    filterLids = "";
+                    foreach (long _lid in lids)
                     {
-                        filterLids = "";
-                        foreach (long _lid in lids)
-                        {
-                            filterLids += "," + _lid;
-                        }
-                        filterLids = filterLids.Substring(1);
+                        filterLids += "," + _lid;
                     }
+                    filterLids = filterLids.Substring(1);
                 }
-                string cmdstr=null;
-                //数据查询与装载
-                DataTable records = LocalRecordMHub.queryCTDRecord(datasource,filterLids, null, out cmdstr);
-                LocalRecordMHub.cacheDGVQuery(cmdstr, records.Rows.Count);
-                if (records != null && records.Rows.Count > 0)
-                {
-                    foreach (DataRow dr in records.Rows)
-                    {
-                        loadCTableData(dr, viewAttrs);
-                    }
-                }
-                res = true;
             }
+            string cmdstr = null;
+            //数据查询与装载
+            DataTable records = LocalRecordMHub.queryCTDRecord(datasource, filterLids, null, out cmdstr);
+            LocalRecordMHub.cacheDGVQuery(cmdstr, records.Rows.Count);
+            if (records != null && records.Rows.Count > 0)
+            {
+                foreach (DataRow dr in records.Rows)
+                {
+                    loadCTableData(dr, viewAttrs);
+                }
+            }
+            res = true;
             return new object[] { res};
         }
         /// <summary>

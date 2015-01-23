@@ -16,11 +16,11 @@ namespace IDCM.Data.Base
         /// </summary>
         public const string CTD_RID = "ctd_rid";
         /// <summary>
-        /// Record 从属父级目录Library ID的列名设定，没有从属特定节点时LibraryNodeDA.REC_UNFILED
+        /// Record 从属父级目录Library ID的列名设定，没有从属特定节点时CatalogNodeDA.REC_UNFILED
         /// </summary>
         public const string CTD_PLID = "ctd_plid";
         /// <summary>
-        /// Record 从属目录的Library ID的列名设定，没有从属特定节点时为LibraryNodeDA.REC_UNFILED
+        /// Record 从属目录的Library ID的列名设定，没有从属特定节点时为CatalogNodeDA.REC_UNFILED
         /// </summary>
         public const string CTD_LID = "ctd_lid";
     }

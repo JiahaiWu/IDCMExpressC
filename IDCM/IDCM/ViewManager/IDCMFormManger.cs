@@ -136,7 +136,6 @@ namespace IDCM.ViewManager
             waitingForm.BringToFront();
             waitingForm.Update();
             ViewManagerHolder.activeChildView(typeof(HomeViewManager), false);
-            //ViewManagerHolder.activeChildView(typeof(HomeViewManager), false);
             DWorkMHub.note(AsyncMessage.RequestHomeView);
             waitingForm.Close();
             waitingForm.Dispose();
@@ -161,6 +160,15 @@ namespace IDCM.ViewManager
         {
             //Unimplement!
         }
+        /// <summary>
+        /// 更新用户登录状态，到目标窗口视图中去
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        internal void OnUpdateGCMSignTip(object sender, IDCMAsyncEventArgs e)
+        {
+            updateUserStatus((e.values != null && e.values.Count()>0)? e.values[0].ToString():null);
+        }
 #endregion
         internal ManagerI getHomeViewManager()
         {
@@ -170,46 +178,11 @@ namespace IDCM.ViewManager
         {
             return ViewManagerHolder.getManager(typeof(GCMViewManager));
         }
-        ///////////////////////////////////////////////////////////////
-        ///// <summary>
-        ///// 主窗体初始化方法，用于激活新（或旧）实例的界面资源及其动态动态显示
-        ///// 注意：
-        ///// 1.该方法的实现务必保证冗余调用许可性，容错性，资源释放状态判定务必保持同步可用。
-        ///// </summary>
-        ///// <param name="activeShow">激活界面用户可见性（可选）</param>
-        ///// <returns>初始化成功与否状态</returns>
-        //public bool initForm(bool activeShow = true)
-        //{
-        //    mainForm.WindowState = FormWindowState.Maximized;
-        //    if (activeShow)
-        //    {
-        //        mainForm.Show();
-        //    }
-        //    else
-        //        mainForm.Hide();
-        //    return true;
-        //}
-        
-        ///// <summary>
-        ///// 显示等待提示页面，并隐式地激活直属视图实例及其必要的窗口显示操作。
-        ///// </summary>
-        ///// <param name="manager"></param>
-        ///// <param name="activeFront"></param>
-        ///// <returns></returns>
-        //public void activeChildViewAwait(Type manager, bool activeFront = false)
-        //{
-        //    Form startForm = new StartForm();
-        //    startForm.Show();
-        //    startForm.Update();
-        //    bool res = ViewManagerHolder.activeChildView(manager, activeFront);
-        //    startForm.Close();
-        //    startForm.Dispose();
-        //}
-        /////////////////////////////////////////////////////////////////
-        //@Deprecated
 
         /// <summary>
         /// 启动当前工作空间
+        /// 说明：
+        /// 1.startWorkSpace和reopenWorkSpace方法实现基本一致，但界面数据有所差异。
         /// </summary>
         /// <returns></returns>
         public bool startWorkSpace()
@@ -220,6 +193,27 @@ namespace IDCM.ViewManager
                 return false;
             }
             ManagerI view = ViewManagerHolder.getManager(typeof(StartRetainer));
+            return view.initView(true);
+        }
+        /// <summary>
+        /// 启动一个新工作空间
+        /// 说明：
+        /// 1.startWorkSpace和reopenWorkSpace方法实现基本一致，但界面数据有所差异。
+        /// </summary>
+        /// <param name="discardHistoryInfo">是否包含历史启动目录信息</param>
+        /// <returns></returns>
+        public bool reopenWorkSpace(bool includeHistoryInfo=false)
+        {
+            if (DataSourceHolder.InWorking)
+            {
+                DialogResult res = MessageBox.Show("A workspace is in working, you need close it first.", "Close Workspace Notice", MessageBoxButtons.OK);
+                return false;
+            }
+            StartRetainer view = ViewManagerHolder.getManager(typeof(StartRetainer)) as StartRetainer;
+            if (includeHistoryInfo==false)
+                view.resetStartInfo(new Service.POO.StartInfo());
+            else
+                view.resetAsDefaultWorkspace(false);
             return view.initView(true);
         }
         /// <summary>
@@ -251,19 +245,41 @@ namespace IDCM.ViewManager
             ManagerI view = ViewManagerHolder.getManager(typeof(LibFieldManager));
             return view.initView(true);
         }
+        /// <summary>
+        /// 显示用户登录或已登录用户的身份信息
+        /// </summary>
+        /// <returns></returns>
         public bool activeAuthView()
         {
-            ManagerI view = ViewManagerHolder.getManager(typeof(AuthenticationRetainer));
-            return view.initView(true);
+            AuthInfo authInfo = DataSourceHolder.getLoginAuthInfo();
+            if (authInfo != null && authInfo.LoginFlag == true) //登录成功
+            {
+                LoginStatusDlg loginStatus = new LoginStatusDlg();
+                loginStatus.setSignInInfo(authInfo.Username, authInfo.Timestamp);
+                loginStatus.ShowDialog();
+                loginStatus.Dispose();
+            }
+            else
+            {
+                SignInDlg signin = new SignInDlg();
+                signin.setReferAuthInfo(authInfo);
+                DialogResult res = signin.ShowDialog();
+                authInfo = DataSourceHolder.getLoginAuthInfo();
+                signin.Dispose();
+                string tip = authInfo.LoginFlag ? authInfo.Username : null;
+                DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip,tip==null?null: new string[] { tip }));
+            }
+            return true;
         }
+        /// <summary>
+        /// 显示后台运行任务的概要信息
+        /// </summary>
+        /// <returns></returns>
         public bool activeBackTaskInfoView()
         {
-            ////////////////////////////////////////////////////////
-            //ManagerI view = ViewManagerHolder.getManager(typeof(StackInfoManager));
-            //return view.initView(true);
-            ////////////////////////////////////
-            //UnImplement!
-            return false;
+            TaskInfoDlg taskInfoDlg = new TaskInfoDlg();
+            taskInfoDlg.Show();
+            return true;
         }
         
         public void showDBDataSearch()
@@ -280,24 +296,10 @@ namespace IDCM.ViewManager
                     }
                 }
             }
-            else
-            {
-                mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
-                if (mi != null)
-                {
-                    GCMViewManager gcmvManager = (GCMViewManager)mi;
-                    if (gcmvManager != null)
-                    {
-                        if (gcmvManager.isActive())
-                        {
-                            //gcmvManager.showDBDataSearch();
-                        }
-                    }
-                }
-            }
         }
         public void frontDataSearch()
         {
+            bool useHomeView = false;
             ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
             if (mi != null)
             {
@@ -306,11 +308,12 @@ namespace IDCM.ViewManager
                 {
                     if (hvManager.isActive())
                     {
+                        useHomeView = true;
                         hvManager.frontDataSearch();
                     }
                 }
             }
-            else
+            if (useHomeView == false)
             {
                 mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
                 if (mi != null)
@@ -328,6 +331,7 @@ namespace IDCM.ViewManager
         }
         public void frontSearchNext()
         {
+            bool useHomeView = false;
             ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
             if (mi != null)
             {
@@ -336,11 +340,12 @@ namespace IDCM.ViewManager
                 {
                     if (hvManager.isActive())
                     {
+                        useHomeView = true;
                         hvManager.frontSearchNext();
                     }
                 }
             }
-            else
+            if (useHomeView == false)
             {
                 mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
                 if (mi != null)
@@ -359,6 +364,7 @@ namespace IDCM.ViewManager
         }
         public void frontSearchPrev()
         {
+            bool useHomeView = false;
             ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
             if (mi != null)
             {
@@ -367,11 +373,12 @@ namespace IDCM.ViewManager
                 {
                     if (hvManager.isActive())
                     {
+                        useHomeView = true;
                         hvManager.frontSearchPrev();
                     }
                 }
             }
-            else
+            if (useHomeView == false)
             {
                 mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
                 if (mi != null)

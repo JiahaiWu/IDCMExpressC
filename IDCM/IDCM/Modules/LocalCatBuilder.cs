@@ -129,13 +129,13 @@ namespace IDCM.Modules
             baseTree.Nodes.Add(rootNode_unfiled);
             baseTree.Nodes.Add(rootNode_trash);
             /////////////////////////////////////////////////////////////////
-            List<CatalogNode> pnodes = LocalRecordMHub.findParentNodes(DataSourceHolder.DataSource);//SELECT * FROM LibraryNode
+            List<CatalogNode> pnodes = LocalRecordMHub.findParentNodes(DataSourceHolder.DataSource);//SELECT * FROM CatalogNode
 
             //如果为空，则创建一个分组为空的节点，更新到数据库
             if (pnodes == null || pnodes.Count == 0)
             {
                 CatalogNode node = new CatalogNode("My Group Set (Temp)", "GroupSet", "My Group Set (Temp)", -1);
-                LocalRecordMHub.saveLibraryNode(DataSourceHolder.DataSource,node);
+                LocalRecordMHub.saveCatalogNode(DataSourceHolder.DataSource,node);
                 long newlid = node.Lid;
                 pnodes = LocalRecordMHub.findParentNodes(DataSourceHolder.DataSource);
             }
@@ -153,7 +153,7 @@ namespace IDCM.Modules
             {
                 long pid=Convert.ToInt64(lnode.Name);//获取节点名称(ID)
 
-                //根据ID 查LibraryNode 根据分组 order by lorder
+                //根据ID 查CatalogNode 根据分组 order by lorder
                 List<CatalogNode> subnodes = LocalRecordMHub.findSubNodes(DataSourceHolder.DataSource,pid);
 
                 //如果节点下有子节点，把子几点添加到父节点上
@@ -200,7 +200,7 @@ namespace IDCM.Modules
 
             lnode.Pid=-1;
             lnode.Lorder=insertIndex;
-            LocalRecordMHub.insertLibraryNode(DataSourceHolder.DataSource, lnode);
+            LocalRecordMHub.insertCatalogNode(DataSourceHolder.DataSource, lnode);
             gsNode.Name = lnode.Lid.ToString();
             ///////////////////////////
             libTree.LabelEdit = true;
@@ -223,7 +223,7 @@ namespace IDCM.Modules
                 insetIndex = tpnode.Index + 1;
             }
             long referNameId = Convert.ToInt64(tpnode.Name);
-            CatalogNode pnode = LocalRecordMHub.findLibraryNode(DataSourceHolder.DataSource, referNameId);
+            CatalogNode pnode = LocalRecordMHub.findCatalogNode(DataSourceHolder.DataSource, referNameId);
             if (pnode != null)
             {
                 CatalogNode lnode = new CatalogNode("New Group", "Group");
@@ -235,7 +235,7 @@ namespace IDCM.Modules
                     tpnode.Nodes.Add(gsNode);
                 gsNode.EnsureVisible();
                 lnode.Lorder = insetIndex;
-                LocalRecordMHub.insertLibraryNode(DataSourceHolder.DataSource, lnode);
+                LocalRecordMHub.insertCatalogNode(DataSourceHolder.DataSource, lnode);
                 gsNode.Name = lnode.Lid.ToString();
                 libTree.LabelEdit = true;
                 gsNode.BeginEdit();

@@ -7,15 +7,29 @@ using System.Data;
 using IDCM.Service.Common.Core;
 using IDCM.Data;
 using IDCM.Data.Base;
+using System.Configuration;
 
 namespace IDCM.Service.Common
 {
     public class LocalRecordMHub
     {
+        /// <summary>
+        /// 获取自定义记录属性映射关系
+        /// </summary>
+        /// <param name="datasource"></param>
+        /// <returns></returns>
         public static Dictionary<string, int> getCustomViewDBMapping(DataSourceMHub datasource)
         {
             return CustomTColMapDAM.ColumnMappingHolder.getCustomViewDBMapping(datasource.WSM);
         }
+        /// <summary>
+        /// 基于缓存模式的记录请求方法
+        /// </summary>
+        /// <param name="datasource"></param>
+        /// <param name="cmdstr"></param>
+        /// <param name="lcount"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
         public static DataTable queryCTDRecordByHistSQL(DataSourceMHub datasource, string cmdstr, long lcount = 0, long offset = 0)
         {
             return CTDRecordDAM.queryCTDRecordByHistSQL(datasource.WSM, cmdstr, lcount, offset);
@@ -90,6 +104,15 @@ namespace IDCM.Service.Common
         public static int deleteRec(DataSourceMHub datasource, long rid)
         {
             return CTDRecordDAM.deleteRec(datasource.WSM, rid);
+        }
+        /// <summary>
+        /// 添加新数据记录或覆盖更新已存在主键的数据值
+        /// </summary>
+        /// <param name="mapValues"></param>
+        /// <returns></returns>
+        public static long mergeRecord(DataSourceMHub datasource, Dictionary<string, string> mapValues)
+        {
+            return CTDRecordDAM.mergeRecord(datasource.WSM, mapValues);
         }
         /// <summary>
         /// 更新目标记录的归档目录属性信息
@@ -192,9 +215,9 @@ namespace IDCM.Service.Common
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static int saveLibraryNode(DataSourceMHub datasource,CatalogNode instance)
+        public static int saveCatalogNode(DataSourceMHub datasource,CatalogNode instance)
         {
-            return CatalogNodeDAM.saveLibraryNode(datasource.WSM,instance);
+            return CatalogNodeDAM.saveCatalogNode(datasource.WSM,instance);
         }
         /// <summary>
         /// 查询具有指定父节点ID编号的孩子节点集合
@@ -216,22 +239,22 @@ namespace IDCM.Service.Common
         }
         /// <summary>
         /// 保存新节点记录,包含同级后续节点位序值后移操作。
-        /// @Note 请注意和saveLibraryNode区别使用，本方法主要用于特定节点插入情形，而批量归档节点插入模式。
+        /// @Note 请注意和saveCatalogNode区别使用，本方法主要用于特定节点插入情形，而批量归档节点插入模式。
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static int insertLibraryNode(DataSourceMHub datasource, CatalogNode instance)
+        public static int insertCatalogNode(DataSourceMHub datasource, CatalogNode instance)
         {
-            return CatalogNodeDAM.insertLibraryNode(datasource.WSM, instance);
+            return CatalogNodeDAM.insertCatalogNode(datasource.WSM, instance);
         }
         /// <summary>
         /// 查询具有目标主键值的节点记录
         /// </summary>
         /// <param name="lid"></param>
         /// <returns></returns>
-        public static CatalogNode findLibraryNode(DataSourceMHub datasource, long lid)
+        public static CatalogNode findCatalogNode(DataSourceMHub datasource, long lid)
         {
-            return CatalogNodeDAM.findLibraryNode(datasource.WSM, lid);
+            return CatalogNodeDAM.findCatalogNode(datasource.WSM, lid);
         }
         /// <summary>
         /// 更新特征条件下的记录的某个属性值
@@ -252,9 +275,33 @@ namespace IDCM.Service.Common
         {
             return CatalogNodeDAM.getSearchMap(datasource.WSM);
         }
+        /// <summary>
+        /// 执行更新进程
+        /// </summary>
+        /// <param name="datasource"></param>
+        /// <param name="newCtcds"></param>
+        /// <returns></returns>
         public static bool doUpdateProcess(DataSourceMHub datasource, LinkedList<CustomTColDef> newCtcds)
         {
             return TemplateUpdater.doUpdateProcess(datasource.WSM, newCtcds);
+        }
+        /// <summary>
+        /// 查询所有数据表自定义属性记录
+        /// </summary>
+        /// <returns></returns>
+        public static LinkedList<CustomTColDef> loadCustomAll(DataSourceMHub datasource)
+        {
+            return CustomTColDefDAM.loadCustomAll(datasource.WSM);
+        }
+        /// <summary>
+        /// 获取字段模板
+        /// </summary>
+        /// <param name="settingPath"></param>
+        /// <returns></returns>
+        public static Dictionary<string, List<CustomTColDef>> getTableTemplateDef(string settingPath=null)
+        {
+            string templPath = settingPath!=null?settingPath:ConfigurationManager.AppSettings["CTableTemplate"];
+            return CTableSetting.getTableTemplateDef(templPath);
         }
     }
 }

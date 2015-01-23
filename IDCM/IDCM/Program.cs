@@ -46,7 +46,10 @@ namespace IDCM
                 Application.SetCompatibleTextRenderingDefault(false);
                 Dictionary<string, string> preActions=commandArgScreening(args);
                 if (preActions.Count > 0)
+                {
                     prepareAppContext(preActions);
+                    return;
+                }
                 IDCMAppContext appContext = new IDCMAppContext();
                 Application.Run(appContext);
             }

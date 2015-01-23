@@ -5,11 +5,30 @@ using System.Text;
 using IDCM.Data;
 using IDCM.Service.Common.GCMDAM;
 using IDCM.Data.Base;
-
+using IDCM.Data.Base.Utils;
+/********************************
+ * Individual Data Center of Microbial resources (IDCM)
+ * A desktop software package for microbial resources researchers.
+ * 
+ * Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+ * 
+ * @Contact NO.1 Beichen West Road, Chaoyang District, Beijing 100101, Email: office@im.ac.cn
+ */
 namespace IDCM.Service.Common
 {
+    /// <summary>
+    /// GCM网站授权资源管理集线器类
+    /// 说明：
+    /// 1.本实现类主要支持访问GCM的用户身份保持与连接状态保持.
+    /// </summary>
     public class GCMSiteMHub
     {
+        /// <summary>
+        /// 构造方法
+        /// </summary>
+        /// <param name="loginName">GCM ID</param>
+        /// <param name="gcmPassword">GCM Password</param>
+        /// <param name="autoLogin"></param>
         public GCMSiteMHub(string loginName, string gcmPassword, bool autoLogin = true)
         {
             this.authInfo = new AuthInfo();
@@ -80,13 +99,17 @@ namespace IDCM.Service.Common
         /// 关闭用户工作空间
         /// </summary>
         /// <returns></returns>
-        public bool disconnect()
+        public bool disconnect(bool cancelDefaultWorkSpace=false)
         {
             if (signMonitor != null)
             {
                 signMonitor.Stop();
                 signMonitor = null;
                 SignExecutor.SignOff(authInfo);
+            }
+            if (cancelDefaultWorkSpace)
+            {
+                ConfigurationHelper.SetAppConfig(SysConstants.LWSAsDefault, "False");
             }
             return true;
         }

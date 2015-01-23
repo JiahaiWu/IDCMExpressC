@@ -89,7 +89,7 @@ namespace IDCM.Service.Common.DAM
         public static Dictionary<int, long> countCTDRecord(WorkSpaceManager wsm, string nodeIds = null)
         {
             Dictionary<int, long> dict = new Dictionary<int, long>();
-            StringBuilder cmdBuilder = new StringBuilder("SELECT count(" + CTDRecordA.CTD_RID + ")," + CTDRecordA.CTD_LID + " FROM " + CTDRecordA.table_name);
+            StringBuilder cmdBuilder = new StringBuilder("SELECT count(" + CTDRecordA.CTD_RID + ") as ccount," + CTDRecordA.CTD_LID + " as clid FROM " + CTDRecordA.table_name);
 
             if (nodeIds != null)
             {
@@ -120,14 +120,14 @@ namespace IDCM.Service.Common.DAM
                 }
                 else
                     cmdBuilder.Append(" in (").Append(nodeIds).Append(") ");
-                long res=DataSupporter.SQLQuery<dynamic>(wsm, cmdBuilder.ToString()).Sum(rs => (long)rs[0]);
+                long res = DataSupporter.SQLQuery<dynamic>(wsm, cmdBuilder.ToString()).Sum(rs => (long)(rs.ccount));
                 dict[Convert.ToInt32(nodeIds)] = Convert.ToInt64(res);
             }
             else
             {
                 cmdBuilder.Append(" group by ").Append(CTDRecordA.CTD_LID);
                 long c_all = DataSupporter.SQLQuery<dynamic>(wsm, cmdBuilder.ToString())
-                    .Sum(rs => (int)rs[1]==CatalogNode.REC_TRASH?0:(long)rs[0] );
+                    .Sum(rs => (int)rs.clid == CatalogNode.REC_TRASH ? 0 : (long)rs.ccount);
                 dict[CatalogNode.REC_ALL] = c_all;
             }
             return dict;

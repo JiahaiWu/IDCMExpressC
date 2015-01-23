@@ -186,12 +186,16 @@ namespace IDCM.ViewManager
         {
             if (fpath.ToLower().EndsWith("xls") || fpath.ToLower().EndsWith(".xlsx"))
             {
-                ExcelImportHandler eih = new ExcelImportHandler(fpath, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
-                eih.addHandler(new UpdateHomeDataViewHandler(DataSourceHolder.DataSource, catBuilder.RootNode_unfiled, homeView.getItemGridView()));
-                UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, homeView.getLibTree(), homeView.getBaseTree());
-                eih.addHandler(uhlch);
-                uhlch.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
-                DWorkMHub.callAsyncHandle(eih);
+                Dictionary<string, string> dataMapping = new Dictionary<string, string>();
+                if (datasetBuilder.checkForExcelImport(fpath, ref dataMapping))
+                {
+                    ExcelImportHandler eih = new ExcelImportHandler(DataSourceHolder.DataSource,fpath,ref dataMapping, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
+                    eih.addHandler(new UpdateHomeDataViewHandler(DataSourceHolder.DataSource, catBuilder.RootNode_unfiled, homeView.getItemGridView()));
+                    UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, homeView.getLibTree(), homeView.getBaseTree());
+                    eih.addHandler(uhlch);
+                    uhlch.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
+                    DWorkMHub.callAsyncHandle(eih);
+                }
             }
         }
         /// <summary>
