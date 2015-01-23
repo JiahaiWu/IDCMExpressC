@@ -323,8 +323,7 @@ namespace IDCM.ViewManager
                     {
                         if (gcmvManager.isActive())
                         {
-                            /////////////////////////////
-                            //gcmvManager.frontDataSearch();
+                            gcmvManager.frontDataSearch();
                         }
                     }
                 }
