@@ -10,6 +10,7 @@ using IDCM.Service.Common;
 using System.Windows.Forms;
 using IDCM.Data.Base;
 using IDCM.Service.BGHandler;
+using IDCM.Service.POO;
 
 namespace IDCM.Core
 {
@@ -95,14 +96,33 @@ namespace IDCM.Core
             return res;
         }
         /// <summary>
+        /// 关闭GCM连接
+        /// </summary>
+        public static void disconnectGCM(bool cancelDefaultWorkSpace = false)
+        {
+            if (gcmHolder != null)
+            {
+                gcmHolder.disconnect(cancelDefaultWorkSpace);
+                gcmHolder = null;
+            }
+        }
+        /// <summary>
         /// 尝试获取登录用户身份信息，如果缓存状态无效则返回新对象
         /// </summary>
         /// <returns></returns>
         public static AuthInfo getLoginAuthInfo()
         {
-            AuthInfo auth = gcmHolder == null ? gcmHolder.getSignedAuthInfo() : new AuthInfo();
-            if (auth == null)
-                auth = new AuthInfo();
+            AuthInfo auth = null;
+            if (gcmHolder != null)
+                auth = gcmHolder.getSignedAuthInfo();
+            else
+            {
+                StartInfo si = IDCMEnvironment.getLastStartInfo();
+                auth=new AuthInfo();
+                auth.Username = si.LoginName;
+                auth.Password = si.GCMPassword;
+                auth.autoLogin = si.rememberPassword;
+            }
             return auth;
         }
         /// <summary>

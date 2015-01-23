@@ -5,6 +5,7 @@ using System.Text;
 using IDCM.Data;
 using IDCM.Service.Common.GCMDAM;
 using IDCM.Data.Base;
+using IDCM.Data.Base.Utils;
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
  * A desktop software package for microbial resources researchers.
@@ -98,13 +99,17 @@ namespace IDCM.Service.Common
         /// 关闭用户工作空间
         /// </summary>
         /// <returns></returns>
-        public bool disconnect()
+        public bool disconnect(bool cancelDefaultWorkSpace=false)
         {
             if (signMonitor != null)
             {
                 signMonitor.Stop();
                 signMonitor = null;
                 SignExecutor.SignOff(authInfo);
+            }
+            if (cancelDefaultWorkSpace)
+            {
+                ConfigurationHelper.SetAppConfig(SysConstants.LWSAsDefault, "False");
             }
             return true;
         }

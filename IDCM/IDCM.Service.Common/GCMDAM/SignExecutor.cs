@@ -13,7 +13,6 @@ namespace IDCM.Service.Common.GCMDAM
     {
         public static bool SignOff(AuthInfo authInfo = null, int timeout = 10000)
         {
-            //AuthInfo authInfo = AuthenticationRetainer.getInstance().getLoginAuthInfo();
             if (authInfo != null)
             {
                 string signInUri = ConfigurationManager.AppSettings["SignOffUri"];
