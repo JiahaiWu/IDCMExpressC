@@ -186,6 +186,7 @@
     <Compile Include="Core\DataSourceHolder.cs" />
     <Compile Include="Modules\FrontProgressPrompt.cs" />
     <Compile Include="Modules\GCMDataSetBuilder.cs" />
+    <Compile Include="Modules\GCMSearchBuilder.cs" />
     <Compile Include="Modules\LibFieldBuilder.cs" />
     <Compile Include="Modules\LocalDataSetBuilder.cs" />
     <Compile Include="Modules\LocalDBSearchBuilder.cs" />
