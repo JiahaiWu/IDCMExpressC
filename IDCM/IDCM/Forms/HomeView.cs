@@ -405,17 +405,24 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void dataGridView_items_SelectionChanged(object sender, EventArgs e)
         {
-            if(dataGridView_items.Rows.Count>0)
+            if (dataGridView_items.Rows.Count > 0 && dataGridView_items.CurrentRow !=null)
             {
                 DataGridViewRow dgvr = dataGridView_items.CurrentRow;
-                DataGridViewCell dgvc = dgvr.Cells[CTDRecordA.CTD_RID];
-                if (dgvc != null)
+                try
                 {
-                    string rid = dgvc.FormattedValue.ToString();
-                    if (rid.Length > 0 && !rid.Equals(manager.CURRENT_RID.ToString()))
+                    DataGridViewCell dgvc = dgvr.Cells[CTDRecordA.CTD_RID];
+                    if (dgvc != null)
                     {
-                        manager.selectViewRecord(dgvr);
+                        string rid = dgvc.FormattedValue.ToString();
+                        if (rid.Length > 0 && !rid.Equals(manager.CURRENT_RID.ToString()))
+                        {
+                            manager.selectViewRecord(dgvr);
+                        }
                     }
+                }
+                catch (ArgumentException ex)
+                {
+                    log.Warn(ex);
                 }
             }
         }

@@ -80,7 +80,7 @@ namespace IDCM.Service.BGHandler
             foreach (string attr in viewAttrs)
             {
 #if DEBUG
-                //Console.WriteLine("[DEBUG](loadCTableData) " + attr + "-->" + CustomTColMapDA.getDBOrder(attr) + ">>" + dr[CustomTColMapDA.getDBOrder(attr)].ToString());
+                //log.Debug("(loadCTableData) " + attr + "-->" + LocalRecordMHub.getDBOrder(datasource, attr) + ">>" + dr[LocalRecordMHub.getDBOrder(datasource, attr)].ToString());
 #endif
                 vals[index] = dr[LocalRecordMHub.getDBOrder(datasource,attr)].ToString();
                 ++index;

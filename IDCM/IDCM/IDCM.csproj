@@ -182,7 +182,6 @@
     <Compile Include="Forms\WaitingForm.Designer.cs">
       <DependentUpon>WaitingForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Modules\BackProgressIndicator.cs" />
     <Compile Include="Core\DataSourceHolder.cs" />
     <Compile Include="Modules\FrontProgressPrompt.cs" />
     <Compile Include="Modules\GCMDataSetBuilder.cs" />

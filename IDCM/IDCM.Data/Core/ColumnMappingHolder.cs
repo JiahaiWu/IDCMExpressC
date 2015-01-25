@@ -11,6 +11,16 @@ using IDCM.Data.Base.Utils;
 
 namespace IDCM.Data.Core
 {
+    /// <summary>
+    /// 本类定义用于支持动态数据表的存储字段与显示字段之间的映射关系的动态缓存实现
+    /// 说明：
+    /// 1.基于ColumnMapping对象实例，记录各个数据字段名与[数据存储，预览界面]的映射关系
+    /// 2.由用户自定义的动态数据表在前端预览的界面中，分为首选字段和备选字段两个部分,字段显示顺序要有稳定性。
+    /// 3.首选字段的显示序号小于CustomTColMap.MaxMainViewCount时视为首选字段，大于CustomTColMap.MaxMainViewCount时视为备选字段。
+    /// 4.动态数据表的数据存储的字段顺序相对固定，但字段名称区别于用户显示的数据字段名，用户自定义的数据字段名均有[前缀和]后缀。
+    /// 5.对于无有[前缀和]后缀的数据字段一律视为内置的字段项，由创建程序内嵌生成与内部管理维护。
+    /// 6.本类缓存实现旨在为用户提供虚拟字段与动态显示顺序设定特性下的快速定位数据库存储记录的字段表示的映射对照。
+    /// </summary>
     class ColumnMappingHolder
     {
         /// <summary>
@@ -18,6 +28,7 @@ namespace IDCM.Data.Core
         /// 说明：
         /// 1.载入基础数据项，如自增长序号定位
         /// 2.确认动态定义的数据表CTDRecord有效生成状态
+        /// 3.本方法通常用于初始化启动过程，可作为自动构建关系表的第一步检视过程。
         /// </summary>
         /// <param name="picker"></param>
         /// <returns>依赖数据项载入成功与否状态</returns>
@@ -34,7 +45,7 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
-        public static bool checkTableSetting(ConnLabel sconn)
+        private static bool checkTableSetting(ConnLabel sconn)
         {
 #if DEBUG
             System.Diagnostics.Debug.Assert(sconn != null);
@@ -69,18 +80,18 @@ namespace IDCM.Data.Core
         /// <summary>
         /// 缓存数据字段映射关联关系
         /// </summary>
-        public static void queryCacheAttrDBMap(ConnLabel sconn)
+        internal static void queryCacheAttrDBMap(ConnLabel sconn)
         {
-            //select * from CustomTColMap order by viewOrder
             List<CustomTColMap> ctcms = CustomTColMapDAM.findAllByOrder(sconn);
             attrMapping.Clear();
             foreach (CustomTColMap dr in ctcms)
             {
-                attrMapping[dr.Attr]= new ObjectPair<int, int>(dr.MapOrder, dr.ViewOrder);
+                ObjectPair<int, int> mapPair = new ObjectPair<int, int>(dr.MapOrder, dr.ViewOrder);
+                attrMapping[dr.Attr]= mapPair;
             }
         }
         /// <summary>
-        /// 获取视图和数据库查询映射
+        /// 获取视图字段和数据存储字段映射副本
         /// </summary>
         /// <returns></returns>
         public static Dictionary<string, int> getViewDBMapping(ConnLabel sconn)
@@ -149,7 +160,7 @@ namespace IDCM.Data.Core
                 List<string> res = new List<string>();
                 foreach (string key in attrMapping.Keys)
                 {
-                    if (CVNameConverter.isViewWrapName(key))//查看是否以[ 开头，以] 结尾
+                    if (CVNameConverter.isViewWrapName(key))//查看是否以[ 开头并以] 结尾
                         res.Add(key);
                 }
                 return res;
@@ -192,6 +203,21 @@ namespace IDCM.Data.Core
             int ic = CustomTColMapDAM.updateViewOrder(sconn, attr, viewOrder);
             if (ic > 0)
                 attrMapping[attr] = new ObjectPair<int, int>(attrMapping[attr].Key, viewOrder);
+        }
+        public static void noteDefaultColMap(ConnLabel sconn, string attr, int dbOrder, int viewOrder)
+        {
+            CustomTColMapDAM.noteDefaultColMap(sconn, attr, dbOrder, viewOrder);
+            queryCacheAttrDBMap(sconn);
+        }
+        public static void noteDefaultColMap(ConnLabel sconn, string[] noteCmds)
+        {
+            CustomTColMapDAM.noteDefaultColMap(sconn, noteCmds);
+            queryCacheAttrDBMap(sconn);
+        }
+        public static void clearColMap(ConnLabel sconn)
+        {
+            CustomTColMapDAM.clearColMap(sconn);
+            attrMapping.Clear();
         }
         /// <summary>
         /// 数据字段名与[数据存储，预览界面]的映射关系

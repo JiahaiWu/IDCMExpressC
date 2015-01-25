@@ -19,7 +19,7 @@ namespace IDCM.Service.Common.DAM
                 //备份旧有的数据记录表
                 string bakSuffix = CustomTColMapDAM.renameCustomTColDefAll(wsm);
                 //重写自定义数据表
-                CTableSetting.overwriteAllCustomTColDef(newCtcds.ToList());
+                DataSupporter.overwriteAllCustomTColDef(wsm,newCtcds.ToList());
                 //重建数据记录表
                 CustomTColMapDAM.buildCustomTable(wsm);
                 //启用数据转录事务

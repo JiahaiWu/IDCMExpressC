@@ -20,7 +20,7 @@ namespace IDCM.Service.Common
         /// <returns></returns>
         public static Dictionary<string, int> getCustomViewDBMapping(DataSourceMHub datasource)
         {
-            return CustomTColMapDAM.ColumnMappingHolder.getCustomViewDBMapping(datasource.WSM);
+            return DataSupporter.getCustomViewDBMapping(datasource.WSM);
         }
         /// <summary>
         /// 基于缓存模式的记录请求方法

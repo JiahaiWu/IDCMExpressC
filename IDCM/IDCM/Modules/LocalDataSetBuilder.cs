@@ -85,7 +85,7 @@ namespace IDCM.Modules
             if (dgvr.Cells.Count > rIdx)
             {
                 CUR_RID = Convert.ToInt64(dgvr.Cells[rIdx].FormattedValue.ToString());
-                DataTable table = LocalRecordMHub.queryCTDRecord(null, CUR_RID.ToString());
+                DataTable table = LocalRecordMHub.queryCTDRecord(DataSourceHolder.DataSource, CUR_RID.ToString());
                 if (table.Rows.Count > 0)
                 {
                     DataRow dr = table.Rows[0];
@@ -219,25 +219,25 @@ namespace IDCM.Modules
             }
         }
         
-        /// <summary>
-        /// 转换数据对象值到列表显示
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="pCtd"></param>
-        protected void loadCTableData(DataRow dr, List<string> viewAttrs)
-        {
-            string[] vals = new string[viewAttrs.Count];
-            int index = 0;
-            foreach (string attr in viewAttrs)
-            {
-#if DEBUG
-                //Console.WriteLine("[DEBUG](loadCTableData) " + attr + "-->" + CustomTColMapDA.getDBOrder(attr) + ">>" + dr[CustomTColMapDA.getDBOrder(attr)].ToString());
-#endif
-                vals[index] = dr[LocalRecordMHub.getDBOrder(DataSourceHolder.DataSource, attr)].ToString();
-                ++index;
-            }
-            DGVAsyncUtil.syncAddRow(itemDGV, vals);
-        }
+//        /// <summary>
+//        /// 转换数据对象值到列表显示
+//        /// </summary>
+//        /// <param name="entity"></param>
+//        /// <param name="pCtd"></param>
+//        protected void loadCTableData(DataRow dr, List<string> viewAttrs)
+//        {
+//            string[] vals = new string[viewAttrs.Count];
+//            int index = 0;
+//            foreach (string attr in viewAttrs)
+//            {
+//#if DEBUG
+//                //Console.WriteLine("[DEBUG](loadCTableData) " + attr + "-->" + CustomTColMapDA.getDBOrder(attr) + ">>" + dr[CustomTColMapDA.getDBOrder(attr)].ToString());
+//#endif
+//                vals[index] = dr[LocalRecordMHub.getDBOrder(DataSourceHolder.DataSource, attr)].ToString();
+//                ++index;
+//            }
+//            DGVAsyncUtil.syncAddRow(itemDGV, vals);
+//        }
         /// <summary>
         /// 加载数据表头展示
         /// </summary>
@@ -250,7 +250,7 @@ namespace IDCM.Modules
             foreach (string attr in viewAttrs)
             {
                 int viewOrder = LocalRecordMHub.getViewOrder(DataSourceHolder.DataSource, attr);//返回属性显示位序
-                Console.Write("##"+attr+"->"+viewOrder);
+                log.Debug("##"+attr+"->"+viewOrder);
                 if (viewOrder < CustomTColMap.MaxMainViewCount)
                 {
                     CustomTColDef ctcd = LocalRecordMHub.getCustomTColDef(DataSourceHolder.DataSource,attr);
@@ -258,8 +258,11 @@ namespace IDCM.Modules
                     DataGridViewColumn dgvCol = Activator.CreateInstance(colType) as DataGridViewColumn;
                     dgvCol.Name = ctcd.Attr;
                     dgvCol.HeaderText = CVNameConverter.toViewName(ctcd.Attr);
-                    if (ctcd.Attr.Equals(CTDRecordA.CTD_RID) || attr.Equals(CTDRecordA.CTD_PLID) || attr.Equals(CTDRecordA.CTD_LID))
+                    if (ctcd.Attr.Equals(CTDRecordA.CTD_RID))
                     {
+                        dgvCol.Visible = true;
+                        dgvCol.Width = 15;
+                    }else if( attr.Equals(CTDRecordA.CTD_PLID) || attr.Equals(CTDRecordA.CTD_LID)){
                         dgvCol.Visible = false;
                         dgvCol.Width = 0;
                     }
@@ -506,7 +509,7 @@ namespace IDCM.Modules
         /// </summary>
         /// <param name="fpath"></param>
         /// <returns></returns>
-        public bool checkForExcelImport(string fpath,ref Dictionary<string, string> dataMapping)
+        public bool checkForExcelImport(string fpath, ref Dictionary<string, string> dataMapping, Form pForm)
         {
             if (fpath == null || fpath.Length < 1)
                 return false;
@@ -520,7 +523,7 @@ namespace IDCM.Modules
                     ISheet dataSheet = workbook.GetSheet("Core Datasets");
                     if (dataSheet == null)
                         dataSheet = workbook.GetSheetAt(0);
-                    return fetchSheetMappingInfo(dataSheet, ref dataMapping) && dataMapping.Count>0;
+                    return fetchSheetMappingInfo(dataSheet, ref dataMapping, pForm) && dataMapping.Count > 0;
                 }
             }
             catch (Exception ex)
@@ -535,7 +538,7 @@ namespace IDCM.Modules
         /// </summary>
         /// <param name="sheet"></param>
         /// <param name="dgv"></param>
-        private static bool fetchSheetMappingInfo(ISheet sheet, ref Dictionary<string, string> dataMapping)
+        private bool fetchSheetMappingInfo(ISheet sheet, ref Dictionary<string, string> dataMapping,Form pForm)
         {
             int skipIdx = 1;
             if (sheet == null || sheet.LastRowNum < skipIdx) //no data
@@ -561,6 +564,7 @@ namespace IDCM.Modules
             ///////////////////////////////////////////////////////////////
             using (AttrMapOptionDlg amoDlg = new AttrMapOptionDlg())
             {
+                amoDlg.BringToFront();
                 amoDlg.setInitCols(xlscols, LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource,false), ref dataMapping);
                 amoDlg.ShowDialog();
                 ///////////////////////////////////////////

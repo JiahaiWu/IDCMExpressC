@@ -12,7 +12,7 @@ using IDCM.Modules;
 using IDCM.Service.BGHandler;
 using IDCM.Service.Utils;
 using IDCM.Core;
-
+using IDCM.Service.UIM;
 
 namespace IDCM.ViewManager
 {
@@ -187,7 +187,7 @@ namespace IDCM.ViewManager
             if (fpath.ToLower().EndsWith("xls") || fpath.ToLower().EndsWith(".xlsx"))
             {
                 Dictionary<string, string> dataMapping = new Dictionary<string, string>();
-                if (datasetBuilder.checkForExcelImport(fpath, ref dataMapping))
+                if (datasetBuilder.checkForExcelImport(fpath, ref dataMapping,homeView))
                 {
                     ExcelImportHandler eih = new ExcelImportHandler(DataSourceHolder.DataSource,fpath,ref dataMapping, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
                     eih.addHandler(new UpdateHomeDataViewHandler(DataSourceHolder.DataSource, catBuilder.RootNode_unfiled, homeView.getItemGridView()));
@@ -298,8 +298,8 @@ namespace IDCM.ViewManager
         {
             datasetBuilder.noteDataSetLib(filterNode); //待考虑顺序问题///////////
             UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(DataSourceHolder.DataSource,filterNode, homeView.getItemGridView());
-            uhdvh.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
             uhdvh.addHandler(new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, filterNode));
+            uhdvh.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
             DWorkMHub.callAsyncHandle(uhdvh);
         }
         public void showDBDataSearch()

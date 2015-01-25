@@ -5,6 +5,7 @@ using System.Text;
 using IDCM.Data.Base;
 using IDCM.Data.Common;
 using Dapper;
+using System.Data.SQLite;
 using IDCM.Data.DHCP;
 using IDCM.Data.Base.Utils;
 
@@ -74,6 +75,8 @@ namespace IDCM.Data.DAM
         
         /// <summary>
         /// find All CustomTColMap By viewOrder
+        /// 说明：
+        /// 1.查询条件为select * from CustomTColMap order by viewOrder
         /// </summary>
         /// <param name="picker"></param>
         /// <returns></returns>
@@ -94,7 +97,33 @@ namespace IDCM.Data.DAM
                 return picker.getConnection().Execute(cmd);
             }
         }
-      
+
+        public static int noteDefaultColMap(ConnLabel sconn, string attr, int dbOrder, int viewOrder)
+        {
+            string cmd = "Replace or insert into " + typeof(CustomTColMap).Name + "(attr,mapOrder,viewOrder) values('" + attr + "'," + dbOrder + "," + viewOrder + ")";
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
+            {
+                return picker.getConnection().Execute(cmd);
+            }
+        }
+        public static int noteDefaultColMap(ConnLabel sconn, string[] noteCmds)
+        {
+            if (noteCmds == null || noteCmds.Length < 1)
+                return 0;
+            int[] res= DAMBase.executeSQL(sconn, noteCmds);
+            return res.Length;
+        }
+        
+
+        public static int clearColMap(ConnLabel sconn)
+        {
+            string cmd = "delete from " + typeof(CustomTColMap).Name + "";
+            using (SQLiteConnPicker picker = new SQLiteConnPicker(sconn))
+            {
+                return picker.getConnection().Execute(cmd);
+            }
+        }
+
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         
     }

@@ -19,6 +19,9 @@ namespace IDCM.Data.Base
         /// </summary>
         public static readonly AsyncMessage RetryDataPrepare = new AsyncMessage(MsgType.RetryDataPrepare, "Retry Data Prepare Operation");
         public static readonly AsyncMessage UpdateGCMSignTip = new AsyncMessage(MsgType.UpdateGCMSignTip, "Update GCM Sign Tip");
+        public static readonly AsyncMessage StartBackProgress = new AsyncMessage(MsgType.StartBackProgress, "Start Back Progress");
+        public static readonly AsyncMessage EndBackProgress = new AsyncMessage(MsgType.EndBackProgress, "End Back Progress");
+        
         /// <summary>
         /// For iterator 
         /// </summary>
@@ -72,6 +75,8 @@ namespace IDCM.Data.Base
         RequestHomeView=2,
         RequestGCMView=3,
         RetryDataPrepare=4,
-        UpdateGCMSignTip=5
+        UpdateGCMSignTip=5,
+        StartBackProgress=6,
+        EndBackProgress = 7
     }
 }
