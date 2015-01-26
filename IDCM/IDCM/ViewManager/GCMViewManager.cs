@@ -26,7 +26,6 @@ namespace IDCM.ViewManager
             gcmView = new GCMView();
             gcmView.setManager(this);
 
-            //gcm所有事件实现，方便管理查看
             gcmView.Shown += OnGcmView_Shown;
             gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;
             gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;
@@ -36,10 +35,8 @@ namespace IDCM.ViewManager
             frontFindDlg.cancelCellHit += new GCMFrontFindDlg.CancelHit<DataGridViewCell>(DGVUtil.cancelDGVCellHit);
            
             datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
-            searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
         }
-
 
         ~GCMViewManager()
         {
@@ -64,14 +61,9 @@ namespace IDCM.ViewManager
                 datasetBuilder.Dispose();
                 datasetBuilder = null;
             }
-            if (searchBuilder != null)
-            {
-                searchBuilder.Dispose();
-                searchBuilder = null;
-            }
             if (gcmView != null && !gcmView.IsDisposed)
             {
-                //BackProgressIndicator.removeIndicatorBar(gcmView.getProgressBar());
+                BackProgressIndicator.removeIndicatorBar(gcmView.getProgressBar());
                 gcmView.Close();
                 gcmView.Dispose();
                 gcmView = null;
@@ -92,12 +84,10 @@ namespace IDCM.ViewManager
             if (gcmView == null || gcmView.IsDisposed)
             {
                 gcmView = new GCMView();
-                gcmView.Shown += OnGcmView_Shown;
-                gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;
-                gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;
+                gcmView.setManager(this);
+
                 datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
-                //BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());
-                searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
+                BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
             }
             AuthInfo auth = DataSourceHolder.GCMHolder.getSignedAuthInfo();
             if (activeShow)

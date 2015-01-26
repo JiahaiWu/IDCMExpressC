@@ -137,11 +137,5 @@ namespace IDCM.Forms
         }
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
-
-        
-        //private void dataGridView_items_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
-        //{
-
-        //}
     }
 }
