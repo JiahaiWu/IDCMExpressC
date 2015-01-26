@@ -76,8 +76,9 @@ namespace IDCM.Service.BGHandler
         /// <param name="pCtd"></param>
         protected void loadCTableData(DataRow dr, List<string> viewAttrs)
         {
-            string[] vals = new string[viewAttrs.Count];
-            int index = 0;
+            string[] vals = new string[viewAttrs.Count+1];
+            vals[0] = false.ToString();
+            int index = 1;
             foreach (string attr in viewAttrs)
             {
 #if DEBUG
@@ -86,6 +87,10 @@ namespace IDCM.Service.BGHandler
                 vals[index] = dr[LocalRecordMHub.getDBOrder(datasource,attr)].ToString();
                 ++index;
             }
+            ////////////////////////////////////////////////////
+            //注意：
+            //如何针对不同类型的DGVCell的设定值显示，有待进一步考虑。
+            //////////////////////////////////////////////////////////
             DGVAsyncUtil.syncAddRow(dgv, vals);
         }
         /// <summary>

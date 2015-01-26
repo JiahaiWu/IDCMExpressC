@@ -291,6 +291,18 @@ namespace IDCM.ViewManager
                 updateDataSet(node);
             }
         }
+        public void CopyClipboard()
+        {
+            DataObject d = homeView.getItemGridView().GetClipboardContent();
+            Clipboard.SetDataObject(d);
+        }
+        /// <summary>
+        /// This will be moved to the util class so it can service any paste into a DGV
+        /// </summary>
+        public void PasteClipboard()
+        {
+            datasetBuilder.PasteClipboard();
+        }
         /// <summary>
         /// 根据指定的数据集合加载数据报表显示
         /// </summary>
