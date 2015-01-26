@@ -29,7 +29,11 @@ namespace IDCM.Modules
         {
             this.itemDGV = dgv_items;
             this.attachTC = tc_attach;
-
+            AddHeaderCheckBox();
+            /////////////////////////
+            //CustomRowSelectionStyle();
+            ////////////////////////////
+            //该方法在单元格选择情况下有缺陷，暂行屏蔽，有待改进。
         }
         ~LocalDataSetBuilder()
         {
@@ -72,7 +76,353 @@ namespace IDCM.Modules
             get { return queryCondtion; }
         }
 
+        private volatile int TotalCheckedCheckBoxes = 0;
+        private volatile CheckBox HeaderCheckBox = null;
+        private volatile bool IsHeaderCheckBoxClicked = false;
+        private volatile int oldRowSelectionIndex = 0;
         #endregion
+
+
+        #region 自定义itemDGV支持多行选取的代码实现
+        /// <summary>
+        /// Add the checkBox into the datagridview
+        /// </summary>
+        private void AddHeaderCheckBox()
+        {
+            HeaderCheckBox = new CheckBox();
+            HeaderCheckBox.Size = new Size(15, 15);
+
+            //Add the CheckBox into the DataGridView
+            this.itemDGV.Controls.Add(HeaderCheckBox);
+            HeaderCheckBox.KeyUp += new KeyEventHandler(HeaderCheckBox_KeyUp);
+            HeaderCheckBox.MouseClick += new MouseEventHandler(HeaderCheckBox_MouseClick);
+            itemDGV.CellValueChanged += new DataGridViewCellEventHandler(dgvSelectAll_CellValueChanged);
+            itemDGV.CurrentCellDirtyStateChanged += new EventHandler(dgvSelectAll_CurrentCellDirtyStateChanged);
+            itemDGV.CellPainting += new DataGridViewCellPaintingEventHandler(dgvSelectAll_CellPainting);
+        }
+        /// <summary>
+        /// 当Checkbox被点击时的事件处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HeaderCheckBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            HeaderCheckBoxClick((CheckBox)sender);
+        }
+        /// <summary>
+        /// 获取空格键输入的键盘弹起事件处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HeaderCheckBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+                HeaderCheckBoxClick((CheckBox)sender);
+        }
+        /// <summary>
+        /// 获取记录改变消息事件，按单元格识别判断如何处理事件响应
+        /// 说明：
+        /// 1.如果单击Checkbox那么设定Checkbox选中操作
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvSelectAll_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+            if (e.ColumnIndex == 0 && !IsHeaderCheckBoxClicked)
+                RowCheckBoxClick((DataGridViewCheckBoxCell)itemDGV[e.ColumnIndex, e.RowIndex]);
+        }
+        /// <summary>
+        /// 当单元格状态改变时，事件触发机制
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvSelectAll_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (itemDGV.CurrentCell!=null && itemDGV.CurrentCell.OwningColumn.Name.Equals(CTDRecordA.CTD_RID))
+                itemDGV.CommitEdit(DataGridViewDataErrorContexts.Commit);
+        }
+        /// <summary>
+        /// 当单元格需要绘制时，捕获事件重绘Checkbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvSelectAll_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if (e.RowIndex == -1 && e.ColumnIndex == 0)
+                ResetHeaderCheckBoxLocation(e.ColumnIndex, e.RowIndex);
+        }
+        /// <summary>
+        /// 重置Checkbox绘制图层的显示位置
+        /// </summary>
+        /// <param name="ColumnIndex"></param>
+        /// <param name="RowIndex"></param>
+        private void ResetHeaderCheckBoxLocation(int ColumnIndex, int RowIndex)
+        {
+            //Get the column header cell bounds
+            Rectangle oRectangle = this.itemDGV.GetCellDisplayRectangle(ColumnIndex, RowIndex, true);
+
+            Point oPoint = new Point();
+
+            oPoint.X = oRectangle.Location.X + (oRectangle.Width - HeaderCheckBox.Width) / 2 + 1;
+            oPoint.Y = oRectangle.Location.Y + (oRectangle.Height - HeaderCheckBox.Height) / 2 + 1;
+
+            //Change the location of the CheckBox to make it stay on the header
+            HeaderCheckBox.Location = oPoint;
+        }
+        /// <summary>
+        /// 全选
+        /// </summary>
+        /// <param name="HCheckBox"></param>
+        private void HeaderCheckBoxClick(CheckBox HCheckBox)
+        {
+            IsHeaderCheckBoxClicked = true;
+
+            foreach (DataGridViewRow Row in itemDGV.Rows)
+                ((DataGridViewCheckBoxCell)Row.Cells[0]).Value = HCheckBox.Checked;
+            itemDGV.RefreshEdit();
+            int TotalCheckBoxes = itemDGV.Rows.Count;
+            TotalCheckedCheckBoxes = HCheckBox.Checked ? TotalCheckBoxes : 0;
+            IsHeaderCheckBoxClicked = false;
+        }
+        /// <summary>
+        /// 选中一行
+        /// </summary>
+        /// <param name="RCheckBox"></param>
+        private void RowCheckBoxClick(DataGridViewCheckBoxCell RCheckBox)
+        {
+            int TotalCheckBoxes = itemDGV.Rows.Count;
+            if (RCheckBox != null)
+            {
+                //Modifiy Counter;            
+                if ((bool)RCheckBox.Value && TotalCheckedCheckBoxes < TotalCheckBoxes)
+                    TotalCheckedCheckBoxes++;
+                else if (TotalCheckedCheckBoxes > 0)
+                    TotalCheckedCheckBoxes--;
+
+                //Change state of the header CheckBox.
+                if (TotalCheckedCheckBoxes < TotalCheckBoxes)
+                    HeaderCheckBox.Checked = false;
+                else if (TotalCheckedCheckBoxes == TotalCheckBoxes)
+                    HeaderCheckBox.Checked = true;
+            }
+        }
+#endregion 
+
+        #region 自定义itemDGV行选中的外观样式
+        private void CustomRowSelectionStyle()
+        {
+            this.itemDGV.RowTemplate.DefaultCellStyle.SelectionBackColor = Color.Transparent;
+            // Attach handlers to DataGridView events.
+            this.itemDGV.ColumnWidthChanged += new
+                DataGridViewColumnEventHandler(itemDGV_ColumnWidthChanged);
+            this.itemDGV.RowPrePaint += new
+                DataGridViewRowPrePaintEventHandler(itemDGV_RowPrePaint);
+            this.itemDGV.RowPostPaint += new
+                DataGridViewRowPostPaintEventHandler(itemDGV_RowPostPaint);
+            this.itemDGV.CurrentCellChanged += new
+                EventHandler(itemDGV_CurrentCellChanged);
+            this.itemDGV.RowHeightChanged += new
+                DataGridViewRowEventHandler(itemDGV_RowHeightChanged);
+        }
+        // Forces the control to repaint itself when the user 
+        // manually changes the width of a column.
+        void itemDGV_ColumnWidthChanged(object sender,
+            DataGridViewColumnEventArgs e)
+        {
+            this.itemDGV.Invalidate();
+        }
+
+        // Forces the row to repaint itself when the user changes the 
+        // current cell. This is necessary to refresh the focus rectangle.
+        void itemDGV_CurrentCellChanged(object sender, EventArgs e)
+        {
+            if (oldRowSelectionIndex != -1)
+            {
+                this.itemDGV.InvalidateRow(oldRowSelectionIndex);
+            }
+            oldRowSelectionIndex = this.itemDGV.CurrentCellAddress.Y;
+        }
+
+        // Paints the custom selection background for selected rows.
+        void itemDGV_RowPrePaint(object sender,DataGridViewRowPrePaintEventArgs e)
+        {
+            // Do not automatically paint the focus rectangle.
+            e.PaintParts &= ~DataGridViewPaintParts.Focus;
+
+            // Determine whether the cell should be painted
+            // with the custom selection background.
+            if ((e.State & DataGridViewElementStates.Selected) ==
+                        DataGridViewElementStates.Selected)
+            {
+                // Calculate the bounds of the row.
+                Rectangle rowBounds = new Rectangle(
+                    this.itemDGV.RowHeadersWidth, e.RowBounds.Top,
+                    this.itemDGV.Columns.GetColumnsWidth(
+                        DataGridViewElementStates.Visible) -
+                    this.itemDGV.HorizontalScrollingOffset + 1,
+                    e.RowBounds.Height);
+
+                // Paint the custom selection background.
+                using (Brush backbrush =
+                    new System.Drawing.Drawing2D.LinearGradientBrush(rowBounds,
+                        this.itemDGV.DefaultCellStyle.SelectionBackColor,
+                        Color.LightSkyBlue,
+                        System.Drawing.Drawing2D.LinearGradientMode.Horizontal))
+                {
+                    e.Graphics.FillRectangle(backbrush, rowBounds);
+                }
+            }
+        }
+
+        // Paints the content that spans multiple columns and the focus rectangle.
+        void itemDGV_RowPostPaint(object sender,
+            DataGridViewRowPostPaintEventArgs e)
+        {
+            // Calculate the bounds of the row.
+            Rectangle rowBounds = new Rectangle(
+                this.itemDGV.RowHeadersWidth, e.RowBounds.Top,
+                this.itemDGV.Columns.GetColumnsWidth(
+                    DataGridViewElementStates.Visible) -
+                this.itemDGV.HorizontalScrollingOffset + 1,
+                e.RowBounds.Height);
+
+            SolidBrush forebrush = null;
+            try
+            {
+                // Determine the foreground color.
+                if ((e.State & DataGridViewElementStates.Selected) ==
+                    DataGridViewElementStates.Selected)
+                {
+                    forebrush = new SolidBrush(e.InheritedRowStyle.SelectionForeColor);
+                }
+                else
+                {
+                    forebrush = new SolidBrush(e.InheritedRowStyle.ForeColor);
+                }
+
+                DataGridViewRow dgvr = this.itemDGV.Rows.SharedRow(e.RowIndex);
+                if (dgvr != null && dgvr.Index > 0)
+                {
+                    // Get the content that spans multiple columns.
+                    object recipe =
+                        this.itemDGV.Rows.SharedRow(e.RowIndex).Cells[2].Value;
+
+                    if (recipe != null)
+                    {
+                        String text = recipe.ToString();
+
+                        // Calculate the bounds for the content that spans multiple 
+                        // columns, adjusting for the horizontal scrolling position 
+                        // and the current row height, and displaying only whole
+                        // lines of text.
+                        Rectangle textArea = rowBounds;
+                        textArea.X -= this.itemDGV.HorizontalScrollingOffset;
+                        textArea.Width += this.itemDGV.HorizontalScrollingOffset;
+                        textArea.Y += rowBounds.Height - e.InheritedRowStyle.Padding.Bottom;
+                        textArea.Height -= rowBounds.Height -
+                            e.InheritedRowStyle.Padding.Bottom;
+                        textArea.Height = (textArea.Height / e.InheritedRowStyle.Font.Height) *
+                            e.InheritedRowStyle.Font.Height;
+
+                        // Calculate the portion of the text area that needs painting.
+                        RectangleF clip = textArea;
+                        clip.Width -= this.itemDGV.RowHeadersWidth + 1 - clip.X;
+                        clip.X = this.itemDGV.RowHeadersWidth + 1;
+                        RectangleF oldClip = e.Graphics.ClipBounds;
+                        e.Graphics.SetClip(clip);
+
+                        // Draw the content that spans multiple columns.
+                        e.Graphics.DrawString(
+                            text, e.InheritedRowStyle.Font, forebrush, textArea);
+
+                        e.Graphics.SetClip(oldClip);
+                    }
+                }
+            }
+            finally
+            {
+                forebrush.Dispose();
+            }
+
+            if (this.itemDGV.CurrentCellAddress.Y == e.RowIndex)
+            {
+                // Paint the focus rectangle.
+                e.DrawFocus(rowBounds, true);
+            }
+        }
+
+        // Adjusts the padding when the user changes the row height so that 
+        // the normal cell content is fully displayed and any extra
+        // height is used for the content that spans multiple columns.
+        void itemDGV_RowHeightChanged(object sender,
+            DataGridViewRowEventArgs e)
+        {
+            // Calculate the new height of the normal cell content.
+            Int32 preferredNormalContentHeight =
+                e.Row.GetPreferredHeight(e.Row.Index,
+                DataGridViewAutoSizeRowMode.AllCellsExceptHeader, true) -
+                e.Row.DefaultCellStyle.Padding.Bottom;
+
+            // Specify a new padding.
+            Padding newPadding = e.Row.DefaultCellStyle.Padding;
+            newPadding.Bottom = e.Row.Height - preferredNormalContentHeight;
+            e.Row.DefaultCellStyle.Padding = newPadding;
+        }
+        #endregion
+
+
+        /// <summary>
+        /// This will be moved to the util class so it can service any paste into a DGV
+        /// </summary>
+        internal void PasteClipboard()
+        {
+            try
+            {
+                string s = Clipboard.GetText();
+                string[] lines = s.Split('\n');
+                int iFail = 0, iRow = itemDGV.CurrentCell.RowIndex;
+                int iCol = itemDGV.CurrentCell.ColumnIndex;
+                DataGridViewCell oCell;
+                foreach (string line in lines)
+                {
+                    if (iRow < itemDGV.RowCount && line.Length > 0)
+                    {
+                        string[] sCells = line.Split('\t');
+                        for (int i = 0; i < sCells.GetLength(0); ++i)
+                        {
+                            if (iCol + i < this.itemDGV.ColumnCount)
+                            {
+                                oCell = itemDGV[iCol + i, iRow];
+                                if (!oCell.ReadOnly)
+                                {
+                                    if (oCell.Value == null || oCell.Value.ToString() != sCells[i])
+                                    {
+                                        oCell.Value = Convert.ChangeType(sCells[i], oCell.ValueType);
+                                        oCell.Style.BackColor = Color.Tomato;
+                                    }
+                                    else
+                                        iFail++;//only traps a fail if the data has changed and you are pasting into a read only cell
+                                }
+                            }
+                            else
+                            { break; }
+                        }
+                        iRow++;
+                    }
+                    else
+                    { break; }
+                    if (iFail > 0)
+                        MessageBox.Show(string.Format("{0} updates failed due to read only column setting", iFail));
+                }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("The data you pasted is in the wrong format for the cell");
+                return;
+            }
+        }
 
         /// <summary>
         /// 根据指定的索引位序更新显示附加的属性信息
@@ -85,7 +435,7 @@ namespace IDCM.Modules
             if (dgvr.Cells.Count > rIdx)
             {
                 CUR_RID = Convert.ToInt64(dgvr.Cells[rIdx].FormattedValue.ToString());
-                DataTable table = LocalRecordMHub.queryCTDRecord(null, CUR_RID.ToString());
+                DataTable table = LocalRecordMHub.queryCTDRecord(DataSourceHolder.DataSource, CUR_RID.ToString());
                 if (table.Rows.Count > 0)
                 {
                     DataRow dr = table.Rows[0];
@@ -219,25 +569,25 @@ namespace IDCM.Modules
             }
         }
         
-        /// <summary>
-        /// 转换数据对象值到列表显示
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="pCtd"></param>
-        protected void loadCTableData(DataRow dr, List<string> viewAttrs)
-        {
-            string[] vals = new string[viewAttrs.Count];
-            int index = 0;
-            foreach (string attr in viewAttrs)
-            {
-#if DEBUG
-                //Console.WriteLine("[DEBUG](loadCTableData) " + attr + "-->" + CustomTColMapDA.getDBOrder(attr) + ">>" + dr[CustomTColMapDA.getDBOrder(attr)].ToString());
-#endif
-                vals[index] = dr[LocalRecordMHub.getDBOrder(DataSourceHolder.DataSource, attr)].ToString();
-                ++index;
-            }
-            DGVAsyncUtil.syncAddRow(itemDGV, vals);
-        }
+//        /// <summary>
+//        /// 转换数据对象值到列表显示
+//        /// </summary>
+//        /// <param name="entity"></param>
+//        /// <param name="pCtd"></param>
+//        protected void loadCTableData(DataRow dr, List<string> viewAttrs)
+//        {
+//            string[] vals = new string[viewAttrs.Count];
+//            int index = 0;
+//            foreach (string attr in viewAttrs)
+//            {
+//#if DEBUG
+//                //Console.WriteLine("[DEBUG](loadCTableData) " + attr + "-->" + CustomTColMapDA.getDBOrder(attr) + ">>" + dr[CustomTColMapDA.getDBOrder(attr)].ToString());
+//#endif
+//                vals[index] = dr[LocalRecordMHub.getDBOrder(DataSourceHolder.DataSource, attr)].ToString();
+//                ++index;
+//            }
+//            DGVAsyncUtil.syncAddRow(itemDGV, vals);
+//        }
         /// <summary>
         /// 加载数据表头展示
         /// </summary>
@@ -246,11 +596,13 @@ namespace IDCM.Modules
         private void loadDGVColumns(List<string> viewAttrs)
         {
             DGVAsyncUtil.syncClearAll(itemDGV);
+            //默认前置的选择列
+            DGVAsyncUtil.syncAddCol(itemDGV, new DataGridViewCheckBoxColumn());
             //创建显性列属性
             foreach (string attr in viewAttrs)
             {
                 int viewOrder = LocalRecordMHub.getViewOrder(DataSourceHolder.DataSource, attr);//返回属性显示位序
-                Console.Write("##"+attr+"->"+viewOrder);
+                log.Debug("##"+attr+"->"+viewOrder);
                 if (viewOrder < CustomTColMap.MaxMainViewCount)
                 {
                     CustomTColDef ctcd = LocalRecordMHub.getCustomTColDef(DataSourceHolder.DataSource,attr);
@@ -258,8 +610,7 @@ namespace IDCM.Modules
                     DataGridViewColumn dgvCol = Activator.CreateInstance(colType) as DataGridViewColumn;
                     dgvCol.Name = ctcd.Attr;
                     dgvCol.HeaderText = CVNameConverter.toViewName(ctcd.Attr);
-                    if (ctcd.Attr.Equals(CTDRecordA.CTD_RID) || attr.Equals(CTDRecordA.CTD_PLID) || attr.Equals(CTDRecordA.CTD_LID))
-                    {
+                    if(attr.Equals(CTDRecordA.CTD_RID)|| attr.Equals(CTDRecordA.CTD_PLID) || attr.Equals(CTDRecordA.CTD_LID)){
                         dgvCol.Visible = false;
                         dgvCol.Width = 0;
                     }
@@ -506,7 +857,7 @@ namespace IDCM.Modules
         /// </summary>
         /// <param name="fpath"></param>
         /// <returns></returns>
-        public bool checkForExcelImport(string fpath,ref Dictionary<string, string> dataMapping)
+        public bool checkForExcelImport(string fpath, ref Dictionary<string, string> dataMapping, Form pForm)
         {
             if (fpath == null || fpath.Length < 1)
                 return false;
@@ -520,7 +871,7 @@ namespace IDCM.Modules
                     ISheet dataSheet = workbook.GetSheet("Core Datasets");
                     if (dataSheet == null)
                         dataSheet = workbook.GetSheetAt(0);
-                    return fetchSheetMappingInfo(dataSheet, ref dataMapping) && dataMapping.Count>0;
+                    return fetchSheetMappingInfo(dataSheet, ref dataMapping, pForm) && dataMapping.Count > 0;
                 }
             }
             catch (Exception ex)
@@ -535,7 +886,7 @@ namespace IDCM.Modules
         /// </summary>
         /// <param name="sheet"></param>
         /// <param name="dgv"></param>
-        private static bool fetchSheetMappingInfo(ISheet sheet, ref Dictionary<string, string> dataMapping)
+        private bool fetchSheetMappingInfo(ISheet sheet, ref Dictionary<string, string> dataMapping,Form pForm)
         {
             int skipIdx = 1;
             if (sheet == null || sheet.LastRowNum < skipIdx) //no data
@@ -561,6 +912,7 @@ namespace IDCM.Modules
             ///////////////////////////////////////////////////////////////
             using (AttrMapOptionDlg amoDlg = new AttrMapOptionDlg())
             {
+                amoDlg.BringToFront();
                 amoDlg.setInitCols(xlscols, LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource,false), ref dataMapping);
                 amoDlg.ShowDialog();
                 ///////////////////////////////////////////

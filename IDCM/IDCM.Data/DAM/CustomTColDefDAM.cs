@@ -76,9 +76,15 @@ namespace IDCM.Data.DAM
             if (ctcds != null)
             {
                 List<CustomTColDef> ictcds = getEmbeddedTableDef();
-                ctcds.AddRange(ictcds);
+                ctcds.InsertRange(0, ictcds);
+                int idx = 0;
+                foreach (CustomTColDef ctcd in ctcds)
+                {
+                    ctcd.Corder =ctcd.IsRequire? idx:CustomTColMap.MaxMainViewCount+idx;
+                    idx++;
+                }
                 rebuildCustomTColDef(sconn);
-                CustomTColDefDAM.save(sconn, ctcds.ToArray());
+                save(sconn, ctcds.ToArray());
                 return true;
             }
             return false;
@@ -206,7 +212,11 @@ namespace IDCM.Data.DAM
                     }
                     CustomTColDef ctcd = formatSettingLine(line);
                     if (ctcd != null)
+                    {
                         ctcds.Add(ctcd);
+                        //set default col order for ctcd attr
+                        ctcd.Corder =ctcd.IsRequire?ctcds.Count:CustomTColMap.MaxMainViewCount+ ctcds.Count;
+                    }
                 }
                 return ctcds;
             }
@@ -229,6 +239,7 @@ namespace IDCM.Data.DAM
                 ctcd.Restrict = vals.Length > 4 ? vals[4] : null;
                 ctcd.DefaultVal = vals.Length > 5 ? vals[5] : null;
                 ctcd.Comments = vals.Length > 6 ? vals[6] : null;
+                ctcd.IsInter = false;
                 return ctcd;
             }
             return null;

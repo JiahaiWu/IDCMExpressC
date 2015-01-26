@@ -405,17 +405,24 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void dataGridView_items_SelectionChanged(object sender, EventArgs e)
         {
-            if(dataGridView_items.Rows.Count>0)
+            if (dataGridView_items.Rows.Count > 0 && dataGridView_items.CurrentRow !=null)
             {
                 DataGridViewRow dgvr = dataGridView_items.CurrentRow;
-                DataGridViewCell dgvc = dgvr.Cells[CTDRecordA.CTD_RID];
-                if (dgvc != null)
+                try
                 {
-                    string rid = dgvc.FormattedValue.ToString();
-                    if (rid.Length > 0 && !rid.Equals(manager.CURRENT_RID.ToString()))
+                    DataGridViewCell dgvc = dgvr.Cells[CTDRecordA.CTD_RID];
+                    if (dgvc != null)
                     {
-                        manager.selectViewRecord(dgvr);
+                        string rid = dgvc.FormattedValue.ToString();
+                        if (rid.Length > 0 && !rid.Equals(manager.CURRENT_RID.ToString()))
+                        {
+                            manager.selectViewRecord(dgvr);
+                        }
                     }
+                }
+                catch (ArgumentException ex)
+                {
+                    log.Warn(ex);
                 }
             }
         }
@@ -688,6 +695,42 @@ namespace IDCM.Forms
 
         }
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+        /// <summary>
+        /// 右键菜单中复制请求
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void copyCtrlCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            manager.CopyClipboard();
+            DataObject d = dataGridView_items.GetClipboardContent();
+            Clipboard.SetDataObject(d);
+        }
+        /// <summary>
+        /// 右键菜单中粘贴请求
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pasteCtrlVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            manager.PasteClipboard();
+        }
+        /// <summary>
+        /// 绑定剪贴板复制粘贴的快捷键处理Ctrl+C Ctrl+V Shift+Delete 及 Shift+Insert
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridView_items_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.Control && e.KeyCode == Keys.C) || (e.Shift && e.KeyCode == Keys.Delete))
+            {
+                manager.CopyClipboard();
+            }
+            if ((e.Control && e.KeyCode == Keys.V) || (e.Shift && e.KeyCode == Keys.Insert))
+            {
+                manager.PasteClipboard();
+            }
+        }
 
     }
 }

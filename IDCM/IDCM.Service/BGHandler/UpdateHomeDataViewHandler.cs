@@ -37,6 +37,7 @@ namespace IDCM.Service.BGHandler
         public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
             bool res = false;
+            DWorkMHub.note(AsyncMessage.StartBackProgress);
             List<string> viewAttrs = LocalRecordMHub.getViewAttrs(datasource);
             long lid = Convert.ToInt64(filterNode.Name);
             DGVAsyncUtil.syncRemoveAllRow(dgv);
@@ -75,16 +76,21 @@ namespace IDCM.Service.BGHandler
         /// <param name="pCtd"></param>
         protected void loadCTableData(DataRow dr, List<string> viewAttrs)
         {
-            string[] vals = new string[viewAttrs.Count];
-            int index = 0;
+            string[] vals = new string[viewAttrs.Count+1];
+            vals[0] = false.ToString();
+            int index = 1;
             foreach (string attr in viewAttrs)
             {
 #if DEBUG
-                //Console.WriteLine("[DEBUG](loadCTableData) " + attr + "-->" + CustomTColMapDA.getDBOrder(attr) + ">>" + dr[CustomTColMapDA.getDBOrder(attr)].ToString());
+                //log.Debug("(loadCTableData) " + attr + "-->" + LocalRecordMHub.getDBOrder(datasource, attr) + ">>" + dr[LocalRecordMHub.getDBOrder(datasource, attr)].ToString());
 #endif
                 vals[index] = dr[LocalRecordMHub.getDBOrder(datasource,attr)].ToString();
                 ++index;
             }
+            ////////////////////////////////////////////////////
+            //注意：
+            //如何针对不同类型的DGVCell的设定值显示，有待进一步考虑。
+            //////////////////////////////////////////////////////////
             DGVAsyncUtil.syncAddRow(dgv, vals);
         }
         /// <summary>
@@ -94,6 +100,7 @@ namespace IDCM.Service.BGHandler
         /// <param name="args"></param>
         public override void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
         {
+            DWorkMHub.note(AsyncMessage.EndBackProgress);
             if (canceled || (args.Count>0 && args[0].Equals(false)))
             {
                 if(nextHandlers!=null)

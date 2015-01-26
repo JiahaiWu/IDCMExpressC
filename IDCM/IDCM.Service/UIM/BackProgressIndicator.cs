@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace IDCM.Modules
+namespace IDCM.Service.UIM
 {
-    class BackProgressIndicator
+    public class BackProgressIndicator
     {
         public static void addIndicatorBar(ToolStripProgressBar progressBar)
         {

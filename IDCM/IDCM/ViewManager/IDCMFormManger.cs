@@ -10,6 +10,7 @@ using IDCM.Service.Common.Core;
 using IDCM.Service;
 using IDCM.Data.Base;
 using IDCM.Core;
+using IDCM.Service.UIM;
 
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -168,6 +169,14 @@ namespace IDCM.ViewManager
         internal void OnUpdateGCMSignTip(object sender, IDCMAsyncEventArgs e)
         {
             updateUserStatus((e.values != null && e.values.Count()>0)? e.values[0].ToString():null);
+        }
+        internal void OnStartBackProgress(object sender, IDCMAsyncEventArgs e)
+        {
+            BackProgressIndicator.startBackProgress();
+        }
+        internal void OnEndBackProgress(object sender, IDCMAsyncEventArgs e)
+        {
+            BackProgressIndicator.endBackProgress();
         }
 #endregion
         internal ManagerI getHomeViewManager()

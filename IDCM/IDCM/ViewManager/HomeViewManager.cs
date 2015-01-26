@@ -12,7 +12,7 @@ using IDCM.Modules;
 using IDCM.Service.BGHandler;
 using IDCM.Service.Utils;
 using IDCM.Core;
-
+using IDCM.Service.UIM;
 
 namespace IDCM.ViewManager
 {
@@ -187,7 +187,7 @@ namespace IDCM.ViewManager
             if (fpath.ToLower().EndsWith("xls") || fpath.ToLower().EndsWith(".xlsx"))
             {
                 Dictionary<string, string> dataMapping = new Dictionary<string, string>();
-                if (datasetBuilder.checkForExcelImport(fpath, ref dataMapping))
+                if (datasetBuilder.checkForExcelImport(fpath, ref dataMapping,homeView))
                 {
                     ExcelImportHandler eih = new ExcelImportHandler(DataSourceHolder.DataSource,fpath,ref dataMapping, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
                     eih.addHandler(new UpdateHomeDataViewHandler(DataSourceHolder.DataSource, catBuilder.RootNode_unfiled, homeView.getItemGridView()));
@@ -291,6 +291,18 @@ namespace IDCM.ViewManager
                 updateDataSet(node);
             }
         }
+        public void CopyClipboard()
+        {
+            DataObject d = homeView.getItemGridView().GetClipboardContent();
+            Clipboard.SetDataObject(d);
+        }
+        /// <summary>
+        /// This will be moved to the util class so it can service any paste into a DGV
+        /// </summary>
+        public void PasteClipboard()
+        {
+            datasetBuilder.PasteClipboard();
+        }
         /// <summary>
         /// 根据指定的数据集合加载数据报表显示
         /// </summary>
@@ -298,8 +310,8 @@ namespace IDCM.ViewManager
         {
             datasetBuilder.noteDataSetLib(filterNode); //待考虑顺序问题///////////
             UpdateHomeDataViewHandler uhdvh = new UpdateHomeDataViewHandler(DataSourceHolder.DataSource,filterNode, homeView.getItemGridView());
-            uhdvh.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
             uhdvh.addHandler(new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, filterNode));
+            uhdvh.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
             DWorkMHub.callAsyncHandle(uhdvh);
         }
         public void showDBDataSearch()

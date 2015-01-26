@@ -48,7 +48,9 @@ namespace IDCM.Data.Base.Utils
                         candicates.Remove(bstr);
                 }
             }
-            mappingEntries = (from entry in baseMapping orderby entry.Value ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
+            mappingEntries = (from entry in baseMapping select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            //mappingEntries = (from entry in baseMapping orderby entry.Value ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value);
             return mappingEntries.Count();
         }
 

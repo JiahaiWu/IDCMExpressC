@@ -5,6 +5,7 @@ using System.Text;
 using IDCM.Data.Base;
 using IDCM.Data;
 using System.Data;
+using IDCM.Service.Common.Core;
 using IDCM.Data.Base.Utils;
 
 namespace IDCM.Service.Common.DAM
@@ -20,22 +21,19 @@ namespace IDCM.Service.Common.DAM
             List<CustomTColDef> ctcds = DataSupporter.ListSQLQuery<CustomTColDef>(wsm, cmd);
             if (ctcds != null && ctcds.Count > 0)
             {
-                CustomTColMapDAM.ColumnMappingHolder.queryCacheAttrDBMap(wsm);
+                DataSupporter.queryCacheAttrDBMap(wsm);
                 return true;
             }
-            ////////////////////////////////////////////
-            //else
-            //{
-            //    CTableSetting.buildDefaultSetting();
-            //    DataTable table = DataSupporter.SQLQuery(wsm, cmd);
-            //    if (table != null && table.Rows.Count > 0)
-            //    {
-            //        CustomTColMapDAM.buildCustomTable();
-            //        return true;
-            //    }
-            //}
-            ///////////////////////////////////////////
-            //调用层次有问题，暂行阻断，待改进
+            else
+            {
+                DataSupporter.buildDefaultSetting(wsm);
+                DataTable table = DataSupporter.SQLQuery(wsm, cmd);
+                if (table != null && table.Rows.Count > 0)
+                {
+                    CustomTColMapDAM.buildCustomTable(wsm);
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -158,8 +156,8 @@ namespace IDCM.Service.Common.DAM
             CustomTColDef pctcd = ctcdCache[ctcd.Attr];
             if (!pctcd.Corder.Equals(ctcd.Corder))
             {
-                int viewOrder = ctcd.IsRequire ? ctcd.Corder : (CustomTColMapDAM.ColumnMappingHolder.MaxMainViewCount + ctcd.Corder);
-                CustomTColMapDAM.ColumnMappingHolder.noteDefaultColMap(wsm,ctcd.Attr, ctcd.Corder, viewOrder);
+                int viewOrder = ctcd.IsRequire ? ctcd.Corder : (CustomTColMap.MaxMainViewCount + ctcd.Corder);
+                DataSupporter.noteDefaultColMap(wsm,ctcd.Attr, ctcd.Corder, viewOrder);
             }
             //update ctcd
             save(wsm, ctcd);

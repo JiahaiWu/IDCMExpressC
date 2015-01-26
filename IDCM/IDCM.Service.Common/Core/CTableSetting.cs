@@ -11,40 +11,40 @@ namespace IDCM.Service.Common.Core
 {
     internal class CTableSetting
     {
-        public static bool buildDefaultSetting()
-        {
-            try
-            {
-                string cTableDefpath = ConfigurationManager.AppSettings[SysConstants.CTableDef];
-                List<CustomTColDef> ctcds = getCustomTableDef(cTableDefpath);
-                overwriteAllCustomTColDef(ctcds);
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-            }
-            return false;
-        }
-        /// <summary>
-        /// 重写用户自定义数据表的字段集定义
-        /// </summary>
-        /// <param name="ctcds"></param>
-        /// <returns></returns>
-        public static bool overwriteAllCustomTColDef(List<CustomTColDef> ctcds)
-        {
-            ////////////////////////////////////////////////
-            //if (ctcds != null)
-            //{
-            //    List<CustomTColDef> ictcds = getEmbeddedTableDef();
-            //    ctcds.AddRange(ictcds);
-            //    CustomTColDefDAM.rebuildCustomTColDef();
-            //    CustomTColDefDAM.save(ctcds.ToArray());
-            //    return true;
-            //}
-            /////////////////////////////////////////////
-            //调用层次有点问题，暂行实现阻断，有待改进
-            return false;
-        }
+        //public static bool buildDefaultSetting()
+        //{
+        //    try
+        //    {
+        //        string cTableDefpath = ConfigurationManager.AppSettings[SysConstants.CTableDef];
+        //        List<CustomTColDef> ctcds = getCustomTableDef(cTableDefpath);
+        //        overwriteAllCustomTColDef(ctcds);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        log.Error(ex);
+        //    }
+        //    return false;
+        //}
+        ///// <summary>
+        ///// 重写用户自定义数据表的字段集定义
+        ///// </summary>
+        ///// <param name="ctcds"></param>
+        ///// <returns></returns>
+        //public static bool overwriteAllCustomTColDef(List<CustomTColDef> ctcds)
+        //{
+        //    ////////////////////////////////////////////////
+        //    //if (ctcds != null)
+        //    //{
+        //    //    List<CustomTColDef> ictcds = getEmbeddedTableDef();
+        //    //    ctcds.AddRange(ictcds);
+        //    //    CustomTColDefDAM.rebuildCustomTColDef();
+        //    //    CustomTColDefDAM.save(ctcds.ToArray());
+        //    //    return true;
+        //    //}
+        //    /////////////////////////////////////////////
+        //    //调用层次有点问题，暂行实现阻断，有待改进
+        //    return false;
+        //}
         public static Dictionary<string, List<CustomTColDef>> getTableTemplateDef(string settingPath)
         {
             Dictionary<string, List<CustomTColDef>> templDict = new Dictionary<string, List<CustomTColDef>>();

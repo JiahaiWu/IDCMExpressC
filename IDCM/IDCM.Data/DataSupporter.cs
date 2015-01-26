@@ -5,6 +5,7 @@ using System.Text;
 using IDCM.Data.Core;
 using IDCM.Data.DAM;
 using IDCM.Data.Common;
+using IDCM.Data.Base;
 using System.Data;
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
@@ -186,5 +187,56 @@ namespace IDCM.Data
             ColumnMappingHolder.updateViewOrder(wsm.getConnection(), attr, viewOrder, isRequired);
         }
 
+        public static void noteDefaultColMap(WorkSpaceManager wsm, string attr, int dbOrder, int viewOrder)
+        {
+            ColumnMappingHolder.noteDefaultColMap(wsm.getConnection(), attr, dbOrder, viewOrder);
+        }
+        public static void noteDefaultColMap(WorkSpaceManager wsm,  List<string> noteCmds)
+        {
+            ColumnMappingHolder.noteDefaultColMap(wsm.getConnection(), noteCmds.ToArray());
+        }
+
+        public static void clearColMap(WorkSpaceManager wsm)
+        {
+            ColumnMappingHolder.clearColMap(wsm.getConnection());
+        }
+        /// <summary>
+        /// 缓存数据字段映射关联关系
+        /// </summary>
+        public static void queryCacheAttrDBMap(WorkSpaceManager wsm)
+        {
+            ColumnMappingHolder.queryCacheAttrDBMap(wsm.getConnection());
+        }
+        /// <summary>
+        /// 获取已经被缓存的用户浏览字段~数据库字段位序的映射关系。
+        /// @author JiahaiWu
+        /// 字段名对于数据库存储名,亦即包装过的表单列名。
+        /// 数据库字段映射位序的值自0计数。
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, int> getCustomViewDBMapping(WorkSpaceManager wsm)
+        {
+            return ColumnMappingHolder.getCustomViewDBMapping(wsm.getConnection());
+        }
+        /// <summary>
+        /// 重写用户自定义数据表的字段集定义
+        /// </summary>
+        /// <param name="picker"></param>
+        /// <param name="ctcds"></param>
+        /// <returns></returns>
+        public static bool overwriteAllCustomTColDef(WorkSpaceManager wsm, List<CustomTColDef> ctcds)
+        {
+            return CustomTColDefDAM.overwriteAllCustomTColDef(wsm.getConnection(), ctcds);
+        }
+
+        /// <summary>
+        /// 读取并创建默认的动态表单定义
+        /// </summary>
+        /// <param name="picker"></param>
+        /// <returns></returns>
+        public static bool buildDefaultSetting(WorkSpaceManager wsm)
+        {
+            return CustomTColDefDAM.buildDefaultSetting(wsm.getConnection());
+        }
     }
 }
