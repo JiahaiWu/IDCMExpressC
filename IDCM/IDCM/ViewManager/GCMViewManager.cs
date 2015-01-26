@@ -28,16 +28,11 @@ namespace IDCM.ViewManager
             frontFindDlg = new GCMFrontFindDlg(gcmView.getItemGridView());
             frontFindDlg.setCellHit += new GCMFrontFindDlg.SetHit<DataGridViewCell>(DGVUtil.setDGVCellHit);
             frontFindDlg.cancelCellHit += new GCMFrontFindDlg.CancelHit<DataGridViewCell>(DGVUtil.cancelDGVCellHit);
-            //recBuilder = new GCMRecordBuilder(gcmView.getRecordTree(),gcmView.getRecordList());
             datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
             searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
         }
-        public static HomeViewManager getInstance()
-        {
-            ManagerI gcm = ViewManagerHolder.getManager(typeof(GCMViewManager));
-            return gcm == null ? null : (gcm as HomeViewManager);
-        }
+
         ~GCMViewManager()
         {
             dispose();
@@ -48,7 +43,6 @@ namespace IDCM.ViewManager
         
         //页面窗口实例
         private volatile GCMView gcmView = null;
-        //private volatile GCMRecordBuilder recBuilder = null;
         private volatile GCMDataSetBuilder datasetBuilder = null;
         private volatile GCMSearchBuilder searchBuilder = null;
         private GCMFrontFindDlg frontFindDlg = null;
@@ -58,21 +52,16 @@ namespace IDCM.ViewManager
         public override void dispose()
         {
             _isDisposed = true;
-            //if (recBuilder != null)
-            //{
-            //    recBuilder.Dispose();
-            //    recBuilder = null;
-            //}
             if (datasetBuilder != null)
             {
                 datasetBuilder.Dispose();
                 datasetBuilder = null;
             }
-            //if (searchBuilder != null)
-            //{
-            //    searchBuilder.Dispose();
-            //    searchBuilder = null;
-            //}
+            if (searchBuilder != null)
+            {
+                searchBuilder.Dispose();
+                searchBuilder = null;
+            }
             if (gcmView != null && !gcmView.IsDisposed)
             {
                 BackProgressIndicator.removeIndicatorBar(gcmView.getProgressBar());
@@ -99,10 +88,9 @@ namespace IDCM.ViewManager
                 gcmView.Shown += OnGcmView_Shown;
                 gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;
                 gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;
-                //recBuilder = new GCMRecordBuilder(gcmView.getRecordTree(), gcmView.getRecordList());
                 datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
                 BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());
-                //searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
+                searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             }
             AuthInfo auth = DataSourceHolder.GCMHolder.getSignedAuthInfo();
             if (activeShow)
@@ -158,16 +146,7 @@ namespace IDCM.ViewManager
         {
             LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList(), datasetBuilder.getLoadedNoter());
             DWorkMHub.callAsyncHandle(lgdh);
-            //datasetBuilder.loadDataSetView();
         }
-        /// <summary>
-        /// 更新具体记录的显示
-        /// </summary>
-        public void updateRecordView()
-        {
-
-        }
-
         /// <summary>
         /// activeHomeView
         /// </summary>
@@ -176,7 +155,6 @@ namespace IDCM.ViewManager
         {
            //加载默认的数据报表展示
            loadDataSetView();
-           updateRecordView();
            //resize for data view
            gcmView.getItemGridView().AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
            gcmView.getItemGridView().AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
