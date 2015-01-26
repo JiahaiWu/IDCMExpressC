@@ -12,7 +12,7 @@ namespace IDCM.Service.UIM
     /// <summary>
     /// 发送网络请求，获取strain信息，构建GCM
     /// </summary>
-    public class LoadGCMItems
+    public class GCMItemsLoader
     {
         /// <summary>
         /// 分多次发送网络请求，获取strain信息，将strain数据添加到DataGridView中
@@ -41,7 +41,7 @@ namespace IDCM.Service.UIM
             }
             if (loadedNoter.Count > 0)
             {
-                TreeView treeNode = LoadGCMRecordNode.loadData(gcmSite, loadedNoter.First().Key, recordView);
+                TreeView treeNode = GCMNodeLoad.loadData(gcmSite, loadedNoter.First().Key, recordView);
                 if (treeNode == null) return true;
                 TreeViewAsyncUtil.syncClearNodes(recordTree);
                 TreeViewAsyncUtil.syncAddNodes(recordTree,treeNode);
@@ -66,7 +66,7 @@ namespace IDCM.Service.UIM
                 //add valMap note Tag into loadedNoter Map
                 int dgvrIdx = -1;
                 loadedNoter.TryGetValue(valMap["id"], out dgvrIdx);
-                if (dgvrIdx <= 0)
+                if (dgvrIdx < 0)
                 {
                     dgvrIdx = itemDGV.RowCount;
                     DGVAsyncUtil.syncAddRow(itemDGV, null, dgvrIdx);
