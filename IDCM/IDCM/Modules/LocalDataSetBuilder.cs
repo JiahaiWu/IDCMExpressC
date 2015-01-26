@@ -29,7 +29,10 @@ namespace IDCM.Modules
         {
             this.itemDGV = dgv_items;
             this.attachTC = tc_attach;
-            AddHeaderCheckBox();
+            ///////////////////////////////
+            //AddHeaderCheckBox();
+            ////////////////////////////
+            //本地数据提交优先考虑只读软连接模式，全选操作模式暂行屏蔽，有待增设状态后再利用。
             /////////////////////////
             //CustomRowSelectionStyle();
             ////////////////////////////
@@ -374,6 +377,7 @@ namespace IDCM.Modules
 
 
         /// <summary>
+        /// 从剪贴板粘贴文本型数据记录到目标区域
         /// This will be moved to the util class so it can service any paste into a DGV
         /// </summary>
         internal void PasteClipboard()
@@ -569,25 +573,7 @@ namespace IDCM.Modules
             }
         }
         
-//        /// <summary>
-//        /// 转换数据对象值到列表显示
-//        /// </summary>
-//        /// <param name="entity"></param>
-//        /// <param name="pCtd"></param>
-//        protected void loadCTableData(DataRow dr, List<string> viewAttrs)
-//        {
-//            string[] vals = new string[viewAttrs.Count];
-//            int index = 0;
-//            foreach (string attr in viewAttrs)
-//            {
-//#if DEBUG
-//                //Console.WriteLine("[DEBUG](loadCTableData) " + attr + "-->" + CustomTColMapDA.getDBOrder(attr) + ">>" + dr[CustomTColMapDA.getDBOrder(attr)].ToString());
-//#endif
-//                vals[index] = dr[LocalRecordMHub.getDBOrder(DataSourceHolder.DataSource, attr)].ToString();
-//                ++index;
-//            }
-//            DGVAsyncUtil.syncAddRow(itemDGV, vals);
-//        }
+
         /// <summary>
         /// 加载数据表头展示
         /// </summary>
@@ -597,7 +583,12 @@ namespace IDCM.Modules
         {
             DGVAsyncUtil.syncClearAll(itemDGV);
             //默认前置的选择列
-            DGVAsyncUtil.syncAddCol(itemDGV, new DataGridViewCheckBoxColumn());
+            DataGridViewCheckBoxColumn chxCol = new DataGridViewCheckBoxColumn();
+            chxCol.ReadOnly = true;
+            chxCol.Resizable = DataGridViewTriState.False;
+            chxCol.FlatStyle = FlatStyle.Popup;
+            chxCol.CellTemplate.Style.ForeColor = Color.LightGray;
+            DGVAsyncUtil.syncAddCol(itemDGV,chxCol);
             //创建显性列属性
             foreach (string attr in viewAttrs)
             {
