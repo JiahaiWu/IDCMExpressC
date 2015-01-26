@@ -355,8 +355,7 @@ namespace IDCM.ViewManager
                     {
                         if (gcmvManager.isActive())
                         {
-                            //////////////////////////////
-                            //gcmvManager.frontSearchNext();
+                            gcmvManager.frontSearchNext();
                         }
                     }
                 }
@@ -388,8 +387,7 @@ namespace IDCM.ViewManager
                     {
                         if (gcmvManager.isActive())
                         {
-                            //////////////////////////////
-                            //gcmvManager.frontSearchPrev();
+                            gcmvManager.frontSearchPrev();
                         }
                     }
                 }

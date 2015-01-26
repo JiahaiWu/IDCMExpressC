@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDCM.Service.Utils;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -39,75 +40,63 @@ namespace IDCM.Modules
         }
         #endregion
 
+        public DataGridViewCell quickSearch(string findTerm)
+        {
+            if (findTerm.Length > 0)
+            {
+                DataGridViewCell ncell = null;
+                if (itemDGV.SelectedCells != null && itemDGV.SelectedCells.Count > 0)
+                {
+                    if (itemDGV.SelectedCells[0].Displayed)
+                        ncell = itemDGV.SelectedCells[0];
+                }
+                while ((ncell = nextTextCell(ncell)) != null)
+                {
+                    string cellval = DGVUtil.getCellValue(ncell);
+                    if (cellval.ToLower().Contains(findTerm.ToLower()))
+                    {
+                        return ncell;
+                    }
+                }
+                if (ncell == null)
+                {
+                    MessageBox.Show("It's reached the end, and no subsequent matches.");
+                }
+            }
+            return null;
+        }
 
-        ///// <summary>
-        ///// @Deprecated
-        ///// 通过网络请求，载入数据显示
-        ///// </summary>
-        //public void loadDataSetView()
-        //{
-        //    int curPage=1;
-        //    StrainListPage slp = StrainListQueryExecutor.strainListQuery(curPage);
-        //    showDataItems(slp);
-        //    while (hasNextPage(slp,curPage))
-        //    {
-        //        curPage++;
-        //        slp = StrainListQueryExecutor.strainListQuery(curPage);
-        //        showDataItems(slp);
-        //    }
-        //}
-        ///// <summary>
-        ///// 将网络获取数据显示到itemDGV，并予以标记缓存
-        ///// </summary>
-        ///// <param name="slp"></param>
-        //private void showDataItems(StrainListPage slp)
-        //{
-        //    if (slp == null || slp.list==null)
-        //        return;
-        //    foreach (Dictionary<string, string> valMap in slp.list)
-        //    {
-        //        //add valMap note Tag into loadedNoter Map
-        //        int dgvrIdx=-1;
-        //        loadedNoter.TryGetValue(valMap["id"],out dgvrIdx);
-        //        if (dgvrIdx < 0)
-        //        {
-        //            dgvrIdx=itemDGV.Rows.Add();
-        //        }
-        //        foreach (KeyValuePair<string, string> entry in valMap)
-        //        {
-        //            //if itemDGV not contains Column of entry.key
-        //            //   add Column named with entry.key
-        //            //then merge data into itemDGV View.
-        //            //(if this valMap has exist in loadedNoter Map use Update Method else is append Method.) 
-        //            if (!itemDGV.Columns.Contains(entry.Key))
-        //            {
-        //                DataGridViewTextBoxColumn dgvtbc = new DataGridViewTextBoxColumn();
-        //                dgvtbc.Name = entry.Key;
-        //                dgvtbc.HeaderText = entry.Key;
-        //                dgvtbc.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-        //                itemDGV.Columns.Add(dgvtbc);
-        //            }
-        //            DataGridViewCell dgvc = itemDGV.Rows[dgvrIdx].Cells[entry.Key];
-        //            if(dgvc!=null)
-        //            {
-        //                dgvc.Value = entry.Value;
-        //            }
-        //        }
-        //    }
-        //}
-        ///// <summary>
-        ///// 判断分页请求是否存在下一页内容
-        ///// </summary>
-        ///// <param name="slp"></param>
-        ///// <param name="reqPage"></param>
-        ///// <returns></returns>
-        //private bool hasNextPage(StrainListPage slp,int reqPage)
-        //{
-        //    if(slp!=null && slp.totalpage>slp.pageNumber && slp.totalpage>reqPage)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
+        /// <summary>
+        /// 下一个单元格定位，如定位失败返回null
+        /// </summary>
+        /// <returns></returns>
+        private DataGridViewCell nextTextCell(DataGridViewCell cell = null)
+        {
+            DataGridViewCell ncell = null;
+            int rowCount = DGVUtil.getRowCount(itemDGV);
+            int columnCount = DGVUtil.getTextColumnCount(itemDGV);
+            int rowIndex = cell == null ? 0 : cell.RowIndex;
+            int colIndex = cell == null ? 0 : cell.ColumnIndex + 1;
+            if (colIndex >= columnCount)
+            {
+                rowIndex = rowIndex + 1;
+                colIndex = 0;
+            }
+            if (colIndex < columnCount && rowIndex < rowCount)
+            {
+                DataGridViewRow dgvr = itemDGV.Rows[rowIndex];
+                if (!dgvr.IsNewRow)
+                {
+                    ncell = dgvr.Cells[colIndex];
+                    if (ncell.Visible && ncell is DataGridViewTextBoxCell)
+                    {
+                        return ncell;
+                    }
+                    else
+                        return nextTextCell(ncell);
+                }
+            }
+            return ncell;
+        }
     }
 }

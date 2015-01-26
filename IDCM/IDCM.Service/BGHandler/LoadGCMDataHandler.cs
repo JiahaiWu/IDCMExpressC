@@ -32,7 +32,7 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             loadedNoter.Clear();
-            res = LoadGCMItems.loadData(gcmSite, itemDGV, loadedNoter, recordTree, recordView);
+            res = GCMItemsLoader.loadData(gcmSite, itemDGV, loadedNoter, recordTree, recordView);
             return new object[] { res };
         }
        

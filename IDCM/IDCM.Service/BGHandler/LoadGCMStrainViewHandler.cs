@@ -40,7 +40,7 @@ namespace IDCM.Service.BGHandler
         /// <returns></returns>
         public override object doWork(System.ComponentModel.BackgroundWorker worker, bool cancel, List<object> args)
         {
-            TreeView treeView = LoadGCMRecordNode.loadData(gcmSite, strainid, listView_record);
+            TreeView treeView = GCMNodeLoad.loadData(gcmSite, strainid, listView_record);
             if (treeView == null) return new Object();
             TreeViewAsyncUtil.syncClearNodes(treeView_record);
             TreeViewAsyncUtil.syncAddNodes(treeView_record, treeView);

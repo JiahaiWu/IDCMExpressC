@@ -28,7 +28,7 @@ namespace IDCM.Service.UIM
         /// <returns></returns>
         public static bool loadData(GCMSiteMHub gcmSite, DataGridView itemDGV, Dictionary<string, int> loadedNoter, TreeView recordTree, ListView recordView)
         {
-            DGVAsyncUtil.syncClearAll(itemDGV);
+            //DGVAsyncUtil.syncClearAll(itemDGV);
             GCMDataMHub gcmDataHub = new GCMDataMHub();
             int curPage = 1;
             StrainListPage slp = gcmDataHub.strainListQuery(gcmSite, curPage);
@@ -66,7 +66,7 @@ namespace IDCM.Service.UIM
                 //add valMap note Tag into loadedNoter Map
                 int dgvrIdx = -1;
                 loadedNoter.TryGetValue(valMap["id"], out dgvrIdx);
-                if (dgvrIdx < 0)
+                if (dgvrIdx <= 0)
                 {
                     dgvrIdx = itemDGV.RowCount;
                     DGVAsyncUtil.syncAddRow(itemDGV, null, dgvrIdx);

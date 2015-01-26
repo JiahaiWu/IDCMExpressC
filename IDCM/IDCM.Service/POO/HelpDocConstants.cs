@@ -11,5 +11,6 @@ namespace IDCM.Service.POO
     public class HelpDocConstants
     {
         public const string StartViewTag = "StartView";
+        public const string GCMViewTag = "GCMView";
     }
 }

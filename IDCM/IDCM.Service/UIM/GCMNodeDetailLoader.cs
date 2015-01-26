@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace IDCM.Service.UIM
 {
-    public class LoadGCMRecordNodeDetail
+    public class GCMNodeDetailLoader
     {
         /// <summary>
         /// 根据传入的TreeNode，读取Tag内容，用Tag内容构建一个ListView

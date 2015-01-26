@@ -91,9 +91,9 @@
     <Compile Include="POO\HelpDocConstants.cs" />
     <Compile Include="POO\StartInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIM\LoadGCMItems.cs" />
-    <Compile Include="UIM\LoadGCMRecordNode.cs" />
-    <Compile Include="UIM\LoadGCMRecordNodeDetail.cs" />
+    <Compile Include="UIM\GCMItemsLoader.cs" />
+    <Compile Include="UIM\GCMNodeLoad.cs" />
+    <Compile Include="UIM\GCMNodeDetailLoader.cs" />
     <Compile Include="Utils\ComboxAsyncUitl.cs" />
     <Compile Include="Utils\ControlAsyncUtil.cs" />
     <Compile Include="Utils\ControlUtil.cs" />

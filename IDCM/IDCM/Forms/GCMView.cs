@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using IDCM.ViewManager;
 using IDCM.Service.Utils;
 using IDCM.Data.Base;
+using IDCM.Service.Common;
 
 namespace IDCM.Forms
 {
@@ -22,9 +23,6 @@ namespace IDCM.Forms
             dataGridView_items.AllowUserToAddRows = false;
             dataGridView_items.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView_items.EditMode = DataGridViewEditMode.EditOnKeystroke;
-            ////dataGridView_items.TopLeftHeaderCell = new DataGridViewTopLeftHeaderCell();
-            ////dataGridView_items.AdjustedTopLeftHeaderBorderStyle = DataGridViewTopLeftHeaderCell.MeasureTextPreferredSize();
-
         }
 
         private GCMViewManager manager=null;
@@ -72,7 +70,7 @@ namespace IDCM.Forms
         /////////////////////////////////////
         private void toolStripButton_local_Click(object sender, EventArgs e)
         {
-
+            manager.activeGCMView();
         }
 
         private void toolStripButton_down_Click(object sender, EventArgs e)
@@ -82,17 +80,18 @@ namespace IDCM.Forms
 
         private void toolStripButton_refresh_Click(object sender, EventArgs e)
         {
-
+            manager.gcmDataRefresh();
         }
 
         private void toolStripButton_search_Click(object sender, EventArgs e)
         {
-
+            string findTerm = this.toolStripTextBox_search.Text.Trim();
+            manager.quickSearch(findTerm);
         }
 
         private void toolStripButton_help_Click(object sender, EventArgs e)
         {
-
+            manager.requestHelp();
         }
 
         private void btn_search_Click(object sender, EventArgs e)
@@ -105,6 +104,44 @@ namespace IDCM.Forms
 
         }
 
+        /// <summary>
+        /// 设置Datagridview显示行号
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dataGridView_items_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(e.RowBounds.Location.X, e.RowBounds.Location.Y, this.dataGridView_items.RowHeadersWidth - 4, e.RowBounds.Height);
 
+            TextRenderer.DrawText(e.Graphics, (e.RowIndex + 1).ToString(), this.dataGridView_items.RowHeadersDefaultCellStyle.Font, rectangle,
+                this.dataGridView_items.RowHeadersDefaultCellStyle.ForeColor, TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
+            this.dataGridView_items.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+        }
+
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            ExportTypeDlg exportDlg = new ExportTypeDlg();
+            if (exportDlg.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    manager.exportData(ExportTypeDlg.LastOptionValue, ExportTypeDlg.LastFilePath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("数据导出失败。");
+                    log.Info("数据导出失败，错误信息：", ex);
+                }
+            }
+        }
+
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
+        
+        //private void dataGridView_items_CellValueNeeded(object sender, DataGridViewCellValueEventArgs e)
+        //{
+
+        //}
     }
 }
