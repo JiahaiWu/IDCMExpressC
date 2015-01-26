@@ -27,6 +27,7 @@ namespace IDCM.Service.BGHandler
         public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
             bool res=false;
+            DWorkMHub.note(AsyncMessage.StartBackProgress);
             ExcelExporter exporter = new ExcelExporter();
             res = exporter.exportExcel(datasource,xlsPath, cmdstr, tcount);
             return new object[] { res};
@@ -38,6 +39,7 @@ namespace IDCM.Service.BGHandler
         /// <param name="args"></param>
         public override void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
         {
+            DWorkMHub.note(AsyncMessage.EndBackProgress);
             if (canceled)
                 return;
             if (error != null)

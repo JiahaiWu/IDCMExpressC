@@ -31,11 +31,27 @@ namespace IDCM.Service.BGHandler
         public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
             bool res = false;
+            DWorkMHub.note(AsyncMessage.StartBackProgress);
             loadedNoter.Clear();
             res = LoadGCMItems.loadData(gcmSite, itemDGV, loadedNoter, recordTree, recordView);
             return new object[] { res };
         }
-       
+        /// <summary>
+        /// 后台任务执行结束，回调代码段
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="args"></param>
+        public override void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
+        {
+            DWorkMHub.note(AsyncMessage.EndBackProgress);
+            if (canceled)
+                return;
+            if (error != null)
+            {
+                log.Error(error);
+                return;
+            }
+        }
         private GCMSiteMHub gcmSite = null;
         private DataGridView itemDGV = null;
         private TreeView recordTree=null;

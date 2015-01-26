@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 /********************************
 * Individual Data Center of Microbial resources (IDCM)
@@ -38,15 +39,31 @@ namespace IDCM.Service.BGHandler
         /// <param name="cancel"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public override object doWork(System.ComponentModel.BackgroundWorker worker, bool cancel, List<object> args)
+        public override object doWork(BackgroundWorker worker, bool cancel, List<object> args)
         {
+            DWorkMHub.note(AsyncMessage.StartBackProgress);
             TreeView treeView = LoadGCMRecordNode.loadData(gcmSite, strainid, listView_record);
             if (treeView == null) return new Object();
             TreeViewAsyncUtil.syncClearNodes(treeView_record);
             TreeViewAsyncUtil.syncAddNodes(treeView_record, treeView);
             return new Object();
         }
-
+        /// <summary>
+        /// 后台任务执行结束，回调代码段
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="args"></param>
+        public override void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
+        {
+            DWorkMHub.note(AsyncMessage.EndBackProgress);
+            if (canceled)
+                return;
+            if (error != null)
+            {
+                log.Error(error);
+                return;
+            }
+        }
         private GCMSiteMHub gcmSite = null;
         private String strainid;
         private TreeView treeView_record;

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using IDCM.Data.Base;
 using IDCM.Service.Common;
+
 /********************************
  * Individual Data Center of Microbial resources (IDCM)
  * A desktop software package for microbial resources researchers.
@@ -30,6 +31,7 @@ namespace IDCM.Service.BGHandler
         /// <param name="args"></param>
         public override Object doWork(BackgroundWorker worker, bool cancel, List<Object> args)
         {
+            DWorkMHub.note(AsyncMessage.StartBackProgress);
             bool res = false;
             res=LocalRecordMHub.doUpdateProcess(datasource,customTCDList);
             return new object[] { res};
@@ -41,6 +43,7 @@ namespace IDCM.Service.BGHandler
         /// <param name="args"></param>
         public override void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
         {
+            DWorkMHub.note(AsyncMessage.EndBackProgress);
             if (canceled)
                 return;
             if (error != null)
