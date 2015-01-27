@@ -177,7 +177,7 @@ namespace IDCM.Forms
                         return nextCell(reverse);
                     }
                     int colIndex = found_colIndex < 0 ? 0 : found_colIndex + 1;
-                    if (colIndex >= DGVUtil.getTextColumnCount(dgvPool[arrayIndex]))
+                    if (colIndex >= dgvPool[arrayIndex].ColumnCount-1)
                     {
                         found_rowIndex = rowIndex + 1;
                         found_colIndex = -2;
@@ -186,6 +186,11 @@ namespace IDCM.Forms
                     if (arrayIndex < dgvPool.Count)
                     {
                         ncell = dgvPool[arrayIndex].Rows[rowIndex].Cells[colIndex];
+                        if (ncell.Visible == false || !(ncell is DataGridViewTextBoxCell))
+                        {
+                            found_colIndex = colIndex+1;
+                            return nextCell(reverse);
+                        }
                         found_arrayIndex = arrayIndex;
                         found_rowIndex = rowIndex;
                         found_colIndex = colIndex;
@@ -204,7 +209,7 @@ namespace IDCM.Forms
                         found_rowIndex = -2;
                         return nextCell(reverse);
                     }
-                    int colIndex = found_colIndex < -1 ? DGVUtil.getTextColumnCount(dgvPool[arrayIndex]) - 1 : found_colIndex - 1;
+                    int colIndex = found_colIndex < -1 ? dgvPool[arrayIndex].ColumnCount - 1 : found_colIndex - 1;
                     if (colIndex < 0)
                     {
                         found_rowIndex = rowIndex - 1;
@@ -214,6 +219,11 @@ namespace IDCM.Forms
                     if (arrayIndex > -1)
                     {
                         ncell = dgvPool[arrayIndex].Rows[rowIndex].Cells[colIndex];
+                        if (ncell.Visible == false || !(ncell is DataGridViewTextBoxCell))
+                        {
+                            found_colIndex = colIndex - 1;
+                            return nextCell(reverse);
+                        }
                         found_arrayIndex = arrayIndex;
                         found_rowIndex = rowIndex;
                         found_colIndex = colIndex;
