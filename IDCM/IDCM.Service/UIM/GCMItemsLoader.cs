@@ -24,9 +24,9 @@ namespace IDCM.Service.UIM
         /// <param name="itemDGV"></param>
         /// <param name="loadedNoter"></param>
         /// <param name="recordTree"></param>
-        /// <param name="recordView"></param>
+        /// <param name="recordList"></param>
         /// <returns></returns>
-        public static bool loadData(GCMSiteMHub gcmSite, DataGridView itemDGV, Dictionary<string, int> loadedNoter, TreeView recordTree, ListView recordView)
+        public static bool loadData(GCMSiteMHub gcmSite, DataGridView itemDGV, Dictionary<string, int> loadedNoter, TreeView recordTree, ListView recordList)
         {
             GCMDataMHub gcmDataHub = new GCMDataMHub();
             int curPage = 1;
@@ -40,7 +40,7 @@ namespace IDCM.Service.UIM
             }
             if (loadedNoter.Count > 0)
             {
-                TreeView treeNode = GCMNodeLoad.loadData(gcmSite, loadedNoter.First().Key, recordView);
+                TreeView treeNode = GCMNodeLoad.loadData(gcmSite, loadedNoter.First().Key, recordList);
                 if (treeNode == null) return true;
                 TreeViewAsyncUtil.syncClearNodes(recordTree);
                 TreeViewAsyncUtil.syncAddNodes(recordTree,treeNode);

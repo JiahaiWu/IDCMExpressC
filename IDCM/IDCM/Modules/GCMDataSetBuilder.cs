@@ -41,6 +41,20 @@ namespace IDCM.Modules
         }
         #endregion
 
+        /// <summary>
+        /// 添加一列CheckBoxColumn
+        /// </summary>
+        public void addCheckBoxColumn()
+        {
+            DataGridViewCheckBoxColumn chxCol = new DataGridViewCheckBoxColumn();
+            chxCol.ReadOnly = true;
+            chxCol.Resizable = DataGridViewTriState.False;
+            chxCol.FlatStyle = FlatStyle.Popup;
+            chxCol.CellTemplate.Style.ForeColor = Color.LightGray;
+            chxCol.Width = 25;
+            itemDGV.Columns.Add(chxCol);
+        }
+
         public DataGridViewCell quickSearch(string findTerm)
         {
             if (findTerm.Length > 0)
@@ -131,7 +145,7 @@ namespace IDCM.Modules
                                         oCell.Style.BackColor = Color.Tomato;
                                     }
                                     else
-                                        iFail++;//only traps a fail if the data has changed and you are pasting into a read only cell
+                                        iFail++;
                                 }
                             }
                             else

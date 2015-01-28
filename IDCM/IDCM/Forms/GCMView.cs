@@ -136,7 +136,7 @@ namespace IDCM.Forms
             }
         }
 
-        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+        
 
         private void copyCtrlCToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -166,5 +166,7 @@ namespace IDCM.Forms
                 manager.PasteClipboard();
             }
         }
+
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
     }
 }
