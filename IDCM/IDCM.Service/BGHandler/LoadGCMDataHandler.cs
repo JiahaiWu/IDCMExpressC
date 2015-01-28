@@ -32,7 +32,6 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
-            loadedNoter.Clear();
             res = GCMItemsLoader.loadData(gcmSite, itemDGV, loadedNoter, recordTree, recordView);
             return new object[] { res };
         }

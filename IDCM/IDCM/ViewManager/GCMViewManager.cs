@@ -89,7 +89,6 @@ namespace IDCM.ViewManager
                 datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
                 BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
             }
-            AuthInfo auth = DataSourceHolder.GCMHolder.getSignedAuthInfo();
             if (activeShow)
             {
                 gcmView.WindowState = FormWindowState.Maximized;
@@ -279,6 +278,17 @@ namespace IDCM.ViewManager
                     MessageBox.Show("Unsupport export type!");
                     break;
             }
+        }
+
+        internal void CopyClipboard()
+        {
+            DataObject d = gcmView.getItemGridView().GetClipboardContent();
+            Clipboard.SetDataObject(d);
+        }
+
+        internal void PasteClipboard()
+        {
+            datasetBuilder.PasteClipboard();
         }
     }
 }

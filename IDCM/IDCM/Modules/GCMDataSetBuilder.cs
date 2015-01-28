@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -97,6 +98,58 @@ namespace IDCM.Modules
                 }
             }
             return ncell;
+        }
+
+        /// <summary>
+        /// 从剪贴板粘贴文本型数据记录到目标区域
+        /// This will be moved to the util class so it can service any paste into a DGV
+        /// </summary>
+        internal void PasteClipboard()
+        {
+            try
+            {
+                string s = Clipboard.GetText();
+                string[] lines = s.Split('\n');
+                int iFail = 0, iRow = itemDGV.CurrentCell.RowIndex;
+                int iCol = itemDGV.CurrentCell.ColumnIndex;
+                DataGridViewCell oCell;
+                foreach (string line in lines)
+                {
+                    if (iRow < itemDGV.RowCount && line.Length > 0)
+                    {
+                        string[] sCells = line.Split('\t');
+                        for (int i = 0; i < sCells.GetLength(0); ++i)
+                        {
+                            if (iCol + i < this.itemDGV.ColumnCount)
+                            {
+                                oCell = itemDGV[iCol + i, iRow];
+                                if (!oCell.ReadOnly)
+                                {
+                                    if (oCell.Value == null || oCell.Value.ToString() != sCells[i])
+                                    {
+                                        oCell.Value = Convert.ChangeType(sCells[i], oCell.ValueType);
+                                        oCell.Style.BackColor = Color.Tomato;
+                                    }
+                                    else
+                                        iFail++;//only traps a fail if the data has changed and you are pasting into a read only cell
+                                }
+                            }
+                            else
+                            { break; }
+                        }
+                        iRow++;
+                    }
+                    else
+                    { break; }
+                    if (iFail > 0)
+                        MessageBox.Show(string.Format("{0} updates failed due to read only column setting", iFail));
+                }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("The data you pasted is in the wrong format for the cell");
+                return;
+            }
         }
     }
 }
