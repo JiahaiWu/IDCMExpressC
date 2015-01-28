@@ -275,10 +275,10 @@ namespace IDCM.ViewManager
                     handler = new GcmExcelExportHandler(fpath, gcmView.getItemGridView());
                     DWorkMHub.callAsyncHandle(handler);
                     break;
-                //case ExportType.JSONList:
-                //    handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value);
-                //    DWorkMHub.callAsyncHandle(handler);
-                //    break;
+                case ExportType.JSONList:
+                    handler = new GcmJSONExportHandler(gcmView.getItemGridView(),fpath);
+                    DWorkMHub.callAsyncHandle(handler);
+                    break;
                 case ExportType.TSV:
                     handler = new GCMTextExportHandler(fpath,gcmView.getItemGridView(),"/t");
                     DWorkMHub.callAsyncHandle(handler);
