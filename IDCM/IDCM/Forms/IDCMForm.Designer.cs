@@ -40,7 +40,6 @@
             this.ToolStripMenuItem_tool = new System.Windows.Forms.ToolStripMenuItem();
             this.localSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onlineSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.frontPageSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_window = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showConsoleToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,21 +84,21 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.newToolStripMenuItem.Text = "New...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -131,8 +130,7 @@
             // 
             this.ToolStripMenuItem_tool.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.localSearchToolStripMenuItem,
-            this.onlineSearchToolStripMenuItem,
-            this.frontPageSearchToolStripMenuItem});
+            this.onlineSearchToolStripMenuItem});
             this.ToolStripMenuItem_tool.Name = "ToolStripMenuItem_tool";
             this.ToolStripMenuItem_tool.Size = new System.Drawing.Size(71, 23);
             this.ToolStripMenuItem_tool.Text = "Tools (T)";
@@ -141,23 +139,14 @@
             // localSearchToolStripMenuItem
             // 
             this.localSearchToolStripMenuItem.Name = "localSearchToolStripMenuItem";
-            this.localSearchToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.localSearchToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.localSearchToolStripMenuItem.Text = "Local Search";
-            this.localSearchToolStripMenuItem.Click += new System.EventHandler(this.localSearchToolStripMenuItem_Click);
             // 
             // onlineSearchToolStripMenuItem
             // 
             this.onlineSearchToolStripMenuItem.Name = "onlineSearchToolStripMenuItem";
-            this.onlineSearchToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.onlineSearchToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.onlineSearchToolStripMenuItem.Text = "Online Search";
-            this.onlineSearchToolStripMenuItem.Click += new System.EventHandler(this.onlineSearchToolStripMenuItem_Click);
-            // 
-            // frontPageSearchToolStripMenuItem
-            // 
-            this.frontPageSearchToolStripMenuItem.Name = "frontPageSearchToolStripMenuItem";
-            this.frontPageSearchToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.frontPageSearchToolStripMenuItem.Text = "Front Page Search";
-            this.frontPageSearchToolStripMenuItem.Click += new System.EventHandler(this.frontPageSearchToolStripMenuItem_Click);
             // 
             // ToolStripMenuItem_window
             // 
@@ -228,7 +217,7 @@
             this.ToolStripTextBox_user.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
             this.ToolStripTextBox_user.ReadOnly = true;
             this.ToolStripTextBox_user.ShortcutsEnabled = false;
-            this.ToolStripTextBox_user.Size = new System.Drawing.Size(250, 23);
+            this.ToolStripTextBox_user.Size = new System.Drawing.Size(220, 23);
             this.ToolStripTextBox_user.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // IDCMForm
@@ -272,7 +261,6 @@
         private System.Windows.Forms.ToolStripMenuItem showConsoleToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem templatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem authToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem frontPageSearchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showBackTaskToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox ToolStripTextBox_user;
     }

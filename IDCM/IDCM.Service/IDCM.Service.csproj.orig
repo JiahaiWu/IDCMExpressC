@@ -68,16 +68,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="BGHandler\GcmExcelExportHandler.cs" />
     <Compile Include="BGHandler\GcmJSONExportHandler.cs" />
     <Compile Include="BGHandler\GCMTextExportHandler.cs" />
-    <Compile Include="BGHandler\GCMXMLExportHandler.cs" />
-    <Compile Include="BGHandler\XMLExportHandler.cs" />
     <Compile Include="DataTransfer\GCMExcelExporter.cs" />
     <Compile Include="DataTransfer\GCMJSONExporter.cs" />
     <Compile Include="DataTransfer\GCMTextExporter.cs" />
-    <Compile Include="DataTransfer\GCMXMLExporter.cs" />
+=======
+    <Compile Include="BGHandler\XMLExportHandler.cs" />
     <Compile Include="DataTransfer\XMLExporter.cs" />
+>>>>>>> github/master
     <Compile Include="UIM\BackProgressIndicator.cs" />
     <Compile Include="BGHandler\ExcelExportHandler.cs" />
     <Compile Include="BGHandler\ExcelImportHandler.cs" />

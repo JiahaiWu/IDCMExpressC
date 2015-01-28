@@ -291,116 +291,116 @@ namespace IDCM.ViewManager
             return true;
         }
         
-        public void showDBDataSearch()
-        {
-            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
-            if (mi != null)
-            {
-                HomeViewManager hvManager = (HomeViewManager)mi;
-                if (hvManager != null)
-                {
-                    if (hvManager.isActive())
-                    {
-                        hvManager.showDBDataSearch();
-                    }
-                }
-            }
-        }
-        public void frontDataSearch()
-        {
-            bool useHomeView = false;
-            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
-            if (mi != null)
-            {
-                HomeViewManager hvManager = (HomeViewManager)mi;
-                if (hvManager != null)
-                {
-                    if (hvManager.isActive())
-                    {
-                        useHomeView = true;
-                        hvManager.frontDataSearch();
-                    }
-                }
-            }
-            if (useHomeView == false)
-            {
-                mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
-                if (mi != null)
-                {
-                    GCMViewManager gcmvManager = (GCMViewManager)mi;
-                    if (gcmvManager != null)
-                    {
-                        if (gcmvManager.isActive())
-                        {
-                            gcmvManager.frontDataSearch();
-                        }
-                    }
-                }
-            }
-        }
-        public void frontSearchNext()
-        {
-            bool useHomeView = false;
-            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
-            if (mi != null)
-            {
-                HomeViewManager hvManager = (HomeViewManager)mi;
-                if (hvManager != null)
-                {
-                    if (hvManager.isActive())
-                    {
-                        useHomeView = true;
-                        hvManager.frontSearchNext();
-                    }
-                }
-            }
-            if (useHomeView == false)
-            {
-                mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
-                if (mi != null)
-                {
-                    GCMViewManager gcmvManager = (GCMViewManager)mi;
-                    if (gcmvManager != null)
-                    {
-                        if (gcmvManager.isActive())
-                        {
-                            gcmvManager.frontSearchNext();
-                        }
-                    }
-                }
-            }
-        }
-        public void frontSearchPrev()
-        {
-            bool useHomeView = false;
-            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
-            if (mi != null)
-            {
-                HomeViewManager hvManager = (HomeViewManager)mi;
-                if (hvManager != null)
-                {
-                    if (hvManager.isActive())
-                    {
-                        useHomeView = true;
-                        hvManager.frontSearchPrev();
-                    }
-                }
-            }
-            if (useHomeView == false)
-            {
-                mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
-                if (mi != null)
-                {
-                    GCMViewManager gcmvManager = (GCMViewManager)mi;
-                    if (gcmvManager != null)
-                    {
-                        if (gcmvManager.isActive())
-                        {
-                            gcmvManager.frontSearchPrev();
-                        }
-                    }
-                }
-            }
-        }
+        //public void showDBDataSearch()
+        //{
+        //    ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+        //    if (mi != null)
+        //    {
+        //        HomeViewManager hvManager = (HomeViewManager)mi;
+        //        if (hvManager != null)
+        //        {
+        //            if (hvManager.isActive())
+        //            {
+        //                hvManager.showDBDataSearch();
+        //            }
+        //        }
+        //    }
+        //}
+        //public void frontDataSearch()
+        //{
+        //    bool useHomeView = false;
+        //    ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+        //    if (mi != null)
+        //    {
+        //        HomeViewManager hvManager = (HomeViewManager)mi;
+        //        if (hvManager != null)
+        //        {
+        //            if (hvManager.isActive())
+        //            {
+        //                useHomeView = true;
+        //                hvManager.frontDataSearch();
+        //            }
+        //        }
+        //    }
+        //    if (useHomeView == false)
+        //    {
+        //        mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+        //        if (mi != null)
+        //        {
+        //            GCMViewManager gcmvManager = (GCMViewManager)mi;
+        //            if (gcmvManager != null)
+        //            {
+        //                if (gcmvManager.isActive())
+        //                {
+        //                    gcmvManager.frontDataSearch();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+        //public void frontSearchNext()
+        //{
+        //    bool useHomeView = false;
+        //    ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+        //    if (mi != null)
+        //    {
+        //        HomeViewManager hvManager = (HomeViewManager)mi;
+        //        if (hvManager != null)
+        //        {
+        //            if (hvManager.isActive())
+        //            {
+        //                useHomeView = true;
+        //                hvManager.frontSearchNext();
+        //            }
+        //        }
+        //    }
+        //    if (useHomeView == false)
+        //    {
+        //        mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+        //        if (mi != null)
+        //        {
+        //            GCMViewManager gcmvManager = (GCMViewManager)mi;
+        //            if (gcmvManager != null)
+        //            {
+        //                if (gcmvManager.isActive())
+        //                {
+        //                    gcmvManager.frontSearchNext();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+        //public void frontSearchPrev()
+        //{
+        //    bool useHomeView = false;
+        //    ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+        //    if (mi != null)
+        //    {
+        //        HomeViewManager hvManager = (HomeViewManager)mi;
+        //        if (hvManager != null)
+        //        {
+        //            if (hvManager.isActive())
+        //            {
+        //                useHomeView = true;
+        //                hvManager.frontSearchPrev();
+        //            }
+        //        }
+        //    }
+        //    if (useHomeView == false)
+        //    {
+        //        mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+        //        if (mi != null)
+        //        {
+        //            GCMViewManager gcmvManager = (GCMViewManager)mi;
+        //            if (gcmvManager != null)
+        //            {
+        //                if (gcmvManager.isActive())
+        //                {
+        //                    gcmvManager.frontSearchPrev();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

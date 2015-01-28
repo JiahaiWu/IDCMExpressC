@@ -24,9 +24,9 @@ namespace IDCM.Forms
         {
             dgvPool = new List<DataGridView>(dgvs.Length);
             dgvPool.AddRange(dgvs);
-            if (lastFindTerm != null && lastFindTerm.Length > 0)
-                this.comboBox_find.FormatString = lastFindTerm;
             InitializeComponent();
+            if (lastFindTerm != null && lastFindTerm.Length > 0)
+                this.comboBox_find.FormatString = lastFindTerm; 
         }
         ~GCMFrontFindDlg()
         {
@@ -142,6 +142,7 @@ namespace IDCM.Forms
         /// <returns></returns>
         private bool checkItemMatch(string testTerm, string cellText, bool matchCase = false, bool matchAll = false)
         {
+            Console.WriteLine("cell.value = "+cellText);
             if (cellText == null)
                 return false;
             if (matchAll)
@@ -197,7 +198,9 @@ namespace IDCM.Forms
                         found_rowIndex = rowIndex;
                         found_colIndex = colIndex;
                     }
+                    Console.WriteLine("第："+rowIndex+"行，第"+colIndex+"列");
                 }
+                
             }
             else
             {

@@ -150,6 +150,32 @@ namespace IDCM.Forms
             manager.PasteClipboard();
         }
 
+        /******************************************************************
+         * 键盘事件处理方法
+         * @auther JiahaiWu 2014-03-17
+         ******************************************************************/
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                //case Keys.Control | Keys.F://打开查找菜单
+                //    manager.showDBDataSearch();
+                //    break;
+                case Keys.Control | Keys.Shift | Keys.F://打开前端记录查找菜单
+                    manager.frontDataSearch();
+                    break;
+                case Keys.Control | Keys.Shift | Keys.N:
+                    manager.frontSearchNext();
+                    break;
+                case Keys.Control | Keys.Shift | Keys.P:
+                    manager.frontSearchPrev();
+                    break;
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
+            }
+            return true;
+        }
+
         /// <summary>
         /// 绑定剪贴板复制粘贴的快捷键处理Ctrl+C Ctrl+V Shift+Delete 及 Shift+Insert
         /// </summary>

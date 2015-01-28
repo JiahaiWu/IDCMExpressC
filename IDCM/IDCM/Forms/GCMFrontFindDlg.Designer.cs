@@ -122,7 +122,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GCMFrontFindDlg";
-            this.Text = "Front Find";
+            this.Text = "GCM Front Find";
             this.Load += new System.EventHandler(this.FrontFindDlg_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

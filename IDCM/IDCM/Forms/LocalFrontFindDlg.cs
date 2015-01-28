@@ -22,9 +22,9 @@ namespace IDCM.Forms
         {
             dgvPool = new List<DataGridView>(dgvs.Length);
             dgvPool.AddRange(dgvs);
+            InitializeComponent();
             if (lastFindTerm != null && lastFindTerm.Length > 0)
                 this.comboBox_find.FormatString = lastFindTerm;
-            InitializeComponent();
         }
         ~LocalFrontFindDlg()
         {

@@ -165,7 +165,7 @@ namespace IDCM.ViewManager
         /// 载入数据显示
         /// 注意：
         /// 1：想了一下，不在在这用串联，加载TreeView需要strain_id。
-        /// 如果以后参数内容增多只能在handler内部使用增加串联
+        /// 如果以后参数内容增多只能在handler内部增加串联
         /// </summary>
         public void loadDataSetView()
         {
@@ -296,6 +296,10 @@ namespace IDCM.ViewManager
                     break;
                 case ExportType.CSV:
                     handler = new GCMTextExportHandler(fpath, gcmView.getItemGridView(), ",");
+                    DWorkMHub.callAsyncHandle(handler);
+                    break;
+                case ExportType.XML:
+                    handler = new GCMXMLExportHandler(gcmView.getItemGridView(),fpath);
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 default:
