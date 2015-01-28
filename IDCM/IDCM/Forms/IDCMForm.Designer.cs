@@ -80,25 +80,26 @@
             this.ToolStripMenuItem_file.Name = "ToolStripMenuItem_file";
             this.ToolStripMenuItem_file.Size = new System.Drawing.Size(57, 23);
             this.ToolStripMenuItem_file.Text = "File (F)";
+            this.ToolStripMenuItem_file.DropDownOpening += new System.EventHandler(this.ToolStripMenuItem_file_DropDownOpening);
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newToolStripMenuItem.Text = "New...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
@@ -167,6 +168,7 @@
             this.ToolStripMenuItem_window.Name = "ToolStripMenuItem_window";
             this.ToolStripMenuItem_window.Size = new System.Drawing.Size(91, 23);
             this.ToolStripMenuItem_window.Text = "Window (W)";
+            this.ToolStripMenuItem_window.DropDownOpening += new System.EventHandler(this.ToolStripMenuItem_window_DropDownOpening);
             // 
             // closeAllToolStripMenuItem
             // 
@@ -226,7 +228,7 @@
             this.ToolStripTextBox_user.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
             this.ToolStripTextBox_user.ReadOnly = true;
             this.ToolStripTextBox_user.ShortcutsEnabled = false;
-            this.ToolStripTextBox_user.Size = new System.Drawing.Size(230, 23);
+            this.ToolStripTextBox_user.Size = new System.Drawing.Size(250, 23);
             this.ToolStripTextBox_user.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // IDCMForm

@@ -507,12 +507,16 @@ namespace IDCM.Forms
                     DataGridViewSelectedRowCollection rowCollection = e.Data.GetData(typeof(DataGridViewSelectedRowCollection)) as DataGridViewSelectedRowCollection;
                     if (rowCollection != null)
                     {
-                        foreach (DataGridViewRow row in rowCollection)
+                        DataGridViewColumn dgvc = dataGridView_items.Columns[CTDRecordA.CTD_RID];
+                        if (dgvc != null)
                         {
-                            int lid = Convert.ToInt32(targetNode.Name);
-                            int plid = Convert.ToInt32(targetNode.Parent.Name);
-                            long rid = Convert.ToInt64(row.Cells[CTDRecordA.CTD_RID].Value.ToString());
-                            manager.updateCTCRecordLid(lid, plid, rid);
+                            foreach (DataGridViewRow row in rowCollection)
+                            {
+                                int lid = Convert.ToInt32(targetNode.Name);
+                                int plid = Convert.ToInt32(targetNode.Parent.Name);
+                                long rid = Convert.ToInt64(row.Cells[dgvc.Index].Value.ToString());
+                                manager.updateCTCRecordLid(lid, plid, rid);
+                            }
                         }
                         manager.updateCatRecCount();
                     }

@@ -69,6 +69,8 @@ namespace IDCM.Service.Common
                 authInfo.LoginFlag = auth.LoginFlag;
                 authInfo.Jsessionid = auth.Jsessionid;
                 authInfo.Timestamp = auth.Timestamp;
+                string tip = authInfo.LoginFlag ? authInfo.Username : null;
+                DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip, tip == null ? null : new string[] { tip }));
             }
         }
         /// <summary>
@@ -89,6 +91,8 @@ namespace IDCM.Service.Common
                         authInfo.LoginFlag = auth.LoginFlag;
                         authInfo.Jsessionid = auth.Jsessionid;
                         authInfo.Timestamp = auth.Timestamp;
+                        string tip = authInfo.LoginFlag ? authInfo.Username : null;
+                        DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip, tip == null ? null : new string[] { tip }));
                     }
                 }
                 return (authInfo != null && authInfo.LoginFlag) ? authInfo : null;
@@ -106,6 +110,8 @@ namespace IDCM.Service.Common
                 signMonitor.Stop();
                 signMonitor = null;
                 SignExecutor.SignOff(authInfo);
+                string tip = authInfo.LoginFlag ? authInfo.Username : null;
+                DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip, tip == null ? null : new string[] { tip }));
             }
             if (cancelDefaultWorkSpace)
             {

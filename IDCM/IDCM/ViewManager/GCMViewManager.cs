@@ -92,7 +92,6 @@ namespace IDCM.ViewManager
                 BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());
                 searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             }
-            AuthInfo auth = DataSourceHolder.GCMHolder.getSignedAuthInfo();
             if (activeShow)
             {
                 gcmView.WindowState = FormWindowState.Maximized;
