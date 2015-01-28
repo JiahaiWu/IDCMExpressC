@@ -68,6 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BGHandler\XMLExportHandler.cs" />
+    <Compile Include="DataTransfer\XMLExporter.cs" />
     <Compile Include="UIM\BackProgressIndicator.cs" />
     <Compile Include="BGHandler\ExcelExportHandler.cs" />
     <Compile Include="BGHandler\ExcelImportHandler.cs" />

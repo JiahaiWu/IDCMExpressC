@@ -224,6 +224,10 @@ namespace IDCM.ViewManager
                     handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
                     DWorkMHub.callAsyncHandle(handler);
                     break;
+                case ExportType.XML:
+                    handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
+                    DWorkMHub.callAsyncHandle(handler);
+                    break;
                 default:
                     MessageBox.Show("Unsupport export type!");
                     break;

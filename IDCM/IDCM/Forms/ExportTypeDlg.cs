@@ -50,6 +50,11 @@ namespace IDCM.Forms
                 lastOptionValue = ExportType.TSV;
                 suffix = ".tsv";
             }
+            if (radioButton_xml.Checked)
+            {
+                lastOptionValue = ExportType.XML;
+                suffix = ".xml";
+            }
             return suffix;
         }
         private void button_confirm_Click(object sender, EventArgs e)
@@ -93,9 +98,11 @@ namespace IDCM.Forms
             if (radioButton_json.Checked)
                 fbd.Filter = "JSON File(*.jso)|*.jso;";
             if (radioButton_csv.Checked)
-                fbd.Filter = "Text File(*.csv)|*.csv;";
+                fbd.Filter = "CSV File(*.csv)|*.csv;";
             if (radioButton_tsv.Checked)
                 fbd.Filter = "Text File(*.tsv)|*.tsv;";
+            if (radioButton_xml.Checked)
+                fbd.Filter = "XML File(*.xml)|*.xml;";
             fbd.SupportMultiDottedExtensions = false;
             fbd.OverwritePrompt = true;
             if (fbd.ShowDialog() == DialogResult.OK)
@@ -105,7 +112,7 @@ namespace IDCM.Forms
         }
 
         private static ExportType lastOptionValue = ExportType.Excel;
-        private static string lastFilePath = "C:\\";
+        private static string lastFilePath = "C:\\idcm_export";
 
         public static string LastFilePath
         {
