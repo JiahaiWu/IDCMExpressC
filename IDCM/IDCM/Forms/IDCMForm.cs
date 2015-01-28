@@ -175,7 +175,36 @@ namespace IDCM.Forms
                     frontPageSearchToolStripMenuItem.Enabled = true;
                 }
             }
+            
         }
+        private void ToolStripMenuItem_file_DropDownOpening(object sender, EventArgs e)
+        {
+            if (IDCM.Core.DataSourceHolder.InWorking)
+            {
+                closeToolStripMenuItem.Enabled = true;
+                newToolStripMenuItem.Enabled = false;
+                openToolStripMenuItem.Enabled = false;
+            }
+            else
+            {
+                closeToolStripMenuItem.Enabled = false;
+                newToolStripMenuItem.Enabled = true;
+                openToolStripMenuItem.Enabled = true;
+            }
+        }
+
+        private void ToolStripMenuItem_window_DropDownOpening(object sender, EventArgs e)
+        {
+            if (IDCM.Core.DataSourceHolder.InWorking)
+            {
+                showBackTaskToolStripMenuItem.Enabled = true;
+            }
+            else
+            {
+                showBackTaskToolStripMenuItem.Enabled = false;
+            }
+        }
+
         /// <summary>
         /// 根据HomeView打开状态控制菜单栏Configuration选项下的菜单的可用状态
         /// </summary>
@@ -183,19 +212,26 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void ToolStripMenuItem_cfg_DropDownOpening(object sender, EventArgs e)
         {
-            ManagerI hvManager = manager.getHomeViewManager();
-            templatesToolStripMenuItem.Enabled = false;
-            authToolStripMenuItem.Enabled = true;
-            if (hvManager != null)
+            if (IDCM.Core.DataSourceHolder.InWorking)
             {
-                if (hvManager.isActive())
+                ManagerI hvManager = manager.getHomeViewManager();
+                templatesToolStripMenuItem.Enabled = false;
+                authToolStripMenuItem.Enabled = true;
+                if (hvManager != null)
                 {
-                    templatesToolStripMenuItem.Enabled = true;
+                    if (hvManager.isActive())
+                    {
+                        templatesToolStripMenuItem.Enabled = true;
+                    }
+                    else
+                    {
+                        templatesToolStripMenuItem.Enabled = false;
+                    }
                 }
-                else
-                {
-                    templatesToolStripMenuItem.Enabled = false;
-                }
+            }
+            else
+            {
+                templatesToolStripMenuItem.Enabled = false;
             }
         }
 
@@ -223,6 +259,7 @@ namespace IDCM.Forms
         {
             manager.closeWorkSpace();
         }
+
 
 
     }

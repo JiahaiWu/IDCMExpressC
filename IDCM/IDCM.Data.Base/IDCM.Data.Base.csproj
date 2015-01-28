@@ -80,6 +80,7 @@
     <Compile Include="Utils\HashUtil.cs" />
     <Compile Include="Utils\StringSimilarity.cs" />
     <Compile Include="Utils\StringUtil.cs" />
+    <Compile Include="IDCMViewException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -35,6 +35,7 @@ namespace IDCM.ViewManager
             frontFindDlg.cancelCellHit += new GCMFrontFindDlg.CancelHit<DataGridViewCell>(DGVUtil.cancelDGVCellHit);
            
             datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
+            searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
         }
 
@@ -49,6 +50,7 @@ namespace IDCM.ViewManager
         //页面窗口实例
         private volatile GCMView gcmView = null;
         private volatile GCMDataSetBuilder datasetBuilder = null;
+        private volatile GCMSearchBuilder searchBuilder = null;
         private GCMFrontFindDlg frontFindDlg = null;
         
         #endregion
@@ -60,6 +62,11 @@ namespace IDCM.ViewManager
             {
                 datasetBuilder.Dispose();
                 datasetBuilder = null;
+            }
+            if (searchBuilder != null)
+            {
+                searchBuilder.Dispose();
+                searchBuilder = null;
             }
             if (gcmView != null && !gcmView.IsDisposed)
             {
@@ -86,8 +93,12 @@ namespace IDCM.ViewManager
                 gcmView = new GCMView();
                 gcmView.setManager(this);
 
+                gcmView.Shown += OnGcmView_Shown;
+                gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;
+                gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;
                 datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
-                BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
+                BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());
+                searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             }
             if (activeShow)
             {

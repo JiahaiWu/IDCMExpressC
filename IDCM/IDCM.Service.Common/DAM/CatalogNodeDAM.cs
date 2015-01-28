@@ -92,7 +92,7 @@ namespace IDCM.Service.Common.DAM
                     cmd += "update " + typeof(CatalogNode).Name + " set lorder=lorder+1 where lorder>=" + instance.Lorder + ";";
                 }
                 cmd += "insert into " + typeof(CatalogNode).Name + "(lid,name,type,pid,lorder) values("
-                    + instance.Lid + ",'" + instance.Name + "','" + instance.Type + "'," + (instance.Pid > 0 ? instance.Pid.ToString() : "null") + "," + instance.Lorder + ");";
+                    + instance.Lid + ",'" + instance.Name + "','" + instance.Type + "'," + (instance.Pid > 0 ? instance.Pid.ToString() : "-1") + "," + instance.Lorder + ");";
                 ic = DataSupporter.executeSQL(wsm, cmd);
             }
 #if DEBUG

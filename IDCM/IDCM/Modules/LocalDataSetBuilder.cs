@@ -739,7 +739,7 @@ namespace IDCM.Modules
                 }
                 while ((ncell = nextTextCell(ncell)) != null)
                 {
-                    string cellval = DGVUtil.getCellValue(ncell);
+                    string cellval = DGVUtil.getCellValue(ncell,"");
                     if (cellval.ToLower().Contains(findTerm.ToLower()))
                     {
                         return ncell;

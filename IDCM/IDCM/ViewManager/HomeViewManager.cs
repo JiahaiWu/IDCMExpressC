@@ -224,6 +224,10 @@ namespace IDCM.ViewManager
                     handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
                     DWorkMHub.callAsyncHandle(handler);
                     break;
+                case ExportType.XML:
+                    handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
+                    DWorkMHub.callAsyncHandle(handler);
+                    break;
                 default:
                     MessageBox.Show("Unsupport export type!");
                     break;
@@ -325,9 +329,15 @@ namespace IDCM.ViewManager
         }
         private void setDGVCellHit(DataGridViewCell cell)
         {
+            if (cell.Visible == false)
+                return;
             cell.DataGridView.EndEdit();
             int colCount = DGVUtil.getTextColumnCount(cell.DataGridView);
             DataGridViewCell rightCell = cell.DataGridView.Rows[cell.RowIndex].Cells[colCount - 1];
+            while (rightCell.Visible == false && rightCell.ColumnIndex > -1)
+            {
+                rightCell = rightCell.OwningRow.Cells[rightCell.ColumnIndex - 1];
+            }
             cell.DataGridView.CurrentCell = rightCell;
             cell.DataGridView.CurrentCell = cell;
             cell.Selected = true;
@@ -335,6 +345,8 @@ namespace IDCM.ViewManager
         }
         private void cancelDGVCellHit(DataGridViewCell cell)
         {
+            if (cell.Visible == false)
+                return;
             cell.DataGridView.EndEdit();
             cell.Selected = false;
         }
