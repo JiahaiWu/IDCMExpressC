@@ -277,29 +277,29 @@ namespace IDCM.ViewManager
         }
 
         //导出
-        internal void exportData(ExportType etype, string fpath)
+        internal void exportData(ExportType etype, string fpath,bool exportStrainTree)
         {
             AbsHandler handler = null;
             switch (etype)
             {
                 case ExportType.Excel:
-                    handler = new GcmExcelExportHandler(fpath, gcmView.getItemGridView());
+                    handler = new GcmExcelExportHandler(fpath, gcmView.getItemGridView(), exportStrainTree);
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 case ExportType.JSONList:
-                    handler = new GcmJSONExportHandler(gcmView.getItemGridView(),fpath);
+                    handler = new GcmJSONExportHandler(gcmView.getItemGridView(), fpath, exportStrainTree);
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 case ExportType.TSV:
-                    handler = new GCMTextExportHandler(fpath,gcmView.getItemGridView(),"/t");
+                    handler = new GCMTextExportHandler(fpath, gcmView.getItemGridView(), exportStrainTree,"/t");
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 case ExportType.CSV:
-                    handler = new GCMTextExportHandler(fpath, gcmView.getItemGridView(), ",");
+                    handler = new GCMTextExportHandler(fpath, gcmView.getItemGridView(), exportStrainTree, ",");
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 case ExportType.XML:
-                    handler = new GCMXMLExportHandler(gcmView.getItemGridView(),fpath);
+                    handler = new GCMXMLExportHandler(gcmView.getItemGridView(), fpath, exportStrainTree);
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 default:

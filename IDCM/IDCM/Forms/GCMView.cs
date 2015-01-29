@@ -122,11 +122,12 @@ namespace IDCM.Forms
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             ExportTypeDlg exportDlg = new ExportTypeDlg();
+            exportDlg.setCheckBoxVisible(true);
             if (exportDlg.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    manager.exportData(ExportTypeDlg.LastOptionValue, ExportTypeDlg.LastFilePath);
+                    manager.exportData(ExportTypeDlg.LastOptionValue, ExportTypeDlg.LastFilePath,ExportTypeDlg.ExportStainTree);
                 }
                 catch (Exception ex)
                 {

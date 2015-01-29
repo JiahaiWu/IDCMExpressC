@@ -12,10 +12,11 @@ namespace IDCM.Service.BGHandler
 {
     public class GcmExcelExportHandler : AbsHandler
     {
-        public GcmExcelExportHandler(string path, DataGridView dgv)
+        public GcmExcelExportHandler(string path, DataGridView dgv, bool exportStrainTree)
         {
             this.path = path;
             this.dgv = dgv;
+            this.exportStrainTree = exportStrainTree;
         }
 
         public override object doWork(System.ComponentModel.BackgroundWorker worker, bool cancel, List<object> args)
@@ -50,5 +51,6 @@ namespace IDCM.Service.BGHandler
 
         private string path;
         private DataGridView dgv;
+        private bool exportStrainTree;
     }
 }

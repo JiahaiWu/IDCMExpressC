@@ -12,10 +12,11 @@ namespace IDCM.Service.BGHandler
 {
     public class GCMXMLExportHandler : AbsHandler
     {
-        public GCMXMLExportHandler(DataGridView dgv, string xpath)
+        public GCMXMLExportHandler(DataGridView dgv, string xpath, bool exportStrainTree)
         {
             this.dgv = dgv;
             this.xpath = xpath;
+            this.exportStrainTree = exportStrainTree;
         }
 
         /// <summary>
@@ -54,5 +55,6 @@ namespace IDCM.Service.BGHandler
 
         private DataGridView dgv;
         private string xpath;
+        private bool exportStrainTree;
     }
 }

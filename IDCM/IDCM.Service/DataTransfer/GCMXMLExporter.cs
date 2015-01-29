@@ -55,10 +55,13 @@ namespace IDCM.Service.DataTransfer
             return dt;
         }
 
+        //注意，返回结果是错误的，等待修改。
         private string ConvertDataTableToXML(DataTable xmlDS)
         {
             MemoryStream stream = null;
             XmlTextWriter writer = null;
+
+            xmlDS.TableName = "GCMXML";
             try
             {
                 stream = new MemoryStream();

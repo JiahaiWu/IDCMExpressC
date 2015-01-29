@@ -12,11 +12,12 @@ namespace IDCM.Service.BGHandler
 {
     public class GCMTextExportHandler : AbsHandler
     {
-        public GCMTextExportHandler(string xpath,DataGridView dgv,string spliter = "")
+        public GCMTextExportHandler(string xpath, DataGridView dgv, bool exportStrainTree, string spliter = "")
         {
             this.xpath = xpath;
             this.dgv = dgv;
-            this.spliter = spliter;
+            this.exportStrainTree = exportStrainTree;
+            this.spliter = spliter;        
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
@@ -52,7 +53,8 @@ namespace IDCM.Service.BGHandler
             }
         }
         private string xpath;
-        private string spliter;
         private DataGridView dgv;
+        private bool exportStrainTree;
+        private string spliter;
     }
 }
