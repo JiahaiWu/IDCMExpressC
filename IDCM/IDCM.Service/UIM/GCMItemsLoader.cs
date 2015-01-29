@@ -40,7 +40,7 @@ namespace IDCM.Service.UIM
             }
             if (loadedNoter.Count > 0)
             {
-                TreeView treeNode = GCMNodeLoad.loadData(gcmSite, loadedNoter.First().Key, recordList);
+                TreeView treeNode = GCMStrainTreeLoader.loadData(gcmSite, loadedNoter.First().Key, recordList);
                 if (treeNode == null) return true;
                 TreeViewAsyncUtil.syncClearNodes(recordTree);
                 TreeViewAsyncUtil.syncAddNodes(recordTree,treeNode);

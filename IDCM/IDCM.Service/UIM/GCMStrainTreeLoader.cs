@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace IDCM.Service.UIM
 {
-    class GCMNodeLoad
+    class GCMStrainTreeLoader
     {
         /// <summary>
         /// 根据strain_id显示strain详细信息(以TreeView的方式)
