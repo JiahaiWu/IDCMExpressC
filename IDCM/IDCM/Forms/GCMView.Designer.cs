@@ -91,12 +91,12 @@
             this.comboBox_attr6 = new System.Windows.Forms.ComboBox();
             this.comboBox_comd6 = new System.Windows.Forms.ComboBox();
             this.dataGridView_items = new System.Windows.Forms.DataGridView();
-            this.splitContainer_right = new System.Windows.Forms.SplitContainer();
-            this.listView_record = new System.Windows.Forms.ListView();
-            this.treeView_record = new System.Windows.Forms.TreeView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyCtrlCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteCtrlVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer_right = new System.Windows.Forms.SplitContainer();
+            this.listView_record = new System.Windows.Forms.ListView();
+            this.treeView_record = new System.Windows.Forms.TreeView();
             this.statusStrip_bottom.SuspendLayout();
             this.toolStrip_gcm.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -116,11 +116,11 @@
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_items)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_right)).BeginInit();
             this.splitContainer_right.Panel1.SuspendLayout();
             this.splitContainer_right.Panel2.SuspendLayout();
             this.splitContainer_right.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip_bottom
@@ -776,6 +776,28 @@
             this.dataGridView_items.TabIndex = 0;
             this.dataGridView_items.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_items_RowPostPaint);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyCtrlCToolStripMenuItem,
+            this.pasteCtrlVToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 48);
+            // 
+            // copyCtrlCToolStripMenuItem
+            // 
+            this.copyCtrlCToolStripMenuItem.Name = "copyCtrlCToolStripMenuItem";
+            this.copyCtrlCToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.copyCtrlCToolStripMenuItem.Text = "Copy (Ctrl+C)";
+            this.copyCtrlCToolStripMenuItem.Click += new System.EventHandler(this.copyCtrlCToolStripMenuItem_Click);
+            // 
+            // pasteCtrlVToolStripMenuItem
+            // 
+            this.pasteCtrlVToolStripMenuItem.Name = "pasteCtrlVToolStripMenuItem";
+            this.pasteCtrlVToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.pasteCtrlVToolStripMenuItem.Text = "Paste (Ctrl+V)";
+            this.pasteCtrlVToolStripMenuItem.Click += new System.EventHandler(this.pasteCtrlVToolStripMenuItem_Click);
+            // 
             // splitContainer_right
             // 
             this.splitContainer_right.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -815,28 +837,6 @@
             this.treeView_record.Size = new System.Drawing.Size(296, 378);
             this.treeView_record.TabIndex = 0;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyCtrlCToolStripMenuItem,
-            this.pasteCtrlVToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 48);
-            // 
-            // copyCtrlCToolStripMenuItem
-            // 
-            this.copyCtrlCToolStripMenuItem.Name = "copyCtrlCToolStripMenuItem";
-            this.copyCtrlCToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.copyCtrlCToolStripMenuItem.Text = "Copy (Ctrl+C)";
-            this.copyCtrlCToolStripMenuItem.Click += new System.EventHandler(this.copyCtrlCToolStripMenuItem_Click);
-            // 
-            // pasteCtrlVToolStripMenuItem
-            // 
-            this.pasteCtrlVToolStripMenuItem.Name = "pasteCtrlVToolStripMenuItem";
-            this.pasteCtrlVToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.pasteCtrlVToolStripMenuItem.Text = "Paste (Ctrl+V)";
-            this.pasteCtrlVToolStripMenuItem.Click += new System.EventHandler(this.pasteCtrlVToolStripMenuItem_Click);
-            // 
             // GCMView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -849,6 +849,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GCMView";
             this.Text = "GCMView";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GCMView_FormClosed);
+            this.Shown += new System.EventHandler(this.GCMView_Shown);
             this.statusStrip_bottom.ResumeLayout(false);
             this.statusStrip_bottom.PerformLayout();
             this.toolStrip_gcm.ResumeLayout(false);
@@ -877,11 +879,11 @@
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_items)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.splitContainer_right.Panel1.ResumeLayout(false);
             this.splitContainer_right.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_right)).EndInit();
             this.splitContainer_right.ResumeLayout(false);
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
