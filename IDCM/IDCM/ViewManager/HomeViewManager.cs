@@ -38,7 +38,6 @@ namespace IDCM.ViewManager
             catBuilder = new LocalCatBuilder(homeView.getBaseTree(), homeView.getLibTree());
             datasetBuilder = new LocalDataSetBuilder(homeView.getItemGridView(), homeView.getAttachTabControl());
             searchBuilder = new LocalDBSearchBuilder(homeView.getDBSearchPanel(), homeView.getSearchSpliter());
-            BackProgressIndicator.addIndicatorBar(homeView.getProgressBar());
         }
 
         ~HomeViewManager()
@@ -78,7 +77,6 @@ namespace IDCM.ViewManager
             }
             if (homeView != null && !homeView.IsDisposed)
             {
-                BackProgressIndicator.removeIndicatorBar(homeView.getProgressBar());
                 homeView.Close();
                 homeView.Dispose();
                 homeView = null;

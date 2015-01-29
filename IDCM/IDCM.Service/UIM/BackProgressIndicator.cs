@@ -20,7 +20,8 @@ namespace IDCM.Service.UIM
         {
             foreach (ToolStripProgressBar bar in bars)
             {
-                bar.Visible = true;
+                if (bar != null && !bar.IsDisposed)
+                    bar.Visible = true;
             }
             lock (BackEndProgress_Lock)
             {
@@ -37,11 +38,25 @@ namespace IDCM.Service.UIM
             {
                 foreach (ToolStripProgressBar bar in bars)
                 {
-                    bar.Visible = false;
+                    if (bar != null && !bar.IsDisposed)
+                        bar.Visible = false;
                 }
             }
             if (backProgressCount < 0)
                 backProgressCount = 0;
+        }
+        public static void shutdownAll()
+        {
+            lock (BackEndProgress_Lock)
+            {
+                backProgressCount=0;
+                foreach (ToolStripProgressBar bar in bars)
+                {
+                    if(bar!=null && !bar.IsDisposed)
+                        bar.Visible = false;
+                }
+                bars.Clear();
+            }
         }
         private static int backProgressCount = 0;
         private static object BackEndProgress_Lock = new object();

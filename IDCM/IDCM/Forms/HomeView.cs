@@ -10,6 +10,7 @@ using System.Threading;
 using IDCM.ViewManager;
 using IDCM.Service.Utils;
 using IDCM.Data.Base;
+using IDCM.Service.UIM;
 
 namespace IDCM.Forms
 {
@@ -51,6 +52,7 @@ namespace IDCM.Forms
 
         private void HomeView_Shown(object sender, EventArgs e)
         {
+            BackProgressIndicator.addIndicatorBar(this.getProgressBar());
         }
 
         /// <summary>
@@ -760,6 +762,11 @@ namespace IDCM.Forms
             {
                 manager.PasteClipboard();
             }
+        }
+
+        private void HomeView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            BackProgressIndicator.removeIndicatorBar(this.getProgressBar());
         }
 
     }

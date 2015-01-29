@@ -10,6 +10,7 @@ using IDCM.ViewManager;
 using IDCM.Service.Utils;
 using IDCM.Data.Base;
 using IDCM.Service.Common;
+using IDCM.Service.UIM;
 
 namespace IDCM.Forms
 {
@@ -68,6 +69,11 @@ namespace IDCM.Forms
             return this.splitContainer_left;
         }
         /////////////////////////////////////
+        private void GCMView_Shown(object sender, EventArgs e)
+        {
+            BackProgressIndicator.addIndicatorBar(this.getProgressBar());
+        }
+
         private void toolStripButton_local_Click(object sender, EventArgs e)
         {
             manager.activeGCMView();
@@ -195,5 +201,10 @@ namespace IDCM.Forms
         }
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
+        private void GCMView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            BackProgressIndicator.removeIndicatorBar(this.getProgressBar());
+        }
     }
 }

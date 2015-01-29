@@ -70,6 +70,7 @@ namespace IDCM.ViewManager
         /// </summary>
         public void Dispose()
         {
+            BackProgressIndicator.shutdownAll();
             if (mainForm != null && !mainForm.IsDisposed) //释放主窗口界面实例资源
             {
                 mainForm.Close();
