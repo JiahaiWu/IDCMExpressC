@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GCMView));
             this.statusStrip_bottom = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel_status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -39,6 +40,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton_down = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_refresh = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTextBox_search = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButton_search = new System.Windows.Forms.ToolStripButton();
@@ -92,6 +94,9 @@
             this.splitContainer_right = new System.Windows.Forms.SplitContainer();
             this.listView_record = new System.Windows.Forms.ListView();
             this.treeView_record = new System.Windows.Forms.TreeView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyCtrlCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteCtrlVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip_bottom.SuspendLayout();
             this.toolStrip_gcm.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -115,6 +120,7 @@
             this.splitContainer_right.Panel1.SuspendLayout();
             this.splitContainer_right.Panel2.SuspendLayout();
             this.splitContainer_right.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip_bottom
@@ -155,6 +161,7 @@
             this.toolStripProgressBar_request.Name = "toolStripProgressBar_request";
             this.toolStripProgressBar_request.Size = new System.Drawing.Size(160, 16);
             this.toolStripProgressBar_request.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.toolStripProgressBar_request.Visible = false;
             // 
             // toolStrip_gcm
             // 
@@ -168,6 +175,7 @@
             this.toolStripSeparator1,
             this.toolStripButton_down,
             this.toolStripButton_refresh,
+            this.toolStripButton1,
             this.toolStripSeparator2,
             this.toolStripTextBox_search,
             this.toolStripButton_search,
@@ -222,6 +230,16 @@
             this.toolStripButton_refresh.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton_refresh.Text = "toolStripButton4";
             this.toolStripButton_refresh.Click += new System.EventHandler(this.toolStripButton_refresh_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::IDCM.Properties.Resources.export;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripSeparator2
             // 
@@ -748,6 +766,7 @@
             // dataGridView_items
             // 
             this.dataGridView_items.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView_items.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridView_items.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView_items.Location = new System.Drawing.Point(0, 0);
             this.dataGridView_items.Margin = new System.Windows.Forms.Padding(0);
@@ -755,6 +774,7 @@
             this.dataGridView_items.RowTemplate.Height = 23;
             this.dataGridView_items.Size = new System.Drawing.Size(620, 241);
             this.dataGridView_items.TabIndex = 0;
+            this.dataGridView_items.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_items_RowPostPaint);
             // 
             // splitContainer_right
             // 
@@ -795,6 +815,28 @@
             this.treeView_record.Size = new System.Drawing.Size(296, 378);
             this.treeView_record.TabIndex = 0;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyCtrlCToolStripMenuItem,
+            this.pasteCtrlVToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 48);
+            // 
+            // copyCtrlCToolStripMenuItem
+            // 
+            this.copyCtrlCToolStripMenuItem.Name = "copyCtrlCToolStripMenuItem";
+            this.copyCtrlCToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.copyCtrlCToolStripMenuItem.Text = "Copy (Ctrl+C)";
+            this.copyCtrlCToolStripMenuItem.Click += new System.EventHandler(this.copyCtrlCToolStripMenuItem_Click);
+            // 
+            // pasteCtrlVToolStripMenuItem
+            // 
+            this.pasteCtrlVToolStripMenuItem.Name = "pasteCtrlVToolStripMenuItem";
+            this.pasteCtrlVToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.pasteCtrlVToolStripMenuItem.Text = "Paste (Ctrl+V)";
+            this.pasteCtrlVToolStripMenuItem.Click += new System.EventHandler(this.pasteCtrlVToolStripMenuItem_Click);
+            // 
             // GCMView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -803,6 +845,7 @@
             this.Controls.Add(this.splitContainer_main);
             this.Controls.Add(this.toolStrip_gcm);
             this.Controls.Add(this.statusStrip_bottom);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GCMView";
             this.Text = "GCMView";
@@ -838,6 +881,7 @@
             this.splitContainer_right.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_right)).EndInit();
             this.splitContainer_right.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -908,5 +952,9 @@
         private System.Windows.Forms.SplitContainer splitContainer_right;
         private System.Windows.Forms.ListView listView_record;
         private System.Windows.Forms.TreeView treeView_record;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem copyCtrlCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteCtrlVToolStripMenuItem;
     }
 }

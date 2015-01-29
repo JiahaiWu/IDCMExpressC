@@ -68,7 +68,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BGHandler\GcmExcelExportHandler.cs" />
+    <Compile Include="BGHandler\GcmJSONExportHandler.cs" />
+    <Compile Include="BGHandler\GCMTextExportHandler.cs" />
+    <Compile Include="BGHandler\GCMXMLExportHandler.cs" />
     <Compile Include="BGHandler\XMLExportHandler.cs" />
+    <Compile Include="DataTransfer\GCMExcelExporter.cs" />
+    <Compile Include="DataTransfer\GCMJSONExporter.cs" />
+    <Compile Include="DataTransfer\GCMTextExporter.cs" />
+    <Compile Include="DataTransfer\GCMXMLExporter.cs" />
     <Compile Include="DataTransfer\XMLExporter.cs" />
     <Compile Include="UIM\BackProgressIndicator.cs" />
     <Compile Include="BGHandler\ExcelExportHandler.cs" />
@@ -94,9 +102,9 @@
     <Compile Include="POO\HelpDocConstants.cs" />
     <Compile Include="POO\StartInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UIM\LoadGCMItems.cs" />
-    <Compile Include="UIM\LoadGCMRecordNode.cs" />
-    <Compile Include="UIM\LoadGCMRecordNodeDetail.cs" />
+    <Compile Include="UIM\GCMItemsLoader.cs" />
+    <Compile Include="UIM\GCMNodeLoad.cs" />
+    <Compile Include="UIM\GCMNodeDetailLoader.cs" />
     <Compile Include="Utils\ComboxAsyncUitl.cs" />
     <Compile Include="Utils\ControlAsyncUtil.cs" />
     <Compile Include="Utils\ControlUtil.cs" />

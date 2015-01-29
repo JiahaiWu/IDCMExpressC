@@ -130,18 +130,18 @@ namespace IDCM.Forms
                 case Keys.Alt | Keys.H://打开Help菜单项
                     this.ToolStripMenuItem_help.ShowDropDown();
                     break;
-                case Keys.Control | Keys.F://打开查找菜单
-                    manager.showDBDataSearch();
-                    break;
-                case Keys.Control | Keys.Shift | Keys.F://打开前端记录查找菜单
-                    manager.frontDataSearch();
-                    break;
-                case Keys.Control | Keys.Shift | Keys.N:
-                    manager.frontSearchNext();
-                    break;
-                case Keys.Control | Keys.Shift | Keys.P:
-                    manager.frontSearchPrev();
-                    break;
+                //case Keys.Control | Keys.F://打开查找菜单
+                //    manager.showDBDataSearch();
+                //    break;
+                //case Keys.Control | Keys.Shift | Keys.F://打开前端记录查找菜单
+                //    manager.frontDataSearch();
+                //    break;
+                //case Keys.Control | Keys.Shift | Keys.N:
+                //    manager.frontSearchNext();
+                //    break;
+                //case Keys.Control | Keys.Shift | Keys.P:
+                //    manager.frontSearchPrev();
+                //    break;
                 default:
                     return base.ProcessCmdKey(ref msg, keyData);
             }
@@ -157,14 +157,12 @@ namespace IDCM.Forms
             ManagerI hvManager = manager.getHomeViewManager();
             ManagerI gcmManager = manager.getGCMViewManager();
             localSearchToolStripMenuItem.Enabled = false;
-            frontPageSearchToolStripMenuItem.Enabled = false;
             onlineSearchToolStripMenuItem.Enabled = false;
             if (hvManager != null)
             {
                 if (hvManager.isActive())
                 {
                     localSearchToolStripMenuItem.Enabled = true;
-                    frontPageSearchToolStripMenuItem.Enabled = true;
                 }
             }
             if (gcmManager != null)
@@ -172,7 +170,6 @@ namespace IDCM.Forms
                 if (gcmManager.isActive())
                 {
                     onlineSearchToolStripMenuItem.Enabled = true;
-                    frontPageSearchToolStripMenuItem.Enabled = true;
                 }
             }
             
@@ -235,20 +232,20 @@ namespace IDCM.Forms
             }
         }
 
-        private void localSearchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            manager.showDBDataSearch();
-        }
+        //private void localSearchToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    manager.showDBDataSearch();
+        //}
 
-        private void onlineSearchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            manager.showDBDataSearch();
-        }
+        //private void onlineSearchToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    manager.showDBDataSearch();
+        //}
 
-        private void frontPageSearchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            manager.frontDataSearch();
-        }
+        //private void frontPageSearchToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    manager.frontDataSearch();
+        //}
         private void aboutIDCMToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             AboutDlg aboutDlg = new AboutDlg();

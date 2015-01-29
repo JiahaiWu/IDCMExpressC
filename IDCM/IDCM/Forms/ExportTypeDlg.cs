@@ -57,9 +57,19 @@ namespace IDCM.Forms
             }
             return suffix;
         }
+
+        private void selectExportStrainTree()
+        {
+            if (export_strain_tree_checkBox.Checked)
+            {
+                ExportTypeDlg.exportStainTree = true;
+            }
+        }
+
         private void button_confirm_Click(object sender, EventArgs e)
         {
             string suffix = getDefaultSuffix();
+            selectExportStrainTree();
             FileInfo fi=new FileInfo(textBox_path.Text.Trim());
             if (fi.Exists || (fi.Directory!=null && fi.Directory.Exists))
             {
@@ -111,8 +121,20 @@ namespace IDCM.Forms
             }
         }
 
+        public void setCheckBoxVisible(bool visible = false)
+        {
+            groupbox_optional.Visible = visible;
+            export_strain_tree_checkBox.Visible = visible;
+        }
+
         private static ExportType lastOptionValue = ExportType.Excel;
         private static string lastFilePath = "C:\\idcm_export";
+        private static bool exportStainTree = false;
+
+        public static bool ExportStainTree
+        {
+            get { return ExportTypeDlg.exportStainTree; }
+        }
 
         public static string LastFilePath
         {

@@ -1,27 +1,23 @@
-﻿using System;
+﻿using IDCM.Data.Base;
+using IDCM.Service.Common;
+using IDCM.Service.DataTransfer;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.ComponentModel;
 using System.Windows.Forms;
-using IDCM.Service.BGHandler;
-using IDCM.Service.UIM;
-using IDCM.Service.Common;
-using IDCM.Data.Base;
-using IDCM.Service.Utils;
 
 namespace IDCM.Service.BGHandler
 {
-
-    public class LoadGCMDataHandler : AbsHandler
+    public class GCMTextExportHandler : AbsHandler
     {
-        public LoadGCMDataHandler(GCMSiteMHub gcmSite,DataGridView itemDGV,TreeView recordTree,ListView recordView,Dictionary<string, int> loadedNoter)
+        public GCMTextExportHandler(string xpath, DataGridView dgv, bool exportStrainTree, string spliter = "")
         {
-            this.itemDGV = itemDGV;
-            this.recordTree=recordTree;
-            this.recordView = recordView;
-            this.loadedNoter = loadedNoter;
-            this.gcmSite = gcmSite;
+            this.xpath = xpath;
+            this.dgv = dgv;
+            this.exportStrainTree = exportStrainTree;
+            this.spliter = spliter;        
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
@@ -32,7 +28,8 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
-            res = GCMItemsLoader.loadData(gcmSite, itemDGV, loadedNoter, recordTree, recordView);
+            GCMTextExporter exporter = new GCMTextExporter();
+            res = exporter.exportText(xpath, dgv, spliter);
             return new object[] { res };
         }
         /// <summary>
@@ -47,15 +44,17 @@ namespace IDCM.Service.BGHandler
                 return;
             if (error != null)
             {
-                log.Error(error);
+                MessageBox.Show("ERROR::" + error.Message + "\n" + error.StackTrace);
                 return;
             }
+            else
+            {
+                MessageBox.Show("Export success. @filepath=" + xpath);
+            }
         }
-        private GCMSiteMHub gcmSite = null;
-        private DataGridView itemDGV = null;
-        private TreeView recordTree=null;
-        private ListView recordView=null;
-        private Dictionary<string, int> loadedNoter = null;
-
+        private string xpath;
+        private DataGridView dgv;
+        private bool exportStrainTree;
+        private string spliter;
     }
 }

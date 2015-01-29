@@ -12,7 +12,7 @@ namespace IDCM.Service.UIM
     /// <summary>
     /// 发送网络请求，获取strain信息，构建GCM
     /// </summary>
-    public class LoadGCMItems
+    public class GCMItemsLoader
     {
         /// <summary>
         /// 分多次发送网络请求，获取strain信息，将strain数据添加到DataGridView中
@@ -24,11 +24,10 @@ namespace IDCM.Service.UIM
         /// <param name="itemDGV"></param>
         /// <param name="loadedNoter"></param>
         /// <param name="recordTree"></param>
-        /// <param name="recordView"></param>
+        /// <param name="recordList"></param>
         /// <returns></returns>
-        public static bool loadData(GCMSiteMHub gcmSite, DataGridView itemDGV, Dictionary<string, int> loadedNoter, TreeView recordTree, ListView recordView)
+        public static bool loadData(GCMSiteMHub gcmSite, DataGridView itemDGV, Dictionary<string, int> loadedNoter, TreeView recordTree, ListView recordList)
         {
-            DGVAsyncUtil.syncClearAll(itemDGV);
             GCMDataMHub gcmDataHub = new GCMDataMHub();
             int curPage = 1;
             StrainListPage slp = gcmDataHub.strainListQuery(gcmSite, curPage);
@@ -41,7 +40,7 @@ namespace IDCM.Service.UIM
             }
             if (loadedNoter.Count > 0)
             {
-                TreeView treeNode = LoadGCMRecordNode.loadData(gcmSite, loadedNoter.First().Key, recordView);
+                TreeView treeNode = GCMNodeLoad.loadData(gcmSite, loadedNoter.First().Key, recordList);
                 if (treeNode == null) return true;
                 TreeViewAsyncUtil.syncClearNodes(recordTree);
                 TreeViewAsyncUtil.syncAddNodes(recordTree,treeNode);
@@ -65,8 +64,7 @@ namespace IDCM.Service.UIM
             {
                 //add valMap note Tag into loadedNoter Map
                 int dgvrIdx = -1;
-                loadedNoter.TryGetValue(valMap["id"], out dgvrIdx);
-                if (dgvrIdx <= 0)
+                if (!loadedNoter.TryGetValue(valMap["id"], out dgvrIdx))
                 {
                     dgvrIdx = itemDGV.RowCount;
                     DGVAsyncUtil.syncAddRow(itemDGV, null, dgvrIdx);

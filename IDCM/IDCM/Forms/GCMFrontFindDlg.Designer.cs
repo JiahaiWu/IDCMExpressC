@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocalFrontFindDlg));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GCMFrontFindDlg));
             this.label_search = new System.Windows.Forms.Label();
             this.comboBox_find = new System.Windows.Forms.ComboBox();
             this.button_searchDown = new System.Windows.Forms.Button();
@@ -106,7 +106,7 @@
             this.button_reset.UseVisualStyleBackColor = true;
             this.button_reset.Click += new System.EventHandler(this.button_reset_Click);
             // 
-            // FrontFindDlg
+            // GCMFrontFindDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -121,8 +121,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FrontFindDlg";
-            this.Text = "Front Find";
+            this.Name = "GCMFrontFindDlg";
+            this.Text = "GCM Front Find";
             this.Load += new System.EventHandler(this.FrontFindDlg_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

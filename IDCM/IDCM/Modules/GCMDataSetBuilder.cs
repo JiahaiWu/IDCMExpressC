@@ -1,6 +1,8 @@
-﻿using System;
+﻿using IDCM.Service.Utils;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -39,75 +41,129 @@ namespace IDCM.Modules
         }
         #endregion
 
+        /// <summary>
+        /// 添加一列CheckBoxColumn
+        /// </summary>
+        public void addCheckBoxColumn()
+        {
+            DataGridViewCheckBoxColumn chxCol = new DataGridViewCheckBoxColumn();
+            chxCol.ReadOnly = true;
+            chxCol.Resizable = DataGridViewTriState.False;
+            chxCol.FlatStyle = FlatStyle.Popup;
+            chxCol.CellTemplate.Style.ForeColor = Color.LightGray;
+            chxCol.Width = 25;
+            itemDGV.Columns.Add(chxCol);
+        }
 
-        ///// <summary>
-        ///// @Deprecated
-        ///// 通过网络请求，载入数据显示
-        ///// </summary>
-        //public void loadDataSetView()
-        //{
-        //    int curPage=1;
-        //    StrainListPage slp = StrainListQueryExecutor.strainListQuery(curPage);
-        //    showDataItems(slp);
-        //    while (hasNextPage(slp,curPage))
-        //    {
-        //        curPage++;
-        //        slp = StrainListQueryExecutor.strainListQuery(curPage);
-        //        showDataItems(slp);
-        //    }
-        //}
-        ///// <summary>
-        ///// 将网络获取数据显示到itemDGV，并予以标记缓存
-        ///// </summary>
-        ///// <param name="slp"></param>
-        //private void showDataItems(StrainListPage slp)
-        //{
-        //    if (slp == null || slp.list==null)
-        //        return;
-        //    foreach (Dictionary<string, string> valMap in slp.list)
-        //    {
-        //        //add valMap note Tag into loadedNoter Map
-        //        int dgvrIdx=-1;
-        //        loadedNoter.TryGetValue(valMap["id"],out dgvrIdx);
-        //        if (dgvrIdx < 0)
-        //        {
-        //            dgvrIdx=itemDGV.Rows.Add();
-        //        }
-        //        foreach (KeyValuePair<string, string> entry in valMap)
-        //        {
-        //            //if itemDGV not contains Column of entry.key
-        //            //   add Column named with entry.key
-        //            //then merge data into itemDGV View.
-        //            //(if this valMap has exist in loadedNoter Map use Update Method else is append Method.) 
-        //            if (!itemDGV.Columns.Contains(entry.Key))
-        //            {
-        //                DataGridViewTextBoxColumn dgvtbc = new DataGridViewTextBoxColumn();
-        //                dgvtbc.Name = entry.Key;
-        //                dgvtbc.HeaderText = entry.Key;
-        //                dgvtbc.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-        //                itemDGV.Columns.Add(dgvtbc);
-        //            }
-        //            DataGridViewCell dgvc = itemDGV.Rows[dgvrIdx].Cells[entry.Key];
-        //            if(dgvc!=null)
-        //            {
-        //                dgvc.Value = entry.Value;
-        //            }
-        //        }
-        //    }
-        //}
-        ///// <summary>
-        ///// 判断分页请求是否存在下一页内容
-        ///// </summary>
-        ///// <param name="slp"></param>
-        ///// <param name="reqPage"></param>
-        ///// <returns></returns>
-        //private bool hasNextPage(StrainListPage slp,int reqPage)
-        //{
-        //    if(slp!=null && slp.totalpage>slp.pageNumber && slp.totalpage>reqPage)
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
+        public DataGridViewCell quickSearch(string findTerm)
+        {
+            if (findTerm.Length > 0)
+            {
+                DataGridViewCell ncell = null;
+                if (itemDGV.SelectedCells != null && itemDGV.SelectedCells.Count > 0)
+                {
+                    if (itemDGV.SelectedCells[0].Displayed)
+                        ncell = itemDGV.SelectedCells[0];
+                }
+                while ((ncell = nextTextCell(ncell)) != null)
+                {
+                    string cellval = DGVUtil.getCellValue(ncell);
+                    if (cellval.ToLower().Contains(findTerm.ToLower()))
+                    {
+                        return ncell;
+                    }
+                }
+                if (ncell == null)
+                {
+                    MessageBox.Show("It's reached the end, and no subsequent matches.");
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 下一个单元格定位，如定位失败返回null
+        /// </summary>
+        /// <returns></returns>
+        private DataGridViewCell nextTextCell(DataGridViewCell cell = null)
+        {
+            DataGridViewCell ncell = null;
+            int rowCount = DGVUtil.getRowCount(itemDGV);
+            int columnCount = DGVUtil.getTextColumnCount(itemDGV);
+            int rowIndex = cell == null ? 0 : cell.RowIndex;
+            int colIndex = cell == null ? 0 : cell.ColumnIndex + 1;
+            if (colIndex >= columnCount)
+            {
+                rowIndex = rowIndex + 1;
+                colIndex = 0;
+            }
+            if (colIndex < columnCount && rowIndex < rowCount)
+            {
+                DataGridViewRow dgvr = itemDGV.Rows[rowIndex];
+                if (!dgvr.IsNewRow)
+                {
+                    ncell = dgvr.Cells[colIndex];
+                    if (ncell.Visible && ncell is DataGridViewTextBoxCell)
+                    {
+                        return ncell;
+                    }
+                    else
+                        return nextTextCell(ncell);
+                }
+            }
+            return ncell;
+        }
+
+        /// <summary>
+        /// 从剪贴板粘贴文本型数据记录到目标区域
+        /// This will be moved to the util class so it can service any paste into a DGV
+        /// </summary>
+        internal void PasteClipboard()
+        {
+            try
+            {
+                string s = Clipboard.GetText();
+                string[] lines = s.Split('\n');
+                int iFail = 0, iRow = itemDGV.CurrentCell.RowIndex;
+                int iCol = itemDGV.CurrentCell.ColumnIndex;
+                DataGridViewCell oCell;
+                foreach (string line in lines)
+                {
+                    if (iRow < itemDGV.RowCount && line.Length > 0)
+                    {
+                        string[] sCells = line.Split('\t');
+                        for (int i = 0; i < sCells.GetLength(0); ++i)
+                        {
+                            if (iCol + i < this.itemDGV.ColumnCount)
+                            {
+                                oCell = itemDGV[iCol + i, iRow];
+                                if (!oCell.ReadOnly)
+                                {
+                                    if (oCell.Value == null || oCell.Value.ToString() != sCells[i])
+                                    {
+                                        oCell.Value = Convert.ChangeType(sCells[i], oCell.ValueType);
+                                        oCell.Style.BackColor = Color.Tomato;
+                                    }
+                                    else
+                                        iFail++;
+                                }
+                            }
+                            else
+                            { break; }
+                        }
+                        iRow++;
+                    }
+                    else
+                    { break; }
+                    if (iFail > 0)
+                        MessageBox.Show(string.Format("{0} updates failed due to read only column setting", iFail));
+                }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("The data you pasted is in the wrong format for the cell");
+                return;
+            }
+        }
     }
 }
