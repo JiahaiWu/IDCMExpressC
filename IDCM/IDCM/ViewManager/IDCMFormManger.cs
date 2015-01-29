@@ -294,6 +294,11 @@ namespace IDCM.ViewManager
             return true;
         }
         
+        //////////////////////////////////////////////////////////////////////////////
+        //说明
+        //1：由于捕获的是IDCM_Form上的键盘输入
+        //2：当HomeView，GCMView均是visible==true时，无法判断应该执行的是HomeView还是GCMView的FrontFindDlg
+        //3：改成由GCMView，HomeView均捕获键盘输入，谁捕获到就执行谁的FrontFindDlg
         //public void showDBDataSearch()
         //{
         //    ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
@@ -405,5 +410,6 @@ namespace IDCM.ViewManager
         //        }
         //    }
         //}
+        ////////////////////////////////////////////////////////////////////////////
     }
 }

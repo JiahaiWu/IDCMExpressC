@@ -24,13 +24,20 @@ namespace IDCM.Service.BGHandler
     /// </summary>
     public class LoadGCMStrainViewHandler:AbsHandler
     {
+        public LoadGCMStrainViewHandler(GCMSiteMHub gcmSite, string[] strainIDs, List<StrainView> strainViews)
+        {
+            this.gcmSite = gcmSite;
+            this.strainIDs = strainIDs;
+            this.strainViews = strainViews;
+        }
+
         public LoadGCMStrainViewHandler(GCMSiteMHub gcmSite,string strainid, TreeView treeView_record, ListView listView_record)
         {
             // TODO: Complete member initialization
+            this.gcmSite = gcmSite;
             this.strainid = strainid;
             this.treeView_record = treeView_record;
-            this.listView_record = listView_record;
-            this.gcmSite = gcmSite;
+            this.listView_record = listView_record;   
         }
         /// <summary>
         /// 
@@ -42,10 +49,19 @@ namespace IDCM.Service.BGHandler
         public override object doWork(BackgroundWorker worker, bool cancel, List<object> args)
         {
             DWorkMHub.note(AsyncMessage.StartBackProgress);
-            TreeView treeView = GCMNodeLoad.loadData(gcmSite, strainid, listView_record);
-            if (treeView == null) return new Object();
-            TreeViewAsyncUtil.syncClearNodes(treeView_record);
-            TreeViewAsyncUtil.syncAddNodes(treeView_record, treeView);
+            if (strainIDs == null && strainIDs.Length < 1)
+            {
+                GCMNodeLoad gcmNodeLoad = new GCMNodeLoad(gcmSite, strainid, listView_record);
+                TreeView treeView = gcmNodeLoad.loadData();
+                TreeViewAsyncUtil.syncClearNodes(treeView_record);
+                TreeViewAsyncUtil.syncAddNodes(treeView_record, treeView);
+                return new Object();
+            }
+            if (strainIDs != null && strainIDs.Length > 0)
+            {
+                GCMNodeLoad gcmNodeLoad = new GCMNodeLoad(gcmSite, strainIDs, strainViews);
+                gcmNodeLoad.loadData();
+            }
             return new Object();
         }
         /// <summary>
@@ -64,9 +80,12 @@ namespace IDCM.Service.BGHandler
                 return;
             }
         }
-        private GCMSiteMHub gcmSite = null;
+        private GCMSiteMHub gcmSite;
         private String strainid;
         private TreeView treeView_record;
         private ListView listView_record;
+
+        private string[] strainIDs;
+        List<StrainView> strainViews;
     }
 }
