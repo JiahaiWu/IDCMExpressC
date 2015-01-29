@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("All References");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Unfiled");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Trash");
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("My Group (Temp)");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("All References");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Unfiled");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Trash");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("My Group (Temp)");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HomeView));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("All Strains");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("节点1");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("节点2");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("All Strains");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("节点1");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("节点2");
             this.statusStripBottom = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel_bottom = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSplitButton_layout = new System.Windows.Forms.ToolStripSplitButton();
@@ -96,6 +96,9 @@
             this.comboBox_attr6 = new System.Windows.Forms.ComboBox();
             this.comboBox_comd6 = new System.Windows.Forms.ComboBox();
             this.dataGridView_items = new System.Windows.Forms.DataGridView();
+            this.contextMenuStrip_items = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.copyCtrlCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteCtrlVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl_attach = new System.Windows.Forms.TabControl();
             this.references = new System.Windows.Forms.TabPage();
             this.links = new System.Windows.Forms.TabPage();
@@ -129,9 +132,6 @@
             this.CreateSmartGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip_base = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clear_toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip_items = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.copyCtrlCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteCtrlVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripBottom.SuspendLayout();
             this.tableLayoutPanel_main.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -157,11 +157,11 @@
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_items)).BeginInit();
+            this.contextMenuStrip_items.SuspendLayout();
             this.tabControl_attach.SuspendLayout();
             this.toolStrip_home.SuspendLayout();
             this.contextMenuStrip_lib.SuspendLayout();
             this.contextMenuStrip_base.SuspendLayout();
-            this.contextMenuStrip_items.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStripBottom
@@ -293,20 +293,20 @@
             this.treeView_library.Location = new System.Drawing.Point(0, 98);
             this.treeView_library.Margin = new System.Windows.Forms.Padding(0);
             this.treeView_library.Name = "treeView_library";
-            treeNode7.Name = "Root";
-            treeNode7.Tag = "0";
-            treeNode7.Text = "All References";
-            treeNode8.Name = "Unfiled";
-            treeNode8.Text = "Unfiled";
-            treeNode9.Name = "Trash";
-            treeNode9.Text = "Trash";
-            treeNode11.Name = "MyGroup";
-            treeNode11.Text = "My Group (Temp)";
+            treeNode1.Name = "Root";
+            treeNode1.Tag = "0";
+            treeNode1.Text = "All References";
+            treeNode2.Name = "Unfiled";
+            treeNode2.Text = "Unfiled";
+            treeNode3.Name = "Trash";
+            treeNode3.Text = "Trash";
+            treeNode4.Name = "MyGroup";
+            treeNode4.Text = "My Group (Temp)";
             this.treeView_library.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode7,
-            treeNode8,
-            treeNode9,
-            treeNode11});
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4});
             this.treeView_library.SelectedImageIndex = 0;
             this.treeView_library.ShowRootLines = false;
             this.treeView_library.Size = new System.Drawing.Size(215, 411);
@@ -364,16 +364,16 @@
             this.treeView_base.Location = new System.Drawing.Point(0, 28);
             this.treeView_base.Margin = new System.Windows.Forms.Padding(0);
             this.treeView_base.Name = "treeView_base";
-            treeNode1.Name = "-1";
-            treeNode1.Text = "All Strains";
-            treeNode2.Name = "节点1";
-            treeNode2.Text = "节点1";
-            treeNode3.Name = "节点2";
-            treeNode3.Text = "节点2";
+            treeNode5.Name = "-1";
+            treeNode5.Text = "All Strains";
+            treeNode6.Name = "节点1";
+            treeNode6.Text = "节点1";
+            treeNode7.Name = "节点2";
+            treeNode7.Text = "节点2";
             this.treeView_base.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3});
+            treeNode5,
+            treeNode6,
+            treeNode7});
             this.treeView_base.SelectedImageIndex = 0;
             this.treeView_base.ShowRootLines = false;
             this.treeView_base.Size = new System.Drawing.Size(215, 70);
@@ -897,6 +897,28 @@
             this.dataGridView_items.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_items_MouseDown);
             this.dataGridView_items.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridView_items_MouseMove);
             // 
+            // contextMenuStrip_items
+            // 
+            this.contextMenuStrip_items.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyCtrlCToolStripMenuItem,
+            this.pasteCtrlVToolStripMenuItem});
+            this.contextMenuStrip_items.Name = "contextMenuStrip_items";
+            this.contextMenuStrip_items.Size = new System.Drawing.Size(157, 48);
+            // 
+            // copyCtrlCToolStripMenuItem
+            // 
+            this.copyCtrlCToolStripMenuItem.Name = "copyCtrlCToolStripMenuItem";
+            this.copyCtrlCToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.copyCtrlCToolStripMenuItem.Text = "Copy (Ctrl+C)";
+            this.copyCtrlCToolStripMenuItem.Click += new System.EventHandler(this.copyCtrlCToolStripMenuItem_Click);
+            // 
+            // pasteCtrlVToolStripMenuItem
+            // 
+            this.pasteCtrlVToolStripMenuItem.Name = "pasteCtrlVToolStripMenuItem";
+            this.pasteCtrlVToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.pasteCtrlVToolStripMenuItem.Text = "Paste (Ctrl+V)";
+            this.pasteCtrlVToolStripMenuItem.Click += new System.EventHandler(this.pasteCtrlVToolStripMenuItem_Click);
+            // 
             // tabControl_attach
             // 
             this.tabControl_attach.Controls.Add(this.references);
@@ -1188,28 +1210,6 @@
             this.clear_toolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.clear_toolStripMenuItem.Text = "Empty";
             // 
-            // contextMenuStrip_items
-            // 
-            this.contextMenuStrip_items.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyCtrlCToolStripMenuItem,
-            this.pasteCtrlVToolStripMenuItem});
-            this.contextMenuStrip_items.Name = "contextMenuStrip_items";
-            this.contextMenuStrip_items.Size = new System.Drawing.Size(157, 48);
-            // 
-            // copyCtrlCToolStripMenuItem
-            // 
-            this.copyCtrlCToolStripMenuItem.Name = "copyCtrlCToolStripMenuItem";
-            this.copyCtrlCToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.copyCtrlCToolStripMenuItem.Text = "Copy (Ctrl+C)";
-            this.copyCtrlCToolStripMenuItem.Click += new System.EventHandler(this.copyCtrlCToolStripMenuItem_Click);
-            // 
-            // pasteCtrlVToolStripMenuItem
-            // 
-            this.pasteCtrlVToolStripMenuItem.Name = "pasteCtrlVToolStripMenuItem";
-            this.pasteCtrlVToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.pasteCtrlVToolStripMenuItem.Text = "Paste (Ctrl+V)";
-            this.pasteCtrlVToolStripMenuItem.Click += new System.EventHandler(this.pasteCtrlVToolStripMenuItem_Click);
-            // 
             // HomeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1221,6 +1221,7 @@
             this.Name = "HomeView";
             this.ShowInTaskbar = false;
             this.Text = "HomeView";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.HomeView_FormClosed);
             this.Load += new System.EventHandler(this.HomeView_Load);
             this.Shown += new System.EventHandler(this.HomeView_Shown);
             this.statusStripBottom.ResumeLayout(false);
@@ -1258,12 +1259,12 @@
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_items)).EndInit();
+            this.contextMenuStrip_items.ResumeLayout(false);
             this.tabControl_attach.ResumeLayout(false);
             this.toolStrip_home.ResumeLayout(false);
             this.toolStrip_home.PerformLayout();
             this.contextMenuStrip_lib.ResumeLayout(false);
             this.contextMenuStrip_base.ResumeLayout(false);
-            this.contextMenuStrip_items.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

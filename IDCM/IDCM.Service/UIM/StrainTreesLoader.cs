@@ -10,9 +10,15 @@ namespace IDCM.Service.UIM
     {
         private List<TreeView> treeViews;
 
-        private void getStrainID()
-        { 
-            
+        private string[] getStrainID(Dictionary<string, int> strainID_cellIndex_Map)
+        {
+            string[] idArray = new string[strainID_cellIndex_Map.Count];
+            int i = 0;
+            foreach (KeyValuePair<string, int> kvp in strainID_cellIndex_Map)
+            {
+                idArray[i++] = kvp.Key;
+            }
+            return idArray;
         }
     }
 }
