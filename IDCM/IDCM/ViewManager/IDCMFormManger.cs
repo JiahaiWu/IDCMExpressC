@@ -247,6 +247,8 @@ namespace IDCM.ViewManager
             string tip = "Off Line";
             if (uname != null)
                 tip = "On Line: " + uname;
+            if (mainForm == null || mainForm.IsDisposed || mainForm.Disposing)
+                return;
             mainForm.setLoginTip(tip);
         }
         public bool activeTemplateView()
