@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using IDCM.Data.Base;
+using IDCM.Service.Common;
+using IDCM.Service.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,10 +14,8 @@ namespace IDCM.Service.DataTransfer
 {
     class GCMJSONExporter
     {
-        public bool exportJSONList(DataGridView dgv,string xpath)
+        public bool exportJSONList(string xpath,DataTable dt)
         {
-            DataTable dt = GetDgvToTable(dgv);
-            
             StringBuilder strbuilder = new StringBuilder();
             using (FileStream fs = new FileStream(xpath, FileMode.Create))
             {
@@ -30,28 +31,25 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-        public static DataTable GetDgvToTable(DataGridView dgv)
+
+        internal bool exportJSONList(string xpath, DataGridViewSelectedRowCollection selectedRows,GCMSiteMHub gcmSiteHolder)
         {
-            DataTable dt = new DataTable();
-            
-            for (int count = 1; count < dgv.Columns.Count; count++)
+            GCMDataMHub gcmDataHub = new GCMDataMHub();
+            if (selectedRows == null || gcmSiteHolder == null) 
+                return false;
+            using (FileStream fs = new FileStream(xpath, FileMode.Create))
             {
-                DataColumn dc = new DataColumn(dgv.Columns[count].Name.ToString());
-                dt.Columns.Add(dc);
-            }
-            for (int count = 0; count < dgv.Rows.Count; count++)
-            {
-                DataRow dr = dt.NewRow();
-                for (int countsub = 0; countsub < dgv.Columns.Count-1; countsub++)
+                foreach (DataGridViewRow dgvRow in selectedRows)
                 {
-                    int j = 1;
-                    string cellStr = dgv.Rows[count].Cells[j++].Value.ToString();
-                    if (cellStr == null) cellStr = "";
-                    dr[countsub] = cellStr;
+                    string strainId = DGVUtil.getCellValue(dgvRow.Cells[1]);
+                    StrainView sv = gcmDataHub.strainViewQuery(gcmSiteHolder, strainId);
+                    Dictionary<string, object> dictionay=sv.ToDictionary();
+                    
                 }
-                dt.Rows.Add(dr);
             }
-            return dt;
+            //gcmDataHub.strainViewQuery(gcmSiteHolder, strainid);
+            return true;
         }
+
     }
 }

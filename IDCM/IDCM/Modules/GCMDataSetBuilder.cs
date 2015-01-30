@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -164,6 +165,51 @@ namespace IDCM.Modules
                 MessageBox.Show("The data you pasted is in the wrong format for the cell");
                 return;
             }
+        }
+
+        /// <summary>
+        /// 返回所有strain_id
+        /// </summary>
+        /// <param name="strainID_cellIndex_Map"></param>
+        /// <returns></returns>
+        public string[] getStrainID()
+        {
+            string[] idArray = new string[loadedNoter.Count];
+            int i = 0;
+            foreach (KeyValuePair<string, int> kvp in loadedNoter)
+            {
+                idArray[i++] = kvp.Key;
+            }
+            return idArray;
+        }
+
+        /// <summary>
+        /// DGV转DataTable,此方法不是通用方法，构建的dataTable是从gcm dgv的列1开始
+        /// </summary>
+        /// <param name="dgv"></param>
+        /// <returns></returns>
+        public DataTable DgvToTable(DataGridView dgv)
+        {
+            DataTable dt = new DataTable();
+
+            for (int count = 1; count < dgv.Columns.Count; count++)
+            {
+                DataColumn dc = new DataColumn(dgv.Columns[count].Name.ToString());
+                dt.Columns.Add(dc);
+            }
+            for (int count = 0; count < dgv.Rows.Count; count++)
+            {
+                DataRow dr = dt.NewRow();
+                for (int countsub = 0; countsub < dgv.Columns.Count - 1; countsub++)
+                {
+                    int j = 1;
+                    string cellStr = dgv.Rows[count].Cells[j++].Value.ToString();
+                    if (cellStr == null) cellStr = "";
+                    dr[countsub] = cellStr;
+                }
+                dt.Rows.Add(dr);
+            }
+            return dt;
         }
     }
 }

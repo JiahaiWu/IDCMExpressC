@@ -1,23 +1,33 @@
 ﻿using IDCM.Data.Base;
 using IDCM.Service.Common;
 using IDCM.Service.DataTransfer;
+using IDCM.Service.UIM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
 namespace IDCM.Service.BGHandler
 {
-    public class GcmJSONExportHandler : AbsHandler
+    public class GCMJSONExportHandler : AbsHandler
     {
-        public GcmJSONExportHandler(DataGridView dgv, string xpath, bool exportStrainTree)
+        public GCMJSONExportHandler(string xpath,bool exportDetail,GCMSiteMHub gcmSiteHolder,DataGridViewSelectedRowCollection selectedRows)
         {
-            this.dgv = dgv;
             this.xpath = xpath;
-            this.exportStrainTree = exportStrainTree;
+            this.exportDetail = exportDetail;            
+            this.gcmSiteHolder = gcmSiteHolder;
+            this.selectedRows = selectedRows;
         }
+        public GCMJSONExportHandler(string xpath, bool exportDetail,DataTable strainViewList)
+        {
+            this.xpath = xpath;
+            this.exportDetail = exportDetail;
+            this.strainList = strainViewList;
+        }
+
 
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
@@ -28,8 +38,16 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
+           
             GCMJSONExporter exporter = new GCMJSONExporter();
-            res = exporter.exportJSONList(dgv, xpath);
+            if (exportDetail)
+            {
+                res = exporter.exportJSONList(xpath, strainList);
+            }
+            else {
+                res = exporter.exportJSONList(xpath,selectedRows, gcmSiteHolder);
+            }
+            
             return new object[] { res };
         }
         /// <summary>
@@ -51,10 +69,11 @@ namespace IDCM.Service.BGHandler
             {
                 MessageBox.Show("Export success. @filepath=" + xpath);
             }
-        }
-
-        private DataGridView dgv;
+        }        
+        private DataTable strainList;
         private string xpath;
-        private bool exportStrainTree;
+        private bool exportDetail;
+        private GCMSiteMHub gcmSiteHolder;
+        private DataGridViewSelectedRowCollection selectedRows;        
     }
 }

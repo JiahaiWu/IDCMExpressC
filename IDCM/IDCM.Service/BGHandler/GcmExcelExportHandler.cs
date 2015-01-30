@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace IDCM.Service.BGHandler
 {
-    public class GcmExcelExportHandler : AbsHandler
+    public class GCMExcelExportHandler : AbsHandler
     {
-        public GcmExcelExportHandler(string path, DataGridView dgv, bool exportStrainTree)
+        public GCMExcelExportHandler(string path, DataGridView dgv, bool exportStrainTree)
         {
             this.path = path;
             this.dgv = dgv;

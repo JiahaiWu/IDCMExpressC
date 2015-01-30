@@ -68,8 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BGHandler\GcmExcelExportHandler.cs" />
-    <Compile Include="BGHandler\GcmJSONExportHandler.cs" />
+    <Compile Include="BGHandler\GCMExcelExportHandler.cs" />
+    <Compile Include="BGHandler\GCMJSONExportHandler.cs" />
     <Compile Include="BGHandler\GCMTextExportHandler.cs" />
     <Compile Include="BGHandler\GCMXMLExportHandler.cs" />
     <Compile Include="BGHandler\XMLExportHandler.cs" />
@@ -103,9 +103,8 @@
     <Compile Include="POO\StartInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UIM\GCMItemsLoader.cs" />
-    <Compile Include="UIM\GCMStrainTreeLoader.cs" />
+    <Compile Include="UIM\GCMNodeLoader.cs" />
     <Compile Include="UIM\GCMNodeDetailLoader.cs" />
-    <Compile Include="UIM\StrainTreesLoader.cs" />
     <Compile Include="Utils\ComboxAsyncUitl.cs" />
     <Compile Include="Utils\ControlAsyncUtil.cs" />
     <Compile Include="Utils\ControlUtil.cs" />

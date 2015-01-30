@@ -19,7 +19,7 @@ namespace IDCM.Service.Common.GCMDAM
                 string signInUri = ConfigurationManager.AppSettings["StrainViewUri"];
                 string url = string.Format(signInUri, new string[] { authInfo.Jsessionid, id });
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                log.Info("StrainViewQueryExecutor Request Url=" + url);
+                //log.Info("StrainViewQueryExecutor Request Url=" + url);
                 request.Method = "POST";
                 request.ContentType = "application/x-www-form-urlencoded";
                 request.Accept = "*/*";
@@ -34,7 +34,7 @@ namespace IDCM.Service.Common.GCMDAM
                 string resStr = myStreamReader.ReadToEnd();
                 myStreamReader.Close();
                 myResponseStream.Close();
-                log.Info("StrainViewQueryExecutor Response=" + resStr);
+                //log.Info("StrainViewQueryExecutor Response=" + resStr);
                 StrainView sv = parserToViewPageInfo(resStr);
                 if (sv != null)
                 {

@@ -24,13 +24,6 @@ namespace IDCM.Service.BGHandler
     /// </summary>
     public class LoadGCMStrainViewHandler:AbsHandler
     {
-        public LoadGCMStrainViewHandler(GCMSiteMHub gcmSite, string[] strainIDs, List<StrainView> strainViews)
-        {
-            this.gcmSite = gcmSite;
-            this.strainIDs = strainIDs;
-            this.strainViews = strainViews;
-        }
-
         public LoadGCMStrainViewHandler(GCMSiteMHub gcmSite,string strainid, TreeView treeView_record, ListView listView_record)
         {
             // TODO: Complete member initialization
@@ -49,19 +42,10 @@ namespace IDCM.Service.BGHandler
         public override object doWork(BackgroundWorker worker, bool cancel, List<object> args)
         {
             DWorkMHub.note(AsyncMessage.StartBackProgress);
-            if (strainIDs == null && strainIDs.Length < 1)
-            {
-                GCMNodeLoad gcmNodeLoad = new GCMNodeLoad(gcmSite, strainid, listView_record);
-                TreeView treeView = gcmNodeLoad.loadData();
-                TreeViewAsyncUtil.syncClearNodes(treeView_record);
-                TreeViewAsyncUtil.syncAddNodes(treeView_record, treeView);
-                return new Object();
-            }
-            if (strainIDs != null && strainIDs.Length > 0)
-            {
-                GCMNodeLoad gcmNodeLoad = new GCMNodeLoad(gcmSite, strainIDs, strainViews);
-                gcmNodeLoad.loadData();
-            }
+            GCMNodeLoader gcmNodeLoad = new GCMNodeLoader(gcmSite, strainid, listView_record);
+            TreeView treeView = gcmNodeLoad.loadData();
+            TreeViewAsyncUtil.syncClearNodes(treeView_record);
+            TreeViewAsyncUtil.syncAddNodes(treeView_record, treeView);
             return new Object();
         }
         /// <summary>
@@ -84,8 +68,5 @@ namespace IDCM.Service.BGHandler
         private String strainid;
         private TreeView treeView_record;
         private ListView listView_record;
-
-        private string[] strainIDs;
-        List<StrainView> strainViews;
     }
 }

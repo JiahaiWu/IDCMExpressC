@@ -40,10 +40,11 @@ namespace IDCM.Service.UIM
             }
             if (loadedNoter.Count > 0)
             {
-                TreeView treeNode = GCMNodeLoad.loadData(gcmSite, loadedNoter.First().Key, recordList);
-                if (treeNode == null) return true;
+                GCMNodeLoader gcmNodeLoad = new GCMNodeLoader(gcmSite, loadedNoter.First().Key, recordList);
+                TreeView treeView = gcmNodeLoad.loadData();
+                if (treeView == null) return true;
                 TreeViewAsyncUtil.syncClearNodes(recordTree);
-                TreeViewAsyncUtil.syncAddNodes(recordTree,treeNode);
+                TreeViewAsyncUtil.syncAddNodes(recordTree, treeView);
             }
             return true;
         }

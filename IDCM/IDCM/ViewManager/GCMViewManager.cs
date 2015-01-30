@@ -15,6 +15,7 @@ using IDCM.Data.Base;
 using IDCM.Service.UIM;
 using IDCM.Service.DataTransfer;
 using IDCM.Service.POO;
+using System.Data;
 
 namespace IDCM.ViewManager
 {
@@ -280,18 +281,23 @@ namespace IDCM.ViewManager
         internal void exportData(ExportType etype, string fpath,bool exportStrainTree)
         {
             AbsHandler handler = null;
+            GCMSiteMHub gcmSiteHolder = null;
+            DataGridViewSelectedRowCollection selectedRows=gcmView.getItemGridView().SelectedRows;
             switch (etype)
             {
                 case ExportType.Excel:
-                    handler = new GcmExcelExportHandler(fpath, gcmView.getItemGridView(), exportStrainTree);
+                    handler = new GCMExcelExportHandler(fpath, gcmView.getItemGridView(), exportStrainTree);
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 case ExportType.JSONList:
-                    handler = new GcmJSONExportHandler(gcmView.getItemGridView(), fpath, exportStrainTree);
+                    if(selectedRows!=null && selectedRows.Count>0)
+                        handler = new GCMJSONExportHandler(fpath, exportStrainTree, gcmSiteHolder, selectedRows);
+                    else
+                        handler = new GCMJSONExportHandler(fpath, exportStrainTree,  datasetBuilder.DgvToTable(gcmView.getItemGridView()));
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 case ExportType.TSV:
-                    handler = new GCMTextExportHandler(fpath, gcmView.getItemGridView(), exportStrainTree,"/t");
+                    handler = new GCMTextExportHandler(fpath, gcmView.getItemGridView(), exportStrainTree, "/t");
                     DWorkMHub.callAsyncHandle(handler);
                     break;
                 case ExportType.CSV:
