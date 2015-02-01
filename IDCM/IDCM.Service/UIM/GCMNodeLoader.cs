@@ -95,10 +95,5 @@ namespace IDCM.Service.UIM
         private GCMSiteMHub gcmSiteHolder;
         private string strainid;
         private ListView recordView;
-        private string[] strainIDs;
-        public Semaphore sem;
-        private List<StrainView> strainViews;
-
-        
     }
 }

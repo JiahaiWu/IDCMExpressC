@@ -4,6 +4,7 @@ using IDCM.Service.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -12,19 +13,37 @@ namespace IDCM.Service.BGHandler
 {
     public class GCMExcelExportHandler : AbsHandler
     {
-        public GCMExcelExportHandler(string path, DataGridView dgv, bool exportStrainTree)
+        public GCMExcelExportHandler(string fpath, bool exportDetail, DataGridViewSelectedRowCollection selectedRows, GCMSiteMHub gcmSiteHolder)
         {
-            this.path = path;
-            this.dgv = dgv;
-            this.exportStrainTree = exportStrainTree;
+            this.fpath = fpath;
+            this.exportDetail = exportDetail;
+            this.selectedRows = selectedRows;
+            this.gcmSiteHolder = gcmSiteHolder;
         }
 
-        public override object doWork(System.ComponentModel.BackgroundWorker worker, bool cancel, List<object> args)
+        public GCMExcelExportHandler(string fpath, bool exportDetail, DataTable strainViewList, GCMSiteMHub gcmSiteHolder)
+        {
+            this.fpath = fpath;
+            this.exportDetail = exportDetail;
+            this.strainViewList = strainViewList;
+            this.gcmSiteHolder = gcmSiteHolder;
+        }
+
+        public override object doWork(BackgroundWorker worker, bool cancel, List<object> args)
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             GCMExcelExporter exporter = new GCMExcelExporter();
-            res = exporter.exportExcel(path, dgv);
+            DWorkMHub.note(AsyncMessage.StartBackProgress);
+            if (strainViewList == null && selectedRows == null) return new object[] { false };
+            if (strainViewList != null)
+            {
+                res = exporter.exportText(fpath, strainViewList, exportDetail, gcmSiteHolder);
+            }
+            else
+            {
+                res = exporter.exportText(fpath, selectedRows, exportDetail, gcmSiteHolder);
+            }
             return new object[] { res };
         }
 
@@ -50,7 +69,10 @@ namespace IDCM.Service.BGHandler
         }
 
         private string path;
-        private DataGridView dgv;
-        private bool exportStrainTree;
+        private bool exportDetail;
+        private string fpath;
+        private DataTable strainViewList;
+        private DataGridViewSelectedRowCollection selectedRows;
+        private GCMSiteMHub gcmSiteHolder;       
     }
 }

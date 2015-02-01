@@ -58,18 +58,16 @@ namespace IDCM.Forms
             return suffix;
         }
 
-        private void selectExportStrainTree()
+        private void updatOptionalStatus()
         {
-            if (export_strain_tree_checkBox.Checked)
-            {
-                ExportTypeDlg.exportStainTree = true;
-            }
+            exportStainTree = export_strain_tree_checkBox.Checked;
         }
 
         private void button_confirm_Click(object sender, EventArgs e)
         {
             string suffix = getDefaultSuffix();
-            selectExportStrainTree();
+            updatOptionalStatus();
+            Console.WriteLine(ExportTypeDlg.ExportStainTree);
             FileInfo fi=new FileInfo(textBox_path.Text.Trim());
             if (fi.Exists || (fi.Directory!=null && fi.Directory.Exists))
             {

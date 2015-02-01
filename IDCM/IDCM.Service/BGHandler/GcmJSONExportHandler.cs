@@ -14,23 +14,28 @@ namespace IDCM.Service.BGHandler
 {
     public class GCMJSONExportHandler : AbsHandler
     {
-        public GCMJSONExportHandler(string xpath,bool exportDetail,GCMSiteMHub gcmSiteHolder,DataGridViewSelectedRowCollection selectedRows)
+        public GCMJSONExportHandler(string xpath, bool exportDetail, DataGridViewSelectedRowCollection selectedRows, GCMSiteMHub gcmSiteHolder = null)
         {
             this.xpath = xpath;
             this.exportDetail = exportDetail;            
             this.gcmSiteHolder = gcmSiteHolder;
             this.selectedRows = selectedRows;
         }
-        public GCMJSONExportHandler(string xpath, bool exportDetail,DataTable strainViewList)
+        public GCMJSONExportHandler(string xpath, bool exportDetail, DataTable strainViewList, GCMSiteMHub gcmSiteHolder = null)
         {
             this.xpath = xpath;
             this.exportDetail = exportDetail;
             this.strainList = strainViewList;
+            this.gcmSiteHolder = gcmSiteHolder;
         }
 
 
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
+        /// 说明：
+        /// 1：doWork有两种情况
+        ///     A：用户有选中行，以选中行为准，导出选中行
+        ///     B：用户没有选中行，以全部记录为准，导出全部记录
         /// </summary>
         /// <param name="worker"></param>
         /// <param name="args"></param>
@@ -38,16 +43,16 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
-           
+            if (strainList == null && selectedRows == null) return new object[] { false };
+
             GCMJSONExporter exporter = new GCMJSONExporter();
-            if (exportDetail)
+            if (strainList != null)
             {
-                res = exporter.exportJSONList(xpath, strainList);
+                res = exporter.exportJSONList(xpath, strainList, exportDetail, gcmSiteHolder);
             }
             else {
-                res = exporter.exportJSONList(xpath,selectedRows, gcmSiteHolder);
+                res = exporter.exportJSONList(xpath, selectedRows, exportDetail,gcmSiteHolder);
             }
-            
             return new object[] { res };
         }
         /// <summary>

@@ -137,7 +137,7 @@ namespace IDCM.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("数据导出失败。");
+                    MessageBox.Show("数据导出失败。",ex.Message);
                     log.Info("数据导出失败，错误信息：", ex);
                 }
             }

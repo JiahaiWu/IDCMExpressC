@@ -4,6 +4,7 @@ using IDCM.Service.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -12,12 +13,22 @@ namespace IDCM.Service.BGHandler
 {
     public class GCMTextExportHandler : AbsHandler
     {
-        public GCMTextExportHandler(string xpath, DataGridView dgv, bool exportStrainTree, string spliter = "")
+        public GCMTextExportHandler(string xpath, bool exportDetail, DataGridViewSelectedRowCollection selectedRows, string spliter, GCMSiteMHub gcmSiteHolder = null)
         {
             this.xpath = xpath;
-            this.dgv = dgv;
-            this.exportStrainTree = exportStrainTree;
-            this.spliter = spliter;        
+            this.exportDetail = exportDetail;
+            this.selectedRows = selectedRows;
+            this.spliter = spliter;
+            this.gcmSiteHolder = gcmSiteHolder;
+            
+        }
+        public GCMTextExportHandler(string xpath, bool exportDetail, DataTable strainViewList,string spliter, GCMSiteMHub gcmSiteHolder = null)
+        {
+            this.xpath = xpath;
+            this.exportDetail = exportDetail;
+            this.strainList = strainViewList;
+            this.spliter = spliter;
+            this.gcmSiteHolder = gcmSiteHolder;
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
@@ -28,8 +39,17 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
+            if (strainList == null && selectedRows == null) return new object[] { false };
+
             GCMTextExporter exporter = new GCMTextExporter();
-            res = exporter.exportText(xpath, dgv, spliter);
+            if (strainList != null)
+            {
+                res = exporter.exportText(xpath, strainList, exportDetail, spliter, gcmSiteHolder);
+            }
+            else
+            {
+                res = exporter.exportText(xpath, selectedRows, exportDetail, spliter,gcmSiteHolder);
+            }
             return new object[] { res };
         }
         /// <summary>
@@ -53,8 +73,10 @@ namespace IDCM.Service.BGHandler
             }
         }
         private string xpath;
-        private DataGridView dgv;
-        private bool exportStrainTree;
+        private DataTable strainList;
+        private DataGridViewSelectedRowCollection selectedRows;
+        private bool exportDetail;
         private string spliter;
+        GCMSiteMHub gcmSiteHolder;
     }
 }

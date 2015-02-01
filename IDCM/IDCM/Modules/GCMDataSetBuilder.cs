@@ -200,14 +200,20 @@ namespace IDCM.Modules
             for (int count = 0; count < dgv.Rows.Count; count++)
             {
                 DataRow dr = dt.NewRow();
-                for (int countsub = 0; countsub < dgv.Columns.Count - 1; countsub++)
+                for (int countsub = 1; countsub < dgv.Columns.Count; countsub++)
                 {
-                    int j = 1;
-                    string cellStr = dgv.Rows[count].Cells[j++].Value.ToString();
-                    if (cellStr == null) cellStr = "";
-                    dr[countsub] = cellStr;
+                    string cellStr = null;
+                    object cellValueObj = dgv.Rows[count].Cells[countsub].Value;
+                    if (cellValueObj == null)
+                        cellStr = "";
+                    else
+                        cellStr = cellValueObj.ToString();
+                    dr[countsub-1] = cellStr;
+                    Console.Write(cellStr);
                 }
                 dt.Rows.Add(dr);
+                Console.WriteLine("");
+                if (dt.Rows.Count == 10) return dt;
             }
             return dt;
         }
