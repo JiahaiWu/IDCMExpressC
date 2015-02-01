@@ -29,6 +29,14 @@ namespace IDCM.Service.DataTransfer
                 ISheet sheet = workbook.CreateSheet("Core Datasets");
                 HashSet<int> excludes = new HashSet<int>();
                 
+                //填充列头
+                IRow columnHead = sheet.CreateRow(0);
+                for (int i = 0; i < strainViewList.Columns.Count;i++ )
+                {
+                    ICell Icell = columnHead.CreateCell(i, CellType.String);
+                    Icell.SetCellValue(strainViewList.Columns[i].ColumnName);
+                }
+
                 int startIndex = strainViewList.Columns.Count;
                 //填充dgv单元格内容
                 for (int i = 0; i < strainViewList.Rows.Count; i++)
@@ -44,7 +52,7 @@ namespace IDCM.Service.DataTransfer
                         string strainID = Convert.ToString(strainViewList.Rows[i][0]);
                         StrainView sv = getStrainView(gcmSiteHolder,strainID);
                         Dictionary<string, object> maps = sv.ToDictionary();
-                        
+                        if(i==0)buildColumn(columnHead, maps, startIndex);
                         buildIrow(Irow, maps, startIndex);
                     }
                 }
@@ -61,6 +69,27 @@ namespace IDCM.Service.DataTransfer
                 return false;
             }
             return true;
+        }
+
+        private void buildColumn(IRow columnHead, Dictionary<string, object> maps, int startIndex)
+        {
+            foreach (KeyValuePair<string, object> svEntry in maps)
+            {
+                if (svEntry.Value is string)
+                {
+                    ICell Icell = columnHead.CreateCell(startIndex++,CellType.String);
+                    Icell.SetCellValue(svEntry.Key);
+                }
+                else if (svEntry.Value is Dictionary<string, dynamic>)
+                {
+                    foreach (KeyValuePair<string, dynamic> subEntry in svEntry.Value as Dictionary<string, dynamic>)
+                    {
+                        string columnName = svEntry.Key + "/" + subEntry.Key;
+                        ICell Icell = columnHead.CreateCell(startIndex++, CellType.String);
+                        Icell.SetCellValue(columnName);
+                    }
+                }
+            }
         }
 
         private void buildIrow(IRow Irow, Dictionary<string, object> maps, int startIndex)
@@ -97,11 +126,18 @@ namespace IDCM.Service.DataTransfer
                 ISheet sheet = workbook.CreateSheet("Core Datasets");
                 HashSet<int> excludes = new HashSet<int>();
 
+                IRow columnHead = sheet.CreateRow(0);
+                DataGridView dgv = selectedRows[0].DataGridView;
+                for (int i = 1; i < dgv.Columns.Count; i++)
+                {
+                    ICell Icell = columnHead.CreateCell(i, CellType.String);
+                    Icell.SetCellValue(dgv.Columns[i].Name);
+                }
                 int startIndex = selectedRows[0].Cells.Count;
                 //填充dgv单元格内容
                 for (int i = 0; i < selectedRows.Count; i++)
                 {
-                    IRow Irow = sheet.CreateRow(i);
+                    IRow Irow = sheet.CreateRow(i+1);
                     DataGridViewRow dgvRow = selectedRows[i];
                     for (int j = 1; j < dgvRow.Cells.Count; j++)
                     {
@@ -113,7 +149,7 @@ namespace IDCM.Service.DataTransfer
                         string strainID = Convert.ToString(dgvRow.Cells[1].Value);
                         StrainView sv = getStrainView(gcmSiteHolder, strainID);
                         Dictionary<string, object> maps = sv.ToDictionary();
-
+                        if (i == 0) buildColumn(columnHead, maps, startIndex);
                         buildIrow(Irow, maps, startIndex);
                     }
                 }
@@ -130,25 +166,6 @@ namespace IDCM.Service.DataTransfer
                 return false;
             }
             return true;
-        }
-
-        private void addStrainViewColumnStr(StringBuilder strBuilder, string spliter, Dictionary<string, object> maps)
-        {
-            foreach (KeyValuePair<string, object> svEntry in maps)
-            {
-                if (svEntry.Value is string)
-                {
-                    strBuilder.Append(svEntry.Key).Append(spliter);
-                }
-                else if (svEntry.Value is Dictionary<string, dynamic>)
-                {
-                    foreach (KeyValuePair<string, dynamic> subEntry in svEntry.Value as Dictionary<string, dynamic>)
-                    {
-                        string columnName = svEntry.Key + "/" + subEntry.Key;
-                        strBuilder.Append(columnName).Append(spliter);
-                    }
-                }
-            }
         }
 
         private StrainView getStrainView(GCMSiteMHub gcmSiteHolder, string strainID)
