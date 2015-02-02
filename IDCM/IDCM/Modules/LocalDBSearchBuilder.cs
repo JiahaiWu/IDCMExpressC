@@ -106,7 +106,7 @@ namespace IDCM.Modules
             if (splter.Panel1Collapsed == true)
             {
                 int defaultRowCount = 2;
-                Dictionary<string,int> viewDBMap =LocalRecordMHub.getCustomViewDBMapping(DataSourceHolder.DataSource);
+                Dictionary<string, int> viewDBMap = LocalRecordMHub.getCustomAttrDBMapping(DataSourceHolder.DataSource);
                 for (int i = panelList.Count(); i>0; i--)
                 {
                     Control panel = panelList[i-1];

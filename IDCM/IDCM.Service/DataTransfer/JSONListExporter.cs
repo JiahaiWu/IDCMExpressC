@@ -23,7 +23,7 @@ namespace IDCM.Service.DataTransfer
                 int count = 0;
                 using (FileStream fs = new FileStream(filepath, FileMode.Create))
                 {
-                    Dictionary<string, int> maps = LocalRecordMHub.getCustomViewDBMapping(datasource);
+                    Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
                     //填写内容////////////////////
                     int offset = 0;
                     int stepLen = SysConstants.EXPORT_PAGING_COUNT;

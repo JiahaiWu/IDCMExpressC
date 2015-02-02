@@ -18,9 +18,9 @@ namespace IDCM.Service.Common
         /// </summary>
         /// <param name="datasource"></param>
         /// <returns></returns>
-        public static Dictionary<string, int> getCustomViewDBMapping(DataSourceMHub datasource)
+        public static Dictionary<string, int> getCustomAttrDBMapping(DataSourceMHub datasource)
         {
-            return DataSupporter.getCustomViewDBMapping(datasource.WSM);
+            return DataSupporter.getCustomAttrDBMapping(datasource.WSM);
         }
         /// <summary>
         /// 基于缓存模式的记录请求方法

@@ -32,7 +32,7 @@ namespace IDCM.Service.DataTransfer
                 IRow rowHead = sheet.CreateRow(0);
                 HashSet<int> excludes = new HashSet<int>();
                 //填写表头
-                Dictionary<string, int> maps = LocalRecordMHub.getCustomViewDBMapping(datasource);
+                Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
                 //填写表头
                 int i = 0;
                 foreach (string key in maps.Keys)

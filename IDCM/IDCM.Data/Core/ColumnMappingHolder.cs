@@ -112,7 +112,7 @@ namespace IDCM.Data.Core
         /// 数据库字段映射位序的值自0计数。
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, int> getCustomViewDBMapping(ConnLabel sconn)
+        public static Dictionary<string, int> getCustomAttrDBMapping(ConnLabel sconn)
         {
             Dictionary<string, int> maps = ColumnMappingHolder.getViewDBMapping(sconn);
             //填写表头
