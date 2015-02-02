@@ -64,11 +64,9 @@ namespace IDCM.Service.BGHandler
             }
             else
             {
-                MessageBox.Show("Export success. @filepath=" + path);
+                MessageBox.Show("Export success. @filepath=" + fpath);
             }
         }
-
-        private string path;
         private bool exportDetail;
         private string fpath;
         private DataTable strainViewList;

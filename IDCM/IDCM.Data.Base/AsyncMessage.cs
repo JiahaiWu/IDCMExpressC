@@ -21,6 +21,10 @@ namespace IDCM.Data.Base
         public static readonly AsyncMessage UpdateGCMSignTip = new AsyncMessage(MsgType.UpdateGCMSignTip, "Update GCM Sign Tip");
         public static readonly AsyncMessage StartBackProgress = new AsyncMessage(MsgType.StartBackProgress, "Start Back Progress");
         public static readonly AsyncMessage EndBackProgress = new AsyncMessage(MsgType.EndBackProgress, "End Back Progress");
+        /// <summary>
+        /// 刷新GCMView中的控件显示
+        /// </summary>
+        public static readonly AsyncMessage RefreshGCMViewControl = new AsyncMessage(MsgType.RefreshGCMViewControl, "Refresh control in GCNView");
         
         /// <summary>
         /// For iterator 
@@ -34,6 +38,7 @@ namespace IDCM.Data.Base
                 yield return RequestHomeView;
                 yield return RequestGCMView;
                 yield return UpdateGCMSignTip;
+                yield return RefreshGCMViewControl;
             }
         }
         private readonly string msgTag;
@@ -77,6 +82,7 @@ namespace IDCM.Data.Base
         RetryDataPrepare=4,
         UpdateGCMSignTip=5,
         StartBackProgress=6,
-        EndBackProgress = 7
+        EndBackProgress = 7,
+        RefreshGCMViewControl = 8
     }
 }

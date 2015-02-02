@@ -15,7 +15,7 @@ namespace IDCM.Test
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DGVSelectAndPaste());
+            Application.Run(new Text());
         }
     }
 }

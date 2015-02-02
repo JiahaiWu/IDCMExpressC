@@ -9,13 +9,14 @@ using IDCM.Service.UIM;
 using IDCM.Service.Common;
 using IDCM.Data.Base;
 using IDCM.Service.Utils;
+using System.Data;
 
 namespace IDCM.Service.BGHandler
 {
 
     public class LoadGCMDataHandler : AbsHandler
     {
-        public LoadGCMDataHandler(GCMSiteMHub gcmSite,DataGridView itemDGV,TreeView recordTree,ListView recordView,Dictionary<string, int> loadedNoter)
+        public LoadGCMDataHandler(GCMSiteMHub gcmSite, DataGridView itemDGV, TreeView recordTree, ListView recordView, Dictionary<string, int> loadedNoter)
         {
             this.itemDGV = itemDGV;
             this.recordTree=recordTree;

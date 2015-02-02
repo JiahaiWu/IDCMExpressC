@@ -212,8 +212,7 @@ namespace IDCM.Modules
                     Console.Write(cellStr);
                 }
                 dt.Rows.Add(dr);
-                Console.WriteLine("");
-                if (dt.Rows.Count == 10) return dt;
+                //if (dt.Rows.Count == 10) return dt;
             }
             return dt;
         }

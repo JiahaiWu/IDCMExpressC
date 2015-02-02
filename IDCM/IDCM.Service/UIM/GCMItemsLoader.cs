@@ -3,6 +3,7 @@ using IDCM.Service.Common;
 using IDCM.Service.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -83,7 +84,7 @@ namespace IDCM.Service.UIM
                         dgvtbc.Name = entry.Key;
                         dgvtbc.HeaderText = entry.Key;
                         dgvtbc.AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
-                        DGVAsyncUtil.syncAddCol(itemDGV, dgvtbc); 
+                        DGVAsyncUtil.syncAddCol(itemDGV, dgvtbc);
                     }
                     DataGridViewCell dgvc = itemDGV.Rows[dgvrIdx].Cells[entry.Key];
                     if (dgvc != null)

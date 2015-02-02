@@ -179,6 +179,13 @@ namespace IDCM.ViewManager
         {
             BackProgressIndicator.endBackProgress();
         }
+        internal void OnRefreshGCMViewControl(object sender, IDCMAsyncEventArgs e)
+        {
+            ManagerI mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
+            if (mi == null || mi.isDisposed())
+                return;
+            ((GCMViewManager)mi).refreshControl((e.values != null && e.values.Count() > 0) ? e.values[0].ToString() : null);
+        } 
 #endregion
         internal ManagerI getHomeViewManager()
         {
