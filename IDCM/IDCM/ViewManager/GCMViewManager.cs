@@ -310,10 +310,10 @@ namespace IDCM.ViewManager
                         handler = new GCMTextExportHandler(fpath, exportStrainTree, selectedRows, ",", DataSourceHolder.GCMHolder);
                         DWorkMHub.callAsyncHandle(handler);
                         break;
-                    //case ExportType.XML:
-                    //    handler = new GCMXMLExportHandler(gcmView.getItemGridView(), fpath, exportStrainTree);
-                    //    DWorkMHub.callAsyncHandle(handler);
-                    //    break;
+                    case ExportType.XML:
+                        handler = new GCMXMLExportHandler(fpath, exportStrainTree, selectedRows, DataSourceHolder.GCMHolder);
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
                     default:
                         MessageBox.Show("Unsupport export type!");
                         break;
@@ -340,7 +340,7 @@ namespace IDCM.ViewManager
                         DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.XML:
-                        handler = new GCMXMLExportHandler(fpath, exportStrainTree, datasetBuilder.DgvToTable(gcmView.getItemGridView()), ",", DataSourceHolder.GCMHolder);
+                        handler = new GCMXMLExportHandler(fpath, exportStrainTree, datasetBuilder.DgvToTable(gcmView.getItemGridView()), DataSourceHolder.GCMHolder);
                         DWorkMHub.callAsyncHandle(handler);
                         break;
                     default:

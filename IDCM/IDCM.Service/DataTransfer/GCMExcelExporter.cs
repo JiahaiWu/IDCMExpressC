@@ -71,6 +71,14 @@ namespace IDCM.Service.DataTransfer
             return true;
         }
 
+        /// <summary>
+        /// 向dataGridView_column中追加strain_tree_column
+        /// 说明：
+        /// 1：此方法只用于追加strain_tree中的列，dataGridView中的列构建不在此方法的考虑中
+        /// </summary>
+        /// <param name="columnHead">DataGridView中的列，构建好的IRow</param>
+        /// <param name="maps">strain_tree树，属性名->属性值映射集合</param>
+        /// <param name="startIndex">追加的开始位置</param>
         private void buildColumn(IRow columnHead, Dictionary<string, object> maps, int startIndex)
         {
             foreach (KeyValuePair<string, object> svEntry in maps)
@@ -92,6 +100,14 @@ namespace IDCM.Service.DataTransfer
             }
         }
 
+        /// <summary>
+        /// 向dataGridView_row(IRow类型)中追加strain_tree_row
+        /// 说明：
+        /// 1：此方法只用于向dataGridView_row中追加strain_tree中的值，dataGridView中的列构建不在此方法的考虑中
+        /// </summary>
+        /// <param name="columnHead">DataGridView中的一行，构建好的IRow</param>
+        /// <param name="maps">strain_tree树，属性名->属性值映射集合</param>
+        /// <param name="startIndex">追加的开始位置</param>
         private void buildIrow(IRow Irow, Dictionary<string, object> maps, int startIndex)
         {
             foreach (KeyValuePair<string, object> svEntry in maps)
@@ -154,7 +170,7 @@ namespace IDCM.Service.DataTransfer
                     }
                 }
                 using (FileStream fs = File.Create(fpath))
-                {
+                {  
                     workbook.Write(fs);
                     fs.Close();
                 }

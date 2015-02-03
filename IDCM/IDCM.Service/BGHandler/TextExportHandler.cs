@@ -40,7 +40,7 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             TextExporter exporter = new TextExporter();
-            if (selectedRows != null && selectedRows.Count>0)
+            if (selectedRows != null)
                 res = exporter.exportText(datasource, textPath, selectedRows, spliter);
             else
                 res = exporter.exportText(datasource,textPath, cmdstr,tcount, spliter);

@@ -13,12 +13,19 @@ namespace IDCM.Service.BGHandler
 {
     public class GCMXMLExportHandler : AbsHandler
     {
-        public GCMXMLExportHandler(string xpath, bool exportDetail, DataTable strainViewList, string spliter, GCMSiteMHub gcmSiteHolder = null)
+        public GCMXMLExportHandler(string xpath, bool exportDetail, DataTable strainViewList, GCMSiteMHub gcmSiteHolder = null)
         {
             this.xpath = xpath;
             this.exportDetail = exportDetail;
             this.strainViewList = strainViewList;
-            this.spliter = spliter;
+            this.gcmSiteHolder = gcmSiteHolder;
+        }
+
+        public GCMXMLExportHandler(string xpath, bool exportDetail, DataGridViewSelectedRowCollection selectedRows, GCMSiteMHub gcmSiteHolder =null)
+        {
+            this.xpath = xpath;
+            this.exportDetail = exportDetail;
+            this.selectedRows = selectedRows;
             this.gcmSiteHolder = gcmSiteHolder;
         }
         /// <summary>
@@ -36,6 +43,8 @@ namespace IDCM.Service.BGHandler
             GCMXMLExporter exporter = new GCMXMLExporter();
             if (strainViewList != null)
                 exporter.exportXML(xpath, strainViewList, exportDetail, gcmSiteHolder);
+            else
+                exporter.exportXML(xpath, selectedRows, exportDetail, gcmSiteHolder);
             return new object[] { res };
         }
         /// <summary>
@@ -61,7 +70,7 @@ namespace IDCM.Service.BGHandler
         private string xpath;
         private bool exportDetail;
         private DataTable strainViewList;
-        private string spliter;
         private GCMSiteMHub gcmSiteHolder;
+        private DataGridViewSelectedRowCollection selectedRows;
     }
 }

@@ -13,21 +13,19 @@ namespace IDCM.Service.BGHandler
 {
     public class XMLExportHandler:AbsHandler
     {
-        public XMLExportHandler(DataSourceMHub datasource, string fpath, string cmdstr, int tcount, string spliter = " ")
+        public XMLExportHandler(DataSourceMHub datasource, string fpath, string cmdstr, int tcount)
         {
             this.textPath = System.IO.Path.GetFullPath(fpath);
             this.cmdstr = cmdstr;
             this.tcount = tcount;
-            this.spliter = spliter;
             this.datasource = datasource;
         }
 
-        public XMLExportHandler(DataSourceMHub datasource, string fpath, DataGridViewSelectedRowCollection selectedRows, string spliter = " ")
+        public XMLExportHandler(DataSourceMHub datasource, string fpath, DataGridViewSelectedRowCollection selectedRows)
         {
             this.datasource = datasource;
             this.textPath = System.IO.Path.GetFullPath(fpath); ;
             this.selectedRows = selectedRows;
-            this.spliter = spliter;
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
@@ -39,10 +37,10 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             XMLExporter exporter = new XMLExporter();
-            if (selectedRows != null & selectedRows.Count > 0)
-                res = exporter.exportXML(datasource, textPath, selectedRows, spliter);
+            if (selectedRows != null)
+                res = exporter.exportXML(datasource, textPath, selectedRows);
             else
-                res = exporter.exportXML(datasource, textPath, cmdstr, tcount, spliter);
+                res = exporter.exportXML(datasource, textPath, cmdstr, tcount);
             return new object[] { res};
         }
         /// <summary>
@@ -66,7 +64,6 @@ namespace IDCM.Service.BGHandler
             }
         }
 
-        private string spliter = null;
         private string textPath = null;
         private string cmdstr=null;
         private int tcount = 0;

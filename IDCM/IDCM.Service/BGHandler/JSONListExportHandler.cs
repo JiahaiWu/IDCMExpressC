@@ -38,7 +38,7 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             JSONListExporter exporter = new JSONListExporter();
-            if (selectedRows != null && selectedRows.Count > 0)
+            if (selectedRows != null)
                 res = exporter.exportJSONList(datasource, xlsPath, selectedRows);
             else
                 res = exporter.exportJSONList(datasource, xlsPath, cmdstr, tcount);

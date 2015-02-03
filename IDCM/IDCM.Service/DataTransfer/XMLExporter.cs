@@ -29,7 +29,7 @@ namespace IDCM.Service.DataTransfer
         /// <param name="tcount"></param>
         /// <param name="spliter"></param>
         /// <returns></returns>
-        public bool exportXML(DataSourceMHub datasource, string filepath, string cmdstr, int tcount, string spliter = " ")
+        public bool exportXML(DataSourceMHub datasource, string filepath, string cmdstr, int tcount)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace IDCM.Service.DataTransfer
                         DataTable table = LocalRecordMHub.queryCTDRecordByHistSQL(datasource, cmdstr, lcount, offset);
                         foreach (DataRow row in table.Rows)
                         {
-                            XmlElement xmlEle = convertToXML(xmlDoc, maps, row, spliter);
+                            XmlElement xmlEle = convertToXML(xmlDoc, maps, row);
                             strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
                             /////////////
                             if (++count % 100 == 0)
@@ -83,7 +83,7 @@ namespace IDCM.Service.DataTransfer
             return true;
         }
 
-        internal bool exportXML(DataSourceMHub datasource, string filepath, DataGridViewSelectedRowCollection selectedRows, string spliter)
+        internal bool exportXML(DataSourceMHub datasource, string filepath, DataGridViewSelectedRowCollection selectedRows)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace IDCM.Service.DataTransfer
                         DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
                         foreach (DataRow row in table.Rows)
                         {
-                            XmlElement xmlEle = convertToXML(xmlDoc, maps, row, spliter);
+                            XmlElement xmlEle = convertToXML(xmlDoc, maps, row);
                             strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
                         }
                         strbuilder.Append("</strains>");
@@ -124,7 +124,7 @@ namespace IDCM.Service.DataTransfer
             return true;
         }
 
-        private static XmlElement convertToXML(XmlDocument xmlDoc,Dictionary<string, int> maps, DataRow row, string spliter)
+        private static XmlElement convertToXML(XmlDocument xmlDoc,Dictionary<string, int> maps, DataRow row)
         {
             XmlElement strainEle = xmlDoc.CreateElement("strain");
             foreach (KeyValuePair<string,int> mapEntry in maps)

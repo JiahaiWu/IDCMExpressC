@@ -36,7 +36,7 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             ExcelExporter exporter = new ExcelExporter();
-            if (selectedRows != null && selectedRows.Count>0)
+            if (selectedRows != null)
                 res = exporter.exportExcel(datasource, xlsPath, selectedRows);
             else
                 res = exporter.exportExcel(datasource, xlsPath, cmdstr, tcount);

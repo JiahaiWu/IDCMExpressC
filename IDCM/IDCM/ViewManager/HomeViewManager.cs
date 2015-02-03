@@ -226,7 +226,7 @@ namespace IDCM.ViewManager
                         DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.XML:
-                        handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, selectedRows, ",");
+                        handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, selectedRows);
                         DWorkMHub.callAsyncHandle(handler);
                         break;
                     default:
@@ -255,7 +255,7 @@ namespace IDCM.ViewManager
                         DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.XML:
-                        handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
+                        handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value);
                         DWorkMHub.callAsyncHandle(handler);
                         break;
                     default:
