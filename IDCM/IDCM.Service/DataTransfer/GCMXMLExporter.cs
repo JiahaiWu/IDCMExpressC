@@ -11,77 +11,78 @@ namespace IDCM.Service.DataTransfer
 {
     class GCMXMLExporter
     {
-
-        public bool exportXML(DataGridView dgv, string xpath)
+        public bool exportXML(string filepath, DataTable strainViewList, bool exportDetail, Common.GCMSiteMHub gcmSiteHolder)
         {
-            DataTable dt = GetDgvToTable(dgv);
-            string XMLStr = ConvertDataTableToXML(dt);
-            StringBuilder strbuilder = new StringBuilder();
-            using (FileStream fs = new FileStream(xpath, FileMode.Create))
+            try
             {
-                strbuilder.Append(XMLStr);
-                if (strbuilder.Length > 0)
+                StringBuilder strbuilder = new StringBuilder();
+                using (FileStream fs = new FileStream(filepath, FileMode.Create))
                 {
-                    Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
-                    BinaryWriter bw = new BinaryWriter(fs);
-                    fs.Write(info, 0, info.Length);
-                    strbuilder.Length = 0;
+
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERROR::" + ex.Message + "\n" + ex.StackTrace);
+                log.Error(ex);
+                return false;
             }
             return true;
         }
 
-        public static DataTable GetDgvToTable(DataGridView dgv)
-        {
-            DataTable dt = new DataTable();
-
-            for (int count = 1; count < dgv.Columns.Count; count++)
-            {
-                DataColumn dc = new DataColumn(dgv.Columns[count].Name.ToString());
-                dt.Columns.Add(dc);
-            }
-            for (int count = 0; count < dgv.Rows.Count; count++)
-            {
-                DataRow dr = dt.NewRow();
-                for (int countsub = 0; countsub < dgv.Columns.Count - 1; countsub++)
-                {
-                    int j = 1;
-                    string cellStr = dgv.Rows[count].Cells[j++].Value.ToString();
-                    if (cellStr == null) cellStr = "";
-                    dr[countsub] = cellStr;
-                }
-                dt.Rows.Add(dr);
-            }
-            return dt;
-        }
-
-        //注意，返回结果是错误的，等待修改。
-        private string ConvertDataTableToXML(DataTable xmlDS)
-        {
-            MemoryStream stream = null;
-            XmlTextWriter writer = null;
-
-            xmlDS.TableName = "GCMXML";
-            try
-            {
-                stream = new MemoryStream();
-                writer = new XmlTextWriter(stream, Encoding.Default);
-                xmlDS.WriteXml(writer);
-                int count = (int)stream.Length;
-                byte[] arr = new byte[count];
-                stream.Seek(0, SeekOrigin.Begin);
-                stream.Read(arr, 0, count);
-                UTF8Encoding utf = new UTF8Encoding();
-                return utf.GetString(arr).Trim();
-            }
-            catch
-            {
-                return String.Empty;
-            }
-            finally
-            {
-                if (writer != null) writer.Close();
-            }
-        }     
+        //public bool exportXML(DataSourceMHub datasource, string filepath, string cmdstr, int tcount, string spliter = " ")
+        //{
+        //    try
+        //    {
+        //        StringBuilder strbuilder = new StringBuilder();
+        //        int count = 0;
+        //        using (FileStream fs = new FileStream(filepath, FileMode.Create))
+        //        {
+        //            XmlDocument xmlDoc = new XmlDocument();
+        //            strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
+        //            strbuilder.Append("<strains>\n\r");
+        //            Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
+        //            ///////////////////
+        //            int offset = 0;
+        //            int stepLen = SysConstants.EXPORT_PAGING_COUNT;
+        //            while (offset < tcount)
+        //            {
+        //                int lcount = tcount - offset > stepLen ? stepLen : tcount - offset;
+        //                DataTable table = LocalRecordMHub.queryCTDRecordByHistSQL(datasource, cmdstr, lcount, offset);
+        //                foreach (DataRow row in table.Rows)
+        //                {
+        //                    XmlElement xmlEle = convertToXML(xmlDoc, maps, row, spliter);
+        //                    strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
+        //                    /////////////
+        //                    if (++count % 100 == 0)
+        //                    {
+        //                        Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+        //                        BinaryWriter bw = new BinaryWriter(fs);
+        //                        fs.Write(info, 0, info.Length);
+        //                        strbuilder.Length = 0;
+        //                    }
+        //                }
+        //                strbuilder.Append("</strains>");
+        //                if (strbuilder.Length > 0)
+        //                {
+        //                    Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+        //                    BinaryWriter bw = new BinaryWriter(fs);
+        //                    fs.Write(info, 0, info.Length);
+        //                    strbuilder.Length = 0;
+        //                }
+        //                offset += lcount;
+        //            }
+        //            fs.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("ERROR::" + ex.Message + "\n" + ex.StackTrace);
+        //        log.Error(ex);
+        //        return false;
+        //    }
+        //    return true;
+        //}
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();  
     }
 }

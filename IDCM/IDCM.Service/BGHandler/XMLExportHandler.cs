@@ -22,13 +22,12 @@ namespace IDCM.Service.BGHandler
             this.datasource = datasource;
         }
 
-        public XMLExportHandler(DataSourceMHub dataSourceMHub, string fpath, DataGridViewSelectedRowCollection selectedRows, string p)
+        public XMLExportHandler(DataSourceMHub datasource, string fpath, DataGridViewSelectedRowCollection selectedRows, string spliter = " ")
         {
-            // TODO: Complete member initialization
-            this.dataSourceMHub = dataSourceMHub;
-            this.fpath = fpath;
+            this.datasource = datasource;
+            this.textPath = System.IO.Path.GetFullPath(fpath); ;
             this.selectedRows = selectedRows;
-            this.p = p;
+            this.spliter = spliter;
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
@@ -40,7 +39,10 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             XMLExporter exporter = new XMLExporter();
-            res = exporter.exportXML(datasource, textPath, cmdstr, tcount, spliter);
+            if (selectedRows != null & selectedRows.Count > 0)
+                res = exporter.exportXML(datasource, textPath, selectedRows, spliter);
+            else
+                res = exporter.exportXML(datasource, textPath, cmdstr, tcount, spliter);
             return new object[] { res};
         }
         /// <summary>
@@ -69,9 +71,6 @@ namespace IDCM.Service.BGHandler
         private string cmdstr=null;
         private int tcount = 0;
         private DataSourceMHub datasource=null;
-        private DataSourceMHub dataSourceMHub;
-        private string fpath;
         private DataGridViewSelectedRowCollection selectedRows;
-        private string p;
     }
 }

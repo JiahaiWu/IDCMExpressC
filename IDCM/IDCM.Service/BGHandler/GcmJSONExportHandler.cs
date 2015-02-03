@@ -43,16 +43,15 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
-            if (strainList == null && selectedRows == null) return new object[] { false };
+
+            if (strainList == null && selectedRows == null)
+                return new object[] { false };
 
             GCMJSONExporter exporter = new GCMJSONExporter();
             if (strainList != null)
-            {
                 res = exporter.exportJSONList(xpath, strainList, exportDetail, gcmSiteHolder);
-            }
-            else {
+            else
                 res = exporter.exportJSONList(xpath, selectedRows, exportDetail,gcmSiteHolder);
-            }
             return new object[] { res };
         }
         /// <summary>

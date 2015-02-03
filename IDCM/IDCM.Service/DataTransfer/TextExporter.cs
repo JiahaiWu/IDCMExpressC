@@ -95,7 +95,7 @@ namespace IDCM.Service.DataTransfer
         /// <param name="recordIDs"></param>
         /// <param name="spliter"></param>
         /// <returns></returns>
-        public bool exportText(DataSourceMHub datasource, string filepath, string[] recordIDs, string spliter)
+        public bool exportText(DataSourceMHub datasource, string filepath, DataGridViewSelectedRowCollection selectedRows, string spliter)
         {
             try
             {
@@ -105,23 +105,20 @@ namespace IDCM.Service.DataTransfer
                 {
                     Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
                     //填写表头
-                    int i = 0;
-                    string key = null;
-                    for (i = 0; i < maps.Count - 1; i++)
+                    foreach (string key in maps.Keys)
                     {
-                        key = CVNameConverter.toViewName(maps.ElementAt(i).Key);
                         strbuilder.Append(key).Append(spliter);
                     }
-                    key = CVNameConverter.toViewName(maps.ElementAt(i).Key);
-                    strbuilder.Append(key);
                     //填写内容////////////////////
-                    foreach (string id in recordIDs)
+                    foreach (DataGridViewRow dgvRow in selectedRows)
                     {
-                        DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, id);
+                        string recordId = dgvRow.Cells[CTDRecordA.CTD_RID].Value as string;
+                        DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
                         foreach (DataRow row in table.Rows)
                         {
                             string dataLine = convertToText(maps, row, spliter);
                             strbuilder.Append("\n\r").Append(dataLine);
+                            /////////////
                             if (++count % 100 == 0)
                             {
                                 Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
@@ -130,7 +127,6 @@ namespace IDCM.Service.DataTransfer
                                 strbuilder.Length = 0;
                             }
                         }
-                        
                     }
                     if (strbuilder.Length > 0)
                     {
@@ -149,22 +145,13 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-        private static string convertToText(Dictionary<string, int> maps, DataRow row, string spliter)
+        private static string convertToText(Dictionary<string, int> customAttrDBMapping, DataRow row, string spliter)
         {
             StringBuilder strbuilder = new StringBuilder();
-            int j = 0;
-            int idx = -1;
-            for (j = 0; j < maps.Count - 1; j++)
+            foreach (KeyValuePair<string, int> kvpair in customAttrDBMapping)
             {
-                idx = maps.ElementAt(j).Value;
-                idx = idx > SysConstants.Max_Attr_Count ? idx - SysConstants.Max_Attr_Count : idx;
-                if(idx>=0)
-                    strbuilder.Append(row[idx]).Append(spliter);
+                strbuilder.Append(row[kvpair.Value].ToString()).Append(spliter);
             }
-            idx = maps.ElementAt(j).Value;
-            idx = idx > SysConstants.Max_Attr_Count ? idx - SysConstants.Max_Attr_Count : idx;
-            if (idx >= 0)
-                strbuilder.Append(row[idx]);
             return strbuilder.ToString();
         }
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();

@@ -209,29 +209,26 @@ namespace IDCM.ViewManager
             {
                 switch (etype)
                 {
-                    ////////////////////////////////////////////////////////////////////////////////////////////////
-                    //等待更改
-                    //case ExportType.Excel:
-                    //    handler = new ExcelExportHandler(DataSourceHolder.DataSource, fpath, selectedRows);
-                    //    DWorkMHub.callAsyncHandle(handler);
-                    //    break;
-                    ////case ExportType.JSONList:
-                    ////    handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, recordIDs);
-                    ////    DWorkMHub.callAsyncHandle(handler);
-                    ////    break;
-                    //case ExportType.TSV:
-                    //    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, selectedRows, "\t");
-                    //    DWorkMHub.callAsyncHandle(handler);
-                    //    break;
-                    //case ExportType.CSV:
-                    //    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, selectedRows, ",");
-                    //    DWorkMHub.callAsyncHandle(handler);
-                    //    break;
-                    ////case ExportType.XML:
-                    ////    handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, recordIDs, ",");
-                    ////    DWorkMHub.callAsyncHandle(handler);
-                    ////    break;
-                    //////////////////////////////////////////////////////////////
+                    case ExportType.Excel:
+                        handler = new ExcelExportHandler(DataSourceHolder.DataSource, fpath, selectedRows);
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    case ExportType.JSONList:
+                        handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, selectedRows);
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    case ExportType.TSV:
+                        handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, selectedRows, "\t");
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    case ExportType.CSV:
+                        handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, selectedRows, ",");
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    case ExportType.XML:
+                        handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, selectedRows, ",");
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
                     default:
                         MessageBox.Show("Unsupport export type!");
                         break;
@@ -462,28 +459,6 @@ namespace IDCM.ViewManager
         {
             get { return catBuilder != null ? catBuilder.SelectedNode_Current : null; }
         }
-        //等会就删
-        ///// <summary>
-        ///// 根据目标选取的行，获取CTDRecordA.CTD_RID
-        ///// </summary>
-        ///// <returns></returns>
-        //public string[] selectedRecordID()
-        //{
-        //    DataGridViewSelectedRowCollection selectedRows = homeView.getItemGridView().SelectedRows;
-        //    string[] recordIds = new string[selectedRows.Count];
-        //    int i = 0;
-        //    DataGridViewColumn dgvc = homeView.getItemGridView().Columns[CTDRecordA.CTD_RID];
-        //    foreach (DataGridViewRow row in selectedRows)
-        //    {
-        //        DataGridViewCell idCell = row.Cells[dgvc.Index];
-        //        if (idCell != null)
-        //        {
-        //            string recordIdStr = idCell.FormattedValue.ToString();
-        //            recordIds[i++] = recordIdStr;
-        //        }
-        //    }
-        //    return recordIds;
-        //}
         public long CURRENT_RID
         {
             get { return datasetBuilder.CURRENT_RID; }

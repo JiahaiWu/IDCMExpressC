@@ -33,17 +33,15 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
+
+            if (strainViewList == null && selectedRows == null) 
+                return new object[] { false };
+
             GCMExcelExporter exporter = new GCMExcelExporter();
-            DWorkMHub.note(AsyncMessage.StartBackProgress);
-            if (strainViewList == null && selectedRows == null) return new object[] { false };
             if (strainViewList != null)
-            {
                 res = exporter.exportText(fpath, strainViewList, exportDetail, gcmSiteHolder);
-            }
             else
-            {
                 res = exporter.exportText(fpath, selectedRows, exportDetail, gcmSiteHolder);
-            }
             return new object[] { res };
         }
 

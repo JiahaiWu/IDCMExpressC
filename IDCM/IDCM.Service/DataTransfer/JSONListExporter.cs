@@ -64,6 +64,52 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
+        public bool exportJSONList(DataSourceMHub datasource, string filepath, DataGridViewSelectedRowCollection selectedRows)
+        {
+            try
+            {
+                StringBuilder strbuilder = new StringBuilder();
+                int count = 0;
+                using (FileStream fs = new FileStream(filepath, FileMode.Create))
+                {
+                    Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
+                    //填写内容////////////////////
+                    foreach (DataGridViewRow dgvRow in selectedRows)
+                    {
+                        string recordId = dgvRow.Cells[CTDRecordA.CTD_RID].Value as string;
+                        DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
+                        foreach (DataRow row in table.Rows)
+                        {
+                            string jsonStr = convertToJsonStr(maps, row);
+                            strbuilder.Append(jsonStr).Append("\n\r");
+                            /////////////
+                            if (++count % 100 == 0)
+                            {
+                                Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+                                BinaryWriter bw = new BinaryWriter(fs);
+                                fs.Write(info, 0, info.Length);
+                                strbuilder.Length = 0;
+                            }    
+                        }
+                        if (strbuilder.Length > 0)
+                        {
+                            Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+                            BinaryWriter bw = new BinaryWriter(fs);
+                            fs.Write(info, 0, info.Length);
+                            strbuilder.Length = 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERROR::" + ex.Message + "\n" + ex.StackTrace);
+                log.Error(ex);
+                return false;
+            }
+            return true;
+        }
+
         protected string convertToJsonStr(Dictionary<string, int> maps, DataRow row)
         {
             Dictionary<string, string> record = ConvertToRecDict(maps, row);

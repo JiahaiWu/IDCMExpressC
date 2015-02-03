@@ -22,12 +22,12 @@ namespace IDCM.Service.BGHandler
             this.datasource = datasource;
         }
 
-        public TextExportHandler(DataSourceMHub datasource, string fpath, string[] recordIDs, string spliter = "")
+        public TextExportHandler(DataSourceMHub datasource, string fpath, DataGridViewSelectedRowCollection selectedRows, string spliter = "")
         {
             // TODO: Complete member initialization
             this.datasource = datasource;
             this.textPath = System.IO.Path.GetFullPath(fpath);
-            this.recordIDs = recordIDs;
+            this.selectedRows = selectedRows;
             this.spliter = spliter;
         }
         /// <summary>
@@ -40,8 +40,8 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             TextExporter exporter = new TextExporter();
-            if(recordIDs != null)
-                res = exporter.exportText(datasource,textPath,recordIDs,spliter);
+            if (selectedRows != null && selectedRows.Count>0)
+                res = exporter.exportText(datasource, textPath, selectedRows, spliter);
             else
                 res = exporter.exportText(datasource,textPath, cmdstr,tcount, spliter);
             return new object[] { res};
@@ -72,6 +72,6 @@ namespace IDCM.Service.BGHandler
         private string cmdstr=null;
         private int tcount = 0;
         private DataSourceMHub datasource=null;
-        string[] recordIDs;
+        private DataGridViewSelectedRowCollection selectedRows;
     }
 }

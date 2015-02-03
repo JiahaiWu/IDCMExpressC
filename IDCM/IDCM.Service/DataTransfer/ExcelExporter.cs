@@ -73,7 +73,14 @@ namespace IDCM.Service.DataTransfer
             return true;
         }
 
-        public bool exportExcel(DataSourceMHub datasource, string filepath, string[] recordIDs)
+        /// <summary>
+        /// 导出DataGridViewSelectedRowCollection中的记录
+        /// </summary>
+        /// <param name="datasource"></param>
+        /// <param name="filepath"></param>
+        /// <param name="selectedRows"></param>
+        /// <returns></returns>
+        public bool exportExcel(DataSourceMHub datasource, string filepath, DataGridViewSelectedRowCollection selectedRows)
         {
             try
             {
@@ -93,18 +100,17 @@ namespace IDCM.Service.DataTransfer
                 foreach (string key in maps.Keys)
                 {
                     ICell cell = rowHead.CreateCell(i++, CellType.String);
-                    cell.SetCellValue(CVNameConverter.toViewName(key));
+                    cell.SetCellValue(key);
                     cell.CellStyle.FillBackgroundColor = IndexedColors.Green.Index; 
                 }
                 CellRangeAddress cra = CellRangeAddress.ValueOf("A1:" + numToExcelIndex(maps.Count) + "1");
                 sheet.SetAutoFilter(cra);
                 //填写内容
                 int ridx = 1;
-                foreach (string id in recordIDs)
+                foreach(DataGridViewRow dgvRow in selectedRows)
                 {
-                    if (id == null || id.Equals("")) 
-                        continue;
-                    DataTable table = LocalRecordMHub.queryCTDRecord(datasource,null,id);
+                    string recordId = dgvRow.Cells[CTDRecordA.CTD_RID].Value as string;
+                    DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
                     foreach (DataRow row in table.Rows)
                     {
                         IRow srow = sheet.CreateRow(ridx++);
@@ -127,7 +133,7 @@ namespace IDCM.Service.DataTransfer
             return true;
         }
 
-        protected void mergeDataToSheetRow(Dictionary<string, int> maps,DataRow row,IRow srow)
+        protected void mergeDataToSheetRow(Dictionary<string, int> customAttrDBMapping, DataRow row, IRow srow)
         {
             int idx=0;
             foreach (KeyValuePair<string, int> kvpair in customAttrDBMapping)

@@ -4,6 +4,7 @@ using IDCM.Service.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -12,13 +13,14 @@ namespace IDCM.Service.BGHandler
 {
     public class GCMXMLExportHandler : AbsHandler
     {
-        public GCMXMLExportHandler(DataGridView dgv, string xpath, bool exportStrainTree)
+        public GCMXMLExportHandler(string xpath, bool exportDetail, DataTable strainViewList, string spliter, GCMSiteMHub gcmSiteHolder = null)
         {
-            this.dgv = dgv;
             this.xpath = xpath;
-            this.exportStrainTree = exportStrainTree;
+            this.exportDetail = exportDetail;
+            this.strainViewList = strainViewList;
+            this.spliter = spliter;
+            this.gcmSiteHolder = gcmSiteHolder;
         }
-
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
         /// </summary>
@@ -28,8 +30,12 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
+            if (strainViewList == null) 
+                return new object[] { false };
+
             GCMXMLExporter exporter = new GCMXMLExporter();
-            res = exporter.exportXML(dgv, xpath);
+            if (strainViewList != null)
+                exporter.exportXML(xpath, strainViewList, exportDetail, gcmSiteHolder);
             return new object[] { res };
         }
         /// <summary>
@@ -52,9 +58,10 @@ namespace IDCM.Service.BGHandler
                 MessageBox.Show("Export success. @filepath=" + xpath);
             }
         }
-
-        private DataGridView dgv;
         private string xpath;
-        private bool exportStrainTree;
+        private bool exportDetail;
+        private DataTable strainViewList;
+        private string spliter;
+        private GCMSiteMHub gcmSiteHolder;
     }
 }

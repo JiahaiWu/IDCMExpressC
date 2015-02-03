@@ -20,11 +20,11 @@ namespace IDCM.Service.BGHandler
             this.datasource = datasource;
         }
 
-        public ExcelExportHandler(DataSourceMHub datasource, string xlsPath, string[] recordIDs)
+        public ExcelExportHandler(DataSourceMHub datasource, string xlsPath, DataGridViewSelectedRowCollection selectedRows)
         {
             this.datasource = datasource;
             this.xlsPath = System.IO.Path.GetFullPath(xlsPath);
-            this.recordIDs = recordIDs;
+            this.selectedRows = selectedRows;
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
@@ -36,8 +36,8 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             ExcelExporter exporter = new ExcelExporter();
-            if (recordIDs != null)
-                res = exporter.exportExcel(datasource, xlsPath, recordIDs);
+            if (selectedRows != null && selectedRows.Count>0)
+                res = exporter.exportExcel(datasource, xlsPath, selectedRows);
             else
                 res = exporter.exportExcel(datasource, xlsPath, cmdstr, tcount);
             return new object[] { res};
@@ -67,7 +67,6 @@ namespace IDCM.Service.BGHandler
         private  string cmdstr;
         private int tcount;
         private DataSourceMHub datasource = null;
-        private DataSourceMHub dataSourceMHub;
-        string[] recordIDs;
+        private DataGridViewSelectedRowCollection selectedRows;
     }
 }

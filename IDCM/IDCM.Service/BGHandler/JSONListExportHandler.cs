@@ -21,11 +21,11 @@ namespace IDCM.Service.BGHandler
             this.datasource = datasource;
         }
 
-        public JSONListExportHandler(DataSourceMHub dataSourceMHub, string fpath, DataGridViewSelectedRowCollection selectedRows)
+        public JSONListExportHandler(DataSourceMHub datasource, string fpath, DataGridViewSelectedRowCollection selectedRows)
         {
             // TODO: Complete member initialization
-            this.dataSourceMHub = dataSourceMHub;
-            this.fpath = fpath;
+            this.datasource = datasource;
+            this.xlsPath = fpath;
             this.selectedRows = selectedRows;
         }
         /// <summary>
@@ -38,7 +38,10 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             JSONListExporter exporter = new JSONListExporter();
-            res = exporter.exportJSONList(datasource,xlsPath, cmdstr, tcount);
+            if (selectedRows != null && selectedRows.Count > 0)
+                res = exporter.exportJSONList(datasource, xlsPath, selectedRows);
+            else
+                res = exporter.exportJSONList(datasource, xlsPath, cmdstr, tcount);
             return new object[] { res};
         }
         /// <summary>
@@ -65,8 +68,6 @@ namespace IDCM.Service.BGHandler
         private  string cmdstr;
         private int tcount;
         private DataSourceMHub datasource = null;
-        private DataSourceMHub dataSourceMHub;
-        private string fpath;
         private DataGridViewSelectedRowCollection selectedRows;
     }
 }
