@@ -16,6 +16,7 @@ namespace IDCM.Data.Base.Utils
     /// 用于记录DataGirdView显示时的字段名称映射关系集合
     /// 说明：
     /// 1.该集合基于并行的字典实现，支持并行化的操作请求方式（参考ConcurrentDictionary说明）
+    /// 2.映射关系存储结构表示为数据存储的字段名与[数据存储位序，预览界面位序]的双层映射关系
     /// </summary>
     [Serializable]
     public class ColumnMapping : ICloneable
