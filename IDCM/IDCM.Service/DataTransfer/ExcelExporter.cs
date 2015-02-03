@@ -38,7 +38,7 @@ namespace IDCM.Service.DataTransfer
                 foreach (string key in maps.Keys)
                 {
                     ICell cell = rowHead.CreateCell(i++, CellType.String);
-                    cell.SetCellValue(CVNameConverter.toViewName(key));
+                    cell.SetCellValue(key);
                     cell.CellStyle.FillBackgroundColor = IndexedColors.Green.Index;
                 }
                 CellRangeAddress cra = CellRangeAddress.ValueOf("A1:" + numToExcelIndex(maps.Count)+"1");
@@ -72,14 +72,20 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-        protected void mergeDataToSheetRow(Dictionary<string, int> maps,DataRow row,IRow srow)
+        /// <summary>
+        /// 将查询结果数据行转录为Excel的行记录
+        /// </summary>
+        /// <param name="customAttrDBMapping"></param>
+        /// <param name="row"></param>
+        /// <param name="srow"></param>
+        protected void mergeDataToSheetRow(Dictionary<string, int> customAttrDBMapping, DataRow row, IRow srow)
         {
             int idx=0;
-            foreach (KeyValuePair<string, int> kvpair in maps)
+            foreach (KeyValuePair<string, int> kvpair in customAttrDBMapping)
             {
                 if (kvpair.Value > 0)
                 {
-                    int k = kvpair.Value > SysConstants.Max_Attr_Count ? kvpair.Value - SysConstants.Max_Attr_Count : kvpair.Value;
+                    int k = kvpair.Value;
                     string value = row[k].ToString();
                     srow.CreateCell(idx).SetCellValue(value);
                 }else{

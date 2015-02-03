@@ -40,13 +40,7 @@ namespace IDCM.Service.DataTransfer
                     XmlDocument xmlDoc = new XmlDocument();
                     strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
                     strbuilder.Append("<strains>\n\r");
-                    Dictionary<string, int> dbmaps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
-                    Dictionary<string, int> maps=new Dictionary<string,int>();
-                    foreach (KeyValuePair<string, int> mapEntry in dbmaps)
-                    {
-                        string key = CVNameConverter.toViewName(mapEntry.Key);
-                        maps[key] = mapEntry.Value;
-                    }
+                    Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
                     ///////////////////
                     int offset = 0;
                     int stepLen = SysConstants.EXPORT_PAGING_COUNT;

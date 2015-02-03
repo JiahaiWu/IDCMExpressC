@@ -76,8 +76,8 @@ namespace IDCM.Service.DataTransfer
             {
                 if (kvpair.Value > 0)
                 {
-                    string key = CVNameConverter.toViewName(kvpair.Key);
-                    int k = kvpair.Value > SysConstants.Max_Attr_Count ? kvpair.Value - SysConstants.Max_Attr_Count : kvpair.Value;
+                    string key = kvpair.Key;
+                    int k = kvpair.Value ;
                     dict[key] = row[k].ToString();
                 }
             }

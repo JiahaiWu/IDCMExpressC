@@ -79,6 +79,8 @@ namespace IDCM.Data.Core
 
         /// <summary>
         /// 缓存数据字段映射关联关系
+        /// 说明：
+        /// 1.该方法用于存储及刷新CTDRecord相关的字段映射关系缓存
         /// </summary>
         internal static void queryCacheAttrDBMap(ConnLabel sconn)
         {
@@ -91,10 +93,60 @@ namespace IDCM.Data.Core
             }
         }
         /// <summary>
-        /// 获取视图字段和数据存储字段映射副本
+        /// 获取已经被缓存的数据存储字段~数据库字段位序的映射关系。
+        /// 说明：
+        /// 1.本方法返回实际的[数据存储字段名称，数据存储字段位序]的映射关系。
+        /// 2.数据库字段映射位序的值自0计数。
+        /// 3.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
+        /// 4.返回的字典主键顺序以用户界面中字段列加载顺序为参照。
+        /// </summary>
+        /// <param name="sconn"></param>
+        /// <returns></returns>
+        public static Dictionary<string, int> getAttrDBMapping(ConnLabel sconn)
+        {
+            Dictionary<string, int> maps = new Dictionary<string, int>();
+            if (attrMapping.Count < 1)
+                queryCacheAttrDBMap(sconn);
+            foreach (KeyValuePair<String, ObjectPair<int, int>> kvpair in attrMapping)
+            {
+                maps[kvpair.Key] = kvpair.Value.Key;
+            }
+            return maps;
+        }
+        /// <summary>
+        /// 获取已经被缓存的用户浏览字段~数据库字段位序的映射关系。
+        /// 说明：
+        /// 1.本方法返回可见的[用户浏览字段名，数据存储字段位序]的映射关系。
+        /// 2.数据库字段映射位序的值自0计数。
+        /// 3.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
+        /// 4.返回的字典主键顺序以用户界面中字段列加载顺序为参照。
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, int> getViewDBMapping(ConnLabel sconn)
+        public static Dictionary<string, int> getCustomAttrDBMapping(ConnLabel sconn)
+        {
+            Dictionary<string, int> maps = ColumnMappingHolder.getAttrDBMapping(sconn);
+            Dictionary<string, int> resmaps = new Dictionary<string, int>();
+            foreach (KeyValuePair<string, int> mapEntry in maps)
+            {
+                if (CVNameConverter.isViewWrapName(mapEntry.Key))
+                {
+                    string key = CVNameConverter.toViewName(mapEntry.Key);
+                    resmaps[key] = mapEntry.Value;
+                }
+            }
+            return resmaps;
+        }
+        /// <summary>
+        /// 获取已经被缓存的数据存储字段~预览界面位序的映射关系。
+        /// 说明：
+        /// 1.本方法返回实际的[数据存储字段名称，预览界面位序]的映射关系。
+        /// 2.数据库字段映射位序的值自0计数。
+        /// 3.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
+        /// 4.返回的字典主键顺序以用户界面中字段列加载顺序为参照。
+        /// </summary>
+        /// <param name="sconn"></param>
+        /// <returns></returns>
+        public static Dictionary<string, int> getAttrViewMapping(ConnLabel sconn)
         {
             Dictionary<string, int> maps = new Dictionary<string, int>();
             if (attrMapping.Count < 1)
@@ -106,46 +158,33 @@ namespace IDCM.Data.Core
             return maps;
         }
         /// <summary>
-        /// 获取已经被缓存的用户浏览字段~数据库字段位序的映射关系。
-        /// @author JiahaiWu
-        /// 字段名对于数据库存储名,亦即包装过的表单列名。
-        /// 数据库字段映射位序的值自0计数。
+        /// 获取已经被缓存的用户浏览字段~预览界面位序的映射关系。
+        /// 说明：
+        /// 1.本方法返回可见的[用户浏览字段名，预览界面位序]的映射关系。
+        /// 2.数据库字段映射位序的值自0计数。
+        /// 3.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
+        /// 4.返回的字典主键顺序以用户界面中字段列加载顺序为参照。
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, int> getCustomAttrDBMapping(ConnLabel sconn)
+        public static Dictionary<string, int> getCustomAttrViewMapping(ConnLabel sconn)
         {
-            Dictionary<string, int> maps = ColumnMappingHolder.getViewDBMapping(sconn);
-            //填写表头
-            List<string> excludes = new List<string>();
-            foreach (string attr in maps.Keys)
+            Dictionary<string, int> maps = ColumnMappingHolder.getAttrDBMapping(sconn);
+            Dictionary<string, int> resmaps = new Dictionary<string, int>();
+            foreach (KeyValuePair<string, int> mapEntry in maps)
             {
-                if (!CVNameConverter.isViewWrapName(attr))
+                if (CVNameConverter.isViewWrapName(mapEntry.Key))
                 {
-                    excludes.Add(CVNameConverter.toViewName(attr));
+                    string key = CVNameConverter.toViewName(mapEntry.Key);
+                    resmaps[key] = mapEntry.Value;
                 }
             }
-            foreach (string attr in excludes)
-            {
-                maps.Remove(attr);
-            }
-            return maps;
-        }
-        /// <summary>
-        /// 获取存储字段序列值(如查找失败返回-1)
-        /// </summary>
-        /// <param name="attr"></param>
-        /// <returns></returns>
-        public static int getDBOrder(ConnLabel sconn, string attr)
-        {
-            if (attrMapping.Count < 1)
-                queryCacheAttrDBMap(sconn);
-            ObjectPair<int, int> kvpair = null;
-            attrMapping.TryGetValue(attr, out kvpair);
-            return kvpair == null ? -1 : kvpair.Key;
+            return resmaps;
         }
 
         /// <summary>
         /// 获取预览字段集序列
+        /// 说明:
+        /// 1.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
         /// </summary>
         /// <returns></returns>
         public static List<string> getViewAttrs(ConnLabel sconn, bool withInnerField = true)
@@ -168,8 +207,10 @@ namespace IDCM.Data.Core
         }
         /// <summary>
         /// 获取预览字段位序值(如查找失败返回-1)
+        /// 说明：
+        /// 1.如果外部存在批量的字段映射匹配需要，首选getAttrViewMapping或getCustomAttrViewMapping方法进行外部缓冲。
         /// </summary>
-        /// <param name="attr"></param>
+        /// <param name="attr">数据存储字段名称</param>
         /// <returns></returns>
         public static int getViewOrder(ConnLabel sconn, string attr)
         {
@@ -179,6 +220,22 @@ namespace IDCM.Data.Core
             attrMapping.TryGetValue(attr, out kvpair);
             return kvpair == null ? -1 : kvpair.Val;
         }
+        /// <summary>
+        /// 获取存储字段序列值(如查找失败返回-1)
+        /// 说明：
+        /// 1.如果外部存在批量的字段映射匹配需要，首选getAttrDBMapping或getCustomAttrDBMapping方法进行外部缓冲。
+        /// </summary>
+        /// <param name="attr">数据存储字段名称</param>
+        /// <returns></returns>
+        public static int getDBOrder(ConnLabel sconn, string attr)
+        {
+            if (attrMapping.Count < 1)
+                queryCacheAttrDBMap(sconn);
+            ObjectPair<int, int> kvpair = null;
+            attrMapping.TryGetValue(attr, out kvpair);
+            return kvpair == null ? -1 : kvpair.Key;
+        }
+
         /// <summary>
         /// 更新预览字段位序值
         /// </summary>
@@ -220,7 +277,7 @@ namespace IDCM.Data.Core
             attrMapping.Clear();
         }
         /// <summary>
-        /// 数据字段名与[数据存储，预览界面]的映射关系
+        /// 数据存储的字段名与[数据存储位序，预览界面位序]的双层映射关系存储集合对象
         /// </summary>
         protected static ColumnMapping attrMapping = new ColumnMapping();
 

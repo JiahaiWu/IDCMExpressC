@@ -42,10 +42,10 @@ namespace IDCM.Service.DataTransfer
                     string key = null;
                     for (i = 0; i < maps.Count - 1; i++)
                     {
-                        key = CVNameConverter.toViewName(maps.ElementAt(i).Key);
+                        key = maps.ElementAt(i).Key;
                         strbuilder.Append(key).Append(spliter);
                     }
-                    key = CVNameConverter.toViewName(maps.ElementAt(i).Key);
+                    key = maps.ElementAt(i).Key;
                     strbuilder.Append(key);
                     //填写内容////////////////////
                     int offset = 0;

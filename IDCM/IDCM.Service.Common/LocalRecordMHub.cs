@@ -14,14 +14,32 @@ namespace IDCM.Service.Common
     public class LocalRecordMHub
     {
         /// <summary>
-        /// 获取自定义记录属性映射关系
+        /// 获取已经被缓存的用户浏览字段~数据库字段位序的映射关系。
+        /// 说明：
+        /// 1.本方法返回可见的[用户浏览字段名，数据存储字段位序]的映射关系。
+        /// 2.数据库字段映射位序的值自0计数。
+        /// 3.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
+        /// 4.返回的字典主键顺序以用户界面中字段列加载顺序为参照。
         /// </summary>
-        /// <param name="datasource"></param>
         /// <returns></returns>
         public static Dictionary<string, int> getCustomAttrDBMapping(DataSourceMHub datasource)
         {
             return DataSupporter.getCustomAttrDBMapping(datasource.WSM);
         }
+        /// <summary>
+        /// 获取已经被缓存的用户浏览字段~预览界面位序的映射关系。
+        /// 说明：
+        /// 1.本方法返回可见的[用户浏览字段名，预览界面位序]的映射关系。
+        /// 2.数据库字段映射位序的值自0计数。
+        /// 3.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
+        /// 4.返回的字典主键顺序以用户界面中字段列加载顺序为参照。
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, int> getCustomAttrViewMapping(DataSourceMHub datasource)
+        {
+            return DataSupporter.getCustomAttrViewMapping(datasource.WSM);
+        }
+
         /// <summary>
         /// 基于缓存模式的记录请求方法
         /// </summary>
@@ -147,8 +165,10 @@ namespace IDCM.Service.Common
         }
         /// <summary>
         /// 获取存储字段序列值(如查找失败返回-1)
+        /// 说明：
+        /// 1.如果外部存在批量的字段映射匹配需要，首选getAttrDBMapping或getCustomAttrDBMapping方法进行外部缓冲。
         /// </summary>
-        /// <param name="attr"></param>
+        /// <param name="attr">数据存储字段名称</param>
         /// <returns></returns>
         public static int getDBOrder(DataSourceMHub datasource, string attr)
         {
@@ -156,8 +176,10 @@ namespace IDCM.Service.Common
         }
         /// <summary>
         /// 获取预览字段位序值(如查找失败返回-1)
+        /// 说明：
+        /// 1.如果外部存在批量的字段映射匹配需要，首选getAttrViewMapping或getCustomAttrViewMapping方法进行外部缓冲。
         /// </summary>
-        /// <param name="attr"></param>
+        /// <param name="attr">数据存储字段名称</param>
         /// <returns></returns>
         public static int getViewOrder(DataSourceMHub datasource, string attr)
         {

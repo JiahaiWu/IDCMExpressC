@@ -161,8 +161,10 @@ namespace IDCM.Data
         }
         /// <summary>
         /// 获取存储字段序列值(如查找失败返回-1)
+        /// 说明：
+        /// 1.如果外部存在批量的字段映射匹配需要，首选getAttrDBMapping或getCustomAttrDBMapping方法进行外部缓冲。
         /// </summary>
-        /// <param name="attr"></param>
+        /// <param name="attr">数据存储字段名称</param>
         /// <returns></returns>
         public static int getDBOrder(WorkSpaceManager wsm, string attr)
         {
@@ -170,8 +172,10 @@ namespace IDCM.Data
         }
         /// <summary>
         /// 获取预览字段位序值(如查找失败返回-1)
+        /// 说明：
+        /// 1.如果外部存在批量的字段映射匹配需要，首选getAttrViewMapping或getCustomAttrViewMapping方法进行外部缓冲。
         /// </summary>
-        /// <param name="attr"></param>
+        /// <param name="attr">数据存储字段名称</param>
         /// <returns></returns>
         public static int getViewOrder(WorkSpaceManager wsm, string attr)
         {
@@ -209,14 +213,29 @@ namespace IDCM.Data
         }
         /// <summary>
         /// 获取已经被缓存的用户浏览字段~数据库字段位序的映射关系。
-        /// @author JiahaiWu
-        /// 字段名对于数据库存储名,亦即包装过的表单列名。
-        /// 数据库字段映射位序的值自0计数。
+        /// 说明：
+        /// 1.本方法返回可见的[用户浏览字段名，数据存储字段位序]的映射关系。
+        /// 2.数据库字段映射位序的值自0计数。
+        /// 3.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
+        /// 4.返回的字典主键顺序以用户界面中字段列加载顺序为参照。
         /// </summary>
         /// <returns></returns>
         public static Dictionary<string, int> getCustomAttrDBMapping(WorkSpaceManager wsm)
         {
             return ColumnMappingHolder.getCustomAttrDBMapping(wsm.getConnection());
+        }
+        /// <summary>
+        /// 获取已经被缓存的用户浏览字段~预览界面位序的映射关系。
+        /// 说明：
+        /// 1.本方法返回可见的[用户浏览字段名，预览界面位序]的映射关系。
+        /// 2.数据库字段映射位序的值自0计数。
+        /// 3.如果外部存在批量的字段映射匹配需要，需外部缓冲，重复请求该方法会重复创建对象资源。
+        /// 4.返回的字典主键顺序以用户界面中字段列加载顺序为参照。
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, int> getCustomAttrViewMapping(WorkSpaceManager wsm)
+        {
+            return ColumnMappingHolder.getCustomAttrViewMapping(wsm.getConnection());
         }
         /// <summary>
         /// 重写用户自定义数据表的字段集定义
