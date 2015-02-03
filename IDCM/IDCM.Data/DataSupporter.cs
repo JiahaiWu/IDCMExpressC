@@ -214,9 +214,9 @@ namespace IDCM.Data
         /// 数据库字段映射位序的值自0计数。
         /// </summary>
         /// <returns></returns>
-        public static Dictionary<string, int> getCustomViewDBMapping(WorkSpaceManager wsm)
+        public static Dictionary<string, int> getCustomAttrDBMapping(WorkSpaceManager wsm)
         {
-            return ColumnMappingHolder.getCustomViewDBMapping(wsm.getConnection());
+            return ColumnMappingHolder.getCustomAttrDBMapping(wsm.getConnection());
         }
         /// <summary>
         /// 重写用户自定义数据表的字段集定义
