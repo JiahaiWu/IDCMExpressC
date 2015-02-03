@@ -204,31 +204,34 @@ namespace IDCM.ViewManager
         {
             KeyValuePair<string, int> lastQuery = LocalRecordMHub.getLastDGVRQuery();
             AbsHandler handler = null;
-            string[] recordIDs = selectedRecordID();
-            if (recordIDs != null && recordIDs.Length > 0)
+            DataGridViewSelectedRowCollection selectedRows = homeView.getItemGridView().SelectedRows;
+            if (selectedRows != null && selectedRows.Count>0)
             {
                 switch (etype)
                 {
-                    case ExportType.Excel:
-                        handler = new ExcelExportHandler(DataSourceHolder.DataSource, fpath, recordIDs);
-                        DWorkMHub.callAsyncHandle(handler);
-                        break;
-                    //case ExportType.JSONList:
-                    //    handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, recordIDs);
+                    ////////////////////////////////////////////////////////////////////////////////////////////////
+                    //等待更改
+                    //case ExportType.Excel:
+                    //    handler = new ExcelExportHandler(DataSourceHolder.DataSource, fpath, selectedRows);
                     //    DWorkMHub.callAsyncHandle(handler);
                     //    break;
+                    ////case ExportType.JSONList:
+                    ////    handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, recordIDs);
+                    ////    DWorkMHub.callAsyncHandle(handler);
+                    ////    break;
                     //case ExportType.TSV:
-                    //    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, recordIDs, "\t");
+                    //    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, selectedRows, "\t");
                     //    DWorkMHub.callAsyncHandle(handler);
                     //    break;
                     //case ExportType.CSV:
-                    //    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, recordIDs, ",");
+                    //    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, selectedRows, ",");
                     //    DWorkMHub.callAsyncHandle(handler);
                     //    break;
-                    //case ExportType.XML:
-                    //    handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, recordIDs, ",");
-                    //    DWorkMHub.callAsyncHandle(handler);
-                    //    break;
+                    ////case ExportType.XML:
+                    ////    handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, recordIDs, ",");
+                    ////    DWorkMHub.callAsyncHandle(handler);
+                    ////    break;
+                    //////////////////////////////////////////////////////////////
                     default:
                         MessageBox.Show("Unsupport export type!");
                         break;
@@ -459,21 +462,28 @@ namespace IDCM.ViewManager
         {
             get { return catBuilder != null ? catBuilder.SelectedNode_Current : null; }
         }
-        public string[] selectedRecordID()
-        {
-            DataGridViewSelectedRowCollection selectedRow = homeView.getItemGridView().SelectedRows;
-            string[] recordIds = new string[selectedRow.Count];
-            foreach (DataGridViewRow row in selectedRow)
-            {
-                DataGridViewCell idCell = row.Cells[CTDRecordA.CTD_RID];                
-                int i = 0;
-                if (idCell != null)
-                {
-                    recordIds[i++] = idCell.FormattedValue.ToString();
-                }
-            }
-            return recordIds;
-        }
+        //等会就删
+        ///// <summary>
+        ///// 根据目标选取的行，获取CTDRecordA.CTD_RID
+        ///// </summary>
+        ///// <returns></returns>
+        //public string[] selectedRecordID()
+        //{
+        //    DataGridViewSelectedRowCollection selectedRows = homeView.getItemGridView().SelectedRows;
+        //    string[] recordIds = new string[selectedRows.Count];
+        //    int i = 0;
+        //    DataGridViewColumn dgvc = homeView.getItemGridView().Columns[CTDRecordA.CTD_RID];
+        //    foreach (DataGridViewRow row in selectedRows)
+        //    {
+        //        DataGridViewCell idCell = row.Cells[dgvc.Index];
+        //        if (idCell != null)
+        //        {
+        //            string recordIdStr = idCell.FormattedValue.ToString();
+        //            recordIds[i++] = recordIdStr;
+        //        }
+        //    }
+        //    return recordIds;
+        //}
         public long CURRENT_RID
         {
             get { return datasetBuilder.CURRENT_RID; }

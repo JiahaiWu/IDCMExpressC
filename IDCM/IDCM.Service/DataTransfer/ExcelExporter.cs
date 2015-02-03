@@ -75,32 +75,55 @@ namespace IDCM.Service.DataTransfer
 
         public bool exportExcel(DataSourceMHub datasource, string filepath, string[] recordIDs)
         {
-            IWorkbook workbook = null;
-            string suffix = Path.GetExtension(filepath).ToLower();
-            if (suffix.Equals(".xlsx"))
-                workbook = new XSSFWorkbook();
-            else
-                workbook = new HSSFWorkbook();
-            ISheet sheet = workbook.CreateSheet("Core Datasets");
-            IRow rowHead = sheet.CreateRow(0);
-            HashSet<int> excludes = new HashSet<int>();
-            //填写表头
-            Dictionary<string, int> maps = LocalRecordMHub.getCustomViewDBMapping(datasource);
-            //填写表头
-            int i = 0;
-            foreach (string key in maps.Keys)
+            try
             {
-                ICell cell = rowHead.CreateCell(i++, CellType.String);
-                cell.SetCellValue(CVNameConverter.toViewName(key));
-                cell.CellStyle.FillBackgroundColor = IndexedColors.Green.Index;
+                IWorkbook workbook = null;
+                string suffix = Path.GetExtension(filepath).ToLower();
+                if (suffix.Equals(".xlsx"))
+                    workbook = new XSSFWorkbook();
+                else
+                    workbook = new HSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("Core Datasets");
+                IRow rowHead = sheet.CreateRow(0);
+                HashSet<int> excludes = new HashSet<int>();
+                //填写表头
+                Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
+                //填写表头
+                int i = 0;
+                foreach (string key in maps.Keys)
+                {
+                    ICell cell = rowHead.CreateCell(i++, CellType.String);
+                    cell.SetCellValue(CVNameConverter.toViewName(key));
+                    cell.CellStyle.FillBackgroundColor = IndexedColors.Green.Index; 
+                }
+                CellRangeAddress cra = CellRangeAddress.ValueOf("A1:" + numToExcelIndex(maps.Count) + "1");
+                sheet.SetAutoFilter(cra);
+                //填写内容
+                int ridx = 1;
+                foreach (string id in recordIDs)
+                {
+                    if (id == null || id.Equals("")) 
+                        continue;
+                    DataTable table = LocalRecordMHub.queryCTDRecord(datasource,null,id);
+                    foreach (DataRow row in table.Rows)
+                    {
+                        IRow srow = sheet.CreateRow(ridx++);
+                        mergeDataToSheetRow(maps, row, srow);
+                    }
+                }
+                using (FileStream fs = File.Create(filepath))
+                {
+                    workbook.Write(fs);
+                    fs.Close();
+                }
             }
-            CellRangeAddress cra = CellRangeAddress.ValueOf("A1:" + numToExcelIndex(maps.Count) + "1");
-            sheet.SetAutoFilter(cra);
-            foreach (string id in recordIDs)
+            catch (Exception ex)
             {
-                DataTable table = LocalRecordMHub.queryCTDRecord(datasource,null,id);
+                MessageBox.Show("ERROR::" + ex.Message + "\n" + ex.StackTrace);
+                log.Error(ex);
+                return false;
             }
-            
+
             return true;
         }
 

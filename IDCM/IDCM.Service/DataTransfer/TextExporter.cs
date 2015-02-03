@@ -87,6 +87,68 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
+        /// <summary>
+        /// 根据用户选择单元行导出相应记录
+        /// </summary>
+        /// <param name="datasource"></param>
+        /// <param name="textPath"></param>
+        /// <param name="recordIDs"></param>
+        /// <param name="spliter"></param>
+        /// <returns></returns>
+        public bool exportText(DataSourceMHub datasource, string filepath, string[] recordIDs, string spliter)
+        {
+            try
+            {
+                StringBuilder strbuilder = new StringBuilder();
+                int count = 0;
+                using (FileStream fs = new FileStream(filepath, FileMode.Create))
+                {
+                    Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
+                    //填写表头
+                    int i = 0;
+                    string key = null;
+                    for (i = 0; i < maps.Count - 1; i++)
+                    {
+                        key = CVNameConverter.toViewName(maps.ElementAt(i).Key);
+                        strbuilder.Append(key).Append(spliter);
+                    }
+                    key = CVNameConverter.toViewName(maps.ElementAt(i).Key);
+                    strbuilder.Append(key);
+                    //填写内容////////////////////
+                    foreach (string id in recordIDs)
+                    {
+                        DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, id);
+                        foreach (DataRow row in table.Rows)
+                        {
+                            string dataLine = convertToText(maps, row, spliter);
+                            strbuilder.Append("\n\r").Append(dataLine);
+                            if (++count % 100 == 0)
+                            {
+                                Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+                                BinaryWriter bw = new BinaryWriter(fs);
+                                fs.Write(info, 0, info.Length);
+                                strbuilder.Length = 0;
+                            }
+                        }
+                        
+                    }
+                    if (strbuilder.Length > 0)
+                    {
+                        Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+                        BinaryWriter bw = new BinaryWriter(fs);
+                        fs.Write(info, 0, info.Length);
+                        strbuilder.Length = 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERROR::" + ex.Message + "\n" + ex.StackTrace);
+                log.Error(ex);
+                return false;
+            }
+            return true;
+        }
         private static string convertToText(Dictionary<string, int> maps, DataRow row, string spliter)
         {
             StringBuilder strbuilder = new StringBuilder();
@@ -106,5 +168,7 @@ namespace IDCM.Service.DataTransfer
             return strbuilder.ToString();
         }
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
+        
     }
 }
