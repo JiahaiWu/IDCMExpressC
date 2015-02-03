@@ -204,32 +204,65 @@ namespace IDCM.ViewManager
         {
             KeyValuePair<string, int> lastQuery = LocalRecordMHub.getLastDGVRQuery();
             AbsHandler handler = null;
-            switch (etype)
+            string[] recordIDs = selectedRecordID();
+            if (recordIDs != null && recordIDs.Length > 0)
             {
-                case ExportType.Excel:
-                    handler = new ExcelExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value);
-                    DWorkMHub.callAsyncHandle(handler);
-                    break;
-                case ExportType.JSONList:
-                    handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value);
-                    DWorkMHub.callAsyncHandle(handler);
-                    break;
-                case ExportType.TSV:
-                    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, "\t");
-                    DWorkMHub.callAsyncHandle(handler);
-                    break;
-                case ExportType.CSV:
-                    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
-                    DWorkMHub.callAsyncHandle(handler);
-                    break;
-                case ExportType.XML:
-                    handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
-                    DWorkMHub.callAsyncHandle(handler);
-                    break;
-                default:
-                    MessageBox.Show("Unsupport export type!");
-                    break;
+                switch (etype)
+                {
+                    case ExportType.Excel:
+                        handler = new ExcelExportHandler(DataSourceHolder.DataSource, fpath, recordIDs);
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    //case ExportType.JSONList:
+                    //    handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, recordIDs);
+                    //    DWorkMHub.callAsyncHandle(handler);
+                    //    break;
+                    //case ExportType.TSV:
+                    //    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, recordIDs, "\t");
+                    //    DWorkMHub.callAsyncHandle(handler);
+                    //    break;
+                    //case ExportType.CSV:
+                    //    handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, recordIDs, ",");
+                    //    DWorkMHub.callAsyncHandle(handler);
+                    //    break;
+                    //case ExportType.XML:
+                    //    handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, recordIDs, ",");
+                    //    DWorkMHub.callAsyncHandle(handler);
+                    //    break;
+                    default:
+                        MessageBox.Show("Unsupport export type!");
+                        break;
+                }
             }
+            else 
+            {
+                switch (etype)
+                {
+                    case ExportType.Excel:
+                        handler = new ExcelExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value);
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    case ExportType.JSONList:
+                        handler = new JSONListExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value);
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    case ExportType.TSV:
+                        handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, "\t");
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    case ExportType.CSV:
+                        handler = new TextExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    case ExportType.XML:
+                        handler = new XMLExportHandler(DataSourceHolder.DataSource, fpath, lastQuery.Key, lastQuery.Value, ",");
+                        DWorkMHub.callAsyncHandle(handler);
+                        break;
+                    default:
+                        MessageBox.Show("Unsupport export type!");
+                        break;
+                }
+            }   
         }
         /// <summary>
         /// 更新分类目录关联文档数显示
@@ -425,6 +458,21 @@ namespace IDCM.ViewManager
         public TreeNode SelectedNode_Current
         {
             get { return catBuilder != null ? catBuilder.SelectedNode_Current : null; }
+        }
+        public string[] selectedRecordID()
+        {
+            DataGridViewSelectedRowCollection selectedRow = homeView.getItemGridView().SelectedRows;
+            string[] recordIds = new string[selectedRow.Count];
+            foreach (DataGridViewRow row in selectedRow)
+            {
+                DataGridViewCell idCell = row.Cells[CTDRecordA.CTD_RID];                
+                int i = 0;
+                if (idCell != null)
+                {
+                    recordIds[i++] = idCell.FormattedValue.ToString();
+                }
+            }
+            return recordIds;
         }
         public long CURRENT_RID
         {

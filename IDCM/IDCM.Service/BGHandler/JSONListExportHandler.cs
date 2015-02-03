@@ -20,6 +20,14 @@ namespace IDCM.Service.BGHandler
             this.tcount = tcount;
             this.datasource = datasource;
         }
+
+        public JSONListExportHandler(DataSourceMHub dataSourceMHub, string fpath, DataGridViewSelectedRowCollection selectedRows)
+        {
+            // TODO: Complete member initialization
+            this.dataSourceMHub = dataSourceMHub;
+            this.fpath = fpath;
+            this.selectedRows = selectedRows;
+        }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
         /// </summary>
@@ -57,5 +65,8 @@ namespace IDCM.Service.BGHandler
         private  string cmdstr;
         private int tcount;
         private DataSourceMHub datasource = null;
+        private DataSourceMHub dataSourceMHub;
+        private string fpath;
+        private DataGridViewSelectedRowCollection selectedRows;
     }
 }

@@ -21,6 +21,15 @@ namespace IDCM.Service.BGHandler
             this.spliter = spliter;
             this.datasource = datasource;
         }
+
+        public XMLExportHandler(DataSourceMHub dataSourceMHub, string fpath, DataGridViewSelectedRowCollection selectedRows, string p)
+        {
+            // TODO: Complete member initialization
+            this.dataSourceMHub = dataSourceMHub;
+            this.fpath = fpath;
+            this.selectedRows = selectedRows;
+            this.p = p;
+        }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
         /// </summary>
@@ -60,5 +69,9 @@ namespace IDCM.Service.BGHandler
         private string cmdstr=null;
         private int tcount = 0;
         private DataSourceMHub datasource=null;
+        private DataSourceMHub dataSourceMHub;
+        private string fpath;
+        private DataGridViewSelectedRowCollection selectedRows;
+        private string p;
     }
 }

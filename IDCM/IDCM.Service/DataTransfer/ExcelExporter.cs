@@ -72,6 +72,38 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
+
+        public bool exportExcel(DataSourceMHub datasource, string filepath, string[] recordIDs)
+        {
+            IWorkbook workbook = null;
+            string suffix = Path.GetExtension(filepath).ToLower();
+            if (suffix.Equals(".xlsx"))
+                workbook = new XSSFWorkbook();
+            else
+                workbook = new HSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("Core Datasets");
+            IRow rowHead = sheet.CreateRow(0);
+            HashSet<int> excludes = new HashSet<int>();
+            //填写表头
+            Dictionary<string, int> maps = LocalRecordMHub.getCustomViewDBMapping(datasource);
+            //填写表头
+            int i = 0;
+            foreach (string key in maps.Keys)
+            {
+                ICell cell = rowHead.CreateCell(i++, CellType.String);
+                cell.SetCellValue(CVNameConverter.toViewName(key));
+                cell.CellStyle.FillBackgroundColor = IndexedColors.Green.Index;
+            }
+            CellRangeAddress cra = CellRangeAddress.ValueOf("A1:" + numToExcelIndex(maps.Count) + "1");
+            sheet.SetAutoFilter(cra);
+            foreach (string id in recordIDs)
+            {
+                DataTable table = LocalRecordMHub.queryCTDRecord(datasource,null,id);
+            }
+            
+            return true;
+        }
+
         protected void mergeDataToSheetRow(Dictionary<string, int> maps,DataRow row,IRow srow)
         {
             int idx=0;

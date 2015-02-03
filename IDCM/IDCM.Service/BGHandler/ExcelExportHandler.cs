@@ -12,12 +12,19 @@ namespace IDCM.Service.BGHandler
 {
     public class ExcelExportHandler:AbsHandler
     {
-        public ExcelExportHandler(DataSourceMHub datasource, string fpath, string cmdstr, int tcount)
+        public ExcelExportHandler(DataSourceMHub datasource, string xlsPath, string cmdstr, int tcount)
         {
-            this.xlsPath = System.IO.Path.GetFullPath(fpath);
+            this.xlsPath = System.IO.Path.GetFullPath(xlsPath);
             this.cmdstr = cmdstr;
             this.tcount = tcount;
             this.datasource = datasource;
+        }
+
+        public ExcelExportHandler(DataSourceMHub datasource, string xlsPath, string[] recordIDs)
+        {
+            this.datasource = datasource;
+            this.xlsPath = System.IO.Path.GetFullPath(xlsPath);
+            this.recordIDs = recordIDs;
         }
         /// <summary>
         /// 后台任务执行方法的主体部分，异步执行代码段！
@@ -29,7 +36,10 @@ namespace IDCM.Service.BGHandler
             bool res=false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
             ExcelExporter exporter = new ExcelExporter();
-            res = exporter.exportExcel(datasource,xlsPath, cmdstr, tcount);
+            if (recordIDs != null || recordIDs.Length > 0)
+                res = exporter.exportExcel(datasource, xlsPath, recordIDs);
+            else
+                res = exporter.exportExcel(datasource, xlsPath, cmdstr, tcount);
             return new object[] { res};
         }
         /// <summary>
@@ -57,5 +67,7 @@ namespace IDCM.Service.BGHandler
         private  string cmdstr;
         private int tcount;
         private DataSourceMHub datasource = null;
+        private DataSourceMHub dataSourceMHub;
+        string[] recordIDs;
     }
 }
