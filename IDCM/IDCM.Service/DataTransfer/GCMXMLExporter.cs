@@ -13,11 +13,20 @@ namespace IDCM.Service.DataTransfer
 {
     class GCMXMLExporter
     {
+        /// <summary>
+        /// 导出数据到XML,数据源DataTable
+        /// </summary>
+        /// <param name="filepath">导出路径</param>
+        /// <param name="strainViewList">数据源</param>
+        /// <param name="exportDetail">是否导出stran_tree</param>
+        /// <param name="gcmSiteHolder">底层GCMSiteMHub句柄，用于获取strain_tree，封装GCM账户信息</param>
+        /// <returns></returns>
         public bool exportXML(string filepath, DataTable strainViewList, bool exportDetail, Common.GCMSiteMHub gcmSiteHolder)
         {
             try
             {
                 StringBuilder strbuilder = new StringBuilder();
+                int count = 0;
                 using (FileStream fs = new FileStream(filepath, FileMode.Create))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
@@ -40,8 +49,8 @@ namespace IDCM.Service.DataTransfer
                             Dictionary<string, object> maps = sv.ToDictionary();
                             mergeDataToXmlDocument(xmlDoc, strainEle, maps);
                         }
-                        strbuilder.Append(strainEle.OuterXml).Append("\n\r").Append("</strains>");
-                        if (strbuilder.Length > 0)
+                        strbuilder.Append(strainEle.OuterXml).Append("\n\r");
+                        if (++count % 100 == 0)
                         {
                             Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
                             BinaryWriter bw = new BinaryWriter(fs);
@@ -49,6 +58,15 @@ namespace IDCM.Service.DataTransfer
                             strbuilder.Length = 0;
                         }
                     }
+                    strbuilder.Append("</strains>");
+                    if (strbuilder.Length > 0)
+                    {
+                        Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+                        BinaryWriter bw = new BinaryWriter(fs);
+                        fs.Write(info, 0, info.Length);
+                        strbuilder.Length = 0;
+                    }
+                    fs.Close();
                 }
             }
             catch (Exception ex)
@@ -59,23 +77,34 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-        internal void exportXML(string filepath, DataGridViewSelectedRowCollection selectedRows, bool exportDetail, GCMSiteMHub gcmSiteHolder)
+        /// <summary>
+        /// 导出数据到XML,数据源DataGridViewSelectedRowCollection
+        /// </summary>
+        /// <param name="filepath">导出路径</param>
+        /// <param name="selectedRows">数据源</param>
+        /// <param name="exportDetail">是否导出stran_tree</param>
+        /// <param name="gcmSiteHolder">底层GCMSiteMHub句柄，用于获取strain_tree，封装GCM账户信息</param>
+        /// <returns></returns>
+        internal bool exportXML(string filepath, DataGridViewSelectedRowCollection selectedRows, bool exportDetail, GCMSiteMHub gcmSiteHolder)
         {
             try
             {
                 StringBuilder strbuilder = new StringBuilder();
+                int count = 0;
                 using (FileStream fs = new FileStream(filepath, FileMode.Create))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
                     strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
                     strbuilder.Append("<strains>\n\r");
                     ///////////////////
-                    int rowIndex = 0;
                     foreach (DataGridViewRow row in selectedRows)
                     {
+                        int columnIndex = 0;
                         XmlElement strainEle = xmlDoc.CreateElement("strain");
                         foreach (DataGridViewColumn column in row.DataGridView.Columns)
                         {
+                            if (columnIndex++ == 0)
+                                continue;
                             XmlElement attrEle = xmlDoc.CreateElement(column.Name);
                             attrEle.InnerText = row.Cells[column.Name].Value as string;
                             strainEle.AppendChild(attrEle);
@@ -87,8 +116,8 @@ namespace IDCM.Service.DataTransfer
                             Dictionary<string, object> maps = sv.ToDictionary();
                             mergeDataToXmlDocument(xmlDoc, strainEle, maps);
                         }
-                        strbuilder.Append(strainEle.OuterXml).Append("\n\r").Append("</strains>");
-                        if (strbuilder.Length > 0)
+                        strbuilder.Append(strainEle.OuterXml).Append("\n\r");
+                        if (++count % 100 == 0)
                         {
                             Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
                             BinaryWriter bw = new BinaryWriter(fs);
@@ -96,6 +125,15 @@ namespace IDCM.Service.DataTransfer
                             strbuilder.Length = 0;
                         }
                     }
+                    strbuilder.Append("</strains>");
+                    if (strbuilder.Length > 0)
+                    {
+                        Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+                        BinaryWriter bw = new BinaryWriter(fs);
+                        fs.Write(info, 0, info.Length);
+                        strbuilder.Length = 0;
+                    }
+                    fs.Close();
                 }
             }
             catch (Exception ex)
@@ -106,9 +144,15 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-        private void mergeDataToXmlDocument(XmlDocument xmlDoc, XmlElement strainEle, Dictionary<string, object> maps)
+        /// <summary>
+        /// 向strain节点中插入strain_tree数据
+        /// </summary>
+        /// <param name="xmlDoc">XmlDocument</param>
+        /// <param name="strainEle">strain节点</param>
+        /// <param name="strain_treeMap">strain_tree</param>
+        private void mergeDataToXmlDocument(XmlDocument xmlDoc, XmlElement strainEle, Dictionary<string, object> strain_treeMap)
         {
-            foreach(KeyValuePair<string,object> strainTreeNode in maps)
+            foreach(KeyValuePair<string,object> strainTreeNode in strain_treeMap)
             {
                 XmlElement attrEle = null;
                 if (strainTreeNode.Value is string)
@@ -135,7 +179,12 @@ namespace IDCM.Service.DataTransfer
                 }              
             }
         }
-
+        /// <summary>
+        /// 获取strain_tree
+        /// </summary>
+        /// <param name="gcmSiteHolder">底层GCMSiteHolder句柄，封装GCMGCM账户信息</param>
+        /// <param name="strainID">strain的ID</param>
+        /// <returns>strain_tree</returns>
         private StrainView getStrainView(GCMSiteMHub gcmSiteHolder, string strainID)
         {
             GCMDataMHub gcmDataHub = new GCMDataMHub();

@@ -18,6 +18,14 @@ namespace IDCM.Service.DataTransfer
 {
     class ExcelExporter
     {
+        /// <summary>
+        /// 导出数据到excel，数据源从数据库读取
+        /// </summary>
+        /// <param name="datasource">DataSourceMHub句柄，主要封装WorkSpaceManager</param>
+        /// <param name="filepath">导出路径</param>
+        /// <param name="cmdstr">查询字符串</param>
+        /// <param name="tcount">总记录数</param>
+        /// <returns></returns>
         public bool exportExcel(DataSourceMHub datasource, string filepath, string cmdstr, int tcount)
         {
             try
@@ -74,11 +82,11 @@ namespace IDCM.Service.DataTransfer
         }
 
         /// <summary>
-        /// 导出DataGridViewSelectedRowCollection中的记录
+        /// 导出数据到excel，数据源DataGridViewSelectedRowCollection
         /// </summary>
-        /// <param name="datasource"></param>
-        /// <param name="filepath"></param>
-        /// <param name="selectedRows"></param>
+        /// <param name="datasource">DataSourceMHub句柄，主要封装WorkSpaceManager</param>
+        /// <param name="filepath">导出路径</param>
+        /// <param name="selectedRows">数据源</param>
         /// <returns></returns>
         public bool exportExcel(DataSourceMHub datasource, string filepath, DataGridViewSelectedRowCollection selectedRows)
         {
@@ -132,7 +140,12 @@ namespace IDCM.Service.DataTransfer
 
             return true;
         }
-
+        /// <summary>
+        /// 根据字段将一行记录转换成IRow
+        /// </summary>
+        /// <param name="customAttrDBMapping">字段名称</param>
+        /// <param name="row">一条记录</param>
+        /// <param name="srow">IRow</param>
         protected void mergeDataToSheetRow(Dictionary<string, int> customAttrDBMapping, DataRow row, IRow srow)
         {
             int idx=0;

@@ -39,9 +39,9 @@ namespace IDCM.Service.BGHandler
 
             GCMExcelExporter exporter = new GCMExcelExporter();
             if (strainViewList != null)
-                res = exporter.exportText(fpath, strainViewList, exportDetail, gcmSiteHolder);
+                res = exporter.exportExcel(fpath, strainViewList, exportDetail, gcmSiteHolder);
             else
-                res = exporter.exportText(fpath, selectedRows, exportDetail, gcmSiteHolder);
+                res = exporter.exportExcel(fpath, selectedRows, exportDetail, gcmSiteHolder);
             return new object[] { res };
         }
 

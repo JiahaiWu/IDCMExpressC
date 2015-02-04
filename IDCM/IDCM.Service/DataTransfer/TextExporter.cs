@@ -88,12 +88,12 @@ namespace IDCM.Service.DataTransfer
             return true;
         }
         /// <summary>
-        /// 根据用户选择单元行导出相应记录
+        /// 以Excel导出数据，数据源DataGridViewSelectedRowCollection
         /// </summary>
-        /// <param name="datasource"></param>
-        /// <param name="textPath"></param>
-        /// <param name="recordIDs"></param>
-        /// <param name="spliter"></param>
+        /// <param name="datasource">DataSourceMHub句柄，主要封装WorkSpaceManager</param>
+        /// <param name="textPath">导出路径</param>
+        /// <param name="recordIDs">一条记录的ID</param>
+        /// <param name="spliter">字符串分隔符，如果导出的是文本分隔符是"\t"，如果导出的是csv分隔符是","</param>
         /// <returns></returns>
         public bool exportText(DataSourceMHub datasource, string filepath, DataGridViewSelectedRowCollection selectedRows, string spliter)
         {
@@ -145,6 +145,13 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
+        /// <summary>
+        /// 根据字段将一行记录转换成Text
+        /// </summary>
+        /// <param name="customAttrDBMapping"></param>
+        /// <param name="row"></param>
+        /// <param name="spliter"></param>
+        /// <returns></returns>
         private static string convertToText(Dictionary<string, int> customAttrDBMapping, DataRow row, string spliter)
         {
             StringBuilder strbuilder = new StringBuilder();

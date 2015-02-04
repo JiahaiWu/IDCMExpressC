@@ -60,16 +60,16 @@ namespace IDCM.Service.DataTransfer
                                 fs.Write(info, 0, info.Length);
                                 strbuilder.Length = 0;
                             }
-                        }
-                        strbuilder.Append("</strains>");
-                        if (strbuilder.Length > 0)
-                        {
-                            Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
-                            BinaryWriter bw = new BinaryWriter(fs);
-                            fs.Write(info, 0, info.Length);
-                            strbuilder.Length = 0;
-                        }
+                        }   
                         offset += lcount;
+                    }
+                    strbuilder.Append("</strains>");
+                    if (strbuilder.Length > 0)
+                    {
+                        Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+                        BinaryWriter bw = new BinaryWriter(fs);
+                        fs.Write(info, 0, info.Length);
+                        strbuilder.Length = 0;
                     }
                     fs.Close();
                 }
@@ -82,12 +82,19 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-
+        /// <summary>
+        /// 以Excle导出数据，数据源DataGridViewSelectedRowCollection
+        /// </summary>
+        /// <param name="datasource">DataSourceMHub句柄，主要封装WorkSpaceManager</param>
+        /// <param name="filepath">导出路径</param>
+        /// <param name="selectedRows">数据源</param>
+        /// <returns></returns>
         internal bool exportXML(DataSourceMHub datasource, string filepath, DataGridViewSelectedRowCollection selectedRows)
         {
             try
             {
                 StringBuilder strbuilder = new StringBuilder();
+                int count = 0;
                 using (FileStream fs = new FileStream(filepath, FileMode.Create))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
@@ -104,15 +111,23 @@ namespace IDCM.Service.DataTransfer
                             XmlElement xmlEle = convertToXML(xmlDoc, maps, row);
                             strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
                         }
-                        strbuilder.Append("</strains>");
-                        if (strbuilder.Length > 0)
+                        if (++count % 100 == 0)
                         {
                             Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
                             BinaryWriter bw = new BinaryWriter(fs);
                             fs.Write(info, 0, info.Length);
                             strbuilder.Length = 0;
                         }
-                    }                  
+                    }
+                    strbuilder.Append("</strains>");
+                    if (strbuilder.Length > 0)
+                    {
+                        Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
+                        BinaryWriter bw = new BinaryWriter(fs);
+                        fs.Write(info, 0, info.Length);
+                        strbuilder.Length = 0;
+                    }
+                    fs.Close();
                 }
             }
             catch (Exception ex)
@@ -123,7 +138,13 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-
+        /// <summary>
+        /// 根据字段将一行记录转换成xmlElement
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <param name="maps"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         private static XmlElement convertToXML(XmlDocument xmlDoc,Dictionary<string, int> maps, DataRow row)
         {
             XmlElement strainEle = xmlDoc.CreateElement("strain");

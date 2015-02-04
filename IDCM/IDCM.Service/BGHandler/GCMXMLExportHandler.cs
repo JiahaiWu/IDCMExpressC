@@ -37,14 +37,14 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
-            if (strainViewList == null) 
+            if (strainViewList == null && selectedRows == null) 
                 return new object[] { false };
 
             GCMXMLExporter exporter = new GCMXMLExporter();
             if (strainViewList != null)
-                exporter.exportXML(xpath, strainViewList, exportDetail, gcmSiteHolder);
+                res = exporter.exportXML(xpath, strainViewList, exportDetail, gcmSiteHolder);
             else
-                exporter.exportXML(xpath, selectedRows, exportDetail, gcmSiteHolder);
+                res = exporter.exportXML(xpath, selectedRows, exportDetail, gcmSiteHolder);
             return new object[] { res };
         }
         /// <summary>

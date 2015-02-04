@@ -16,20 +16,14 @@ namespace IDCM.Service.DataTransfer
     class GCMJSONExporter
     {
         /// <summary>
-        /// 以JSON格式导出数据，此方法一般用做数据源以DataTable为格式的导出.
-        /// 说明：
-        /// 1：此方法有两种情况
-        ///     A：exportDetail==true，需要导出详细列表，此方法会发送网络请求，比较耗时.
-        ///     B：exportDetail==false，不需要导出详细列表，不会发送网络请求，直接导出DataTable中数据.
-        /// 主意：
-        /// 1：此方法可能会导致客户端弹出异常信息，但是不会影响程序运行(用户输入的路径无法读写)
+        /// 以JSON格式导出数据，数据源DataTable.
         /// </summary>
-        /// <param name="xpath"></param>
-        /// <param name="strainViewList"></param>
-        /// <param name="exportDetail"></param>
-        /// <param name="gcmSiteHolder"></param>
+        /// <param name="xpath">导出路径</param>
+        /// <param name="strainViewList">数据源</param>
+        /// <param name="exportDetail">是否导出strain_tree</param>
+        /// <param name="gcmSiteHolder">底层GCMSiteMHub句柄，用于获取strain_tree，封装GCM账户信息</param>
         /// <returns></returns>
-        public bool exportJSONList(string xpath,DataTable strainViewList,bool exportDetail,GCMSiteMHub gcmSiteHolder = null)
+        public bool exportJSONList(string xpath, DataTable strainViewList, bool exportDetail, GCMSiteMHub gcmSiteHolder = null)
         {
             if (strainViewList == null | strainViewList.Rows.Count < 1) return true;
             StringBuilder strbuilder = new StringBuilder();
@@ -47,8 +41,8 @@ namespace IDCM.Service.DataTransfer
                     {
                         string strainID = Convert.ToString(row[0]);
                         StrainView sv = getStrainView(gcmSiteHolder, strainID);
-                        Dictionary<string, object> maps_from = sv.ToDictionary();
-                        AddToDictionary(dict, maps_from);
+                        Dictionary<string, object> strain_treeMap_from = sv.ToDictionary();
+                        AddToDictionary(dict, strain_treeMap_from);
                     }
                     string jsonStr = JsonConvert.SerializeObject(dict);
                     strbuilder.Append(jsonStr).Append("\n");
@@ -63,20 +57,13 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-
         /// <summary>
-        /// 以JSON格式导出数据，此方法一般用做数据源以DataGridViewSelectedRowCollection为格式的导出.
-        /// 说明：
-        /// 1：此方法有两种情况
-        ///     A：exportDetail==true，需要导出详细列表，此方法会发送网络请求，比较耗时.
-        ///     B：exportDetail==false，不需要导出详细列表，不会发送网络请求，直接导出DataGridViewSelectedRowCollection中数据.
-        /// 主意：
-        /// 1：此方法可能会导致客户端弹出异常信息，但是不会影响程序运行(用户输入的路径无法读写)
+        /// 以JSON格式导出数据，数据源DataGridViewSelectedRowCollection
         /// </summary>
-        /// <param name="xpath"></param>
-        /// <param name="selectedRows"></param>
-        /// <param name="exportDetail"></param>
-        /// <param name="gcmSiteHolder"></param>
+        /// <param name="xpath">导出路径</param>
+        /// <param name="selectedRows">数据源</param>
+        /// <param name="exportDetail">是否导出strain_tree</param>
+        /// <param name="gcmSiteHolder">底层GCMSiteMHub句柄，用于获取strain_tree，封装GCM账户信息</param>
         /// <returns></returns>
         internal bool exportJSONList(string xpath, DataGridViewSelectedRowCollection selectedRows, bool exportDetail, GCMSiteMHub gcmSiteHolder = null)
         {
@@ -97,8 +84,8 @@ namespace IDCM.Service.DataTransfer
                     {
                         string strainID = Convert.ToString(row.Cells[1].Value);
                         StrainView sv = getStrainView(gcmSiteHolder, strainID);
-                        Dictionary<string, object> maps_from = sv.ToDictionary();
-                        AddToDictionary(dict, maps_from);
+                        Dictionary<string, object> strain_treeMap_from = sv.ToDictionary();
+                        AddToDictionary(dict, strain_treeMap_from);
                     }
                     string jsonStr = JsonConvert.SerializeObject(dict);
                     strbuilder.Append(jsonStr).Append("\n");
@@ -113,10 +100,14 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-
-        public void AddToDictionary(Dictionary<string, string> dict_To, Dictionary<string, object> maps_from)
+        /// <summary>
+        /// 将strain_tree的map数据添加到需要数据源构建好的map中
+        /// </summary>
+        /// <param name="dict_To">数据源构建好的map</param>
+        /// <param name="strain_treeMap_from">需要添加的map</param>
+        public void AddToDictionary(Dictionary<string, string> dict_To, Dictionary<string, object> strain_treeMap_from)
         {
-            foreach (KeyValuePair<string, object> svEntry in maps_from)
+            foreach (KeyValuePair<string, object> svEntry in strain_treeMap_from)
             {
                 if (svEntry.Value is string)
                 {
@@ -126,13 +117,18 @@ namespace IDCM.Service.DataTransfer
                 {
                     foreach (KeyValuePair<string, dynamic> subEntry in svEntry.Value as Dictionary<string, dynamic>)
                     {
-                        string keyName = svEntry.Key + "/" + subEntry.Key;
+                        string keyName = svEntry.Key + "_" + subEntry.Key;
                         dict_To[keyName] = Convert.ToString(subEntry.Value);
                     }
                 }
             }
         }
-
+        /// <summary>
+        /// 获取strain_tree
+        /// </summary>
+        /// <param name="gcmSiteHolder">底层GCMSiteMHub句柄，封装GCM账户信息</param>
+        /// <param name="strainID">strain的ID</param>
+        /// <returns>strain_tree</returns>
         private StrainView getStrainView(GCMSiteMHub gcmSiteHolder, string strainID)
         {
             GCMDataMHub gcmDataHub = new GCMDataMHub();

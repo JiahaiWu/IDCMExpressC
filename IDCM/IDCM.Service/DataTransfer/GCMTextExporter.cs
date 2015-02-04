@@ -13,6 +13,15 @@ namespace IDCM.Service.DataTransfer
 {
     class GCMTextExporter
     { 
+        /// <summary>
+        /// 导出数据到文本或csv(根据分隔符)，数据源DataTable
+        /// </summary>
+        /// <param name="filepath">导出路径</param>
+        /// <param name="starinViewList">数据源</param>
+        /// <param name="exportDetail">是否导出strain_tree</param>
+        /// <param name="spliter">分隔符，如果导出文本分隔符是"\t"，如果导出csv分隔符是","</param>
+        /// <param name="gcmSiteHolder">底层GCMSiteMHub句柄，用于获取strain_tree，封装GCM账户信息</param>
+        /// <returns></returns>
         public bool exportText(string filepath, DataTable starinViewList, bool exportDetail, string spliter, GCMSiteMHub gcmSiteHolder = null)
         {
             try
@@ -38,9 +47,9 @@ namespace IDCM.Service.DataTransfer
                         {
                             string strainId = Convert.ToString(row[0]);
                             StrainView sv = getStrainView(gcmSiteHolder, strainId);
-                            Dictionary<string, object> maps = sv.ToDictionary();
-                            buildRow(strbuilder, maps, spliter);                 
-                            if(i == 0)columnStr += buildColumn(maps, spliter);
+                            Dictionary<string, object> strain_treeMap = sv.ToDictionary();
+                            mergeMapValueToRow(strbuilder, strain_treeMap, spliter);                 
+                            if(i == 0)columnStr += buildColumn(strain_treeMap, spliter);
                         }
                         strbuilder.Append("\n");
                     }
@@ -62,28 +71,14 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-
-        private string buildColumn(Dictionary<string, object> maps, string spliter)
-        {
-            StringBuilder strBuilder = new StringBuilder();
-            foreach (KeyValuePair<string, object> svEntry in maps)
-            {
-                if (svEntry.Value is string)
-                {
-                    strBuilder.Append(svEntry.Key).Append(spliter);
-                }
-                else if (svEntry.Value is Dictionary<string, dynamic>)
-                {
-                    foreach (KeyValuePair<string, dynamic> subEntry in svEntry.Value as Dictionary<string, dynamic>)
-                    {
-                        string columnName = svEntry.Key + "/" + subEntry.Key;
-                        strBuilder.Append(columnName).Append(spliter);
-                    }
-                }
-            }
-            return strBuilder.ToString();
-        }
-
+        /// <summary>
+        /// 导出数据到文本或csv(根据分隔符)，数据源DataGridViewSelectedRowCollection
+        /// </summary>
+        /// <param name="filepath">导出路径</param>
+        /// <param name="selectedRows">数据源</param>
+        /// <param name="exportDetail">是否导出strain_tree</param>
+        /// <param name="spliter">分隔符，如果导出文本分隔符是"\t"，如果导出csv分隔符是","</param>
+        /// <param name="gcmSiteHolder">底层GCMSiteMHub句柄，用于获取strain_tree，封装GCM账户信息</param>
         public bool exportText(string filepath, DataGridViewSelectedRowCollection selectedRows, bool exportDetail, string spliter, GCMSiteMHub gcmSiteHolder = null)
         {
             try
@@ -97,25 +92,25 @@ namespace IDCM.Service.DataTransfer
                     {
                         columnStr = strbuilder.Append(dgv.Columns[i].Name).Append(spliter).ToString();
                     }
-                    strbuilder.Clear(); 
-                    for (int i = 0; i < selectedRows.Count;i++ )
+                    strbuilder.Clear();
+                    for (int i = 0; i < selectedRows.Count; i++)
                     {
                         DataGridViewRow row = selectedRows[i];
-                        for (int j = 1; j < row.Cells.Count;j++ )
+                        for (int j = 1; j < row.Cells.Count; j++)
                         {
                             strbuilder.Append(Convert.ToString(row.Cells[j].Value)).Append(spliter);
                         }
-                        if(exportDetail)
+                        if (exportDetail)
                         {
                             string strainId = Convert.ToString(row.Cells[1].Value);
                             StrainView sv = getStrainView(gcmSiteHolder, strainId);
-                            Dictionary<string, object> maps = sv.ToDictionary();
-                            buildRow(strbuilder, maps, spliter);
-                            if (i == 0) if (i == 0) columnStr += buildColumn(maps, spliter);
+                            Dictionary<string, object> strain_treeMap = sv.ToDictionary();
+                            mergeMapValueToRow(strbuilder, strain_treeMap, spliter);
+                            if (i == 0) if (i == 0) columnStr += buildColumn(strain_treeMap, spliter);
                         }
                         strbuilder.Append("\n");
                     }
-                    strbuilder.Insert(0, columnStr+"\n");
+                    strbuilder.Insert(0, columnStr + "\n");
                     if (strbuilder.Length > 0)
                     {
                         Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
@@ -133,27 +128,62 @@ namespace IDCM.Service.DataTransfer
             }
             return true;
         }
-
-        private void buildRow(StringBuilder strbuilder, Dictionary<string, object> maps, string spliter)
+        /// <summary>
+        /// 构建strain_tree列
+        /// </summary>
+        /// <param name="strain_treeMap">strain_tree,key->value映射集合</param>
+        /// <param name="spliter">分隔符，如果导出文本分隔符是"\t"，如果导出csv分隔符是","</param>
+        /// <returns></returns>
+        private string buildColumn(Dictionary<string, object> strain_treeMap, string spliter)
         {
-            foreach (KeyValuePair<string, object> svEntry in maps)
+            StringBuilder strBuilder = new StringBuilder();
+            foreach (KeyValuePair<string, object> svEntry in strain_treeMap)
             {
                 if (svEntry.Value is string)
                 {
-                    strbuilder.Append(svEntry.Value).Append(spliter);
+                    strBuilder.Append(svEntry.Key).Append(spliter);
+                }
+                else if (svEntry.Value is Dictionary<string, dynamic>)
+                {
+                    foreach (KeyValuePair<string, dynamic> subEntry in svEntry.Value as Dictionary<string, dynamic>)
+                    {
+                        string columnName = svEntry.Key + "_" + subEntry.Key;
+                        strBuilder.Append(columnName).Append(spliter);
+                    }
+                }
+            }
+            return strBuilder.ToString();
+        }
+        /// <summary>
+        /// 合并strain_tree中的value，到数据源的一行数据中
+        /// </summary>
+        /// <param name="dataSourceRow">数据源一行数据</param>
+        /// <param name="strain_treeMap">strain_tree,key->value映射集合</param>
+        /// <param name="spliter">分隔符，如果导出文本分隔符是"\t"，如果导出csv分隔符是","</param>
+        private void mergeMapValueToRow(StringBuilder dataSourceRow, Dictionary<string, object> strain_treeMap, string spliter)
+        {
+            foreach (KeyValuePair<string, object> svEntry in strain_treeMap)
+            {
+                if (svEntry.Value is string)
+                {
+                    dataSourceRow.Append(svEntry.Value).Append(spliter);
                 }
                 else if (svEntry.Value is Dictionary<string, dynamic>)
                 {
                     foreach (KeyValuePair<string, dynamic> subEntry in svEntry.Value as Dictionary<string, dynamic>)
                     {
                         string value = Convert.ToString(subEntry.Value);
-                        strbuilder.Append(value).Append(spliter);
+                        dataSourceRow.Append(value).Append(spliter);
                     }
                 }
             }
         }
-
-
+        /// <summary>
+        /// 获取strain_tree
+        /// </summary>
+        /// <param name="gcmSiteHolder">底层GCMSiteHolder句柄，封装GCMGCM账户信息</param>
+        /// <param name="strainID">strain的ID</param>
+        /// <returns>strain_tree</returns>
         private StrainView getStrainView(GCMSiteMHub gcmSiteHolder, string strainID)
         {
             GCMDataMHub gcmDataHub = new GCMDataMHub();
