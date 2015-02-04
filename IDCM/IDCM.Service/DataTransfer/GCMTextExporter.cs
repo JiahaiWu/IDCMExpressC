@@ -93,9 +93,10 @@ namespace IDCM.Service.DataTransfer
                         columnStr = strbuilder.Append(dgv.Columns[i].Name).Append(spliter).ToString();
                     }
                     strbuilder.Clear();
-                    for (int i = 0; i < selectedRows.Count; i++)
+                    int rowIndex = 0;
+                    for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
                     {
-                        DataGridViewRow row = selectedRows[i];
+                        DataGridViewRow row = selectedRows[ridx];
                         for (int j = 1; j < row.Cells.Count; j++)
                         {
                             strbuilder.Append(Convert.ToString(row.Cells[j].Value)).Append(spliter);
@@ -106,7 +107,7 @@ namespace IDCM.Service.DataTransfer
                             StrainView sv = getStrainView(gcmSiteHolder, strainId);
                             Dictionary<string, object> strain_treeMap = sv.ToDictionary();
                             mergeMapValueToRow(strbuilder, strain_treeMap, spliter);
-                            if (i == 0) if (i == 0) columnStr += buildColumn(strain_treeMap, spliter);
+                            if (rowIndex == 0) columnStr += buildColumn(strain_treeMap, spliter);
                         }
                         strbuilder.Append("\n");
                     }

@@ -114,14 +114,15 @@ namespace IDCM.Service.DataTransfer
                 CellRangeAddress cra = CellRangeAddress.ValueOf("A1:" + numToExcelIndex(maps.Count) + "1");
                 sheet.SetAutoFilter(cra);
                 //填写内容
-                int ridx = 1;
-                foreach(DataGridViewRow dgvRow in selectedRows)
+                int IrowIndex = 1;
+                for (int ridx = selectedRows.Count -1; ridx >=0; ridx--)
                 {
+                    DataGridViewRow dgvRow = selectedRows[ridx];
                     string recordId = dgvRow.Cells[CTDRecordA.CTD_RID].Value as string;
                     DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
                     foreach (DataRow row in table.Rows)
                     {
-                        IRow srow = sheet.CreateRow(ridx++);
+                        IRow srow = sheet.CreateRow(IrowIndex++);
                         mergeDataToSheetRow(maps, row, srow);
                     }
                 }

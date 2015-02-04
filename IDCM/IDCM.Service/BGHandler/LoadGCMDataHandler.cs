@@ -57,6 +57,5 @@ namespace IDCM.Service.BGHandler
         private TreeView recordTree=null;
         private ListView recordView=null;
         private Dictionary<string, int> loadedNoter = null;
-
     }
 }

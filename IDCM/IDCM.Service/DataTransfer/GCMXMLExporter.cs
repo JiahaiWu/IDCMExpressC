@@ -97,8 +97,9 @@ namespace IDCM.Service.DataTransfer
                     strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
                     strbuilder.Append("<strains>\n\r");
                     ///////////////////
-                    foreach (DataGridViewRow row in selectedRows)
+                    for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
                     {
+                        DataGridViewRow row = selectedRows[ridx];
                         int columnIndex = 0;
                         XmlElement strainEle = xmlDoc.CreateElement("strain");
                         foreach (DataGridViewColumn column in row.DataGridView.Columns)

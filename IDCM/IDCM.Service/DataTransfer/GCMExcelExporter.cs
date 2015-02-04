@@ -59,9 +59,9 @@ namespace IDCM.Service.DataTransfer
                     {
                         string strainID = Convert.ToString(strainViewList.Rows[i][0]);
                         StrainView sv = getStrainView(gcmSiteHolder,strainID);
-                        Dictionary<string, object> strain_treeMap = sv.ToDictionary();
-                        if(i==0)mergeMapKeyToColumn(columnHead, strain_treeMap, startIndex);
-                        mergeMapValueToIrow(Irow, strain_treeMap, startIndex);
+                        Dictionary<string, object> maps = sv.ToDictionary();
+                        if(i==0)mergeMapKeyToColumn(columnHead, maps, startIndex);
+                        mergeMapValueToIrow(Irow, maps, startIndex);
                     }
                 }
                 using (FileStream fs = File.Create(fpath))
@@ -103,18 +103,19 @@ namespace IDCM.Service.DataTransfer
                 DataGridView dgv = selectedRows[0].DataGridView;
                 for (int i = 1; i < dgv.Columns.Count; i++)
                 {
-                    ICell Icell = columnHead.CreateCell(i, CellType.String);
+                    ICell Icell = columnHead.CreateCell(i-1, CellType.String);
                     Icell.SetCellValue(dgv.Columns[i].Name);
                 }
                 int startIndex = selectedRows[0].Cells.Count;
                 //填充dgv单元格内容
-                for (int i = 0; i < selectedRows.Count; i++)
+                int IrowIndex = 0;
+                for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
                 {
-                    IRow Irow = sheet.CreateRow(i + 1);
-                    DataGridViewRow dgvRow = selectedRows[i];
+                    DataGridViewRow dgvRow = selectedRows[ridx];
+                    IRow Irow = sheet.CreateRow(IrowIndex + 1);
                     for (int j = 1; j < dgvRow.Cells.Count; j++)
                     {
-                        ICell Icell = Irow.CreateCell(j, CellType.String);
+                        ICell Icell = Irow.CreateCell(j-1, CellType.String);
                         Icell.SetCellValue(Convert.ToString(dgvRow.Cells[j].Value));
                     }
                     if (exportDetail)
@@ -122,9 +123,10 @@ namespace IDCM.Service.DataTransfer
                         string strainID = Convert.ToString(dgvRow.Cells[1].Value);
                         StrainView sv = getStrainView(gcmSiteHolder, strainID);
                         Dictionary<string, object> strain_treeMap = sv.ToDictionary();
-                        if (i == 0) mergeMapKeyToColumn(columnHead, strain_treeMap, startIndex);
+                        if (IrowIndex == 0) mergeMapKeyToColumn(columnHead, strain_treeMap, startIndex);
                         mergeMapValueToIrow(Irow, strain_treeMap, startIndex);
                     }
+                    IrowIndex++;
                 }
                 using (FileStream fs = File.Create(fpath))
                 {

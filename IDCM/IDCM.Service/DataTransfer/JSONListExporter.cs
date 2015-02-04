@@ -74,8 +74,9 @@ namespace IDCM.Service.DataTransfer
                 {
                     Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
                     //填写内容////////////////////
-                    foreach (DataGridViewRow dgvRow in selectedRows)
+                    for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
                     {
+                        DataGridViewRow dgvRow = selectedRows[ridx];
                         string recordId = dgvRow.Cells[CTDRecordA.CTD_RID].Value as string;
                         DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
                         foreach (DataRow row in table.Rows)

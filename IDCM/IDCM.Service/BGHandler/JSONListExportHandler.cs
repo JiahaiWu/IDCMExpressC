@@ -23,7 +23,6 @@ namespace IDCM.Service.BGHandler
 
         public JSONListExportHandler(DataSourceMHub datasource, string fpath, DataGridViewSelectedRowCollection selectedRows)
         {
-            // TODO: Complete member initialization
             this.datasource = datasource;
             this.xlsPath = fpath;
             this.selectedRows = selectedRows;

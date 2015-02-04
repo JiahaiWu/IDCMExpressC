@@ -72,10 +72,10 @@ namespace IDCM.Service.DataTransfer
             DataGridView dgv = selectedRows[0].Cells[0].DataGridView;
             using (FileStream fs = new FileStream(xpath, FileMode.Create))
             {
-                for (int i = 0; i < selectedRows.Count;i++ )
+                for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
                 {
+                    DataGridViewRow row = selectedRows[ridx];
                     Dictionary<string, string> dict = new Dictionary<string, string>();
-                    DataGridViewRow row = selectedRows[i];
                     for (int j = 1; j < row.Cells.Count; j++)
                     {
                         dict[dgv.Columns[j].Name] = Convert.ToString(row.Cells[j].Value);

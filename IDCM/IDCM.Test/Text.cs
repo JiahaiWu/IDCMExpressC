@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace IDCM.Test
@@ -61,6 +62,20 @@ namespace IDCM.Test
         {
             BindingSource oBS = (BindingSource)this.dataGridView1.DataSource;
             DataTable dTable = (DataTable)oBS.DataSource;
+            duoThread(dTable);
+        }
+       
+        public void duoThread(DataTable dt)
+        {
+            ParameterizedThreadStart pts = new ParameterizedThreadStart(refreshData);
+            Thread thread = new Thread(pts);
+            thread.Start(dt);
+        }
+
+        private void refreshData(object obj)
+        {
+            DataTable dTable = (DataTable)obj;
+            
             DataRow dRow = dTable.NewRow();
             DateTime dTime = DateTime.Now; ;
             dRow["IsChecked"] = "true";

@@ -278,11 +278,7 @@ namespace IDCM.ViewManager
         }
 
         /// <summary>
-        /// 导出
-        /// 未完善(太过臃肿)：
-        /// 1：参数改为xpath,ISexportStrainTree,dataTable,GCMHolder
-        ///     思路1：数据形式全部以DataTable传递，不用seletedRow，如果需要seletedRow，将其构造成DataTable
-        ///         Hanlder里只需要实例化export类，调用export方法，在方法中判断是否导出strain_tree
+        /// 数据导出
         /// </summary>
         /// <param name="etype"></param>
         /// <param name="fpath"></param>
@@ -300,19 +296,15 @@ namespace IDCM.ViewManager
                         break;
                     case ExportType.JSONList:
                         handler = new GCMJSONExportHandler(fpath, exportStrainTree, selectedRows, DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.TSV:
                         handler = new GCMTextExportHandler(fpath, exportStrainTree, selectedRows, "\t", DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.CSV:
                         handler = new GCMTextExportHandler(fpath, exportStrainTree, selectedRows, ",", DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.XML:
                         handler = new GCMXMLExportHandler(fpath, exportStrainTree, selectedRows, DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     default:
                         MessageBox.Show("Unsupport export type!");
@@ -325,30 +317,26 @@ namespace IDCM.ViewManager
                 {
                     case ExportType.Excel:
                         handler = new GCMExcelExportHandler(fpath, exportStrainTree, datasetBuilder.DgvToTable(gcmView.getItemGridView()), DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.JSONList:
                         handler = new GCMJSONExportHandler(fpath, exportStrainTree, datasetBuilder.DgvToTable(gcmView.getItemGridView()), DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.TSV:
                         handler = new GCMTextExportHandler(fpath, exportStrainTree, datasetBuilder.DgvToTable(gcmView.getItemGridView()), "\t", DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.CSV:
                         handler = new GCMTextExportHandler(fpath, exportStrainTree, datasetBuilder.DgvToTable(gcmView.getItemGridView()), ",", DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     case ExportType.XML:
                         handler = new GCMXMLExportHandler(fpath, exportStrainTree, datasetBuilder.DgvToTable(gcmView.getItemGridView()), DataSourceHolder.GCMHolder);
-                        DWorkMHub.callAsyncHandle(handler);
                         break;
                     default:
                         MessageBox.Show("Unsupport export type!");
                         break;
                 }
             }
-            
+            if(handler != null)
+                DWorkMHub.callAsyncHandle(handler);
         }
 
         //复制

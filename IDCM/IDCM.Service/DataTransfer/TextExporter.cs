@@ -57,7 +57,7 @@ namespace IDCM.Service.DataTransfer
                         foreach (DataRow row in table.Rows)
                         {
                             string dataLine = convertToText(maps,row,spliter);
-                            strbuilder.Append("\n\r").Append(dataLine);
+                            strbuilder.Append("\n").Append(dataLine);
                             /////////////
                             if (++count % 100 == 0)
                             {
@@ -110,14 +110,15 @@ namespace IDCM.Service.DataTransfer
                         strbuilder.Append(key).Append(spliter);
                     }
                     //填写内容////////////////////
-                    foreach (DataGridViewRow dgvRow in selectedRows)
+                    for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
                     {
+                        DataGridViewRow dgvRow = selectedRows[ridx];
                         string recordId = dgvRow.Cells[CTDRecordA.CTD_RID].Value as string;
                         DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
                         foreach (DataRow row in table.Rows)
                         {
                             string dataLine = convertToText(maps, row, spliter);
-                            strbuilder.Append("\n\r").Append(dataLine);
+                            strbuilder.Append("\n").Append(dataLine);
                             /////////////
                             if (++count % 100 == 0)
                             {
