@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace IDCM.Test
 {
@@ -17,7 +18,26 @@ namespace IDCM.Test
         public Text()
         {
             InitializeComponent();
-            loadData();
+            loadXML();
+        }
+
+        public void loadXML()
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.IgnoreComments = true;
+            //XmlReader reader = XmlReader.Create(@"C:\Users\ding\Desktop\EN0JNJ1JRP2EXL2Q4GTU1XFINF.xml");
+            XmlReader reader = XmlReader.Create(@"C:\Users\ding\Desktop\test.xml");
+            xmlDoc.Load(reader);
+            XmlElement rootNode = xmlDoc.DocumentElement;
+            XmlNodeList rootNodeList = rootNode.ChildNodes;
+            foreach(XmlNode node in rootNodeList)
+            {
+                XmlNodeList oneNodeList = node.ChildNodes;
+                if(oneNodeList==null)
+                    Console.WriteLine(node.Name);
+            }
+            reader.Close();
         }
 
         private void loadData()
