@@ -183,24 +183,24 @@ namespace IDCM.ViewManager
         public void importData(string fpath)
         {
             Dictionary<string, string> dataMapping = new Dictionary<string, string>();
+            AbsHandler eih = null;
             if (fpath.ToLower().EndsWith("xls") || fpath.ToLower().EndsWith(".xlsx"))
             {                
                 if (datasetBuilder.checkForExcelImport(fpath, ref dataMapping,homeView))
-                {
-                    ExcelImportHandler eih = new ExcelImportHandler(DataSourceHolder.DataSource,fpath,ref dataMapping, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
-                    eih.addHandler(new UpdateHomeDataViewHandler(DataSourceHolder.DataSource, catBuilder.RootNode_unfiled, homeView.getItemGridView()));
-                    UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, homeView.getLibTree(), homeView.getBaseTree());
-                    eih.addHandler(uhlch);
-                    uhlch.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
-                    DWorkMHub.callAsyncHandle(eih);
-                }
+                    eih = new ExcelImportHandler(DataSourceHolder.DataSource,fpath,ref dataMapping, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
             }
             if(fpath.ToLower().EndsWith("xml") || fpath.ToLower().EndsWith(".xml"))
             {
                 if (datasetBuilder.checkForXMLImport(fpath, ref dataMapping, homeView))
-                { 
-                
-                }
+                    eih = new XMLImportHandler(DataSourceHolder.DataSource,fpath,ref dataMapping, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
+            }
+            if (eih != null)
+            {
+                eih.addHandler(new UpdateHomeDataViewHandler(DataSourceHolder.DataSource, catBuilder.RootNode_unfiled, homeView.getItemGridView()));
+                UpdateHomeLibCountHandler uhlch = new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, homeView.getLibTree(), homeView.getBaseTree());
+                eih.addHandler(uhlch);
+                uhlch.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
+                DWorkMHub.callAsyncHandle(eih);
             }
         }
         /// <summary>

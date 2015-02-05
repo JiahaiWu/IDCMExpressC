@@ -878,25 +878,55 @@ namespace IDCM.Modules
         /// </summary>
         /// <param name="fpath"></param>
         /// <returns></returns>
-        internal bool checkForXMLImport(string fpath, ref Dictionary<string, string> dataMapping, HomeView homeView)
+        internal bool checkForXMLImport(string fpath, ref Dictionary<string, string> dataMapping, Form pForm)
         {
             if (fpath == null || fpath.Length < 1)
                 return false;
             string fullPaht = System.IO.Path.GetFullPath(fpath);
-            XmlDocument xDoc = new XmlDocument();
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.IgnoreComments = true;
-            XmlReader xRead = XmlReader.Create(fullPaht);
-            xDoc.Load(xRead);
-
-            XmlNode strainNode = xDoc.SelectSingleNode("strain");
-            XmlNodeList strainChildNodes = strainNode.ChildNodes;
+            try
+            {
+                XmlDocument xDoc = new XmlDocument();
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.IgnoreComments = true;
+                using(XmlReader xRead = XmlReader.Create(fullPaht))
+                {
+                    xDoc.Load(xRead);
+                    return fetchXMLMappingInfo(xDoc, ref dataMapping, pForm) && dataMapping.Count > 0;
+                }  
+            }
+            catch(Exception ex)
+            {
+                log.Info("ERROR: XML文件导入失败！ ", ex);
+                MessageBox.Show("ERROR: XML文件导入失败！ " + ex.Message + "\n" + ex.StackTrace);
+            }
+            return false;
+        }
+        public bool fetchXMLMappingInfo(XmlDocument xDoc,ref Dictionary<string, string> dataMapping, Form pForm)
+        {
+            XmlNodeList strainChildNodes = xDoc.DocumentElement.ChildNodes;
+            while (strainChildNodes.Count > 0)
+            {
+                XmlNode node = strainChildNodes[0];
+                if (node.ChildNodes.Count <= 0)
+                    break;
+                strainChildNodes = node.ChildNodes;
+            }
+            List<string> attrNameList = new List<string>(strainChildNodes.Count);
             foreach (XmlNode strainChildNode in strainChildNodes)
             {
-                string attrName = strainChildNode.Name;
-                Console.WriteLine(attrName);
+                attrNameList.Add(strainChildNode.Name);               
             }
-            return true;
+            ///////////////////////////////////////////////////////////////
+            using (AttrMapOptionDlg amoDlg = new AttrMapOptionDlg())
+            {
+                amoDlg.BringToFront();
+                amoDlg.setInitCols(attrNameList, LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource, false), ref dataMapping);
+                amoDlg.ShowDialog();
+                ///////////////////////////////////////////
+                if (amoDlg.DialogResult == DialogResult.OK)
+                    return true;
+            }
+            return false;
         }
         /// <summary>
         /// 通过NPOI读取Excel文档，转换可识别内容至本地数据库中
