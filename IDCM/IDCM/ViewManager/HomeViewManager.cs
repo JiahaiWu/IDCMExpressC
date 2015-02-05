@@ -182,9 +182,9 @@ namespace IDCM.ViewManager
         /// <param name="fpath"></param>
         public void importData(string fpath)
         {
+            Dictionary<string, string> dataMapping = new Dictionary<string, string>();
             if (fpath.ToLower().EndsWith("xls") || fpath.ToLower().EndsWith(".xlsx"))
-            {
-                Dictionary<string, string> dataMapping = new Dictionary<string, string>();
+            {                
                 if (datasetBuilder.checkForExcelImport(fpath, ref dataMapping,homeView))
                 {
                     ExcelImportHandler eih = new ExcelImportHandler(DataSourceHolder.DataSource,fpath,ref dataMapping, CatalogNode.REC_UNFILED, CatalogNode.REC_ALL);
@@ -193,6 +193,13 @@ namespace IDCM.ViewManager
                     eih.addHandler(uhlch);
                     uhlch.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
                     DWorkMHub.callAsyncHandle(eih);
+                }
+            }
+            if(fpath.ToLower().EndsWith("xml") || fpath.ToLower().EndsWith(".xml"))
+            {
+                if (datasetBuilder.checkForXMLImport(fpath, ref dataMapping, homeView))
+                { 
+                
                 }
             }
         }

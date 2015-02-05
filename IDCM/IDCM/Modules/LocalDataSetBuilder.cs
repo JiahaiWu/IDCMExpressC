@@ -15,6 +15,7 @@ using NPOI.XSSF.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using IDCM.Forms;
+using System.Xml;
 
 namespace IDCM.Modules
 {
@@ -871,6 +872,31 @@ namespace IDCM.Modules
                 MessageBox.Show("ERROR: Excel文件导入失败！ " + ex.Message + "\n" + ex.StackTrace);
             }
             return false;
+        }
+        /// <summary>
+        /// 解析指定的XML文档，验证数据转换的属性映射条件.
+        /// </summary>
+        /// <param name="fpath"></param>
+        /// <returns></returns>
+        internal bool checkForXMLImport(string fpath, ref Dictionary<string, string> dataMapping, HomeView homeView)
+        {
+            if (fpath == null || fpath.Length < 1)
+                return false;
+            string fullPaht = System.IO.Path.GetFullPath(fpath);
+            XmlDocument xDoc = new XmlDocument();
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.IgnoreComments = true;
+            XmlReader xRead = XmlReader.Create(fullPaht);
+            xDoc.Load(xRead);
+
+            XmlNode strainNode = xDoc.SelectSingleNode("strain");
+            XmlNodeList strainChildNodes = strainNode.ChildNodes;
+            foreach (XmlNode strainChildNode in strainChildNodes)
+            {
+                string attrName = strainChildNode.Name;
+                Console.WriteLine(attrName);
+            }
+            return true;
         }
         /// <summary>
         /// 通过NPOI读取Excel文档，转换可识别内容至本地数据库中
