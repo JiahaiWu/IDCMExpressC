@@ -160,7 +160,9 @@ namespace IDCM.ViewManager
         }
         internal void OnRetryDataPrepare(object sender, IDCMAsyncEventArgs e)
         {
-            //Unimplement!
+            HomeViewManager homeViewManager = (HomeViewManager)ViewManagerHolder.getManager(typeof(HomeViewManager));
+            homeViewManager.dispose();
+            ViewManagerHolder.activeChildView(typeof(HomeViewManager),true);
         }
         /// <summary>
         /// 更新用户登录状态，到目标窗口视图中去
