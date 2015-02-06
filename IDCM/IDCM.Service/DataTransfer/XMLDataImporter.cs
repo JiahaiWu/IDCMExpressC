@@ -45,41 +45,39 @@ namespace IDCM.Service.DataTransfer
         public static void parseXMLMappingInfo(DataSourceMHub datasource, XmlDocument xDoc, ref Dictionary<string, string> dataMapping, string lid, string plid)
         {
             XmlNodeList strainChildNodes = xDoc.DocumentElement.ChildNodes;
-            XmlNode strainNode = null;
             while (strainChildNodes.Count > 0)
             {
                 XmlNode node = strainChildNodes[0];
                 if (node.ChildNodes.Count <= 0)
                     break;
                 strainChildNodes = node.ChildNodes;
-                strainNode = node;
             }
-            List<string> attrNameList = new List<string>(strainChildNodes.Count);
-            foreach (XmlNode strainChildNode in strainChildNodes)
-            {
-                attrNameList.Add(strainChildNode.Name);
-            }
-            XmlNodeList strainParentList = xDoc.GetElementsByTagName(strainNode.Name);
+            XmlNode strainNode = strainChildNodes[0].ParentNode;//获取第一个strainNode
             /////////////////////////////////////////////////////////////////////////////
             if (dataMapping != null && dataMapping.Count > 0)
             {
-                foreach(XmlNode strain in strainParentList)//循环的strains -> strain
+                while (strainNode!=null)
                 {
                     Dictionary<string, string> mapValues = new Dictionary<string, string>();
-                    foreach (XmlNode attrNode in strain.ChildNodes)//循环的是strain -> strainAttr
+                    foreach (XmlNode attrNode in strainNode.ChildNodes)//循环的是strain -> strainAttr
                     { 
-                        string xmlAttrName = attrNode.Name;
+                        string xmlAttrName = attrNode.Name;  
+                        string dbName = dataMapping[xmlAttrName];
                         string xmlAttrValue = attrNode.InnerText;
-                        string dbName = dataMapping[xmlAttrName]; 
-                        if (dbName != null && xmlAttrValue!=null && xmlAttrValue.Length>0)
+                        if (dbName != null && xmlAttrValue != null && xmlAttrValue.Length>0)
                             mapValues[dbName] = xmlAttrValue;
                     }   
                     mapValues[CTDRecordA.CTD_LID] = lid;
                     mapValues[CTDRecordA.CTD_PLID] = plid;
                     long nuid = LocalRecordMHub.mergeRecord(datasource, mapValues);
-                } 
+                    strainNode = nextStrainNode(strainNode);
+                }
             }
         }
+        private static XmlNode nextStrainNode(XmlNode strainNode)
+        {
+            return strainNode.NextSibling;
+        }
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
-    }
+    }  
 }

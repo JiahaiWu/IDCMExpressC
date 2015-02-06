@@ -902,8 +902,11 @@ namespace IDCM.Modules
             return false;
         }
         public bool fetchXMLMappingInfo(XmlDocument xDoc,ref Dictionary<string, string> dataMapping, Form pForm)
-        {
+        {            
             XmlNodeList strainChildNodes = xDoc.DocumentElement.ChildNodes;
+            //一直向下探索，直到某个节点下没有子节点，说明这个节点是个attrNode,
+            //因为按正常的逻辑，属性节点应该是最小的节点单位了
+            //attrNode的集合就是strainChildNodes  
             while (strainChildNodes.Count > 0)
             {
                 XmlNode node = strainChildNodes[0];
@@ -911,11 +914,22 @@ namespace IDCM.Modules
                     break;
                 strainChildNodes = node.ChildNodes;
             }
+
+            //节点探测代码
+            XmlNode strainNode = strainChildNodes[0].ParentNode;//获取第一个strainNode
             List<string> attrNameList = new List<string>(strainChildNodes.Count);
-            foreach (XmlNode strainChildNode in strainChildNodes)
+            int cursor = 0;
+            int detectDepth = 5;
+            while (!(strainNode == null))
             {
-                attrNameList.Add(strainChildNode.Name);               
+                if (cursor > detectDepth)
+                    break;
+                if (mergeAttrList(attrNameList, strainNode.ChildNodes))//如果这个节点下有新属性出现，使探测深度增加2倍
+                    detectDepth = (int)(detectDepth * 1.5);
+                strainNode = nextStrainNode(strainNode);
+                cursor++;
             }
+
             ///////////////////////////////////////////////////////////////
             using (AttrMapOptionDlg amoDlg = new AttrMapOptionDlg())
             {
@@ -926,6 +940,23 @@ namespace IDCM.Modules
                 if (amoDlg.DialogResult == DialogResult.OK)
                     return true;
             }
+            return false;
+        }
+        private XmlNode nextStrainNode(XmlNode strainNode)
+        {
+            return strainNode.NextSibling;
+        }
+        private bool mergeAttrList(List<string> attrNameList,XmlNodeList attrNodeList)
+        {
+            int startLeng = attrNameList.Count;
+            foreach (XmlNode strainChildNode in attrNodeList)
+            {
+                if(!attrNameList.Contains(strainChildNode.Name))
+                    attrNameList.Add(strainChildNode.Name);
+            }
+            int endLeng = attrNameList.Count;
+            if (startLeng != endLeng)
+                return true;
             return false;
         }
         /// <summary>
