@@ -72,6 +72,7 @@
     <Compile Include="BGHandler\GCMJSONExportHandler.cs" />
     <Compile Include="BGHandler\GCMTextExportHandler.cs" />
     <Compile Include="BGHandler\GCMXMLExportHandler.cs" />
+    <Compile Include="BGHandler\LocalDataUploadHandler.cs" />
     <Compile Include="BGHandler\XMLExportHandler.cs" />
     <Compile Include="DataTransfer\GCMExcelExporter.cs" />
     <Compile Include="DataTransfer\GCMJSONExporter.cs" />

@@ -177,7 +177,7 @@ namespace IDCM.ViewManager
             noteCurSelectedNode(tnode);
         }
         /// <summary>
-        /// 导入数据文档
+        /// 导入Excel数据文档
         /// </summary>
         /// <param name="fpath"></param>
         public void importData(string fpath)
@@ -348,6 +348,36 @@ namespace IDCM.ViewManager
             uhdvh.addHandler(new UpdateHomeLibCountHandler(DataSourceHolder.DataSource, filterNode));
             uhdvh.addHandler(new SelectDataRowHandler(DataSourceHolder.DataSource, homeView.getItemGridView(), homeView.getAttachTabControl()));
             DWorkMHub.callAsyncHandle(uhdvh);
+        }
+        /// <summary>
+        /// 将选中列提交至GCM目录的处理入口方法
+        /// 说明：
+        /// 该方法实现主要包括以下四部分内容
+        /// 1.验证选择行记录
+        /// 2.验证GCM登录状态
+        /// 3.获取本地数据字段至GCM目标字段的映射关系
+        /// 4.建立上传目标数据至GCM目录事务（内置临时XML导出及更新菌种资源软链接消息）
+        /// </summary>
+        public void uploadSelectionToGCM()
+        {
+            DataGridViewSelectedRowCollection selectedRows = homeView.getItemGridView().SelectedRows;
+            AuthInfo authInfo = DataSourceHolder.getLoginAuthInfo();
+            if (authInfo != null && authInfo.LoginFlag == true) //登录成功
+            {
+                if (selectedRows != null && selectedRows.Count > 0)
+                {
+                    Dictionary<string, string> dataMapping = new Dictionary<string, string>();
+                    if (datasetBuilder.checkForGCMImport(ref dataMapping, homeView))
+                    {
+                        LocalDataUploadHandler lduh = new LocalDataUploadHandler(DataSourceHolder.DataSource,selectedRows,dataMapping);
+                        DWorkMHub.callAsyncHandle(lduh);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please sign in brfore this operation request.", "Sign In Notice", MessageBoxButtons.OK);
+            }
         }
         public void showDBDataSearch()
         {
