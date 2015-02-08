@@ -121,7 +121,7 @@ namespace IDCM.Service.DataTransfer
                     if (exportDetail)
                     {
                         string strainID = Convert.ToString(dgvRow.Cells[1].Value);
-                        StrainView sv = getStrainView(gcmSiteHolder, strainID);
+                        StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainID);
                         Dictionary<string, object> strain_treeMap = sv.ToDictionary();
                         if (IrowIndex == 0) mergeMapKeyToColumn(columnHead, strain_treeMap, startIndex);
                         mergeMapValueToIrow(Irow, strain_treeMap, startIndex);
@@ -197,17 +197,6 @@ namespace IDCM.Service.DataTransfer
                     }
                 }
             }            
-        }
-        /// <summary>
-        /// 获取strain_tree
-        /// </summary>
-        /// <param name="gcmSiteHolder">底层GCMSiteHolder句柄，封装GCMGCM账户信息</param>
-        /// <param name="strainID">strain的ID</param>
-        /// <returns>strain_tree</returns>
-        private StrainView getStrainView(GCMSiteMHub gcmSiteHolder, string strainID)
-        {
-            GCMDataMHub gcmDataHub = new GCMDataMHub();
-            return gcmDataHub.strainViewQuery(gcmSiteHolder, strainID);
         }
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();

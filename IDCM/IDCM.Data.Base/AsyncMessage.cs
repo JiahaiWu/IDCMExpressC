@@ -21,6 +21,7 @@ namespace IDCM.Data.Base
         public static readonly AsyncMessage UpdateGCMSignTip = new AsyncMessage(MsgType.UpdateGCMSignTip, "Update GCM Sign Tip");
         public static readonly AsyncMessage StartBackProgress = new AsyncMessage(MsgType.StartBackProgress, "Start Back Progress");
         public static readonly AsyncMessage EndBackProgress = new AsyncMessage(MsgType.EndBackProgress, "End Back Progress");
+        public static readonly AsyncMessage UpdateLGCMLinkTags = new AsyncMessage(MsgType.UpdateLGCMLinkTags, "Update LGCM Link Tags");
         /// <summary>
         /// 刷新GCMView中的控件显示
         /// </summary>
@@ -83,6 +84,7 @@ namespace IDCM.Data.Base
         UpdateGCMSignTip=5,
         StartBackProgress=6,
         EndBackProgress = 7,
-        RefreshGCMViewControl = 8
+        RefreshGCMViewControl = 8,
+        UpdateLGCMLinkTags=9
     }
 }

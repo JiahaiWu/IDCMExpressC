@@ -51,6 +51,10 @@ namespace IDCM.Data.Base
 
         #endregion
         /// <summary>
+        /// GCM上传XML格式模板文档
+        /// </summary>
+        public const string GCMUploadTemplate = "GCMUploadTemplate";
+        /// <summary>
         /// 最长等待毫秒数
         /// </summary>
         public static int MAX_DB_REQUEST_TIME_OUT = 10000;

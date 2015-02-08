@@ -81,6 +81,7 @@
     <Compile Include="Utils\StringSimilarity.cs" />
     <Compile Include="Utils\StringUtil.cs" />
     <Compile Include="IDCMViewException.cs" />
+    <Compile Include="XMLImportStrainsRes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

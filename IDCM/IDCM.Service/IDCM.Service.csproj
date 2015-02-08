@@ -78,7 +78,9 @@
     <Compile Include="DataTransfer\GCMJSONExporter.cs" />
     <Compile Include="DataTransfer\GCMTextExporter.cs" />
     <Compile Include="DataTransfer\GCMXMLExporter.cs" />
+    <Compile Include="DataTransfer\LocalDataUploadExporter.cs" />
     <Compile Include="DataTransfer\XMLExporter.cs" />
+    <Compile Include="LGCMLinkMapHolder.cs" />
     <Compile Include="UIM\BackProgressIndicator.cs" />
     <Compile Include="BGHandler\ExcelExportHandler.cs" />
     <Compile Include="BGHandler\ExcelImportHandler.cs" />

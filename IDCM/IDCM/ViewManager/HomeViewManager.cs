@@ -367,7 +367,7 @@ namespace IDCM.ViewManager
                 if (selectedRows != null && selectedRows.Count > 0)
                 {
                     Dictionary<string, string> dataMapping = new Dictionary<string, string>();
-                    if (datasetBuilder.checkForGCMImport(ref dataMapping, homeView))
+                    if (datasetBuilder.checkForGCMImport(ref dataMapping))
                     {
                         LocalDataUploadHandler lduh = new LocalDataUploadHandler(DataSourceHolder.DataSource,selectedRows,dataMapping);
                         DWorkMHub.callAsyncHandle(lduh);

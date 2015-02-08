@@ -18,7 +18,7 @@ namespace IDCM.Service.Common
         /// <param name="strainname"></param>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public StrainListPage strainListQuery(GCMSiteMHub gcmSite,int currentPage, string strainnumber = "", string strainname = "", int timeout = 10000)
+        public static StrainListPage strainListQuery(GCMSiteMHub gcmSite,int currentPage, string strainnumber = "", string strainname = "", int timeout = 10000)
         {
             return StrainListQueryExecutor.strainListQuery(currentPage, strainnumber, strainname, gcmSite.getSignedAuthInfo(), timeout);
         }
@@ -29,9 +29,14 @@ namespace IDCM.Service.Common
         /// <param name="id"></param>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public StrainView strainViewQuery(GCMSiteMHub gcmSite, string id, int timeout = 10000)
+        public static StrainView strainViewQuery(GCMSiteMHub gcmSite, string id, int timeout = 10000)
         {
             return StrainViewQueryExecutor.strainViewQuery(id, gcmSite.getSignedAuthInfo(), timeout);
+        }
+
+        public static XMLImportStrainsRes xmlImportStrains(string tempXlsPath)
+        {
+            throw new NotImplementedException();
         }
     }
 }
