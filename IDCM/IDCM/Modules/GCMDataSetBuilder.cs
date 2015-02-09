@@ -42,19 +42,22 @@ namespace IDCM.Modules
         }
         #endregion
 
-        /// <summary>
-        /// 添加一列CheckBoxColumn
-        /// </summary>
-        public void addCheckBoxColumn()
-        {
-            DataGridViewCheckBoxColumn chxCol = new DataGridViewCheckBoxColumn();
-            chxCol.ReadOnly = true;
-            chxCol.Resizable = DataGridViewTriState.False;
-            chxCol.FlatStyle = FlatStyle.Popup;
-            chxCol.CellTemplate.Style.ForeColor = Color.LightGray;
-            chxCol.Width = 25;
-            itemDGV.Columns.Add(chxCol);
-        }
+        //////////////////////////////////////////////////////////////////////////////////////
+        //这个方法的作用是对GCM的主表添加一列CheckBoxColumn，这个功能暂时屏蔽
+        ///// <summary>
+        ///// 添加一列CheckBoxColumn
+        ///// </summary>
+        //public void addCheckBoxColumn()
+        //{
+        //    DataGridViewCheckBoxColumn chxCol = new DataGridViewCheckBoxColumn();
+        //    chxCol.ReadOnly = true;
+        //    chxCol.Resizable = DataGridViewTriState.False;
+        //    chxCol.FlatStyle = FlatStyle.Popup;
+        //    chxCol.CellTemplate.Style.ForeColor = Color.LightGray;
+        //    chxCol.Width = 25;
+        //    itemDGV.Columns.Add(chxCol);
+        //}
+        //////////////////////////////////////////////////////////////////////////////////////
 
         public DataGridViewCell quickSearch(string findTerm)
         {

@@ -159,7 +159,6 @@ namespace IDCM.ViewManager
             gcmView.getItemGridView().AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
             gcmView.getItemGridView().AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
             gcmView.getItemGridView().AllowUserToResizeColumns = true;
-            datasetBuilder.addCheckBoxColumn();
         }
 
         /// <summary>
