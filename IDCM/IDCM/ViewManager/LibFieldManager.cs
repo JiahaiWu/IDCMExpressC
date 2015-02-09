@@ -17,8 +17,16 @@ namespace IDCM.ViewManager
         {
             libFieldView = new LibFieldSettingView();
             libFieldView.setManager(this);
+
+            libFieldView.OnRemoveField += OnFieldViewRemoveField;
+            libFieldView.OnSelectTemplate += OnFieldViewSelectTemplate;
+            libFieldView.OnAppendField += OnFieldViewAppendField;
+            libFieldView.OnOverwriteField += OnFieldViewOverwriteField;
+            libFieldView.OnSubmitSetting += OnFieldViewSubmitSetting;
+
             filedBuilder = new LibFieldBuilder(libFieldView.getTemplateChx(), libFieldView.getFieldDGV());
         }
+
         ~LibFieldManager()
         {
             dispose();
@@ -112,11 +120,12 @@ namespace IDCM.ViewManager
         }
         #endregion
 
-        public void selectTemplate(int sIndex)
+        private void OnFieldViewSelectTemplate(object sender, Core.IDCMViewEventArgs e)
         {
-            filedBuilder.selectTemplate(sIndex);
+            //e.values.length = 1 ### e.values[0] = comboBox_templ.SelectedIndex
+            filedBuilder.selectTemplate(e.values[0]);
         }
-        public void submitSetting()
+        private void OnFieldViewSubmitSetting(object sender, Core.IDCMViewEventArgs e)
         {
             filedBuilder.submitCustomSetting();
         }
@@ -124,17 +133,20 @@ namespace IDCM.ViewManager
         {
             return filedBuilder.checkFieldsInCustom();
         }
-        public void appendField(DataGridViewRow dgvr, string groupName)
+        private void OnFieldViewAppendField(object sender, Core.IDCMViewEventArgs e)
         {
-            filedBuilder.appendField(dgvr, groupName);
+            //e.values.length = 2 ### e.values[0] = dataGridView_fields.Rows[e.RowIndex] e.values[1] = this.comboBox_templ.SelectedItem.ToString()
+            filedBuilder.appendField(e.values[0], e.values[1]);
         }
-        public void removeField(DataGridViewRow dgvr)
+        private void OnFieldViewRemoveField(object sender, Core.IDCMViewEventArgs e)
         {
-            filedBuilder.removeField(dgvr);
+            //e.values.length = 1 ###  e.values[0] = dataGridView_fields.Rows[rowIndex]
+            filedBuilder.removeField(e.values[0]);
         }
-        public void overwriteField(DataGridViewRow dgvr, string groupName)
+        private void OnFieldViewOverwriteField(object sender, Core.IDCMViewEventArgs e)
         {
-            filedBuilder.overwriteField(dgvr, groupName);
+            ////e.values.length = 2 ### e.values[0] = dataGridView_fields.Rows[e.RowIndex] e.values[1] = this.comboBox_templ.SelectedItem.ToString()
+            filedBuilder.overwriteField(e.values[0], e.values[1]);
         }
     }
 }

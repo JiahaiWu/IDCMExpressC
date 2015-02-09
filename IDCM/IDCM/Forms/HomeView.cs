@@ -53,13 +53,13 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void HomeView_Load(object sender, EventArgs e)
         {
-            OnHomeViewShown(this, null);
+            OnHomeViewLoad(this, null);
         }
 
         private void HomeView_Shown(object sender, EventArgs e)
         {
             BackProgressIndicator.addIndicatorBar(this.getProgressBar());
-            OnHomeViewLoad(this, null);
+            OnHomeViewShown(this, null);
         }
 
         /// <summary>

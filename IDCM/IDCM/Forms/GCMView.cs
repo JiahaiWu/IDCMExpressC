@@ -34,6 +34,12 @@ namespace IDCM.Forms
         public event IDCMViewEventHandler OnGCMViewShown;
         public event IDCMViewEventHandler OnRequestHelp;
         public event IDCMViewEventHandler OnSearchButtonClick;
+        public event IDCMViewEventHandler OnExportData;
+        public event IDCMViewEventHandler OnCopyClipboard;
+        public event IDCMViewEventHandler OnFrontDataSearch;
+        public event IDCMViewEventHandler OnFrontSearchNext;
+        public event IDCMViewEventHandler OnFrontSearchPrev;
+        public event IDCMViewEventHandler OnQuickSearch;
 
         private GCMViewManager manager=null;
 
@@ -120,7 +126,7 @@ namespace IDCM.Forms
         }
         private void treeView_record_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            OnStrainTreeNodeClick(sender,new IDCMViewEventArgs(new object[]{e}));
+            OnStrainTreeNodeClick(sender,new IDCMViewEventArgs(new TreeNode[]{e.Node}));
         }
         private void dataGridView_items_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -149,7 +155,7 @@ namespace IDCM.Forms
             {
                 try
                 {
-                    manager.exportData(ExportTypeDlg.LastOptionValue, ExportTypeDlg.LastFilePath,ExportTypeDlg.ExportStainTree);
+                    OnExportData(this, new IDCMViewEventArgs(new object[] { ExportTypeDlg.LastOptionValue ,ExportTypeDlg.LastFilePath,ExportTypeDlg.ExportStainTree}));
                 }
                 catch (Exception ex)
                 {
@@ -163,14 +169,9 @@ namespace IDCM.Forms
 
         private void copyCtrlCToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            manager.CopyClipboard();
+            OnCopyClipboard(this,null);
             DataObject d = dataGridView_items.GetClipboardContent();
             Clipboard.SetDataObject(d);
-        }
-
-        private void pasteCtrlVToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            manager.PasteClipboard();
         }
 
         /******************************************************************
@@ -181,17 +182,14 @@ namespace IDCM.Forms
         {
             switch (keyData)
             {
-                //case Keys.Control | Keys.F://打开查找菜单
-                //    manager.showDBDataSearch();
-                //    break;
                 case Keys.Control | Keys.Shift | Keys.F://打开前端记录查找菜单
-                    manager.frontDataSearch();
+                    OnFrontDataSearch(this, null);
                     break;
                 case Keys.Control | Keys.Shift | Keys.N:
-                    manager.frontSearchNext();
+                    OnFrontSearchNext(this,null);
                     break;
                 case Keys.Control | Keys.Shift | Keys.P:
-                    manager.frontSearchPrev();
+                    OnFrontSearchPrev(this,null);
                     break;
                 default:
                     return base.ProcessCmdKey(ref msg, keyData);
@@ -208,11 +206,7 @@ namespace IDCM.Forms
         {
             if ((e.Control && e.KeyCode == Keys.C) || (e.Shift && e.KeyCode == Keys.Delete))
             {
-                manager.CopyClipboard();
-            }
-            if ((e.Control && e.KeyCode == Keys.V) || (e.Shift && e.KeyCode == Keys.Insert))
-            {
-                manager.PasteClipboard();
+                OnCopyClipboard(this, null);
             }
         }
 
@@ -234,7 +228,7 @@ namespace IDCM.Forms
             if (e.KeyCode == Keys.Enter)
             {
                 string findTerm = this.toolStripTextBox_search.Text.Trim();
-                manager.quickSearch(findTerm);
+                OnQuickSearch(this, new IDCMViewEventArgs(new string[] { findTerm }));
             }
         }
 

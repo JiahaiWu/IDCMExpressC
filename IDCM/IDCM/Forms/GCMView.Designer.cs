@@ -93,7 +93,6 @@
             this.dataGridView_items = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyCtrlCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteCtrlVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer_right = new System.Windows.Forms.SplitContainer();
             this.listView_record = new System.Windows.Forms.ListView();
             this.treeView_record = new System.Windows.Forms.TreeView();
@@ -141,7 +140,7 @@
             // toolStripStatusLabel_status
             // 
             this.toolStripStatusLabel_status.Name = "toolStripStatusLabel_status";
-            this.toolStripStatusLabel_status.Size = new System.Drawing.Size(44, 17);
+            this.toolStripStatusLabel_status.Size = new System.Drawing.Size(43, 17);
             this.toolStripStatusLabel_status.Text = "Ready";
             // 
             // toolStripDropDownButton_online
@@ -783,24 +782,16 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyCtrlCToolStripMenuItem,
-            this.pasteCtrlVToolStripMenuItem});
+            this.copyCtrlCToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(157, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(154, 48);
             // 
             // copyCtrlCToolStripMenuItem
             // 
             this.copyCtrlCToolStripMenuItem.Name = "copyCtrlCToolStripMenuItem";
-            this.copyCtrlCToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.copyCtrlCToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.copyCtrlCToolStripMenuItem.Text = "Copy (Ctrl+C)";
             this.copyCtrlCToolStripMenuItem.Click += new System.EventHandler(this.copyCtrlCToolStripMenuItem_Click);
-            // 
-            // pasteCtrlVToolStripMenuItem
-            // 
-            this.pasteCtrlVToolStripMenuItem.Name = "pasteCtrlVToolStripMenuItem";
-            this.pasteCtrlVToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.pasteCtrlVToolStripMenuItem.Text = "Paste (Ctrl+V)";
-            this.pasteCtrlVToolStripMenuItem.Click += new System.EventHandler(this.pasteCtrlVToolStripMenuItem_Click);
             // 
             // splitContainer_right
             // 
@@ -961,6 +952,5 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem copyCtrlCToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pasteCtrlVToolStripMenuItem;
     }
 }

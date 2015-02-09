@@ -181,10 +181,10 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void StartView_FormClosed(object sender, FormClosedEventArgs e)
         {
-            OnFormClosed(this, new IDCMViewEventArgs(new FormClosedEventArgs[] { e }));
+            OnFormClose(this, new IDCMViewEventArgs(new FormClosedEventArgs[] { e }));
         }
         public event IDCMViewEventHandler OnRequestHelp;
-        public event IDCMViewEventHandler OnFormClosed;
+        public event IDCMViewEventHandler OnFormClose;
 
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         private StartInfo startInfo = null;

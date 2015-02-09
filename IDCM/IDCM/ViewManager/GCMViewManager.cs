@@ -32,8 +32,14 @@ namespace IDCM.ViewManager
             gcmView.OnStrainTreeNodeClick += OnGCMViewStrainTreeNodeClick;//查看树节点key value
             gcmView.OnRefreshData += OnGCMViewRefreshData;
             gcmView.OnActiveHomeView += OnGCMViewActiveHomeView;
-            gcmView.OnRequestHelp += OnGCMRequestHelp;
-            gcmView.OnSearchButtonClick += OnGCMSearchButtonClick;
+            gcmView.OnRequestHelp += OnGCMViewRequestHelp;
+            gcmView.OnSearchButtonClick += OnGCMViewSearchButtonClick;
+            gcmView.OnExportData += OnGCMViewExportData;
+            gcmView.OnCopyClipboard += OnGCMViewCopyClipboard;
+            gcmView.OnFrontDataSearch += OnGCMViewFrontDataSearch;
+            gcmView.OnFrontSearchNext += OnGCMViewFrontSearchNext;
+            gcmView.OnFrontSearchPrev += OnGCMViewFrontSearchPrev;
+            gcmView.OnActiveHomeView += OnGCMViewQuickSearch;
 
             frontFindDlg = new GCMFrontFindDlg(gcmView.getItemGridView());
             frontFindDlg.setCellHit += new GCMFrontFindDlg.SetHit<DataGridViewCell>(DGVUtil.setDGVCellHit);
@@ -43,7 +49,6 @@ namespace IDCM.ViewManager
             searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
         }
-        
 
         ~GCMViewManager()
         {
@@ -104,8 +109,14 @@ namespace IDCM.ViewManager
                 gcmView.OnStrainTreeNodeClick += OnGCMViewStrainTreeNodeClick;//查看树节点key value
                 gcmView.OnRefreshData += OnGCMViewRefreshData;
                 gcmView.OnActiveHomeView += OnGCMViewActiveHomeView;
-                gcmView.OnRequestHelp += OnGCMRequestHelp;
-                gcmView.OnSearchButtonClick += OnGCMSearchButtonClick;
+                gcmView.OnRequestHelp += OnGCMViewRequestHelp;
+                gcmView.OnSearchButtonClick += OnGCMViewSearchButtonClick;
+                gcmView.OnExportData += OnGCMViewExportData;
+                gcmView.OnCopyClipboard += OnGCMViewCopyClipboard;
+                gcmView.OnFrontDataSearch += OnGCMViewFrontDataSearch;
+                gcmView.OnFrontSearchNext += OnGCMViewFrontSearchNext;
+                gcmView.OnFrontSearchPrev += OnGCMViewFrontSearchPrev;
+                gcmView.OnActiveHomeView += OnGCMViewQuickSearch;
 
                 datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
                 BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());
@@ -191,8 +202,8 @@ namespace IDCM.ViewManager
         /// <param name="e"></param>
         private void OnGCMViewStrainTreeNodeClick(object sender, IDCMViewEventArgs e)
         {
-            TreeNodeMouseClickEventArgs tmcEvent = (TreeNodeMouseClickEventArgs)e.values[0];
-            GCMNodeDetailLoader.loadData(tmcEvent.Node, gcmView.getRecordList());
+            //e.values.length = 1 ### e.values[0] = TreeNodeMouseClickEventArgs.node
+            GCMNodeDetailLoader.loadData(e.values[0], gcmView.getRecordList());
         }
         /// <summary>
         /// 激活HomeView视图
@@ -214,13 +225,14 @@ namespace IDCM.ViewManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="hlpevent"></param>
-        private void OnGCMRequestHelp(object sender, IDCMViewEventArgs e)
+        private void OnGCMViewRequestHelp(object sender, IDCMViewEventArgs e)
         {
             HelpDocRequester.requestHelpDoc(HelpDocConstants.GCMViewTag);
         }
-        private void OnGCMSearchButtonClick(object sender, IDCMViewEventArgs e)
+        private void OnGCMViewSearchButtonClick(object sender, IDCMViewEventArgs e)
         {
-            quickSearch(e.values[0]);
+            //e.values.length = 1 ### e.values[0] = this.toolStripTextBox_search.Text.Trim()
+            OnGCMViewQuickSearch(sender, e);
         }
         #endregion
 
@@ -238,7 +250,7 @@ namespace IDCM.ViewManager
         /// <summary>
         /// 激活GCM FrontFindDlg
         /// </summary>
-        internal void frontDataSearch()
+        private void OnGCMViewFrontDataSearch(object sender, IDCMViewEventArgs e)
         {
             if (frontFindDlg == null || frontFindDlg.IsDisposed)
             {
@@ -251,23 +263,25 @@ namespace IDCM.ViewManager
             frontFindDlg.Activate();
         }
 
-        internal void frontSearchNext()
+        private void OnGCMViewFrontSearchNext(object sender, IDCMViewEventArgs e)
         {
             frontFindDlg.findDown();
         }
 
-        internal void frontSearchPrev()
+        private void OnGCMViewFrontSearchPrev(object sender, IDCMViewEventArgs e)
         {
             frontFindDlg.findRev();
         }
+
 
         /// <summary>
         /// 模糊查找
         /// </summary>
         /// <param name="findTerm"></param>
-        internal void quickSearch(string findTerm)
+        private void OnGCMViewQuickSearch(object sender, IDCMViewEventArgs e)
         {
-            DataGridViewCell ncell = datasetBuilder.quickSearch(findTerm);
+            //e.values.length = 1 ### e.values[0] = this.toolStripTextBox_search.Text.Trim()
+            DataGridViewCell ncell = datasetBuilder.quickSearch(e.values[0]);
             if (ncell != null)
                 setDGVCellHit(ncell);
         }
@@ -293,10 +307,15 @@ namespace IDCM.ViewManager
         /// <param name="etype"></param>
         /// <param name="fpath"></param>
         /// <param name="exportStrainTree"></param>
-        internal void exportData(ExportType etype, string fpath,bool exportStrainTree)
+        private void OnGCMViewExportData(object sender, IDCMViewEventArgs e)
         {
+            //e.values一共有三个成员，存放顺序：ExportTypeDlg.LastOptionValue, ExportTypeDlg.LastFilePath,ExportTypeDlg.ExportStainTree
+            ExportType etype = e.values[0];
+            string fpath = e.values[1];
+            bool exportStrainTree = e.values[2];
+
             AbsHandler handler = null;
-            DataGridViewSelectedRowCollection selectedRows=gcmView.getItemGridView().SelectedRows;
+            DataGridViewSelectedRowCollection selectedRows = gcmView.getItemGridView().SelectedRows;
             if (selectedRows != null && selectedRows.Count > 0)
             {
                 switch (etype)
@@ -320,7 +339,7 @@ namespace IDCM.ViewManager
                         MessageBox.Show("Unsupport export type!");
                         break;
                 }
-            }              
+            }
             else
             {
                 switch (etype)
@@ -345,21 +364,19 @@ namespace IDCM.ViewManager
                         break;
                 }
             }
-            if(handler != null)
+            if (handler != null)
                 DWorkMHub.callAsyncHandle(handler);
+        }
+        internal void exportData(ExportType etype, string fpath,bool exportStrainTree)
+        {
+            
         }
 
         //复制
-        internal void CopyClipboard()
+        private void OnGCMViewCopyClipboard(object sender, IDCMViewEventArgs e)
         {
             DataObject d = gcmView.getItemGridView().GetClipboardContent();
-            Clipboard.SetDataObject(d);
-        }
-
-        //粘贴
-        internal void PasteClipboard()
-        {
-            datasetBuilder.PasteClipboard();
+            Clipboard.SetDataObject(d); 
         }
 
         /// <summary>

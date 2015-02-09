@@ -10,12 +10,15 @@ using System.Threading;
 using IDCM.AppContext;
 using IDCM.ViewManager;
 using IDCM.Service.Utils;
+using IDCM.Core;
 
 namespace IDCM.Forms
 {
     public partial class LibFieldSettingView : Form
     {
         private LibFieldManager manager = null;
+        
+
         internal void setManager(LibFieldManager manager)
         {
             this.manager = manager;
@@ -26,6 +29,13 @@ namespace IDCM.Forms
             InitializeComponent();
             
         }
+
+        public event IDCMViewEventHandler OnRemoveField;
+        public event IDCMViewEventHandler OnSelectTemplate;
+        public event IDCMViewEventHandler OnAppendField;
+        public event IDCMViewEventHandler OnOverwriteField;
+        public event IDCMViewEventHandler OnSubmitSetting;
+        public event IDCMViewEventHandler OnCheckFields;
 
         public ComboBox getTemplateChx()
         {
@@ -43,7 +53,7 @@ namespace IDCM.Forms
 
         private void comboBox_templ_SelectedIndexChanged(object sender, EventArgs e)
         {
-            manager.selectTemplate(comboBox_templ.SelectedIndex);
+            OnSelectTemplate(this, new IDCMViewEventArgs(new object[] { comboBox_templ.SelectedIndex }));
             if (comboBox_templ.SelectedIndex > 0)
             {
                 toolStripMenuItem_copy.Visible = true;
@@ -110,7 +120,7 @@ namespace IDCM.Forms
                 }
                 else if (dataGridView_fields.Columns[e.ColumnIndex].HeaderText.Equals("Delete"))
                 {
-                    manager.removeField(dataGridView_fields.Rows[e.RowIndex]);
+                    OnRemoveField(this, new IDCMViewEventArgs(new DataGridViewRow[] { dataGridView_fields.Rows[e.RowIndex] }));
                     dataGridView_fields.Rows.RemoveAt(e.RowIndex);
                 }
             }
@@ -120,13 +130,13 @@ namespace IDCM.Forms
                 {
                     DataGridViewCheckBoxCell dgvc = dataGridView_fields.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewCheckBoxCell;
                     if(dgvc.FormattedValue.Equals(true))
-                        manager.appendField(dataGridView_fields.Rows[e.RowIndex], this.comboBox_templ.SelectedItem.ToString());
+                        OnAppendField(this,new IDCMViewEventArgs(new object[]{dataGridView_fields.Rows[e.RowIndex],this.comboBox_templ.SelectedItem.ToString()}));
                     else
-                        manager.removeField(dataGridView_fields.Rows[e.RowIndex]);
+                        OnRemoveField(this, new IDCMViewEventArgs(new DataGridViewRow[] { dataGridView_fields.Rows[e.RowIndex] }));                        
                 }
                 else if (dataGridView_fields.Columns[e.ColumnIndex].HeaderText.Equals("Overwrite"))
                 {
-                    manager.overwriteField(dataGridView_fields.Rows[e.RowIndex], this.comboBox_templ.SelectedItem.ToString());
+                    OnOverwriteField(this, new IDCMViewEventArgs(new object[] { dataGridView_fields.Rows[e.RowIndex], this.comboBox_templ.SelectedItem.ToString() }));
                 }
             }
         }
@@ -141,9 +151,9 @@ namespace IDCM.Forms
                 {
                     DataGridViewCheckBoxCell dgvc = dataGridView_fields.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewCheckBoxCell;
                     if (dgvc.FormattedValue.Equals(true))
-                        manager.appendField(dataGridView_fields.Rows[e.RowIndex], this.comboBox_templ.SelectedItem.ToString());
+                        OnAppendField(this,new IDCMViewEventArgs(new object[]{dataGridView_fields.Rows[e.RowIndex],this.comboBox_templ.SelectedItem.ToString()}));
                     else
-                        manager.removeField(dataGridView_fields.Rows[e.RowIndex]);
+                        OnRemoveField(this, new IDCMViewEventArgs(new DataGridViewRow[] { dataGridView_fields.Rows[e.RowIndex] }));  
                 }
             }
         }
@@ -157,7 +167,7 @@ namespace IDCM.Forms
 
         private void button_submit_Click(object sender, EventArgs e)
         {
-            manager.submitSetting();
+            OnSubmitSetting(this,null);
             this.Close();
             this.Dispose();
         }
@@ -166,7 +176,7 @@ namespace IDCM.Forms
         {
             if (comboBox_templ.SelectedIndex == 0)
             {
-                manager.checkFields();
+              manager.checkFields();//此方法有返回值
             }
         }
 
@@ -194,12 +204,12 @@ namespace IDCM.Forms
         }
         private void toolStripMenuItem_copy_Click(object sender, EventArgs e, int columnIndex, int rowIndex)
         {
-            manager.appendField(dataGridView_fields.Rows[rowIndex], this.comboBox_templ.SelectedText);
+            OnAppendField(this, new IDCMViewEventArgs(new object[] { dataGridView_fields.Rows[rowIndex], this.comboBox_templ.SelectedText }));
         }
 
         private void toolStripMenuItem_merge_Click(object sender, EventArgs e, int columnIndex, int rowIndex)
         {
-            manager.overwriteField(dataGridView_fields.Rows[rowIndex], this.comboBox_templ.SelectedText);
+            OnOverwriteField(this, new IDCMViewEventArgs(new object[] { dataGridView_fields.Rows[rowIndex], this.comboBox_templ.SelectedText }));
         }
 
         private void toolStripMenuItem_up_Click(object sender, EventArgs e, int columnIndex, int rowIndex)
@@ -238,7 +248,7 @@ namespace IDCM.Forms
         {
             if (comboBox_templ.SelectedIndex == 0)
             {
-                manager.removeField(dataGridView_fields.Rows[rowIndex]);
+                OnRemoveField(this, new IDCMViewEventArgs(new DataGridViewRow[] { dataGridView_fields.Rows[rowIndex] }));
                 dataGridView_fields.Rows.RemoveAt(rowIndex);
             }
         }

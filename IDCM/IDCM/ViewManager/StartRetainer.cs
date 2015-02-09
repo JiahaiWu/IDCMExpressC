@@ -35,7 +35,7 @@ namespace IDCM.ViewManager
         {
             startInfo = IDCMEnvironment.getLastStartInfo();
             startView = new StartView();
-            startView.OnFormClosed += OnStartViewClosed;
+            startView.OnFormClose += OnStartViewClosed;
             startView.OnRequestHelp += OnStartViewRequestHelp;
         }
 
