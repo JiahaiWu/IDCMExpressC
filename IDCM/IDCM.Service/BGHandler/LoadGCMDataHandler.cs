@@ -51,6 +51,7 @@ namespace IDCM.Service.BGHandler
                 return;
             }
         }
+
         private GCMSiteMHub gcmSite = null;
         private DataGridView itemDGV = null;
         private TreeView recordTree=null;
