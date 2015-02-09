@@ -29,7 +29,6 @@ namespace IDCM.Service.UIM
         /// <returns></returns>
         public static bool loadData(GCMSiteMHub gcmSite, DataGridView itemDGV, TreeView recordTree, ListView recordList)
         {
-            GCMDataMHub gcmDataHub = new GCMDataMHub();
             int curPage = 1;
             StrainListPage slp = GCMDataMHub.strainListQuery(gcmSite, curPage);
             showDataItems(slp, itemDGV, gcmSite.getLoadedNoter());

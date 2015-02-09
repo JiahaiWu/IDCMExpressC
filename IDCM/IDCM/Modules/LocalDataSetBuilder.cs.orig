@@ -17,7 +17,11 @@ using NPOI.SS.UserModel;
 using IDCM.Forms;
 using System.Configuration;
 using System.Xml;
+<<<<<<< HEAD
+using System.Configuration;
+=======
 using IDCM.Service;
+>>>>>>> github/master
 
 namespace IDCM.Modules
 {
@@ -1015,7 +1019,7 @@ namespace IDCM.Modules
         /// <returns></returns>
         public bool checkForGCMImport(ref Dictionary<string, string> dataMapping)
         {
-            List<string> gcmCols = GCMDataMHub.fetchPublishGCMFields();
+            List<string> gcmCols = LGCMLinkMapHolder.fetchPublishGCMFields();
             List<string> viewCols = LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource, false);
             if (gcmCols == null || gcmCols.Count < 1)
                 return false;

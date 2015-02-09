@@ -76,7 +76,7 @@ namespace IDCM.Forms
 
         private void toolStripButton_local_Click(object sender, EventArgs e)
         {
-            manager.activeGCMView();
+            manager.activeHomeView();
         }
 
         private void toolStripButton_down_Click(object sender, EventArgs e)
@@ -205,6 +205,27 @@ namespace IDCM.Forms
         private void GCMView_FormClosed(object sender, FormClosedEventArgs e)
         {
             BackProgressIndicator.removeIndicatorBar(this.getProgressBar());
+        }
+
+        private void toolStripTextBox_search_Enter(object sender, EventArgs e)
+        {
+            this.toolStripTextBox_search.Text = "";
+            this.toolStripTextBox_search.Owner.Update();
+        }
+
+        private void toolStripTextBox_search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string findTerm = this.toolStripTextBox_search.Text.Trim();
+                manager.quickSearch(findTerm);
+            }
+        }
+
+        private void toolStripTextBox_search_Leave(object sender, EventArgs e)
+        {
+            if (this.toolStripTextBox_search.Text.Trim().Length < 1)
+                this.toolStripTextBox_search.Text = "Quick Search";
         }
     }
 }

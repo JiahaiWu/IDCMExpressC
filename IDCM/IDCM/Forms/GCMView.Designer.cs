@@ -168,7 +168,7 @@
             this.toolStrip_gcm.BackColor = System.Drawing.Color.SkyBlue;
             this.toolStrip_gcm.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.toolStrip_gcm.GripMargin = new System.Windows.Forms.Padding(2, 4, 2, 4);
-            this.toolStrip_gcm.ImageScalingSize = new System.Drawing.Size(18, 18);
+            this.toolStrip_gcm.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip_gcm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton_local,
             this.toolStripButton_gcm,
@@ -183,7 +183,7 @@
             this.toolStripButton_help});
             this.toolStrip_gcm.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_gcm.Name = "toolStrip_gcm";
-            this.toolStrip_gcm.Size = new System.Drawing.Size(920, 25);
+            this.toolStrip_gcm.Size = new System.Drawing.Size(920, 27);
             this.toolStrip_gcm.TabIndex = 1;
             this.toolStrip_gcm.Text = "toolStrip1";
             // 
@@ -193,8 +193,8 @@
             this.toolStripButton_local.Image = global::IDCM.Properties.Resources.local;
             this.toolStripButton_local.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_local.Name = "toolStripButton_local";
-            this.toolStripButton_local.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_local.Text = "toolStripButton1";
+            this.toolStripButton_local.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_local.Text = "Go Home";
             this.toolStripButton_local.Click += new System.EventHandler(this.toolStripButton_local_Click);
             // 
             // toolStripButton_gcm
@@ -203,13 +203,13 @@
             this.toolStripButton_gcm.Image = global::IDCM.Properties.Resources.gcm_logo;
             this.toolStripButton_gcm.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_gcm.Name = "toolStripButton_gcm";
-            this.toolStripButton_gcm.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_gcm.Text = "toolStripButton_gcm";
+            this.toolStripButton_gcm.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_gcm.Text = "Go GCM";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
             // toolStripButton_down
             // 
@@ -217,8 +217,8 @@
             this.toolStripButton_down.Image = global::IDCM.Properties.Resources.down;
             this.toolStripButton_down.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_down.Name = "toolStripButton_down";
-            this.toolStripButton_down.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_down.Text = "toolStripButton3";
+            this.toolStripButton_down.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_down.Text = "Download";
             this.toolStripButton_down.Click += new System.EventHandler(this.toolStripButton_down_Click);
             // 
             // toolStripButton_refresh
@@ -227,8 +227,8 @@
             this.toolStripButton_refresh.Image = global::IDCM.Properties.Resources.refresh;
             this.toolStripButton_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_refresh.Name = "toolStripButton_refresh";
-            this.toolStripButton_refresh.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_refresh.Text = "toolStripButton4";
+            this.toolStripButton_refresh.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_refresh.Text = "Refresh";
             this.toolStripButton_refresh.Click += new System.EventHandler(this.toolStripButton_refresh_Click);
             // 
             // toolStripButton1
@@ -237,20 +237,23 @@
             this.toolStripButton1.Image = global::IDCM.Properties.Resources.export;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton1.Text = "Export";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
             // toolStripTextBox_search
             // 
             this.toolStripTextBox_search.Name = "toolStripTextBox_search";
-            this.toolStripTextBox_search.Size = new System.Drawing.Size(150, 25);
+            this.toolStripTextBox_search.Size = new System.Drawing.Size(150, 27);
             this.toolStripTextBox_search.Text = "Quick Search";
+            this.toolStripTextBox_search.Enter += new System.EventHandler(this.toolStripTextBox_search_Enter);
+            this.toolStripTextBox_search.Leave += new System.EventHandler(this.toolStripTextBox_search_Leave);
+            this.toolStripTextBox_search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripTextBox_search_KeyDown);
             // 
             // toolStripButton_search
             // 
@@ -258,14 +261,14 @@
             this.toolStripButton_search.Image = global::IDCM.Properties.Resources.search;
             this.toolStripButton_search.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_search.Name = "toolStripButton_search";
-            this.toolStripButton_search.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_search.Text = "toolStripButton5";
+            this.toolStripButton_search.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_search.Text = "Search";
             this.toolStripButton_search.Click += new System.EventHandler(this.toolStripButton_search_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
             // 
             // toolStripButton_help
             // 
@@ -273,14 +276,14 @@
             this.toolStripButton_help.Image = global::IDCM.Properties.Resources.help;
             this.toolStripButton_help.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_help.Name = "toolStripButton_help";
-            this.toolStripButton_help.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_help.Text = "toolStripButton6";
+            this.toolStripButton_help.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_help.Text = "Help";
             this.toolStripButton_help.Click += new System.EventHandler(this.toolStripButton_help_Click);
             // 
             // splitContainer_main
             // 
             this.splitContainer_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer_main.Location = new System.Drawing.Point(0, 25);
+            this.splitContainer_main.Location = new System.Drawing.Point(0, 27);
             this.splitContainer_main.Margin = new System.Windows.Forms.Padding(0);
             this.splitContainer_main.Name = "splitContainer_main";
             // 
@@ -291,7 +294,7 @@
             // splitContainer_main.Panel2
             // 
             this.splitContainer_main.Panel2.Controls.Add(this.splitContainer_right);
-            this.splitContainer_main.Size = new System.Drawing.Size(920, 480);
+            this.splitContainer_main.Size = new System.Drawing.Size(920, 478);
             this.splitContainer_main.SplitterDistance = 620;
             this.splitContainer_main.TabIndex = 2;
             // 
@@ -310,8 +313,8 @@
             // splitContainer_left.Panel2
             // 
             this.splitContainer_left.Panel2.Controls.Add(this.dataGridView_items);
-            this.splitContainer_left.Size = new System.Drawing.Size(620, 480);
-            this.splitContainer_left.SplitterDistance = 235;
+            this.splitContainer_left.Size = new System.Drawing.Size(620, 478);
+            this.splitContainer_left.SplitterDistance = 234;
             this.splitContainer_left.TabIndex = 0;
             // 
             // tableLayoutPanel_search
@@ -344,7 +347,7 @@
             this.tableLayoutPanel_search.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel_search.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel_search.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel_search.Size = new System.Drawing.Size(620, 235);
+            this.tableLayoutPanel_search.Size = new System.Drawing.Size(620, 234);
             this.tableLayoutPanel_search.TabIndex = 6;
             // 
             // panel2
@@ -772,7 +775,7 @@
             this.dataGridView_items.Margin = new System.Windows.Forms.Padding(0);
             this.dataGridView_items.Name = "dataGridView_items";
             this.dataGridView_items.RowTemplate.Height = 23;
-            this.dataGridView_items.Size = new System.Drawing.Size(620, 241);
+            this.dataGridView_items.Size = new System.Drawing.Size(620, 240);
             this.dataGridView_items.TabIndex = 0;
             this.dataGridView_items.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_items_RowPostPaint);
             // 
@@ -813,8 +816,8 @@
             // splitContainer_right.Panel2
             // 
             this.splitContainer_right.Panel2.Controls.Add(this.treeView_record);
-            this.splitContainer_right.Size = new System.Drawing.Size(296, 480);
-            this.splitContainer_right.SplitterDistance = 98;
+            this.splitContainer_right.Size = new System.Drawing.Size(296, 478);
+            this.splitContainer_right.SplitterDistance = 97;
             this.splitContainer_right.TabIndex = 0;
             // 
             // listView_record
@@ -823,7 +826,7 @@
             this.listView_record.Location = new System.Drawing.Point(0, 0);
             this.listView_record.Margin = new System.Windows.Forms.Padding(0);
             this.listView_record.Name = "listView_record";
-            this.listView_record.Size = new System.Drawing.Size(296, 98);
+            this.listView_record.Size = new System.Drawing.Size(296, 97);
             this.listView_record.TabIndex = 0;
             this.listView_record.UseCompatibleStateImageBehavior = false;
             this.listView_record.View = System.Windows.Forms.View.Details;
@@ -834,7 +837,7 @@
             this.treeView_record.Location = new System.Drawing.Point(0, 0);
             this.treeView_record.Margin = new System.Windows.Forms.Padding(0);
             this.treeView_record.Name = "treeView_record";
-            this.treeView_record.Size = new System.Drawing.Size(296, 378);
+            this.treeView_record.Size = new System.Drawing.Size(296, 377);
             this.treeView_record.TabIndex = 0;
             // 
             // GCMView

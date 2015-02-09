@@ -993,7 +993,7 @@
             this.toolStripButton_local.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_local.Name = "toolStripButton_local";
             this.toolStripButton_local.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_local.Text = "toolStripButton_local";
+            this.toolStripButton_local.Text = "Go Home";
             // 
             // toolStripButton_gcm
             // 
@@ -1002,7 +1002,7 @@
             this.toolStripButton_gcm.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_gcm.Name = "toolStripButton_gcm";
             this.toolStripButton_gcm.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_gcm.Text = "toolStripButton_gcm";
+            this.toolStripButton_gcm.Text = "Go GCM";
             this.toolStripButton_gcm.Click += new System.EventHandler(this.toolStripButton_gcm_Click);
             // 
             // toolStripSeparator1
@@ -1034,7 +1034,7 @@
             this.toolStripButton_add.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_add.Name = "toolStripButton_add";
             this.toolStripButton_add.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_add.Text = "toolStripButton_add";
+            this.toolStripButton_add.Text = "Add Record";
             this.toolStripButton_add.Click += new System.EventHandler(this.toolStripButton_add_Click);
             // 
             // toolStripButton_del
@@ -1044,7 +1044,7 @@
             this.toolStripButton_del.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_del.Name = "toolStripButton_del";
             this.toolStripButton_del.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_del.Text = "toolStripButton_del";
+            this.toolStripButton_del.Text = "Delete Record";
             this.toolStripButton_del.Click += new System.EventHandler(this.toolStripButton_del_Click);
             // 
             // toolStripButton_import
@@ -1054,7 +1054,7 @@
             this.toolStripButton_import.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_import.Name = "toolStripButton_import";
             this.toolStripButton_import.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_import.Text = "toolStripButton_import";
+            this.toolStripButton_import.Text = "Import";
             this.toolStripButton_import.Click += new System.EventHandler(this.toolStripButton_import_Click);
             // 
             // toolStripButton_export
@@ -1064,7 +1064,7 @@
             this.toolStripButton_export.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_export.Name = "toolStripButton_export";
             this.toolStripButton_export.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_export.Text = "toolStripButton_export";
+            this.toolStripButton_export.Text = "Export";
             this.toolStripButton_export.Click += new System.EventHandler(this.toolStripButton_export_Click);
             // 
             // toolStripButton_download
@@ -1074,7 +1074,7 @@
             this.toolStripButton_download.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_download.Name = "toolStripButton_download";
             this.toolStripButton_download.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_download.Text = "toolStripButton_download";
+            this.toolStripButton_download.Text = "Download";
             this.toolStripButton_download.Click += new System.EventHandler(this.toolStripButton_download_Click);
             // 
             // toolStripButton_upload
@@ -1084,7 +1084,7 @@
             this.toolStripButton_upload.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_upload.Name = "toolStripButton_upload";
             this.toolStripButton_upload.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_upload.Text = "toolStripButton_upload";
+            this.toolStripButton_upload.Text = "Upload";
             this.toolStripButton_upload.Click += new System.EventHandler(this.toolStripButton_upload_Click);
             // 
             // toolStripButton_refresh
@@ -1094,7 +1094,7 @@
             this.toolStripButton_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_refresh.Name = "toolStripButton_refresh";
             this.toolStripButton_refresh.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_refresh.Text = "toolStripButton_refresh";
+            this.toolStripButton_refresh.Text = "Refresh";
             this.toolStripButton_refresh.Click += new System.EventHandler(this.toolStripButton_refresh_Click);
             // 
             // toolStripSeparator3
@@ -1119,7 +1119,7 @@
             this.toolStripButton_qsearch.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_qsearch.Name = "toolStripButton_qsearch";
             this.toolStripButton_qsearch.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_qsearch.Text = "toolStripButton10";
+            this.toolStripButton_qsearch.Text = "Search";
             this.toolStripButton_qsearch.Click += new System.EventHandler(this.toolStripButton_qsearch_Click);
             // 
             // toolStripSeparator4
@@ -1134,7 +1134,7 @@
             this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton11.Name = "toolStripButton11";
             this.toolStripButton11.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton11.Text = "toolStripButton11";
+            this.toolStripButton11.Text = "Help";
             // 
             // contextMenuStrip_lib
             // 
