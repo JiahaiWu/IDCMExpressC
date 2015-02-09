@@ -17,7 +17,6 @@ namespace IDCM.Modules
         public GCMDataSetBuilder(DataGridView dgv)
         {
             this.itemDGV = dgv;
-            this.loadedNoter = new Dictionary<string, int>();
         }
         ~GCMDataSetBuilder()
         {
@@ -26,20 +25,11 @@ namespace IDCM.Modules
         public void Dispose()
         {
             itemDGV = null;
-            if (loadedNoter != null)
-            {
-                loadedNoter.Clear();
-        }
-            loadedNoter = null;
         }
         #endregion
         #region 实例对象保持部分
         private DataGridView itemDGV=null;
-        private Dictionary<string, int> loadedNoter = null;
-        public Dictionary<string, int> getLoadedNoter()
-        {
-            return loadedNoter;
-        }
+        
         #endregion
 
         //////////////////////////////////////////////////////////////////////////////////////
@@ -170,21 +160,7 @@ namespace IDCM.Modules
             }
         }
 
-        /// <summary>
-        /// 返回所有strain_id
-        /// </summary>
-        /// <param name="strainID_cellIndex_Map"></param>
-        /// <returns></returns>
-        public string[] getStrainID()
-        {
-            string[] idArray = new string[loadedNoter.Count];
-            int i = 0;
-            foreach (KeyValuePair<string, int> kvp in loadedNoter)
-            {
-                idArray[i++] = kvp.Key;
-            }
-            return idArray;
-        }
+
 
         /// <summary>
         /// DGV转DataTable,此方法不是通用方法，构建的dataTable是从gcm dgv的列1开始

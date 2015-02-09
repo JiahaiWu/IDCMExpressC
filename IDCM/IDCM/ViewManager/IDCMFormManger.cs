@@ -182,13 +182,21 @@ namespace IDCM.ViewManager
         {
             BackProgressIndicator.endBackProgress();
         }
-        internal void OnRefreshGCMViewControl(object sender, IDCMAsyncEventArgs e)
+        internal void OnUpdateGCMLinkStrains(object sender, IDCMAsyncEventArgs e)
         {
             ManagerI mi = ViewManagerHolder.getManager(typeof(GCMViewManager));
             if (mi == null || mi.isDisposed())
                 return;
-            ((GCMViewManager)mi).refreshControl((e.values != null && e.values.Count() > 0) ? e.values[0].ToString() : null);
-        } 
+            ((GCMViewManager)mi).OnUpdateGCMLinkStrains((e.values != null && e.values.Count() > 0) ? e.values[0] as string[]: null);
+            DWorkMHub.note(AsyncMessage.UpdateLocalLinkTags);
+        }
+        internal void OnUpdateLocalLinkTags(object sender, IDCMAsyncEventArgs e)
+        {
+            ManagerI mi = ViewManagerHolder.getManager(typeof(HomeViewManager));
+            if (mi == null || mi.isDisposed())
+                return;
+            ((HomeViewManager)mi).OnUpdateLocalLinkTags();
+        }
 #endregion
         internal ManagerI getHomeViewManager()
         {

@@ -20,13 +20,13 @@ namespace IDCM.Service.DataTransfer
         /// <param name="filepath">导出路径</param>
         /// <param name="selectedRows">数据源</param>
         /// <returns></returns>
-        internal bool exportGCMXML(DataSourceMHub datasource, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, int> dbLinkMaps,string filepath)
+        internal bool exportGCMXML(DataSourceMHub datasource, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, int> dbLinkMaps, out string xmlImportData)
         {
             try
             {
                 StringBuilder strbuilder = new StringBuilder();
                 int count = 0;
-                using (FileStream fs = new FileStream(filepath, FileMode.Create))
+                using (MemoryStream fs = new MemoryStream())
                 {
                     XmlDocument xmlDoc = new XmlDocument();
                     strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
@@ -58,6 +58,7 @@ namespace IDCM.Service.DataTransfer
                         fs.Write(info, 0, info.Length);
                         strbuilder.Length = 0;
                     }
+                    xmlImportData = fs.ToString();
                     fs.Close();
                 }
             }
@@ -65,6 +66,7 @@ namespace IDCM.Service.DataTransfer
             {
                 MessageBox.Show("ERROR::" + ex.Message + "\n" + ex.StackTrace);
                 log.Error(ex);
+                xmlImportData = null;
                 return false;
             }
             return true;

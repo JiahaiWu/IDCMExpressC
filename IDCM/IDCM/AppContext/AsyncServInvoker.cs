@@ -45,8 +45,11 @@ namespace IDCM.AppContext
                 case MsgType.EndBackProgress:
                     OnEndBackProgress(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
                     break;
-                case MsgType.RefreshGCMViewControl:
-                    OnRefreshGCMViewControl(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
+                case MsgType.UpdateLocalLinkTags:
+                    OnUpdateLocalLinkTags(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
+                    break;
+                case MsgType.UpdateGCMLinkStrains:
+                    OnUpdateGCMLinkStrains(this, new IDCMAsyncEventArgs(msg.MsgTag, msg.Parameters));
                     break;
                 default:
                     log.Warn("Unhandled asynchronous message.  @msgTag=" + msg.MsgTag);
@@ -63,7 +66,8 @@ namespace IDCM.AppContext
         internal event IDCMAsyncRequest OnUpdateGCMSignTip;
         internal event IDCMAsyncRequest OnStartBackProgress;
         internal event IDCMAsyncRequest OnEndBackProgress;
-        internal event IDCMAsyncRequest OnRefreshGCMViewControl;
+        internal event IDCMAsyncRequest OnUpdateLocalLinkTags;
+        internal event IDCMAsyncRequest OnUpdateGCMLinkStrains;
         #endregion
 
         //异步消息事件委托形式化声明
