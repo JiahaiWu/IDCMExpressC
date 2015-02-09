@@ -11,6 +11,7 @@ using IDCM.Service.Utils;
 using IDCM.Data.Base;
 using IDCM.Service.Common;
 using IDCM.Service.UIM;
+using IDCM.Core;
 
 namespace IDCM.Forms
 {
@@ -25,6 +26,14 @@ namespace IDCM.Forms
             dataGridView_items.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView_items.EditMode = DataGridViewEditMode.EditOnKeystroke;
         }
+
+        public event IDCMViewEventHandler OnRefreshData;
+        public event IDCMViewEventHandler OnActiveHomeView;
+        public event IDCMViewEventHandler OnStrainTreeNodeClick;
+        public event IDCMViewEventHandler OnItemsDGVCellClick;
+        public event IDCMViewEventHandler OnGCMViewShown;
+        public event IDCMViewEventHandler OnRequestHelp;
+        public event IDCMViewEventHandler OnSearchButtonClick;
 
         private GCMViewManager manager=null;
 
@@ -71,12 +80,12 @@ namespace IDCM.Forms
         /////////////////////////////////////
         private void GCMView_Shown(object sender, EventArgs e)
         {
-            BackProgressIndicator.addIndicatorBar(this.getProgressBar());
+            OnGCMViewShown(this, null);
         }
 
         private void toolStripButton_local_Click(object sender, EventArgs e)
         {
-            manager.activeHomeView();
+            OnActiveHomeView(this, null);
         }
 
         private void toolStripButton_down_Click(object sender, EventArgs e)
@@ -86,18 +95,18 @@ namespace IDCM.Forms
 
         private void toolStripButton_refresh_Click(object sender, EventArgs e)
         {
-            manager.gcmDataRefresh();
+            OnRefreshData(this, null);
         }
 
         private void toolStripButton_search_Click(object sender, EventArgs e)
         {
             string findTerm = this.toolStripTextBox_search.Text.Trim();
-            manager.quickSearch(findTerm);
+            OnSearchButtonClick(this, new IDCMViewEventArgs(new string[] { findTerm }));
         }
 
         private void toolStripButton_help_Click(object sender, EventArgs e)
         {
-            manager.requestHelp();
+            OnRequestHelp(this, null);
         }
 
         private void btn_search_Click(object sender, EventArgs e)
@@ -109,7 +118,14 @@ namespace IDCM.Forms
         {
 
         }
-
+        private void treeView_record_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            OnStrainTreeNodeClick(sender,new IDCMViewEventArgs(new object[]{e}));
+        }
+        private void dataGridView_items_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            OnItemsDGVCellClick(this, null);
+        }
         /// <summary>
         /// 设置Datagridview显示行号
         /// </summary>
@@ -227,5 +243,6 @@ namespace IDCM.Forms
             if (this.toolStripTextBox_search.Text.Trim().Length < 1)
                 this.toolStripTextBox_search.Text = "Quick Search";
         }
+
     }
 }

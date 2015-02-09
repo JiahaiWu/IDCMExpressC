@@ -27,9 +27,13 @@ namespace IDCM.ViewManager
             gcmView = new GCMView();
             gcmView.setManager(this);
 
-            gcmView.Shown += OnGcmView_Shown;
-            gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;//点击cell查看strain节点树
-            gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;//查看树节点key value
+            gcmView.OnGCMViewShown += OnGCMViewShown;
+            gcmView.OnItemsDGVCellClick += OnGCMViewItemsDGVCellClick;//点击cell查看strain节点树
+            gcmView.OnStrainTreeNodeClick += OnGCMViewStrainTreeNodeClick;//查看树节点key value
+            gcmView.OnRefreshData += OnGCMViewRefreshData;
+            gcmView.OnActiveHomeView += OnGCMViewActiveHomeView;
+            gcmView.OnRequestHelp += OnGCMRequestHelp;
+            gcmView.OnSearchButtonClick += OnGCMSearchButtonClick;
 
             frontFindDlg = new GCMFrontFindDlg(gcmView.getItemGridView());
             frontFindDlg.setCellHit += new GCMFrontFindDlg.SetHit<DataGridViewCell>(DGVUtil.setDGVCellHit);
@@ -39,6 +43,7 @@ namespace IDCM.ViewManager
             searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
             BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());//有待完善
         }
+        
 
         ~GCMViewManager()
         {
@@ -94,9 +99,14 @@ namespace IDCM.ViewManager
                 gcmView = new GCMView();
                 gcmView.setManager(this);
 
-                gcmView.Shown += OnGcmView_Shown;
-                gcmView.getItemGridView().CellClick += OnGcmDataGridViewItems_CellClick;
-                gcmView.getRecordTree().NodeMouseClick += OnGcmTreeViewRecord_NodeMouseClick;
+                gcmView.OnGCMViewShown += OnGCMViewShown;
+                gcmView.OnItemsDGVCellClick += OnGCMViewItemsDGVCellClick;//点击cell查看strain节点树
+                gcmView.OnStrainTreeNodeClick += OnGCMViewStrainTreeNodeClick;//查看树节点key value
+                gcmView.OnRefreshData += OnGCMViewRefreshData;
+                gcmView.OnActiveHomeView += OnGCMViewActiveHomeView;
+                gcmView.OnRequestHelp += OnGCMRequestHelp;
+                gcmView.OnSearchButtonClick += OnGCMSearchButtonClick;
+
                 datasetBuilder = new GCMDataSetBuilder(gcmView.getItemGridView());
                 BackProgressIndicator.addIndicatorBar(gcmView.getProgressBar());
                 searchBuilder = new GCMSearchBuilder(gcmView.getSearchPanel(), gcmView.getSearchSpliter());
@@ -113,6 +123,8 @@ namespace IDCM.ViewManager
             }
             return true;
         }
+
+        
         public override void setMaxToNormal()
         {
             if (gcmView.WindowState.Equals(FormWindowState.Maximized))
@@ -151,7 +163,7 @@ namespace IDCM.ViewManager
         /// GCM第一次显示_加载GCM数据
         /// </summary>
         /// <param name="refresh"></param>
-        public void OnGcmView_Shown(object sender, EventArgs e)
+        public void OnGCMViewShown(object sender, IDCMViewEventArgs e)
         {
             //加载默认的数据报表展示
             loadDataSetView();
@@ -160,6 +172,57 @@ namespace IDCM.ViewManager
             gcmView.getItemGridView().AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
             gcmView.getItemGridView().AllowUserToResizeColumns = true;
         }
+        /// <summary>
+        /// 查看Strain明细
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnGCMViewItemsDGVCellClick(object sender, IDCMViewEventArgs e)
+        {
+            DataGridViewRow dgvRow = gcmView.getItemGridView().CurrentRow;
+            String strainid = dgvRow.Cells["id"].FormattedValue.ToString();
+            LoadGCMStrainViewHandler lsvh = new LoadGCMStrainViewHandler(DataSourceHolder.GCMHolder, strainid, gcmView.getRecordTree(), gcmView.getRecordList());
+            DWorkMHub.callAsyncHandle(lsvh);
+        }
+        /// <summary>
+        /// 查看GCM_TreeView节点明细
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnGCMViewStrainTreeNodeClick(object sender, IDCMViewEventArgs e)
+        {
+            TreeNodeMouseClickEventArgs tmcEvent = (TreeNodeMouseClickEventArgs)e.values[0];
+            GCMNodeDetailLoader.loadData(tmcEvent.Node, gcmView.getRecordList());
+        }
+        /// <summary>
+        /// 激活HomeView视图
+        /// </summary>
+        private void OnGCMViewActiveHomeView(object sender, IDCMViewEventArgs e)
+        {
+            DWorkMHub.note(AsyncMessage.RequestHomeView);
+        }
+        /// <summary>
+        /// 刷新数据展示
+        /// </summary>
+        private void OnGCMViewRefreshData(object sender, IDCMViewEventArgs e)
+        {
+            LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList());
+            DWorkMHub.callAsyncHandle(lgdh);
+        }
+        /// <summary>
+        /// 查看帮助文档
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="hlpevent"></param>
+        private void OnGCMRequestHelp(object sender, IDCMViewEventArgs e)
+        {
+            HelpDocRequester.requestHelpDoc(HelpDocConstants.GCMViewTag);
+        }
+        private void OnGCMSearchButtonClick(object sender, IDCMViewEventArgs e)
+        {
+            quickSearch(e.values[0]);
+        }
+        #endregion
 
         /// <summary>
         /// 载入数据显示
@@ -172,58 +235,6 @@ namespace IDCM.ViewManager
             LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList());
             DWorkMHub.callAsyncHandle(lgdh);
         }
-
-        /// <summary>
-        /// 查看Strain明细
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnGcmDataGridViewItems_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            DataGridViewRow dgvRow = gcmView.getItemGridView().CurrentRow;
-            String strainid = dgvRow.Cells["id"].FormattedValue.ToString();
-            LoadGCMStrainViewHandler lsvh = new LoadGCMStrainViewHandler(DataSourceHolder.GCMHolder,strainid, gcmView.getRecordTree(), gcmView.getRecordList());
-            DWorkMHub.callAsyncHandle(lsvh);
-        }
-
-        /// <summary>
-        /// 查看GCM_TreeView节点明细
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnGcmTreeViewRecord_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            GCMNodeDetailLoader.loadData(e.Node, gcmView.getRecordList());     
-        }
-
-        /// <summary>
-        /// 激活HomeView视图
-        /// </summary>
-        public void activeHomeView()
-        {
-            DWorkMHub.note(AsyncMessage.RequestHomeView);
-        }
-        /// <summary>
-        /// 刷新数据展示
-        /// </summary>
-        public void gcmDataRefresh()
-        {
-            LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList());
-            DWorkMHub.callAsyncHandle(lgdh);
-        }
-
-        /// <summary>
-        /// 查看帮助文档
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="hlpevent"></param>
-        public void requestHelp()
-        {
-            HelpDocRequester.requestHelpDoc(HelpDocConstants.GCMViewTag);
-        }
-        #endregion
-
-
         /// <summary>
         /// 激活GCM FrontFindDlg
         /// </summary>

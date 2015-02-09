@@ -11,6 +11,7 @@ using IDCM.ViewManager;
 using IDCM.Service.Utils;
 using IDCM.Data.Base;
 using IDCM.Service.UIM;
+using IDCM.Core;
 
 namespace IDCM.Forms
 {
@@ -41,6 +42,10 @@ namespace IDCM.Forms
             treeView_base.ImageList = imageList_lib;
             treeView_library.ImageList = imageList_lib;
         }
+
+        public event IDCMViewEventHandler OnHomeViewShown;
+        public event IDCMViewEventHandler OnHomeViewLoad;
+
         /// <summary>
         /// 客户端默认首页面视图实例化后，加载数据过程
         /// </summary>
@@ -48,11 +53,13 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void HomeView_Load(object sender, EventArgs e)
         {
+            OnHomeViewShown(this, null);
         }
 
         private void HomeView_Shown(object sender, EventArgs e)
         {
             BackProgressIndicator.addIndicatorBar(this.getProgressBar());
+            OnHomeViewLoad(this, null);
         }
 
         /// <summary>

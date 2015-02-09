@@ -28,8 +28,8 @@ namespace IDCM.ViewManager
             homeView = new HomeView();
             homeView.setManager(this);
 
-            homeView.Load += OnHomeView_Load;
-            homeView.Shown += OnHomeView_Shown;
+            homeView.OnHomeViewShown += OnHomeViewShown;
+            homeView.OnHomeViewLoad += OnHomeViewLoad;
 
             frontFindDlg = new LocalFrontFindDlg(homeView.getItemGridView());
             frontFindDlg.setCellHit += new LocalFrontFindDlg.SetHit<DataGridViewCell>(setDGVCellHit);
@@ -154,13 +154,13 @@ namespace IDCM.ViewManager
         }
         #endregion
         #region 接管视图组件的关键的事件处理区
-        public void OnHomeView_Load(object sender, EventArgs e)
+        private void OnHomeViewLoad(object sender, IDCMViewEventArgs e)
         {
             //加载默认的分类目录树展示
             catBuilder.loadTreeSet();
             updateCatRecCount();
         }
-        public void OnHomeView_Shown(object sender, EventArgs e)
+        private void OnHomeViewShown(object sender, IDCMViewEventArgs e)
         {
             //加载用数据记录
             loadDataSetView(homeView.getBaseTree().Nodes[0]);
@@ -169,7 +169,6 @@ namespace IDCM.ViewManager
             //dataGridView_items.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.None);
             homeView.getItemGridView().AllowUserToResizeColumns = true;
         }
-
         #endregion
         public void loadDataSetView(TreeNode tnode)
         {

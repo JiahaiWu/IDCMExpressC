@@ -777,6 +777,7 @@
             this.dataGridView_items.RowTemplate.Height = 23;
             this.dataGridView_items.Size = new System.Drawing.Size(620, 240);
             this.dataGridView_items.TabIndex = 0;
+            this.dataGridView_items.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_items_CellClick);
             this.dataGridView_items.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_items_RowPostPaint);
             // 
             // contextMenuStrip1
@@ -839,6 +840,7 @@
             this.treeView_record.Name = "treeView_record";
             this.treeView_record.Size = new System.Drawing.Size(296, 377);
             this.treeView_record.TabIndex = 0;
+            this.treeView_record.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_record_NodeMouseClick);
             // 
             // GCMView
             // 

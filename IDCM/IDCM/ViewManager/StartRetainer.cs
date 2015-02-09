@@ -35,7 +35,7 @@ namespace IDCM.ViewManager
         {
             startInfo = IDCMEnvironment.getLastStartInfo();
             startView = new StartView();
-            startView.FormClosed += OnStartViewClosed;
+            startView.OnFormClosed += OnStartViewClosed;
             startView.OnRequestHelp += OnStartViewRequestHelp;
         }
 
@@ -106,9 +106,10 @@ namespace IDCM.ViewManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void OnStartViewClosed(object sender, FormClosedEventArgs e)
+        private void OnStartViewClosed(object sender, IDCMViewEventArgs e)
         {
-            CloseReason res = e.CloseReason;
+            FormClosedEventArgs formCloseEvent = e.values[0];
+            CloseReason res = formCloseEvent.CloseReason;
             DialogResult dres = startView.DialogResult;
             if (res.Equals(CloseReason.UserClosing) || dres.Equals(DialogResult.OK))
             {
@@ -145,11 +146,10 @@ namespace IDCM.ViewManager
             //        DWorkMHub.note(AsyncMessage.RequestCloseIDCMForm);
             //}
         }
-        public void OnStartViewRequestHelp(object sender, HelpEventArgs e)
+        private void OnStartViewRequestHelp(object sender, IDCMViewEventArgs e)
         {
             HelpDocRequester.requestHelpDoc(HelpDocConstants.StartViewTag);
         }
-
         public override bool isDisposed()
         {
             if (_isDisposed == false)
