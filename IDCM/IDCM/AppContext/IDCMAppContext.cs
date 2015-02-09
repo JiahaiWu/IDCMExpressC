@@ -63,7 +63,8 @@ namespace IDCM.AppContext
                 servInvoker.OnUpdateGCMSignTip += mainManger.OnUpdateGCMSignTip;
                 servInvoker.OnStartBackProgress += mainManger.OnStartBackProgress;
                 servInvoker.OnEndBackProgress += mainManger.OnEndBackProgress;
-                servInvoker.OnRefreshGCMViewControl += mainManger.OnRefreshGCMViewControl;
+                servInvoker.OnUpdateGCMLinkStrains += mainManger.OnUpdateGCMLinkStrains;
+                servInvoker.OnUpdateLocalLinkTags += mainManger.OnUpdateLocalLinkTags;
                 //Run HandleInstanceMonitor
                 handleMonitor.Interval = 1000;
                 handleMonitor.Tick += OnHMHeartBreak;

@@ -16,12 +16,11 @@ namespace IDCM.Service.BGHandler
 
     public class LoadGCMDataHandler : AbsHandler
     {
-        public LoadGCMDataHandler(GCMSiteMHub gcmSite, DataGridView itemDGV, TreeView recordTree, ListView recordView, Dictionary<string, int> loadedNoter)
+        public LoadGCMDataHandler(GCMSiteMHub gcmSite, DataGridView itemDGV, TreeView recordTree, ListView recordView)
         {
             this.itemDGV = itemDGV;
             this.recordTree=recordTree;
             this.recordView = recordView;
-            this.loadedNoter = loadedNoter;
             this.gcmSite = gcmSite;
         }
         /// <summary>
@@ -33,7 +32,7 @@ namespace IDCM.Service.BGHandler
         {
             bool res = false;
             DWorkMHub.note(AsyncMessage.StartBackProgress);
-            res = GCMItemsLoader.loadData(gcmSite, itemDGV, loadedNoter, recordTree, recordView);
+            res = GCMItemsLoader.loadData(gcmSite, itemDGV, recordTree, recordView);
             return new object[] { res };
         }
         /// <summary>
@@ -56,6 +55,5 @@ namespace IDCM.Service.BGHandler
         private DataGridView itemDGV = null;
         private TreeView recordTree=null;
         private ListView recordView=null;
-        private Dictionary<string, int> loadedNoter = null;
     }
 }

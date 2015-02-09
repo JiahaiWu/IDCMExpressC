@@ -21,11 +21,14 @@ namespace IDCM.Data.Base
         public static readonly AsyncMessage UpdateGCMSignTip = new AsyncMessage(MsgType.UpdateGCMSignTip, "Update GCM Sign Tip");
         public static readonly AsyncMessage StartBackProgress = new AsyncMessage(MsgType.StartBackProgress, "Start Back Progress");
         public static readonly AsyncMessage EndBackProgress = new AsyncMessage(MsgType.EndBackProgress, "End Back Progress");
-        public static readonly AsyncMessage UpdateLGCMLinkTags = new AsyncMessage(MsgType.UpdateLGCMLinkTags, "Update LGCM Link Tags");
         /// <summary>
-        /// 刷新GCMView中的控件显示
+        /// 更新GCM获取记录信息
         /// </summary>
-        public static readonly AsyncMessage RefreshGCMViewControl = new AsyncMessage(MsgType.RefreshGCMViewControl, "Refresh control in GCNView");
+        public static readonly AsyncMessage UpdateGCMLinkStrains = new AsyncMessage(MsgType.UpdateGCMLinkStrains, "Update GCM Link Strains");
+        /// <summary>
+        /// 更新Local软连接记录信息
+        /// </summary>
+        public static readonly AsyncMessage UpdateLocalLinkTags = new AsyncMessage(MsgType.UpdateLocalLinkTags, "Update Local Link Tags");
         
         /// <summary>
         /// For iterator 
@@ -38,8 +41,12 @@ namespace IDCM.Data.Base
                 yield return RetryQuickStartConnect;
                 yield return RequestHomeView;
                 yield return RequestGCMView;
+                yield return RetryDataPrepare;
                 yield return UpdateGCMSignTip;
-                yield return RefreshGCMViewControl;
+                yield return StartBackProgress;
+                yield return EndBackProgress;
+                yield return UpdateGCMLinkStrains;
+                yield return UpdateLocalLinkTags;
             }
         }
         private readonly string msgTag;
@@ -84,7 +91,7 @@ namespace IDCM.Data.Base
         UpdateGCMSignTip=5,
         StartBackProgress=6,
         EndBackProgress = 7,
-        RefreshGCMViewControl = 8,
-        UpdateLGCMLinkTags=9
+        UpdateGCMLinkStrains = 8,
+        UpdateLocalLinkTags = 9
     }
 }

@@ -33,6 +33,11 @@ namespace IDCM.Service.Common
         {
             return StrainViewQueryExecutor.strainViewQuery(id, gcmSite.getSignedAuthInfo(), timeout);
         }
+
+        public static List<string> fetchPublishGCMFields()
+        {
+            return XMLImportExecutor.fetchPublishGCMFields();
+        }
         /// <summary>
         /// XML上传，批量导入（如果菌号相同，则更新均中信息）
         /// 说明：

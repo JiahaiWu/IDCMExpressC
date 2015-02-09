@@ -8,11 +8,36 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Specialized;
+using System.Xml;
 
 namespace IDCM.Service.Common.GCMDAM
 {
     class XMLImportExecutor
     {
+        public static List<string> fetchPublishGCMFields()
+        {
+            Dictionary<string, int> gcmCols = new Dictionary<string, int>();
+            string fpath = ConfigurationManager.AppSettings.Get(SysConstants.GCMUploadTemplate);
+            if (fpath == null || fpath.Length < 1)
+                return null;
+            XmlDocument xmlDoc = new XmlDocument();
+            using (FileStream fs = new FileStream(fpath, FileMode.Open, FileAccess.Read))
+            {
+                xmlDoc.Load(fs);
+                foreach (XmlNode sxnode in xmlDoc.ChildNodes)
+                {
+                    if (sxnode.Name.Equals("strain"))
+                    {
+                        foreach (XmlNode attrNode in sxnode.ChildNodes)
+                        {
+                            gcmCols.Add(attrNode.Name, 0);
+                        }
+                    }
+                }
+            }
+            return gcmCols.Keys.ToList();
+        }
+
         /// <summary>
         /// XML上传，批量导入（如果菌号相同，则更新均中信息）
         /// 说明：

@@ -27,21 +27,21 @@ namespace IDCM.Service.UIM
         /// <param name="recordTree"></param>
         /// <param name="recordList"></param>
         /// <returns></returns>
-        public static bool loadData(GCMSiteMHub gcmSite, DataGridView itemDGV, Dictionary<string, int> loadedNoter, TreeView recordTree, ListView recordList)
+        public static bool loadData(GCMSiteMHub gcmSite, DataGridView itemDGV, TreeView recordTree, ListView recordList)
         {
             GCMDataMHub gcmDataHub = new GCMDataMHub();
             int curPage = 1;
             StrainListPage slp = GCMDataMHub.strainListQuery(gcmSite, curPage);
-            showDataItems(slp, itemDGV, loadedNoter);
+            showDataItems(slp, itemDGV, gcmSite.getLoadedNoter());
             while (hasNextPage(slp, curPage))
             {
                 curPage++;
                 slp = GCMDataMHub.strainListQuery(gcmSite, curPage);
-                showDataItems(slp, itemDGV, loadedNoter);
+                showDataItems(slp, itemDGV, gcmSite.getLoadedNoter());
             }
-            if (loadedNoter.Count > 0)
+            if (gcmSite.getLoadedNoter().Count > 0)
             {
-                GCMNodeLoader gcmNodeLoad = new GCMNodeLoader(gcmSite, loadedNoter.First().Key, recordList);
+                GCMNodeLoader gcmNodeLoad = new GCMNodeLoader(gcmSite, gcmSite.getLoadedNoter().First().Key, recordList);
                 TreeView treeView = gcmNodeLoad.loadData();
                 if (treeView == null) return true;
                 TreeViewAsyncUtil.syncClearNodes(recordTree);

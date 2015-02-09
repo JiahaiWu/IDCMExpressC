@@ -170,7 +170,7 @@ namespace IDCM.ViewManager
         /// </summary>
         public void loadDataSetView()
         {
-            LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList(), datasetBuilder.getLoadedNoter());
+            LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList());
             DWorkMHub.callAsyncHandle(lgdh);
         }
 
@@ -209,7 +209,7 @@ namespace IDCM.ViewManager
         /// </summary>
         public void gcmDataRefresh()
         {
-            LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList(), datasetBuilder.getLoadedNoter());
+            LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList());
             DWorkMHub.callAsyncHandle(lgdh);
         }
 
@@ -353,16 +353,22 @@ namespace IDCM.ViewManager
         }
 
         /// <summary>
-        /// 刷新DataGridView数据
+        /// 刷新DataGridView数据显示
         /// </summary>
-        /// <param name="p"></param>
-        internal void refreshControl(string p)
+        /// <param name="sids"></param>
+        internal void OnUpdateGCMLinkStrains(params string[] sids)
         {
-            if (p == null)
-                this.gcmView.Refresh();
-
-            if (p.Equals(gcmView.getItemGridView().Name))
-                gcmView.getItemGridView().Refresh();
+            if (sids == null)
+            {
+                LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList());
+                DWorkMHub.callAsyncHandle(lgdh);
+            }
+            else
+            {
+                //有待改进以下实现
+                LoadGCMDataHandler lgdh = new LoadGCMDataHandler(DataSourceHolder.GCMHolder, gcmView.getItemGridView(), gcmView.getRecordTree(), gcmView.getRecordList());
+                DWorkMHub.callAsyncHandle(lgdh);
+            }
         }
     }
 }

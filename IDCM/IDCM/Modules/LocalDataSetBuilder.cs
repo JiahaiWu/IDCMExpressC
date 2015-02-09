@@ -1009,7 +1009,7 @@ namespace IDCM.Modules
         /// <returns></returns>
         public bool checkForGCMImport(ref Dictionary<string, string> dataMapping)
         {
-            List<string> gcmCols = LGCMLinkMapHolder.fetchPublishGCMFields();
+            List<string> gcmCols = GCMDataMHub.fetchPublishGCMFields();
             List<string> viewCols = LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource, false);
             if (gcmCols == null || gcmCols.Count < 1)
                 return false;

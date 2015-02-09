@@ -54,20 +54,33 @@ namespace IDCM.Service.BGHandler
                         dbLinkMaps.Add(gcmMapEntry.Value, dbOrder);
                     }
                 }
-
-                string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-                string tempXlsPath = Path.GetDirectoryName(exePath) + Path.DirectorySeparatorChar + CUIDGenerator.getUID(CUIDGenerator.Radix_32);
-
-                res = exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, tempXlsPath);
+                ////////////////////////////////////////////////////////
+                //抽取菌种号
+                List<string> linkIds = new List<string>();
+                for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
+                {
+                    DataGridViewRow dgvRow = selectedRows[ridx];
+                    string strainId = dgvRow.Cells["[id]"].Value as string;
+                    linkIds.Add(strainId);
+                }
+                ///////////////////////////////////////////////////////
+                //导出XML文档数据
+                string xmlImportData = null;
+                res = exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, out xmlImportData);
                 if (res)
                 {
-                    importRes= GCMDataMHub.xmlImportStrains(gcmSite,tempXlsPath);
-                    DWorkMHub.note(AsyncMessage.UpdateLGCMLinkTags);
+                    //提交至GCM站点
+                    importRes = GCMDataMHub.xmlImportStrains(gcmSite, xmlImportData);
+                    if (importRes.msg_num.Equals("2"))
+                    {
+                        //更新本地软连接记录信息
+                        DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMLinkStrains, linkIds));
+                    }
                 }
-                File.Delete(tempXlsPath);
             }
             return new object[] { res, importRes };
         }
+
         /// <summary>
         /// 后台任务执行结束，回调代码段
         /// </summary>

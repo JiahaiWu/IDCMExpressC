@@ -473,6 +473,15 @@ namespace IDCM.ViewManager
         {
             DWorkMHub.note(AsyncMessage.RequestGCMView);
         }
+        /// <summary>
+        /// 根据GCM发布记录，同步本地数据集的软连接状态标记
+        /// </summary>
+        internal void OnUpdateLocalLinkTags()
+        {
+            throw new NotImplementedException();
+        }
+
+
         public void quickSearch(string findTerm)
         {
             DataGridViewCell ncell = datasetBuilder.quickSearch(findTerm);
@@ -512,5 +521,6 @@ namespace IDCM.ViewManager
                 return catBuilder.RootNode_unfiled;
             }
         }
+        
     }
 }

@@ -82,7 +82,6 @@
     <Compile Include="DataTransfer\LocalDataUploadExporter.cs" />
     <Compile Include="DataTransfer\XMLDataImporter.cs" />
     <Compile Include="DataTransfer\XMLExporter.cs" />
-    <Compile Include="LGCMLinkMapHolder.cs" />
     <Compile Include="UIM\BackProgressIndicator.cs" />
     <Compile Include="BGHandler\ExcelExportHandler.cs" />
     <Compile Include="BGHandler\ExcelImportHandler.cs" />

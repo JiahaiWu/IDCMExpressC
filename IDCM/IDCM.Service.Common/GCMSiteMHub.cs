@@ -32,6 +32,7 @@ namespace IDCM.Service.Common
         public GCMSiteMHub(string loginName, string gcmPassword, bool autoLogin = true)
         {
             this.authInfo = new AuthInfo();
+            this.loadedNoter = new Dictionary<string, int>();
             authInfo.Username = loginName;
             authInfo.Password = gcmPassword;
             authInfo.autoLogin = autoLogin;
@@ -113,13 +114,40 @@ namespace IDCM.Service.Common
                 string tip = authInfo.LoginFlag ? authInfo.Username : null;
                 DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip, tip == null ? null : new string[] { tip }));
             }
+            signMonitor = null;
+            if (loadedNoter != null)
+            {
+                loadedNoter.Clear();
+                DWorkMHub.note(AsyncMessage.UpdateLocalLinkTags);
+            }
+            loadedNoter = null;
             if (cancelDefaultWorkSpace)
             {
                 ConfigurationHelper.SetAppConfig(SysConstants.LWSAsDefault, "False");
             }
             return true;
         }
+        public Dictionary<string, int> getLoadedNoter()
+        {
+            return loadedNoter;
+        }
+        /// <summary>
+        /// 返回所有strain_id
+        /// </summary>
+        /// <param name="strainID_cellIndex_Map"></param>
+        /// <returns></returns>
+        public string[] getStrainID()
+        {
+            string[] idArray = new string[loadedNoter.Count];
+            int i = 0;
+            foreach (KeyValuePair<string, int> kvp in loadedNoter)
+            {
+                idArray[i++] = kvp.Key;
+            }
+            return idArray;
+        }
 
+        private Dictionary<string, int> loadedNoter = null;
         /// <summary>
         /// SignIn hold Monitor
         /// </summary>
