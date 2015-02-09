@@ -478,7 +478,8 @@ namespace IDCM.ViewManager
         /// </summary>
         internal void OnUpdateLocalLinkTags()
         {
-            throw new NotImplementedException();
+            UpdateLocalLinkTagHandler ullth = new UpdateLocalLinkTagHandler(DataSourceHolder.GCMHolder,homeView.getItemGridView(),"[id]");
+            DWorkMHub.callAsyncHandle(ullth);
         }
 
 

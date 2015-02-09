@@ -11,12 +11,18 @@ using IDCM.ViewManager;
 using IDCM.Service.Utils;
 using IDCM.Data.Base;
 using IDCM.Service.UIM;
+using System.Drawing;
+
+using System.Drawing.Drawing2D;
 
 namespace IDCM.Forms
 {
     public partial class HomeView : Form
     {
         private DataGridViewSelectedRowCollection dgvsRowCollection = null;//用来保存选中的行
+        private Rectangle m_rect = new Rectangle(0, 0, 12, 12);
+        private Pen m_outline = new Pen(new SolidBrush(Color.Black), 1F);
+
         private HomeViewManager manager = null;
         internal void setManager(HomeViewManager manager)
         {
@@ -559,12 +565,36 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void dataGridView_items_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
+            //////////////////////////////////
+            //设置Datagridview显示行号
             System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(e.RowBounds.Location.X,e.RowBounds.Location.Y,dataGridView_items.RowHeadersWidth - 4,e.RowBounds.Height);
-
-            TextRenderer.DrawText(e.Graphics, (e.RowIndex + 1).ToString(),dataGridView_items.RowHeadersDefaultCellStyle.Font,rectangle,
-                dataGridView_items.RowHeadersDefaultCellStyle.ForeColor,TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
+            TextRenderer.DrawText(e.Graphics, 
+                (e.RowIndex + 1).ToString(),
+                dataGridView_items.RowHeadersDefaultCellStyle.Font,rectangle,
+                dataGridView_items.RowHeadersDefaultCellStyle.ForeColor,
+                TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
             dataGridView_items.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+            ////////////////////////////////
+            //if (e.RowIndex > -1)
+            //{
+            //    DataGridViewCheckBoxCell dgvcbc = dataGridView_items.Rows[e.RowIndex].Cells[0] as DataGridViewCheckBoxCell;
+            //    Graphics g = e.Graphics;
+            //    g.SmoothingMode = SmoothingMode.AntiAlias;
+            //    if (dgvcbc.Selected)
+            //    {
+            //        g.FillRectangle(new SolidBrush(Color.Blue), m_rect);
+            //        g.DrawRectangle(m_outline, m_rect);
+            //    }
+            //    else
+            //    {
+            //        g.FillRectangle(new SolidBrush(Color.White), m_rect);
+            //        g.DrawRectangle(m_outline, m_rect);
+            //    }
+            //}
+            //重新渲染checkBox软连接状态的显示，有待通过自定义控件完成实现
+            //////////////////////////////////
         }
+
 
         private void treeView_library_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -768,6 +798,7 @@ namespace IDCM.Forms
         {
             BackProgressIndicator.removeIndicatorBar(this.getProgressBar());
         }
+
 
     }
 }
