@@ -322,7 +322,7 @@ namespace IDCM.Service.Common
         /// <returns></returns>
         public static Dictionary<string, List<CustomTColDef>> getTableTemplateDef(string settingPath=null)
         {
-            string templPath = settingPath!=null?settingPath:ConfigurationManager.AppSettings["CTableTemplate"];
+            string templPath = settingPath != null ? settingPath : ConfigurationManager.AppSettings[SysConstants.CTableTemplate];
             return CTableSetting.getTableTemplateDef(templPath);
         }
     }

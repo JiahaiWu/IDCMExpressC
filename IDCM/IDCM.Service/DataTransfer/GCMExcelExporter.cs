@@ -58,7 +58,7 @@ namespace IDCM.Service.DataTransfer
                     if(exportDetail)
                     {
                         string strainID = Convert.ToString(strainViewList.Rows[i][0]);
-                        StrainView sv = getStrainView(gcmSiteHolder,strainID);
+                        StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainID);
                         Dictionary<string, object> maps = sv.ToDictionary();
                         if(i==0)mergeMapKeyToColumn(columnHead, maps, startIndex);
                         mergeMapValueToIrow(Irow, maps, startIndex);

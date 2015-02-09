@@ -9,5 +9,6 @@ namespace IDCM.Data.Base
     {
         public string loginflag { get; set; }
         public string msg_num { get; set; }
+        public string Jsessionid { get; set; }
     }
 }

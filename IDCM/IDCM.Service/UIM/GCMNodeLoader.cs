@@ -39,17 +39,10 @@ namespace IDCM.Service.UIM
         /// <returns></returns>
         internal TreeView loadData()
         {
-            StrainView sv = getStrainView(strainid);
+            StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainid);
             TreeView treeView = buildTreeView(sv);
             GCMNodeDetailLoader.loadData(treeView.Nodes[0], recordView);
             return treeView;
-        }
-
-
-        public StrainView getStrainView(string strainid)
-        {
-            GCMDataMHub gcmDataHub = new GCMDataMHub();
-            return gcmDataHub.strainViewQuery(gcmSiteHolder, strainid);
         }
 
         

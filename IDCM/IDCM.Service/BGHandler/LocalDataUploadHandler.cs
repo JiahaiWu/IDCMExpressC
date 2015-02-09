@@ -15,12 +15,14 @@ namespace IDCM.Service.BGHandler
     public class LocalDataUploadHandler : AbsHandler
     {
         private DataSourceMHub datasource;
+        private GCMSiteMHub gcmSite;
         private DataGridViewSelectedRowCollection selectedRows;
         private Dictionary<string, string> dataMapping;
 
-        public LocalDataUploadHandler(DataSourceMHub datasource, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, string> dataMapping)
+        public LocalDataUploadHandler(DataSourceMHub datasource,GCMSiteMHub gcmSite, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, string> dataMapping)
         {
             this.datasource = datasource;
+            this.gcmSite = gcmSite;
             this.selectedRows = selectedRows;
             this.dataMapping = dataMapping;
         }
@@ -59,7 +61,7 @@ namespace IDCM.Service.BGHandler
                 res = exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, tempXlsPath);
                 if (res)
                 {
-                    importRes= GCMDataMHub.xmlImportStrains(tempXlsPath);
+                    importRes= GCMDataMHub.xmlImportStrains(gcmSite,tempXlsPath);
                     DWorkMHub.note(AsyncMessage.UpdateLGCMLinkTags);
                 }
                 File.Delete(tempXlsPath);

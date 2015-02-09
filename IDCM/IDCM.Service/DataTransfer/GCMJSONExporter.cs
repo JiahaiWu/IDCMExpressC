@@ -40,7 +40,7 @@ namespace IDCM.Service.DataTransfer
                     if (exportDetail)
                     {
                         string strainID = Convert.ToString(row[0]);
-                        StrainView sv = getStrainView(gcmSiteHolder, strainID);
+                        StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainID);
                         Dictionary<string, object> strain_treeMap_from = sv.ToDictionary();
                         AddToDictionary(dict, strain_treeMap_from);
                     }

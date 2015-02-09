@@ -369,7 +369,7 @@ namespace IDCM.ViewManager
                     Dictionary<string, string> dataMapping = new Dictionary<string, string>();
                     if (datasetBuilder.checkForGCMImport(ref dataMapping))
                     {
-                        LocalDataUploadHandler lduh = new LocalDataUploadHandler(DataSourceHolder.DataSource,selectedRows,dataMapping);
+                        LocalDataUploadHandler lduh = new LocalDataUploadHandler(DataSourceHolder.DataSource, DataSourceHolder.GCMHolder, selectedRows, dataMapping);
                         DWorkMHub.callAsyncHandle(lduh);
                     }
                 }

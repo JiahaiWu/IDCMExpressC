@@ -55,7 +55,7 @@ namespace IDCM.Data.DAM
         {
             try
             {
-                string cTableDefpath = ConfigurationManager.AppSettings["CTableDef"];
+                string cTableDefpath = ConfigurationManager.AppSettings[SysConstants.CTableDef];
                 List<CustomTColDef> ctcds = getCustomTableDef(cTableDefpath);
                 return overwriteAllCustomTColDef(sconn, ctcds);
             }

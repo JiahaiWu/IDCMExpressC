@@ -93,7 +93,6 @@
     <Compile Include="BGHandler\UpdateHomeDataViewHandler.cs" />
     <Compile Include="BGHandler\UpdateHomeLibCountHandler.cs" />
     <Compile Include="BGHandler\UpdateTemplateHandler.cs" />
-    <Compile Include="DataSourceHolder.cs" />
     <Compile Include="DataTransfer\ExcelDataImporter.cs" />
     <Compile Include="DataTransfer\ExcelExporter.cs" />
     <Compile Include="DataTransfer\JSONListExporter.cs" />

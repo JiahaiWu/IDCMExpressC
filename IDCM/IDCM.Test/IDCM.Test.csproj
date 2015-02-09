@@ -53,6 +53,7 @@
     <Compile Include="DGVSelectAndPaste.Designer.cs">
       <DependentUpon>DGVSelectAndPaste.cs</DependentUpon>
     </Compile>
+    <Compile Include="HttpUpload.cs" />
     <Compile Include="QuickTest_Data.cs">
       <SubType>Form</SubType>
     </Compile>

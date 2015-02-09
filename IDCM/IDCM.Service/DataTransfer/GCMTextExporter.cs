@@ -46,7 +46,7 @@ namespace IDCM.Service.DataTransfer
                         if (exportDetail)//如果不需要导出详细信息，就让maps等于Null
                         {
                             string strainId = Convert.ToString(row[0]);
-                            StrainView sv = getStrainView(gcmSiteHolder, strainId);
+                            StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainId);
                             Dictionary<string, object> strain_treeMap = sv.ToDictionary();
                             mergeMapValueToRow(strbuilder, strain_treeMap, spliter);                 
                             if(i == 0)columnStr += buildColumn(strain_treeMap, spliter);
