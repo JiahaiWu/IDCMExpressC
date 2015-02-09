@@ -845,7 +845,6 @@
             this.Controls.Add(this.splitContainer_main);
             this.Controls.Add(this.toolStrip_gcm);
             this.Controls.Add(this.statusStrip_bottom);
-            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "GCMView";
             this.Text = "GCMView";

@@ -74,11 +74,13 @@
     <Compile Include="BGHandler\GCMXMLExportHandler.cs" />
     <Compile Include="BGHandler\LocalDataUploadHandler.cs" />
     <Compile Include="BGHandler\XMLExportHandler.cs" />
+    <Compile Include="BGHandler\XMLImportHandler.cs" />
     <Compile Include="DataTransfer\GCMExcelExporter.cs" />
     <Compile Include="DataTransfer\GCMJSONExporter.cs" />
     <Compile Include="DataTransfer\GCMTextExporter.cs" />
     <Compile Include="DataTransfer\GCMXMLExporter.cs" />
     <Compile Include="DataTransfer\LocalDataUploadExporter.cs" />
+    <Compile Include="DataTransfer\XMLDataImporter.cs" />
     <Compile Include="DataTransfer\XMLExporter.cs" />
     <Compile Include="LGCMLinkMapHolder.cs" />
     <Compile Include="UIM\BackProgressIndicator.cs" />

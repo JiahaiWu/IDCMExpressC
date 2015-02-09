@@ -875,6 +875,92 @@ namespace IDCM.Modules
             }
             return false;
         }
+        /// <summary>
+        /// 解析指定的XML文档，验证数据转换的属性映射条件.
+        /// </summary>
+        /// <param name="fpath"></param>
+        /// <returns></returns>
+        internal bool checkForXMLImport(string fpath, ref Dictionary<string, string> dataMapping, Form pForm)
+        {
+            if (fpath == null || fpath.Length < 1)
+                return false;
+            string fullPaht = System.IO.Path.GetFullPath(fpath);
+            try
+            {
+                XmlDocument xDoc = new XmlDocument();
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.IgnoreComments = true;
+                using(XmlReader xRead = XmlReader.Create(fullPaht))
+                {
+                    xDoc.Load(xRead);
+                    return fetchXMLMappingInfo(xDoc, ref dataMapping, pForm) && dataMapping.Count > 0;
+                }  
+            }
+            catch(Exception ex)
+            {
+                log.Info("ERROR: XML文件导入失败！ ", ex);
+                MessageBox.Show("ERROR: XML文件导入失败！ " + ex.Message + "\n" + ex.StackTrace);
+            }
+            return false;
+        }
+        public bool fetchXMLMappingInfo(XmlDocument xDoc,ref Dictionary<string, string> dataMapping, Form pForm)
+        {            
+            XmlNodeList strainChildNodes = xDoc.DocumentElement.ChildNodes;
+            //一直向下探索，直到某个节点下没有子节点，说明这个节点是个attrNode,
+            //因为按正常的逻辑，属性节点应该是最小的节点单位了
+            //attrNode的集合就是strainChildNodes  
+            while (strainChildNodes.Count > 0)
+            {
+                XmlNode node = strainChildNodes[0];
+                if (node.ChildNodes.Count <= 0)
+                    break;
+                strainChildNodes = node.ChildNodes;
+            }
+
+            //节点探测代码
+            XmlNode strainNode = strainChildNodes[0].ParentNode;//获取第一个strainNode
+            List<string> attrNameList = new List<string>(strainChildNodes.Count);
+            int cursor = 0;
+            int detectDepth = 5;
+            while (!(strainNode == null))
+            {
+                if (cursor > detectDepth)
+                    break;
+                if (mergeAttrList(attrNameList, strainNode.ChildNodes))//如果这个节点下有新属性出现，使探测深度增加2倍
+                    detectDepth = (int)(detectDepth * 1.5);
+                strainNode = nextStrainNode(strainNode);
+                cursor++;
+            }
+
+            ///////////////////////////////////////////////////////////////
+            using (AttrMapOptionDlg amoDlg = new AttrMapOptionDlg())
+            {
+                amoDlg.BringToFront();
+                amoDlg.setInitCols(attrNameList, LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource, false), ref dataMapping);
+                amoDlg.ShowDialog();
+                ///////////////////////////////////////////
+                if (amoDlg.DialogResult == DialogResult.OK)
+                    return true;
+            }
+            return false;
+        }
+        private XmlNode nextStrainNode(XmlNode strainNode)
+        {
+            return strainNode.NextSibling;
+        }
+        private bool mergeAttrList(List<string> attrNameList,XmlNodeList attrNodeList)
+        {
+            int startLeng = attrNameList.Count;
+            foreach (XmlNode strainChildNode in attrNodeList)
+            {
+                if(!attrNameList.Contains(strainChildNode.Name))
+                    attrNameList.Add(strainChildNode.Name);
+            }
+            int endLeng = attrNameList.Count;
+            if (startLeng != endLeng)
+                return true;
+            return false;
+        }
         
         /// <summary>
         /// 通过NPOI读取Excel文档，转换可识别内容至本地数据库中
