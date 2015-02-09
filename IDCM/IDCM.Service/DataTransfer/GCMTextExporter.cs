@@ -46,7 +46,7 @@ namespace IDCM.Service.DataTransfer
                         if (exportDetail)//如果不需要导出详细信息，就让maps等于Null
                         {
                             string strainId = Convert.ToString(row[0]);
-                            StrainView sv = getStrainView(gcmSiteHolder, strainId);
+                            StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainId);
                             Dictionary<string, object> strain_treeMap = sv.ToDictionary();
                             mergeMapValueToRow(strbuilder, strain_treeMap, spliter);                 
                             if(i == 0)columnStr += buildColumn(strain_treeMap, spliter);
@@ -104,7 +104,7 @@ namespace IDCM.Service.DataTransfer
                         if (exportDetail)
                         {
                             string strainId = Convert.ToString(row.Cells[1].Value);
-                            StrainView sv = getStrainView(gcmSiteHolder, strainId);
+                            StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainId);
                             Dictionary<string, object> strain_treeMap = sv.ToDictionary();
                             mergeMapValueToRow(strbuilder, strain_treeMap, spliter);
                             if (rowIndex == 0) columnStr += buildColumn(strain_treeMap, spliter);
@@ -179,17 +179,7 @@ namespace IDCM.Service.DataTransfer
                 }
             }
         }
-        /// <summary>
-        /// 获取strain_tree
-        /// </summary>
-        /// <param name="gcmSiteHolder">底层GCMSiteHolder句柄，封装GCMGCM账户信息</param>
-        /// <param name="strainID">strain的ID</param>
-        /// <returns>strain_tree</returns>
-        private StrainView getStrainView(GCMSiteMHub gcmSiteHolder, string strainID)
-        {
-            GCMDataMHub gcmDataHub = new GCMDataMHub();
-            return gcmDataHub.strainViewQuery(gcmSiteHolder, strainID);
-        }
+
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
     }
 }

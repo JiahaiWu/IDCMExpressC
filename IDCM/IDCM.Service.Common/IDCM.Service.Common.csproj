@@ -73,6 +73,7 @@
     <Compile Include="DAM\DelayWorkNoteDAM.cs" />
     <Compile Include="DAM\CatalogNodeDAM.cs" />
     <Compile Include="DAM\TemplateUpdater.cs" />
+    <Compile Include="GCMDAM\XMLImportExecutor.cs" />
     <Compile Include="GCMDataMHub.cs" />
     <Compile Include="GCMSiteMHub.cs" />
     <Compile Include="DataSourceMHub.cs" />

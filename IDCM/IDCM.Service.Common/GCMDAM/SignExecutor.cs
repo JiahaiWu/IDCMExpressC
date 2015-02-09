@@ -15,7 +15,7 @@ namespace IDCM.Service.Common.GCMDAM
         {
             if (authInfo != null)
             {
-                string signInUri = ConfigurationManager.AppSettings["SignOffUri"];
+                string signInUri = ConfigurationManager.AppSettings[SysConstants.SignOffUri];
                 string url = string.Format(signInUri, new string[] { authInfo.Jsessionid });
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 log.Info("StrainViewQueryExecutor Request Url=" + url);
@@ -44,7 +44,7 @@ namespace IDCM.Service.Common.GCMDAM
         {
             if (username != null && password != null)
             {
-                string signInUri = ConfigurationManager.AppSettings["SignInUri"];
+                string signInUri = ConfigurationManager.AppSettings[SysConstants.SignInUri];
                 string url = string.Format(signInUri, new string[] { username, password });
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 log.Info("SignInExecutor Request Url=" + url);

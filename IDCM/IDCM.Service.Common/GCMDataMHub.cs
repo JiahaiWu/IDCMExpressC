@@ -18,7 +18,7 @@ namespace IDCM.Service.Common
         /// <param name="strainname"></param>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public StrainListPage strainListQuery(GCMSiteMHub gcmSite,int currentPage, string strainnumber = "", string strainname = "", int timeout = 10000)
+        public static StrainListPage strainListQuery(GCMSiteMHub gcmSite,int currentPage, string strainnumber = "", string strainname = "", int timeout = 10000)
         {
             return StrainListQueryExecutor.strainListQuery(currentPage, strainnumber, strainname, gcmSite.getSignedAuthInfo(), timeout);
         }
@@ -29,9 +29,29 @@ namespace IDCM.Service.Common
         /// <param name="id"></param>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public StrainView strainViewQuery(GCMSiteMHub gcmSite, string id, int timeout = 10000)
+        public static StrainView strainViewQuery(GCMSiteMHub gcmSite, string id, int timeout = 10000)
         {
             return StrainViewQueryExecutor.strainViewQuery(id, gcmSite.getSignedAuthInfo(), timeout);
+        }
+        /// <summary>
+        /// XML上传，批量导入（如果菌号相同，则更新均中信息）
+        /// 说明：
+        /// 返回结果	例：{"msg_num":"2"}
+        /// 返回结果代码参考:
+        /// 0:文件类型错误
+        /// 1:xml文件内容错误并返回错误行数据
+        /// 2:导入成功
+        /// 3:xml解析异常，xml文件格式不正确
+        /// 4:导入失败，请与管理员联系
+        /// loginflag:"false" 没有登录 JSESSIONID失效
+        /// </summary>
+        /// <param name="gcmSite"></param>
+        /// <param name="xmlImportData"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public static XMLImportStrainsRes xmlImportStrains(GCMSiteMHub gcmSite,string xmlImportData, int timeout = 10000)
+        {
+            return XMLImportExecutor.xmlImportStrains(xmlImportData, gcmSite.getSignedAuthInfo(), timeout);
         }
     }
 }

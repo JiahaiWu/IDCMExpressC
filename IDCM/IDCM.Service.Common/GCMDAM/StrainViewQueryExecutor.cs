@@ -16,7 +16,7 @@ namespace IDCM.Service.Common.GCMDAM
         {
             if (authInfo != null && id != null)
             {
-                string signInUri = ConfigurationManager.AppSettings["StrainViewUri"];
+                string signInUri = ConfigurationManager.AppSettings[SysConstants.StrainViewUri];
                 string url = string.Format(signInUri, new string[] { authInfo.Jsessionid, id });
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 //log.Info("StrainViewQueryExecutor Request Url=" + url);

@@ -40,7 +40,7 @@ namespace IDCM.Service.DataTransfer
                     if (exportDetail)
                     {
                         string strainID = Convert.ToString(row[0]);
-                        StrainView sv = getStrainView(gcmSiteHolder, strainID);
+                        StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainID);
                         Dictionary<string, object> strain_treeMap_from = sv.ToDictionary();
                         AddToDictionary(dict, strain_treeMap_from);
                     }
@@ -83,7 +83,7 @@ namespace IDCM.Service.DataTransfer
                     if (exportDetail)
                     {
                         string strainID = Convert.ToString(row.Cells[1].Value);
-                        StrainView sv = getStrainView(gcmSiteHolder, strainID);
+                        StrainView sv = GCMDataMHub.strainViewQuery(gcmSiteHolder, strainID);
                         Dictionary<string, object> strain_treeMap_from = sv.ToDictionary();
                         AddToDictionary(dict, strain_treeMap_from);
                     }
@@ -122,17 +122,6 @@ namespace IDCM.Service.DataTransfer
                     }
                 }
             }
-        }
-        /// <summary>
-        /// 获取strain_tree
-        /// </summary>
-        /// <param name="gcmSiteHolder">底层GCMSiteMHub句柄，封装GCM账户信息</param>
-        /// <param name="strainID">strain的ID</param>
-        /// <returns>strain_tree</returns>
-        private StrainView getStrainView(GCMSiteMHub gcmSiteHolder, string strainID)
-        {
-            GCMDataMHub gcmDataHub = new GCMDataMHub();
-            return gcmDataHub.strainViewQuery(gcmSiteHolder, strainID);
         }
     }
 }

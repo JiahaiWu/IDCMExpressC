@@ -16,7 +16,7 @@ namespace IDCM.Service.Common.GCMDAM
         {
             if (authInfo != null && currentPage >= 0)
             {
-                string signInUri = ConfigurationManager.AppSettings["StrainListUri"];
+                string signInUri = ConfigurationManager.AppSettings[SysConstants.StrainListUri];
                 string url = string.Format(signInUri, new object[] { authInfo.Jsessionid, currentPage, strainnumber, strainname });
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 log.Info("StrainListQueryExecutor Request Url=" + url);

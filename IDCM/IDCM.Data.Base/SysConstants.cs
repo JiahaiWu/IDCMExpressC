@@ -48,8 +48,15 @@ namespace IDCM.Data.Base
         /// GCM菌种保藏记录详细信息请求资源地址
         /// </summary>
         public const string StrainViewUri = "StrainViewUri";
-
+        /// <summary>
+        /// GCM菌种保藏记录批量导入请求资源地址
+        /// </summary>
+        public const string XMLImportUri = "XMLImportUri";
         #endregion
+        /// <summary>
+        /// GCM上传XML格式模板文档
+        /// </summary>
+        public const string GCMUploadTemplate = "GCMUploadTemplate";
         /// <summary>
         /// 最长等待毫秒数
         /// </summary>

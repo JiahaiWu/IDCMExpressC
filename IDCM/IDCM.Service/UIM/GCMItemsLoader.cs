@@ -31,12 +31,12 @@ namespace IDCM.Service.UIM
         {
             GCMDataMHub gcmDataHub = new GCMDataMHub();
             int curPage = 1;
-            StrainListPage slp = gcmDataHub.strainListQuery(gcmSite, curPage);
+            StrainListPage slp = GCMDataMHub.strainListQuery(gcmSite, curPage);
             showDataItems(slp, itemDGV, loadedNoter);
             while (hasNextPage(slp, curPage))
             {
                 curPage++;
-                slp = gcmDataHub.strainListQuery(gcmSite, curPage);
+                slp = GCMDataMHub.strainListQuery(gcmSite, curPage);
                 showDataItems(slp, itemDGV, loadedNoter);
             }
             if (loadedNoter.Count > 0)

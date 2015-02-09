@@ -15,8 +15,9 @@ using NPOI.XSSF.UserModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using IDCM.Forms;
-using System.Xml;
 using System.Configuration;
+using System.Xml;
+using IDCM.Service;
 
 namespace IDCM.Modules
 {
@@ -966,6 +967,7 @@ namespace IDCM.Modules
                 return true;
             return false;
         }
+        
         /// <summary>
         /// 通过NPOI读取Excel文档，转换可识别内容至本地数据库中
         /// </summary>
@@ -999,6 +1001,29 @@ namespace IDCM.Modules
             {
                 amoDlg.BringToFront();
                 amoDlg.setInitCols(xlscols, LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource,false), ref dataMapping);
+                amoDlg.ShowDialog();
+                ///////////////////////////////////////////
+                if (amoDlg.DialogResult == DialogResult.OK)
+                    return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 解析本地数据属性和GCM发布数据的属性映射条件
+        /// </summary>
+        /// <param name="dataMapping"></param>
+        /// <returns></returns>
+        public bool checkForGCMImport(ref Dictionary<string, string> dataMapping)
+        {
+            List<string> gcmCols = LGCMLinkMapHolder.fetchPublishGCMFields();
+            List<string> viewCols = LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource, false);
+            if (gcmCols == null || gcmCols.Count < 1)
+                return false;
+            ///////////////////////////////////////////////////////////////
+            using (AttrMapOptionDlg amoDlg = new AttrMapOptionDlg())
+            {
+                amoDlg.BringToFront();
+                amoDlg.setInitCols(viewCols, gcmCols, ref dataMapping);
                 amoDlg.ShowDialog();
                 ///////////////////////////////////////////
                 if (amoDlg.DialogResult == DialogResult.OK)
