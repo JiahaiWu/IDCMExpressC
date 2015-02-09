@@ -200,9 +200,9 @@ namespace IDCM.ViewManager
         /// <summary>
         /// 激活HomeView视图
         /// </summary>
-        public void activeGCMView()
+        public void activeHomeView()
         {
-            DWorkMHub.note(AsyncMessage.RetryQuickStartConnect);
+            DWorkMHub.note(AsyncMessage.RequestHomeView);
         }
         /// <summary>
         /// 刷新数据展示

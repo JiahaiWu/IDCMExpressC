@@ -16,6 +16,7 @@ using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using IDCM.Forms;
 using System.Xml;
+using System.Configuration;
 
 namespace IDCM.Modules
 {
@@ -918,14 +919,15 @@ namespace IDCM.Modules
             //节点探测代码
             XmlNode strainNode = strainChildNodes[0].ParentNode;//获取第一个strainNode
             List<string> attrNameList = new List<string>(strainChildNodes.Count);
-            int cursor = 0;
-            int detectDepth = 5;
+            int cursor = Convert.ToInt32(ConfigurationManager.AppSettings.Get(SysConstants.Cursor));
+            int detectDepth = Convert.ToInt32(ConfigurationManager.AppSettings.Get(SysConstants.DetectDepth));
+            double GrowthFactor = Convert.ToDouble(ConfigurationManager.AppSettings.Get(SysConstants.GrowthFactor));
             while (!(strainNode == null))
             {
                 if (cursor > detectDepth)
                     break;
                 if (mergeAttrList(attrNameList, strainNode.ChildNodes))//如果这个节点下有新属性出现，使探测深度增加2倍
-                    detectDepth = (int)(detectDepth * 1.5);
+                    detectDepth = (int)(detectDepth * GrowthFactor);
                 strainNode = nextStrainNode(strainNode);
                 cursor++;
             }
@@ -942,6 +944,11 @@ namespace IDCM.Modules
             }
             return false;
         }
+        /// <summary>
+        /// 获取下一个XmlNode兄弟节点
+        /// </summary>
+        /// <param name="strainNode"></param>
+        /// <returns></returns>
         private XmlNode nextStrainNode(XmlNode strainNode)
         {
             return strainNode.NextSibling;

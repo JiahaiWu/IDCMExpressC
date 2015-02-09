@@ -123,7 +123,8 @@ namespace IDCM.ViewManager
         /// <param name="e"></param>
         internal void OnRetryQuickStartConnect(object sender, IDCMAsyncEventArgs e)
         {
-            ViewManagerHolder.activeChildView(typeof(HomeViewManager), true);
+            ManagerI view = ViewManagerHolder.getManager(typeof(StartRetainer));
+            view.initView(true);
         }
         /// <summary>
         /// 数据源预处理流程完成事件处理方法

@@ -58,5 +58,17 @@ namespace IDCM.Data.Base
         /// 最大数据库连接池连接数
         /// </summary>
         public static int MAX_DB_REQUEST_POOL_NUM = 4;
+        /// <summary>
+        /// 探索XML节点稳定性，游标，代表探索的当前位置，初始是0，代表从0开始
+        /// </summary>
+        public static string Cursor = "Cursor";
+        /// <summary>
+        /// 探索XML节点稳定性，深度，代表探索深度，如果在当前深度下，XML比较稳定则不会继续向下探索
+        /// </summary>
+        public static string DetectDepth = "DetectDepth";
+        /// <summary>
+        /// 探索XML节点稳定性，增长系数，如果在DetectDepth深度下，探索过程中出现strain节点下的attr节点增加的情况，会触发 DetectDepth * DetectDepth，使探索深度翻倍
+        /// </summary>
+        public static string GrowthFactor = "GrowthFactor";
     }
 }
