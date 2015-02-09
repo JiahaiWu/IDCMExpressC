@@ -174,7 +174,7 @@ namespace IDCM.ViewManager
         public void loadDataSetView(TreeNode tnode)
         {
             datasetBuilder.loadDataSetView();
-            noteCurSelectedNode(tnode);
+            noteCurSelectedNode(tnode,true);
         }
         /// <summary>
         /// 导入Excel数据文档
@@ -325,10 +325,10 @@ namespace IDCM.ViewManager
             catBuilder.renameNode(treeNode, label);
         }
 
-        public void noteCurSelectedNode(TreeNode node)
+        public void noteCurSelectedNode(TreeNode node,bool forceUpdate=false)
         {
             bool needUpdateData = catBuilder.noteCurSelectedNode(node);
-            if (needUpdateData)
+            if (needUpdateData || forceUpdate)
             {
                 updateDataSet(node);
             }
@@ -365,7 +365,7 @@ namespace IDCM.ViewManager
         /// 3.获取本地数据字段至GCM目标字段的映射关系
         /// 4.建立上传目标数据至GCM目录事务（内置临时XML导出及更新菌种资源软链接消息）
         /// </summary>
-        public void uploadSelectionToGCM()
+        public void publishSelectionToGCM()
         {
             DataGridViewSelectedRowCollection selectedRows = homeView.getItemGridView().SelectedRows;
             AuthInfo authInfo = DataSourceHolder.getLoginAuthInfo();

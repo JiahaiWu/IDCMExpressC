@@ -42,7 +42,7 @@ namespace IDCM.Forms
             List<string> baseList = new List<string>();
             foreach (string str in destCols)
             {
-                baseList.Add(CVNameConverter.toViewName(str));
+                baseList.Add(str);
             }
             StringSimilarity.computeSimilarMap(srcCols, baseList, ref mappingEntries);
             mapping.Clear();
@@ -50,7 +50,7 @@ namespace IDCM.Forms
             {
                 if (kvpair.Value >= threshold)
                 {
-                    mapping[kvpair.Key.Val] = CVNameConverter.toDBName(kvpair.Key.Key);
+                    mapping[kvpair.Key.Val] = kvpair.Key.Key;
                 }
             }
             foreach (string col in srcCols)
@@ -63,7 +63,7 @@ namespace IDCM.Forms
             this.dataGridView_map.Rows.Clear();
             foreach (KeyValuePair<string, string> mappair in mapping)
             {
-                this.dataGridView_map.Rows.Add(new string[] { mappair.Key, null, null, CVNameConverter.toViewName(mappair.Value), null });
+                this.dataGridView_map.Rows.Add(new string[] { mappair.Key, null, null, mappair.Value, null });
             }
             radioButton_similarity.Checked = true;
         }
@@ -76,9 +76,9 @@ namespace IDCM.Forms
             mapping.Clear();
             foreach (string col in srcCols)
             {
-                if (baseSet.Contains(CVNameConverter.toDBName(col)))
+                if (baseSet.Contains(col))
                 {
-                    mapping[col] = CVNameConverter.toDBName(col);
+                    mapping[col] = col;
                 }
                 else
                 {
@@ -88,7 +88,7 @@ namespace IDCM.Forms
             this.dataGridView_map.Rows.Clear();
             foreach (KeyValuePair<string, string> mappair in mapping)
             {
-                this.dataGridView_map.Rows.Add(new string[] { mappair.Key, null, null, CVNameConverter.toViewName(mappair.Value), null });
+                this.dataGridView_map.Rows.Add(new string[] { mappair.Key, null, null,mappair.Value, null });
             }
             radioButton_exact.Checked = true;
         }
@@ -190,7 +190,7 @@ namespace IDCM.Forms
             if (stext!=null)
             {
                 dataGridView_map.Rows[rowIndex].Cells[3].Value =stext;
-                mapping[dataGridView_map.Rows[rowIndex].Cells[0].Value.ToString()] = CVNameConverter.toDBName(stext);
+                mapping[dataGridView_map.Rows[rowIndex].Cells[0].Value.ToString()] = stext;
             }
         }
         /// <summary>
@@ -204,7 +204,7 @@ namespace IDCM.Forms
             foreach (string col in destCols)
             {
                 if (!dests.Contains(col))
-                    res.Add(CVNameConverter.toViewName(col));
+                    res.Add(col);
             }
             return res.ToArray();
         }

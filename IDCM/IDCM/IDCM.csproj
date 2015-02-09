@@ -198,6 +198,7 @@
     <Compile Include="ViewManager\LibFieldManager.cs" />
     <Compile Include="ViewManager\StartRetainer.cs" />
     <Compile Include="ViewManager\ViewManagerHolder.cs" />
+    <None Include="Resources\gcm_upload.png" />
     <EmbeddedResource Include="Forms\AboutDlg.resx">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </EmbeddedResource>

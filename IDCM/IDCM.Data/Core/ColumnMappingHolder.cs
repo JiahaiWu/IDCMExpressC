@@ -217,7 +217,7 @@ namespace IDCM.Data.Core
             if (attrMapping.Count < 1)
                 queryCacheAttrDBMap(sconn);
             ObjectPair<int, int> kvpair = null;
-            attrMapping.TryGetValue(attr, out kvpair);
+            attrMapping.TryGetValue(CVNameConverter.toDBName(attr), out kvpair);
             return kvpair == null ? -1 : kvpair.Val;
         }
         /// <summary>
@@ -232,7 +232,7 @@ namespace IDCM.Data.Core
             if (attrMapping.Count < 1)
                 queryCacheAttrDBMap(sconn);
             ObjectPair<int, int> kvpair = null;
-            attrMapping.TryGetValue(attr, out kvpair);
+            attrMapping.TryGetValue(CVNameConverter.toDBName(attr), out kvpair);
             return kvpair == null ? -1 : kvpair.Key;
         }
 

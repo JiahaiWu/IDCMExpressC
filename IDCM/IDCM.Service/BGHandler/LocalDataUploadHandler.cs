@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using IDCM.Service.DataTransfer;
 using System.IO;
 using IDCM.Data.Base.Utils;
+using System.Configuration;
+using IDCM.Service.Utils;
 
 namespace IDCM.Service.BGHandler
 {
@@ -42,39 +44,57 @@ namespace IDCM.Service.BGHandler
             LocalDataUploadExporter exporter = new LocalDataUploadExporter();
             if (selectedRows != null)
             {
+                string sidAttr = ConfigurationManager.AppSettings.Get(SysConstants.StrainNumber);
+                string sidName = null;
                 ///////////////////////////////////////////////////////
                 //将目标XML导出字段名和数据库存储字段名映射存储位序产生关联
                 Dictionary<string, int> dbMaps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
                 Dictionary<string, int> dbLinkMaps = new Dictionary<string, int>();
                 foreach (KeyValuePair<string, string> gcmMapEntry in dataMapping)
                 {
+                    if (gcmMapEntry.Value == null)
+                        continue;
                     int dbOrder = -1;
                     if (dbMaps.TryGetValue(gcmMapEntry.Key, out dbOrder))
                     {
                         dbLinkMaps.Add(gcmMapEntry.Value, dbOrder);
                     }
+                    if (sidName==null && gcmMapEntry.Value.Equals(sidAttr))
+                        sidName = gcmMapEntry.Key;
                 }
-                ////////////////////////////////////////////////////////
-                //抽取菌种号
-                List<string> linkIds = new List<string>();
-                for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
+                if (sidName != null)
                 {
-                    DataGridViewRow dgvRow = selectedRows[ridx];
-                    string strainId = dgvRow.Cells["[id]"].Value as string;
-                    linkIds.Add(strainId);
-                }
-                ///////////////////////////////////////////////////////
-                //导出XML文档数据
-                string xmlImportData = null;
-                res = exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, out xmlImportData);
-                if (res)
-                {
-                    //提交至GCM站点
-                    importRes = GCMDataMHub.xmlImportStrains(gcmSite, xmlImportData);
-                    if (importRes.msg_num.Equals("2"))
+                    int sidViewOrder = LocalRecordMHub.getViewOrder(datasource,sidName);
+                    if (sidViewOrder > 0)
                     {
-                        //更新本地软连接记录信息
-                        DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMLinkStrains, linkIds));
+                        ////////////////////////////////////////////////////////
+                        //抽取菌种号
+                        List<string> linkIds = new List<string>();
+                        for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
+                        {
+                            DataGridViewRow dgvRow = selectedRows[ridx];
+                            DataGridViewCell dgvc = dgvRow.Cells[sidViewOrder];
+                            if (dgvc != null)
+                            {
+                                string strainId = DGVUtil.getCellValue(dgvc);
+                                if (strainId != null && strainId.Length > 0)
+                                    linkIds.Add(strainId);
+                            }
+                        }
+                        ///////////////////////////////////////////////////////
+                        //导出XML文档数据
+                        string xmlImportData = null;
+                        res = exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, out xmlImportData);
+                        if (res)
+                        {
+                            //提交至GCM站点
+                            importRes = GCMDataMHub.xmlImportStrains(gcmSite, xmlImportData);
+                            if (importRes.msg_num.Equals("2"))
+                            {
+                                //更新本地软连接记录信息
+                                DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMLinkStrains, linkIds));
+                            }
+                        }
                     }
                 }
             }

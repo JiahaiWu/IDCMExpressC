@@ -39,17 +39,12 @@
             System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("节点2");
             this.statusStripBottom = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel_bottom = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSplitButton_layout = new System.Windows.Forms.ToolStripSplitButton();
-            this.showRefer = new System.Windows.Forms.ToolStripMenuItem();
-            this.hideRefer = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripProgressBar_bottom = new System.Windows.Forms.ToolStripProgressBar();
             this.tableLayoutPanel_main = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer_main = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel_librarGroup = new System.Windows.Forms.TableLayoutPanel();
             this.treeView_library = new System.Windows.Forms.TreeView();
             this.imageList_lib = new System.Windows.Forms.ImageList(this.components);
-            this.panel_libraryHead = new System.Windows.Forms.Panel();
-            this.label_libraryHead = new System.Windows.Forms.Label();
             this.treeView_base = new System.Windows.Forms.TreeView();
             this.splitContainer_right = new System.Windows.Forms.SplitContainer();
             this.splitContainer_middle = new System.Windows.Forms.SplitContainer();
@@ -103,24 +98,13 @@
             this.references = new System.Windows.Forms.TabPage();
             this.links = new System.Windows.Forms.TabPage();
             this.toolStrip_home = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton_local = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_gcm = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton_add = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_del = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_import = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_export = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_download = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_upload = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_refresh = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTextBox_quickSearch = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripButton_qsearch = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip_lib = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.CreateGroupSet = new System.Windows.Forms.ToolStripMenuItem();
             this.RenameGroupSet = new System.Windows.Forms.ToolStripMenuItem();
@@ -132,6 +116,23 @@
             this.CreateSmartGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip_base = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clear_toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panel_libraryHead = new System.Windows.Forms.Panel();
+            this.label_libraryHead = new System.Windows.Forms.Label();
+            this.toolStripButton_local = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_gcm = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_add = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_del = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_import = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_export = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_download = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_upload = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_publish = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_refresh = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_qsearch = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_help = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSplitButton_layout = new System.Windows.Forms.ToolStripSplitButton();
+            this.showRefer = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideRefer = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripBottom.SuspendLayout();
             this.tableLayoutPanel_main.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).BeginInit();
@@ -139,7 +140,6 @@
             this.splitContainer_main.Panel2.SuspendLayout();
             this.splitContainer_main.SuspendLayout();
             this.tableLayoutPanel_librarGroup.SuspendLayout();
-            this.panel_libraryHead.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_right)).BeginInit();
             this.splitContainer_right.Panel1.SuspendLayout();
             this.splitContainer_right.Panel2.SuspendLayout();
@@ -162,6 +162,7 @@
             this.toolStrip_home.SuspendLayout();
             this.contextMenuStrip_lib.SuspendLayout();
             this.contextMenuStrip_base.SuspendLayout();
+            this.panel_libraryHead.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStripBottom
@@ -185,31 +186,6 @@
             this.toolStripStatusLabel_bottom.Name = "toolStripStatusLabel_bottom";
             this.toolStripStatusLabel_bottom.Size = new System.Drawing.Size(44, 18);
             this.toolStripStatusLabel_bottom.Text = "Ready";
-            // 
-            // toolStripSplitButton_layout
-            // 
-            this.toolStripSplitButton_layout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripSplitButton_layout.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showRefer,
-            this.hideRefer});
-            this.toolStripSplitButton_layout.Image = global::IDCM.Properties.Resources.layout2;
-            this.toolStripSplitButton_layout.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSplitButton_layout.Margin = new System.Windows.Forms.Padding(0, 2, 2, 0);
-            this.toolStripSplitButton_layout.Name = "toolStripSplitButton_layout";
-            this.toolStripSplitButton_layout.Size = new System.Drawing.Size(78, 21);
-            this.toolStripSplitButton_layout.Text = "Layout";
-            // 
-            // showRefer
-            // 
-            this.showRefer.Name = "showRefer";
-            this.showRefer.Size = new System.Drawing.Size(169, 22);
-            this.showRefer.Text = "Show Reference";
-            // 
-            // hideRefer
-            // 
-            this.hideRefer.Name = "hideRefer";
-            this.hideRefer.Size = new System.Drawing.Size(169, 22);
-            this.hideRefer.Text = "Hide Reference";
             // 
             // toolStripProgressBar_bottom
             // 
@@ -327,29 +303,6 @@
             this.imageList_lib.Images.SetKeyName(0, "base.gif");
             this.imageList_lib.Images.SetKeyName(1, "folder.gif");
             this.imageList_lib.Images.SetKeyName(2, "20140717040702441_easyicon_net_24.png");
-            // 
-            // panel_libraryHead
-            // 
-            this.panel_libraryHead.BackColor = System.Drawing.Color.Transparent;
-            this.panel_libraryHead.BackgroundImage = global::IDCM.Properties.Resources.bg2;
-            this.panel_libraryHead.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel_libraryHead.Controls.Add(this.label_libraryHead);
-            this.panel_libraryHead.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_libraryHead.Location = new System.Drawing.Point(0, 0);
-            this.panel_libraryHead.Margin = new System.Windows.Forms.Padding(0);
-            this.panel_libraryHead.Name = "panel_libraryHead";
-            this.panel_libraryHead.Size = new System.Drawing.Size(215, 28);
-            this.panel_libraryHead.TabIndex = 0;
-            // 
-            // label_libraryHead
-            // 
-            this.label_libraryHead.AutoSize = true;
-            this.label_libraryHead.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label_libraryHead.Location = new System.Drawing.Point(4, 3);
-            this.label_libraryHead.Name = "label_libraryHead";
-            this.label_libraryHead.Size = new System.Drawing.Size(90, 21);
-            this.label_libraryHead.TabIndex = 0;
-            this.label_libraryHead.Text = "My Library";
             // 
             // treeView_base
             // 
@@ -974,36 +927,18 @@
             this.toolStripButton_export,
             this.toolStripButton_download,
             this.toolStripButton_upload,
+            this.toolStripButton_publish,
             this.toolStripButton_refresh,
             this.toolStripSeparator3,
             this.toolStripTextBox_quickSearch,
             this.toolStripButton_qsearch,
             this.toolStripSeparator4,
-            this.toolStripButton11});
+            this.toolStripButton_help});
             this.toolStrip_home.Location = new System.Drawing.Point(0, 0);
             this.toolStrip_home.Name = "toolStrip_home";
             this.toolStrip_home.Size = new System.Drawing.Size(1008, 27);
             this.toolStrip_home.TabIndex = 1;
             this.toolStrip_home.Text = "toolStrip_home";
-            // 
-            // toolStripButton_local
-            // 
-            this.toolStripButton_local.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_local.Image = global::IDCM.Properties.Resources.local;
-            this.toolStripButton_local.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_local.Name = "toolStripButton_local";
-            this.toolStripButton_local.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_local.Text = "Go Home";
-            // 
-            // toolStripButton_gcm
-            // 
-            this.toolStripButton_gcm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_gcm.Image = global::IDCM.Properties.Resources.gcm_logo;
-            this.toolStripButton_gcm.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_gcm.Name = "toolStripButton_gcm";
-            this.toolStripButton_gcm.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_gcm.Text = "Go GCM";
-            this.toolStripButton_gcm.Click += new System.EventHandler(this.toolStripButton_gcm_Click);
             // 
             // toolStripSeparator1
             // 
@@ -1027,76 +962,6 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
-            // toolStripButton_add
-            // 
-            this.toolStripButton_add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_add.Image = global::IDCM.Properties.Resources.newRecord;
-            this.toolStripButton_add.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_add.Name = "toolStripButton_add";
-            this.toolStripButton_add.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_add.Text = "Add Record";
-            this.toolStripButton_add.Click += new System.EventHandler(this.toolStripButton_add_Click);
-            // 
-            // toolStripButton_del
-            // 
-            this.toolStripButton_del.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_del.Image = global::IDCM.Properties.Resources.del_note;
-            this.toolStripButton_del.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_del.Name = "toolStripButton_del";
-            this.toolStripButton_del.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_del.Text = "Delete Record";
-            this.toolStripButton_del.Click += new System.EventHandler(this.toolStripButton_del_Click);
-            // 
-            // toolStripButton_import
-            // 
-            this.toolStripButton_import.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_import.Image = global::IDCM.Properties.Resources.import1;
-            this.toolStripButton_import.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_import.Name = "toolStripButton_import";
-            this.toolStripButton_import.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_import.Text = "Import";
-            this.toolStripButton_import.Click += new System.EventHandler(this.toolStripButton_import_Click);
-            // 
-            // toolStripButton_export
-            // 
-            this.toolStripButton_export.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_export.Image = global::IDCM.Properties.Resources.export;
-            this.toolStripButton_export.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_export.Name = "toolStripButton_export";
-            this.toolStripButton_export.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_export.Text = "Export";
-            this.toolStripButton_export.Click += new System.EventHandler(this.toolStripButton_export_Click);
-            // 
-            // toolStripButton_download
-            // 
-            this.toolStripButton_download.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_download.Image = global::IDCM.Properties.Resources.download;
-            this.toolStripButton_download.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_download.Name = "toolStripButton_download";
-            this.toolStripButton_download.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_download.Text = "Download";
-            this.toolStripButton_download.Click += new System.EventHandler(this.toolStripButton_download_Click);
-            // 
-            // toolStripButton_upload
-            // 
-            this.toolStripButton_upload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_upload.Image = global::IDCM.Properties.Resources.upload;
-            this.toolStripButton_upload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_upload.Name = "toolStripButton_upload";
-            this.toolStripButton_upload.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_upload.Text = "Upload";
-            this.toolStripButton_upload.Click += new System.EventHandler(this.toolStripButton_upload_Click);
-            // 
-            // toolStripButton_refresh
-            // 
-            this.toolStripButton_refresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_refresh.Image = global::IDCM.Properties.Resources.refresh;
-            this.toolStripButton_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_refresh.Name = "toolStripButton_refresh";
-            this.toolStripButton_refresh.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_refresh.Text = "Refresh";
-            this.toolStripButton_refresh.Click += new System.EventHandler(this.toolStripButton_refresh_Click);
-            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -1112,29 +977,10 @@
             this.toolStripTextBox_quickSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.toolStripTextBox_quickSearch_KeyDown);
             this.toolStripTextBox_quickSearch.TextChanged += new System.EventHandler(this.toolStripTextBox_quickSearch_TextChanged);
             // 
-            // toolStripButton_qsearch
-            // 
-            this.toolStripButton_qsearch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_qsearch.Image = global::IDCM.Properties.Resources.search;
-            this.toolStripButton_qsearch.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_qsearch.Name = "toolStripButton_qsearch";
-            this.toolStripButton_qsearch.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton_qsearch.Text = "Search";
-            this.toolStripButton_qsearch.Click += new System.EventHandler(this.toolStripButton_qsearch_Click);
-            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
-            // 
-            // toolStripButton11
-            // 
-            this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton11.Image = global::IDCM.Properties.Resources.help;
-            this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton11.Name = "toolStripButton11";
-            this.toolStripButton11.Size = new System.Drawing.Size(24, 24);
-            this.toolStripButton11.Text = "Help";
             // 
             // contextMenuStrip_lib
             // 
@@ -1210,6 +1056,172 @@
             this.clear_toolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.clear_toolStripMenuItem.Text = "Empty";
             // 
+            // panel_libraryHead
+            // 
+            this.panel_libraryHead.BackColor = System.Drawing.Color.Transparent;
+            this.panel_libraryHead.BackgroundImage = global::IDCM.Properties.Resources.bg2;
+            this.panel_libraryHead.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel_libraryHead.Controls.Add(this.label_libraryHead);
+            this.panel_libraryHead.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_libraryHead.Location = new System.Drawing.Point(0, 0);
+            this.panel_libraryHead.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_libraryHead.Name = "panel_libraryHead";
+            this.panel_libraryHead.Size = new System.Drawing.Size(215, 28);
+            this.panel_libraryHead.TabIndex = 0;
+            // 
+            // label_libraryHead
+            // 
+            this.label_libraryHead.AutoSize = true;
+            this.label_libraryHead.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label_libraryHead.Location = new System.Drawing.Point(4, 3);
+            this.label_libraryHead.Name = "label_libraryHead";
+            this.label_libraryHead.Size = new System.Drawing.Size(90, 21);
+            this.label_libraryHead.TabIndex = 0;
+            this.label_libraryHead.Text = "My Library";
+            // 
+            // toolStripButton_local
+            // 
+            this.toolStripButton_local.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_local.Image = global::IDCM.Properties.Resources.local;
+            this.toolStripButton_local.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_local.Name = "toolStripButton_local";
+            this.toolStripButton_local.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_local.Text = "Go Home";
+            // 
+            // toolStripButton_gcm
+            // 
+            this.toolStripButton_gcm.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_gcm.Image = global::IDCM.Properties.Resources.gcm_logo;
+            this.toolStripButton_gcm.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_gcm.Name = "toolStripButton_gcm";
+            this.toolStripButton_gcm.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_gcm.Text = "Go GCM";
+            this.toolStripButton_gcm.Click += new System.EventHandler(this.toolStripButton_gcm_Click);
+            // 
+            // toolStripButton_add
+            // 
+            this.toolStripButton_add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_add.Image = global::IDCM.Properties.Resources.newRecord;
+            this.toolStripButton_add.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_add.Name = "toolStripButton_add";
+            this.toolStripButton_add.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_add.Text = "Add Record";
+            this.toolStripButton_add.Click += new System.EventHandler(this.toolStripButton_add_Click);
+            // 
+            // toolStripButton_del
+            // 
+            this.toolStripButton_del.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_del.Image = global::IDCM.Properties.Resources.del_note;
+            this.toolStripButton_del.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_del.Name = "toolStripButton_del";
+            this.toolStripButton_del.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_del.Text = "Delete Record";
+            this.toolStripButton_del.Click += new System.EventHandler(this.toolStripButton_del_Click);
+            // 
+            // toolStripButton_import
+            // 
+            this.toolStripButton_import.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_import.Image = global::IDCM.Properties.Resources.import1;
+            this.toolStripButton_import.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_import.Name = "toolStripButton_import";
+            this.toolStripButton_import.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_import.Text = "Import";
+            this.toolStripButton_import.Click += new System.EventHandler(this.toolStripButton_import_Click);
+            // 
+            // toolStripButton_export
+            // 
+            this.toolStripButton_export.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_export.Image = global::IDCM.Properties.Resources.export;
+            this.toolStripButton_export.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_export.Name = "toolStripButton_export";
+            this.toolStripButton_export.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_export.Text = "Export";
+            this.toolStripButton_export.Click += new System.EventHandler(this.toolStripButton_export_Click);
+            // 
+            // toolStripButton_download
+            // 
+            this.toolStripButton_download.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_download.Image = global::IDCM.Properties.Resources.download;
+            this.toolStripButton_download.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_download.Name = "toolStripButton_download";
+            this.toolStripButton_download.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_download.Text = "Download";
+            this.toolStripButton_download.Click += new System.EventHandler(this.toolStripButton_download_Click);
+            // 
+            // toolStripButton_upload
+            // 
+            this.toolStripButton_upload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_upload.Image = global::IDCM.Properties.Resources.upload;
+            this.toolStripButton_upload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_upload.Name = "toolStripButton_upload";
+            this.toolStripButton_upload.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_upload.Text = "Upload";
+            this.toolStripButton_upload.Click += new System.EventHandler(this.toolStripButton_upload_Click);
+            // 
+            // toolStripButton_publish
+            // 
+            this.toolStripButton_publish.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_publish.Image = global::IDCM.Properties.Resources.gcm_upload;
+            this.toolStripButton_publish.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_publish.Name = "toolStripButton_publish";
+            this.toolStripButton_publish.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_publish.Text = "Publish";
+            this.toolStripButton_publish.Click += new System.EventHandler(this.toolStripButton_publish_Click);
+            // 
+            // toolStripButton_refresh
+            // 
+            this.toolStripButton_refresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_refresh.Image = global::IDCM.Properties.Resources.refresh;
+            this.toolStripButton_refresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_refresh.Name = "toolStripButton_refresh";
+            this.toolStripButton_refresh.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_refresh.Text = "Refresh";
+            this.toolStripButton_refresh.Click += new System.EventHandler(this.toolStripButton_refresh_Click);
+            // 
+            // toolStripButton_qsearch
+            // 
+            this.toolStripButton_qsearch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_qsearch.Image = global::IDCM.Properties.Resources.search;
+            this.toolStripButton_qsearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_qsearch.Name = "toolStripButton_qsearch";
+            this.toolStripButton_qsearch.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_qsearch.Text = "Search";
+            this.toolStripButton_qsearch.Click += new System.EventHandler(this.toolStripButton_qsearch_Click);
+            // 
+            // toolStripButton_help
+            // 
+            this.toolStripButton_help.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_help.Image = global::IDCM.Properties.Resources.help;
+            this.toolStripButton_help.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_help.Name = "toolStripButton_help";
+            this.toolStripButton_help.Size = new System.Drawing.Size(24, 24);
+            this.toolStripButton_help.Text = "Help";
+            // 
+            // toolStripSplitButton_layout
+            // 
+            this.toolStripSplitButton_layout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSplitButton_layout.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showRefer,
+            this.hideRefer});
+            this.toolStripSplitButton_layout.Image = global::IDCM.Properties.Resources.layout2;
+            this.toolStripSplitButton_layout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSplitButton_layout.Margin = new System.Windows.Forms.Padding(0, 2, 2, 0);
+            this.toolStripSplitButton_layout.Name = "toolStripSplitButton_layout";
+            this.toolStripSplitButton_layout.Size = new System.Drawing.Size(78, 21);
+            this.toolStripSplitButton_layout.Text = "Layout";
+            // 
+            // showRefer
+            // 
+            this.showRefer.Name = "showRefer";
+            this.showRefer.Size = new System.Drawing.Size(169, 22);
+            this.showRefer.Text = "Show Reference";
+            // 
+            // hideRefer
+            // 
+            this.hideRefer.Name = "hideRefer";
+            this.hideRefer.Size = new System.Drawing.Size(169, 22);
+            this.hideRefer.Text = "Hide Reference";
+            // 
             // HomeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1233,8 +1245,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_main)).EndInit();
             this.splitContainer_main.ResumeLayout(false);
             this.tableLayoutPanel_librarGroup.ResumeLayout(false);
-            this.panel_libraryHead.ResumeLayout(false);
-            this.panel_libraryHead.PerformLayout();
             this.splitContainer_right.Panel1.ResumeLayout(false);
             this.splitContainer_right.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer_right)).EndInit();
@@ -1265,6 +1275,8 @@
             this.toolStrip_home.PerformLayout();
             this.contextMenuStrip_lib.ResumeLayout(false);
             this.contextMenuStrip_base.ResumeLayout(false);
+            this.panel_libraryHead.ResumeLayout(false);
+            this.panel_libraryHead.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1311,7 +1323,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton_qsearch;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripButton toolStripButton11;
+        private System.Windows.Forms.ToolStripButton toolStripButton_help;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button_add1;
         private System.Windows.Forms.TextBox textBox_search1;
@@ -1367,5 +1379,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_items;
         private System.Windows.Forms.ToolStripMenuItem copyCtrlCToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteCtrlVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButton_publish;
     }
 }

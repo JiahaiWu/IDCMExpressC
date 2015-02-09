@@ -152,14 +152,6 @@ namespace IDCM.Data
         }
 
         /// <summary>
-        /// 获取预览字段集序列
-        /// </summary>
-        /// <returns></returns>
-        public static List<string> getViewAttrs(WorkSpaceManager wsm, bool withInnerField = true)
-        {
-            return ColumnMappingHolder.getViewAttrs(wsm.getConnection(),withInnerField);
-        }
-        /// <summary>
         /// 获取存储字段序列值(如查找失败返回-1)
         /// 说明：
         /// 1.如果外部存在批量的字段映射匹配需要，首选getAttrDBMapping或getCustomAttrDBMapping方法进行外部缓冲。
@@ -236,6 +228,15 @@ namespace IDCM.Data
         public static Dictionary<string, int> getCustomAttrViewMapping(WorkSpaceManager wsm)
         {
             return ColumnMappingHolder.getCustomAttrViewMapping(wsm.getConnection());
+        }
+
+        /// <summary>
+        /// 获取预览字段集序列
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> getViewAttrs(WorkSpaceManager wsm, bool withInnerField = true)
+        {
+            return ColumnMappingHolder.getViewAttrs(wsm.getConnection(), withInnerField);
         }
         /// <summary>
         /// 重写用户自定义数据表的字段集定义

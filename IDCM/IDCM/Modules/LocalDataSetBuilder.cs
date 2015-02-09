@@ -468,12 +468,9 @@ namespace IDCM.Modules
                     DGVAsyncUtil.syncRemoveAllRow(itemDGV);
                     resetReferences(viewAttrs);
                 }
-                else
-                {
-                    //行列表头显示
-                    loadDGVColumns(viewAttrs);
-                    loadReferences(viewAttrs);
-                }
+                //行列表头显示
+                loadDGVColumns(viewAttrs);
+                loadReferences(viewAttrs);
             }
         }
         /// <summary>
@@ -591,6 +588,8 @@ namespace IDCM.Modules
             chxCol.Resizable = DataGridViewTriState.False;
             chxCol.FlatStyle = FlatStyle.Popup;
             chxCol.CellTemplate.Style.ForeColor = Color.LightGray;
+            chxCol.Width = 25;
+            chxCol.Name = "　";
             DGVAsyncUtil.syncAddCol(itemDGV,chxCol);
             //创建显性列属性
             foreach (string attr in viewAttrs)
@@ -1016,7 +1015,7 @@ namespace IDCM.Modules
         public bool checkForGCMImport(ref Dictionary<string, string> dataMapping)
         {
             List<string> gcmCols = GCMDataMHub.fetchPublishGCMFields();
-            List<string> viewCols = LocalRecordMHub.getViewAttrs(DataSourceHolder.DataSource, false);
+            List<string> viewCols = LocalRecordMHub.getCustomAttrViewMapping(DataSourceHolder.DataSource).Keys.ToList();
             if (gcmCols == null || gcmCols.Count < 1)
                 return false;
             ///////////////////////////////////////////////////////////////

@@ -188,7 +188,6 @@ namespace IDCM.ViewManager
             if (mi == null || mi.isDisposed())
                 return;
             ((GCMViewManager)mi).OnUpdateGCMLinkStrains((e.values != null && e.values.Count() > 0) ? e.values[0] as string[]: null);
-            DWorkMHub.note(AsyncMessage.UpdateLocalLinkTags);
         }
         internal void OnUpdateLocalLinkTags(object sender, IDCMAsyncEventArgs e)
         {

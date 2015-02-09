@@ -43,6 +43,7 @@ namespace IDCM.Modules
             chxCol.FlatStyle = FlatStyle.Popup;
             chxCol.CellTemplate.Style.ForeColor = Color.LightGray;
             chxCol.Width = 25;
+            chxCol.Name = "　";
             itemDGV.Columns.Add(chxCol);
         }
 

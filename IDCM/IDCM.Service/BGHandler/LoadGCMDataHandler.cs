@@ -42,6 +42,7 @@ namespace IDCM.Service.BGHandler
         /// <param name="args"></param>
         public override void complete(BackgroundWorker worker, bool canceled, Exception error, List<Object> args)
         {
+            DWorkMHub.note(AsyncMessage.UpdateLocalLinkTags);
             DWorkMHub.note(AsyncMessage.EndBackProgress);
             if (canceled)
                 return;

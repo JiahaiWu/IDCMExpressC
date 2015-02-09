@@ -11,7 +11,6 @@ using IDCM.ViewManager;
 using IDCM.Service.Utils;
 using IDCM.Data.Base;
 using IDCM.Service.UIM;
-using System.Drawing;
 
 using System.Drawing.Drawing2D;
 
@@ -730,7 +729,7 @@ namespace IDCM.Forms
             manager.activeGCMView();
         }
         /// <summary>
-        /// 云备份
+        /// 云恢复
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -739,7 +738,7 @@ namespace IDCM.Forms
 
         }
         /// <summary>
-        /// 云恢复
+        /// 云备份
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -748,13 +747,27 @@ namespace IDCM.Forms
 
         }
         /// <summary>
+        /// GCM发布
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripButton_publish_Click(object sender, EventArgs e)
+        {
+            DataGridViewSelectedRowCollection selectedRows = dataGridView_items.SelectedRows;
+            if (selectedRows != null && selectedRows.Count > 0)
+            {
+                manager.publishSelectionToGCM();
+            }
+        }
+        /// <summary>
         /// 本地数据刷新
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void toolStripButton_refresh_Click(object sender, EventArgs e)
         {
-
+            //加载用数据记录
+            manager.loadDataSetView(treeView_base.Nodes[0]);
         }
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         /// <summary>
@@ -798,6 +811,7 @@ namespace IDCM.Forms
         {
             BackProgressIndicator.removeIndicatorBar(this.getProgressBar());
         }
+
 
 
     }

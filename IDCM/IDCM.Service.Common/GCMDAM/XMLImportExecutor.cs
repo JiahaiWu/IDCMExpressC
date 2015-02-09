@@ -24,15 +24,12 @@ namespace IDCM.Service.Common.GCMDAM
             using (FileStream fs = new FileStream(fpath, FileMode.Open, FileAccess.Read))
             {
                 xmlDoc.Load(fs);
-                foreach (XmlNode sxnode in xmlDoc.ChildNodes)
+                XmlNode sxnode = xmlDoc.SelectSingleNode("/strains/strain");
+                if (sxnode == null)
+                    return null;
+                foreach (XmlNode attrNode in sxnode.ChildNodes)
                 {
-                    if (sxnode.Name.Equals("strain"))
-                    {
-                        foreach (XmlNode attrNode in sxnode.ChildNodes)
-                        {
-                            gcmCols.Add(attrNode.Name, 0);
-                        }
-                    }
+                    gcmCols[attrNode.Name]=0;
                 }
             }
             return gcmCols.Keys.ToList();

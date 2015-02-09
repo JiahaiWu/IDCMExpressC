@@ -77,5 +77,9 @@ namespace IDCM.Data.Base
         /// 探索XML节点稳定性，增长系数，如果在DetectDepth深度下，探索过程中出现strain节点下的attr节点增加的情况，会触发 DetectDepth * DetectDepth，使探索深度翻倍
         /// </summary>
         public static string GrowthFactor = "GrowthFactor";
+        /// <summary>
+        /// 菌种号字段标识
+        /// </summary>
+        public static string StrainNumber = "StrainNumber";
     }
 }
