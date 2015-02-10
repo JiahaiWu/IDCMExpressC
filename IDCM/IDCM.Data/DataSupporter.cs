@@ -158,9 +158,9 @@ namespace IDCM.Data
         /// </summary>
         /// <param name="attr">数据存储字段名称</param>
         /// <returns></returns>
-        public static int getDBOrder(WorkSpaceManager wsm, string attr)
+        public static int getDBOrder(WorkSpaceManager wsm, string attr, bool autoWrap = true)
         {
-            return ColumnMappingHolder.getDBOrder(wsm.getConnection(), attr);
+            return ColumnMappingHolder.getDBOrder(wsm.getConnection(), attr,autoWrap);
         }
         /// <summary>
         /// 获取预览字段位序值(如查找失败返回-1)

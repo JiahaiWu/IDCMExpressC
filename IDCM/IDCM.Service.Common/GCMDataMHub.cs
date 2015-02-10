@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using IDCM.Data.Base;
 using IDCM.Service.Common.GCMDAM;
+using System.IO;
 
 namespace IDCM.Service.Common
 {
@@ -51,12 +52,12 @@ namespace IDCM.Service.Common
         /// loginflag:"false" 没有登录 JSESSIONID失效
         /// </summary>
         /// <param name="gcmSite"></param>
-        /// <param name="xmlImportData"></param>
+        /// <param name="ms"></param>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public static XMLImportStrainsRes xmlImportStrains(GCMSiteMHub gcmSite,string xmlImportData, int timeout = 10000)
+        public static XMLImportStrainsRes xmlImportStrains(GCMSiteMHub gcmSite, MemoryStream ms, int timeout = 10000)
         {
-            return XMLImportExecutor.xmlImportStrains(xmlImportData, gcmSite.getSignedAuthInfo(), timeout);
+            return XMLImportExecutor.xmlImportStrains(ms, gcmSite.getSignedAuthInfo(), timeout);
         }
     }
 }

@@ -84,7 +84,7 @@ namespace IDCM.Service.BGHandler
 #if DEBUG
                 //log.Debug("(loadCTableData) " + attr + "-->" + LocalRecordMHub.getDBOrder(datasource, attr) + ">>" + dr[LocalRecordMHub.getDBOrder(datasource, attr)].ToString());
 #endif
-                vals[index] = dr[LocalRecordMHub.getDBOrder(datasource,attr)].ToString();
+                vals[index] = dr[LocalRecordMHub.getDBOrder(datasource,attr,false)].ToString();
                 ++index;
             }
             ////////////////////////////////////////////////////

@@ -170,9 +170,9 @@ namespace IDCM.Service.Common
         /// </summary>
         /// <param name="attr">数据存储字段名称</param>
         /// <returns></returns>
-        public static int getDBOrder(DataSourceMHub datasource, string attr)
+        public static int getDBOrder(DataSourceMHub datasource, string attr, bool autoWrap = true)
         {
-            return DataSupporter.getDBOrder(datasource.WSM, attr);
+            return DataSupporter.getDBOrder(datasource.WSM, attr,autoWrap);
         }
         /// <summary>
         /// 获取预览字段位序值(如查找失败返回-1)

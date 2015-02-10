@@ -83,16 +83,18 @@ namespace IDCM.Service.BGHandler
                         }
                         ///////////////////////////////////////////////////////
                         //导出XML文档数据
-                        string xmlImportData = null;
-                        res = exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, out xmlImportData);
-                        if (res)
+                        using (MemoryStream ms = new MemoryStream())
                         {
-                            //提交至GCM站点
-                            importRes = GCMDataMHub.xmlImportStrains(gcmSite, xmlImportData);
-                            if (importRes.msg_num.Equals("2"))
+                            res = exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, ms);
+                            if (res)
                             {
-                                //更新本地软连接记录信息
-                                DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMLinkStrains, linkIds));
+                                //提交至GCM站点
+                                importRes = GCMDataMHub.xmlImportStrains(gcmSite, ms);
+                                if (importRes.msg_num.Equals("2"))
+                                {
+                                    //更新本地软连接记录信息
+                                    DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMLinkStrains, linkIds));
+                                }
                             }
                         }
                     }

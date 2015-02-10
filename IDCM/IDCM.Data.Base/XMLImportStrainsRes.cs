@@ -19,6 +19,10 @@ namespace IDCM.Data.Base
     {
         public string loginflag { get; set; }
         public string msg_num { get; set; }
+        public string err_msg { get; set; }
+        public string err_strain { get; set; }
+        public string filemsg { get; set; }
         public string Jsessionid { get; set; }
+
     }
 }

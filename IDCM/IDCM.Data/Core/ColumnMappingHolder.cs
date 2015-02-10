@@ -227,12 +227,15 @@ namespace IDCM.Data.Core
         /// </summary>
         /// <param name="attr">数据存储字段名称</param>
         /// <returns></returns>
-        public static int getDBOrder(ConnLabel sconn, string attr)
+        public static int getDBOrder(ConnLabel sconn, string attr,bool autoWrap=true)
         {
             if (attrMapping.Count < 1)
                 queryCacheAttrDBMap(sconn);
             ObjectPair<int, int> kvpair = null;
-            attrMapping.TryGetValue(CVNameConverter.toDBName(attr), out kvpair);
+            if(autoWrap==true)
+                attrMapping.TryGetValue(CVNameConverter.toDBName(attr), out kvpair);
+            else
+                attrMapping.TryGetValue(attr, out kvpair);
             return kvpair == null ? -1 : kvpair.Key;
         }
 

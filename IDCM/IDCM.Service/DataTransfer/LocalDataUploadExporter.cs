@@ -20,53 +20,47 @@ namespace IDCM.Service.DataTransfer
         /// <param name="filepath">导出路径</param>
         /// <param name="selectedRows">数据源</param>
         /// <returns></returns>
-        internal bool exportGCMXML(DataSourceMHub datasource, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, int> dbLinkMaps, out string xmlImportData)
+        internal bool exportGCMXML(DataSourceMHub datasource, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, int> dbLinkMaps, MemoryStream ms)
         {
             try
             {
+                Encoding encoding = new UTF8Encoding(true);
                 StringBuilder strbuilder = new StringBuilder();
                 int count = 0;
-                using (MemoryStream fs = new MemoryStream())
+                XmlDocument xmlDoc = new XmlDocument();
+                strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
+                strbuilder.Append("<strains>\n\r");
+                ///////////////////
+                for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
                 {
-                    XmlDocument xmlDoc = new XmlDocument();
-                    strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
-                    strbuilder.Append("<strains>\n\r");
-                    ///////////////////
-                    for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
+                    DataGridViewRow dgvRow = selectedRows[ridx];
+                    string recordId = dgvRow.Cells[CTDRecordA.CTD_RID].Value as string;
+                    DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
+                    foreach (DataRow row in table.Rows)
                     {
-                        DataGridViewRow dgvRow = selectedRows[ridx];
-                        string recordId = dgvRow.Cells[CTDRecordA.CTD_RID].Value as string;
-                        DataTable table = LocalRecordMHub.queryCTDRecord(datasource, null, recordId);
-                        foreach (DataRow row in table.Rows)
-                        {
-                            XmlElement xmlEle = convertToXML(xmlDoc, dbLinkMaps, row);
-                            strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
-                        }
-                        if (++count % 100 == 0)
-                        {
-                            Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
-                            BinaryWriter bw = new BinaryWriter(fs);
-                            fs.Write(info, 0, info.Length);
-                            strbuilder.Length = 0;
-                        }
+                        XmlElement xmlEle = convertToXML(xmlDoc, dbLinkMaps, row);
+                        strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
                     }
-                    strbuilder.Append("</strains>");
-                    if (strbuilder.Length > 0)
+                    if (++count % 100 == 0)
                     {
-                        Byte[] info = new UTF8Encoding(true).GetBytes(strbuilder.ToString());
-                        BinaryWriter bw = new BinaryWriter(fs);
-                        fs.Write(info, 0, info.Length);
+                        byte[] info = encoding.GetBytes(strbuilder.ToString());
+                        ms.Write(info, 0, info.Length);
                         strbuilder.Length = 0;
                     }
-                    xmlImportData = fs.ToString();
-                    fs.Close();
                 }
+                strbuilder.Append("</strains>");
+                if (strbuilder.Length > 0)
+                {
+                    byte[] info = encoding.GetBytes(strbuilder.ToString());
+                    ms.Write(info, 0, info.Length);
+                    strbuilder.Length = 0;
+                }
+                ms.Position = 0;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("ERROR::" + ex.Message + "\n" + ex.StackTrace);
                 log.Error(ex);
-                xmlImportData = null;
                 return false;
             }
             return true;
