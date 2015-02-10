@@ -217,7 +217,7 @@
             this.ToolStripTextBox_user.Padding = new System.Windows.Forms.Padding(0, 0, 30, 0);
             this.ToolStripTextBox_user.ReadOnly = true;
             this.ToolStripTextBox_user.ShortcutsEnabled = false;
-            this.ToolStripTextBox_user.Size = new System.Drawing.Size(220, 23);
+            this.ToolStripTextBox_user.Size = new System.Drawing.Size(190, 23);
             this.ToolStripTextBox_user.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // IDCMForm
@@ -234,6 +234,7 @@
             this.Text = "IDCM";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.IDCMForm_FormClosed);
             this.Load += new System.EventHandler(this.IDCMForm_Load);
+            this.Shown += new System.EventHandler(this.IDCMForm_Shown);
             this.MenuStrip_IDCM.ResumeLayout(false);
             this.MenuStrip_IDCM.PerformLayout();
             this.ResumeLayout(false);

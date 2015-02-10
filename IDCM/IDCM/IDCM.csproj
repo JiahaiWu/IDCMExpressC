@@ -90,6 +90,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppContext\AsyncServInvoker.cs" />
+    <Compile Include="Core\IDCMViewA.cs" />
+    <Compile Include="Core\IDCMViewEventArgs.cs" />
     <Compile Include="Core\ShareSyncLockers.cs" />
     <Compile Include="Forms\AboutDlg.cs">
       <SubType>Form</SubType>

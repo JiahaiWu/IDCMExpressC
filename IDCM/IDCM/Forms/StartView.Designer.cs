@@ -219,6 +219,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "StartView";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.StartView_FormClosed);
             this.Shown += new System.EventHandler(this.StartView_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_start)).EndInit();
             this.panel_start.ResumeLayout(false);

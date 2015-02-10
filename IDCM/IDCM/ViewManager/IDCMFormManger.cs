@@ -41,7 +41,7 @@ namespace IDCM.ViewManager
         {
             mainForm = new IDCMForm(); //创建主框架界面实例对象
             DWorkMHub.note(mainForm);
-            mainForm.Shown += IDCMForm_Shown;
+            mainForm.OnIDCMFormShown += OnIDCMFormShown;
             mainForm.setManager(this); //通知界面实例对象绑定事件控制中转例程
         }
         /// <summary>
@@ -110,12 +110,11 @@ namespace IDCM.ViewManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void IDCMForm_Shown(object sender, EventArgs e)
+        private void OnIDCMFormShown(object sender, IDCMViewEventArgs e)
         {
             //启动欢迎页面
             startWorkSpace();
         }
-
         /// <summary>
         /// 再次打开默认的登录启动页面展示
         /// </summary>

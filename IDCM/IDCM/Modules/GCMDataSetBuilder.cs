@@ -32,20 +32,82 @@ namespace IDCM.Modules
         
         #endregion
 
-        /// <summary>
-        /// 添加一列CheckBoxColumn
-        /// </summary>
-        public void addCheckBoxColumn()
-        {
-            DataGridViewCheckBoxColumn chxCol = new DataGridViewCheckBoxColumn();
-            chxCol.ReadOnly = true;
-            chxCol.Resizable = DataGridViewTriState.False;
-            chxCol.FlatStyle = FlatStyle.Popup;
-            chxCol.CellTemplate.Style.ForeColor = Color.LightGray;
-            chxCol.Width = 25;
+        //////////////////////////////////////////////////////////////////////////////////////
+        //这个方法的作用是对GCM的主表添加一列CheckBoxColumn，这个功能暂时屏蔽
+        ///// <summary>
+        ///// 添加一列CheckBoxColumn
+        ///// </summary>
+        //public void addCheckBoxColumn()
+        //{
+        //    DataGridViewCheckBoxColumn chxCol = new DataGridViewCheckBoxColumn();
+        //    chxCol.ReadOnly = true;
+        //    chxCol.Resizable = DataGridViewTriState.False;
+        //    chxCol.FlatStyle = FlatStyle.Popup;
             chxCol.Name = "　";
-            itemDGV.Columns.Add(chxCol);
+        //    chxCol.Width = 25;
+        //    itemDGV.Columns.Add(chxCol);
+        //}
+        //////////////////////////////////////////////////////////////////////////////////////
+
+        public DataGridViewCell quickSearch(string findTerm)
+        {
+            if (findTerm.Length > 0)
+            {
+                DataGridViewCell ncell = null;
+                if (itemDGV.SelectedCells != null && itemDGV.SelectedCells.Count > 0)
+                {
+                    if (itemDGV.SelectedCells[0].Displayed)
+                        ncell = itemDGV.SelectedCells[0];
+                }
+                while ((ncell = nextTextCell(ncell)) != null)
+                {
+                    string cellval = DGVUtil.getCellValue(ncell);
+                    if (cellval.ToLower().Contains(findTerm.ToLower()))
+                    {
+                        return ncell;
+                    }
+                }
+                if (ncell == null)
+                {
+                    MessageBox.Show("It's reached the end, and no subsequent matches.");
+                }
+            }
+            return null;
         }
+
+        /// <summary>
+        /// 下一个单元格定位，如定位失败返回null
+        /// </summary>
+        /// <returns></returns>
+        private DataGridViewCell nextTextCell(DataGridViewCell cell = null)
+        {
+            DataGridViewCell ncell = null;
+            int rowCount = DGVUtil.getRowCount(itemDGV);
+            int columnCount = DGVUtil.getTextColumnCount(itemDGV);
+            int rowIndex = cell == null ? 0 : cell.RowIndex;
+            int colIndex = cell == null ? 0 : cell.ColumnIndex + 1;
+            if (colIndex >= columnCount)
+            {
+                rowIndex = rowIndex + 1;
+                colIndex = 0;
+            }
+            if (colIndex < columnCount && rowIndex < rowCount)
+            {
+                DataGridViewRow dgvr = itemDGV.Rows[rowIndex];
+                if (!dgvr.IsNewRow)
+                {
+                    ncell = dgvr.Cells[colIndex];
+                    if (ncell.Visible && ncell is DataGridViewTextBoxCell)
+                    {
+                        return ncell;
+                    }
+                    else
+                        return nextTextCell(ncell);
+                }
+            }
+            return ncell;
+        }
+
 
         public DataGridViewCell quickSearch(string findTerm)
         {

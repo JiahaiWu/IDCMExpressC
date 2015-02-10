@@ -11,6 +11,7 @@ using System.IO;
 using IDCM.Data.Base;
 using IDCM.Data.Base.Utils;
 using IDCM.Service.Common;
+using IDCM.Core;
 
 namespace IDCM.Forms
 {
@@ -171,12 +172,24 @@ namespace IDCM.Forms
         /// <param name="e"></param>
         private void pictureBox_help_Click(object sender, EventArgs e)
         {
-            OnRequestHelp(this, new HelpEventArgs(MousePosition));
+            OnRequestHelp(this, null);
         }
+        /// <summary>
+        /// From关闭处理事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StartView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            OnFormClose(this, new IDCMViewEventArgs(new FormClosedEventArgs[] { e }));
+        }
+        public event IDCMViewEventHandler OnRequestHelp;
+        public event IDCMViewEventHandler OnFormClose;
 
-        public event HelpEventHandler OnRequestHelp;
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         private StartInfo startInfo = null;
+
+        
 
     }
 }

@@ -11,6 +11,7 @@ using System.Configuration;
 using IDCM.ViewManager;
 using IDCM.Service;
 using IDCM.Service.Utils;
+using IDCM.Core;
 
 namespace IDCM.Forms
 {
@@ -28,9 +29,16 @@ namespace IDCM.Forms
             
         }
 
+        public event IDCMViewEventHandler OnIDCMFormShown;
+
         private void IDCMForm_Load(object sender, EventArgs e)
         {
             //Thread.CurrentThread.Name = "IDCMForm" + HandleToken.nextTempID();
+        }
+
+        private void IDCMForm_Shown(object sender, EventArgs e)
+        {
+            OnIDCMFormShown(this, null);
         }
 
         private void MenuStrip_IDCM_ItemAdded(object sender, ToolStripItemEventArgs e)
@@ -130,18 +138,6 @@ namespace IDCM.Forms
                 case Keys.Alt | Keys.H://打开Help菜单项
                     this.ToolStripMenuItem_help.ShowDropDown();
                     break;
-                //case Keys.Control | Keys.F://打开查找菜单
-                //    manager.showDBDataSearch();
-                //    break;
-                //case Keys.Control | Keys.Shift | Keys.F://打开前端记录查找菜单
-                //    manager.frontDataSearch();
-                //    break;
-                //case Keys.Control | Keys.Shift | Keys.N:
-                //    manager.frontSearchNext();
-                //    break;
-                //case Keys.Control | Keys.Shift | Keys.P:
-                //    manager.frontSearchPrev();
-                //    break;
                 default:
                     return base.ProcessCmdKey(ref msg, keyData);
             }
@@ -256,8 +252,6 @@ namespace IDCM.Forms
         {
             manager.closeWorkSpace();
         }
-
-
 
     }
 }
