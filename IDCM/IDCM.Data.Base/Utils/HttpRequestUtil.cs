@@ -54,11 +54,9 @@ namespace IDCM.Data.Base.Utils
             httpWebRequest.Timeout = timeout;
             httpWebRequest.ReadWriteTimeout = timeout;
             httpWebRequest.KeepAlive = true;
-            httpWebRequest.Credentials =
-            System.Net.CredentialCache.DefaultCredentials;
+            httpWebRequest.Credentials = System.Net.CredentialCache.DefaultCredentials;
 
             Stream memStream = new System.IO.MemoryStream();
-
             byte[] boundarybytes = System.Text.Encoding.ASCII.GetBytes("\r\n--" + boundary + "\r\n");
             string formdataTemplate = "\r\n--" + boundary + "\r\nContent-Disposition: form-data; name=\"{0}\";\r\n\r\n{1}";
             if (nvc != null)
@@ -74,12 +72,12 @@ namespace IDCM.Data.Base.Utils
             string headerTemplate = "Content-Disposition: form-data; name=\"{0}\";filename=\"{1}\"\r\n Content-Type: application/octet-stream\r\n\r\n";
             for (int i = 0; i < files.Length; i++)
             {
-                string header = string.Format(headerTemplate, postNamePrefix + i, files[i]);
+                string header = string.Format(headerTemplate, (i>0?postNamePrefix + i:postNamePrefix), files[i]);
                 byte[] headerbytes = System.Text.Encoding.UTF8.GetBytes(header);
                 memStream.Write(headerbytes, 0, headerbytes.Length);
                 FileStream fileStream = new FileStream(files[i], FileMode.Open,
                 FileAccess.Read);
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[8192];
                 int bytesRead = 0;
                 while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) != 0)
                 {
@@ -90,22 +88,15 @@ namespace IDCM.Data.Base.Utils
             }
             httpWebRequest.ContentLength = memStream.Length;
             Stream requestStream = httpWebRequest.GetRequestStream();
-
             memStream.Position = 0;
-            byte[] tempBuffer = new byte[memStream.Length];
-            memStream.Read(tempBuffer, 0, tempBuffer.Length);
+            memStream.CopyTo(requestStream);
             memStream.Close();
-            requestStream.Write(tempBuffer, 0, tempBuffer.Length);
-            ////////////////////////////////////////
-            //memStream.Position = 0;
-            //memStream.CopyTo(requestStream);
             ///////////////////////////////////
             requestStream.Close();
             WebResponse webResponse2 = httpWebRequest.GetResponse();
             Stream stream2 = webResponse2.GetResponseStream();
             StreamReader reader2 = new StreamReader(stream2);
-            string responseContent = null;
-            responseContent = reader2.ReadToEnd();
+            string responseContent = reader2.ReadToEnd();
             webResponse2.Close();
             httpWebRequest = null;
             webResponse2 = null;
@@ -154,15 +145,17 @@ namespace IDCM.Data.Base.Utils
             string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\n Content-Type: application/octet-stream\r\n\r\n";
             string header = string.Format(headerTemplate, postName, postFileName);
             byte[] headerbytes = System.Text.Encoding.UTF8.GetBytes(header);
-            memStream.Write(headerbytes, 0, headerbytes.Length);
             /////////////////////////////////////////////////
+            memStream.Write(headerbytes, 0, headerbytes.Length);
             fileData.Position = 0;
             fileData.CopyTo(memStream);
+            memStream.Write(boundarybytes, 0, boundarybytes.Length);
             ///////////////////////////////////////////////////
             httpWebRequest.ContentLength = memStream.Length;
             Stream requestStream = httpWebRequest.GetRequestStream();
             memStream.Position = 0;
             memStream.CopyTo(requestStream);
+            memStream.Close();
             requestStream.Close();
             WebResponse webResponse = httpWebRequest.GetResponse();
             Stream stream = webResponse.GetResponseStream();
