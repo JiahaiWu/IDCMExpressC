@@ -23,6 +23,6 @@ namespace IDCM.Data.Base
         public string err_strain { get; set; }
         public string filemsg { get; set; }
         public string Jsessionid { get; set; }
-
+        public string username { get; set; }
     }
 }

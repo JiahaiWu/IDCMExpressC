@@ -34,7 +34,7 @@ namespace IDCM.Service.DataTransfer
                         foreach(DataRow row in table.Rows)
                         {
                             string jsonStr = convertToJsonStr(maps, row);
-                            strbuilder.Append(jsonStr).Append("\n\r");
+                            strbuilder.Append(jsonStr).Append("\r\n");
                             /////////////
                             if (++count % 100 == 0)
                             {
@@ -82,7 +82,7 @@ namespace IDCM.Service.DataTransfer
                         foreach (DataRow row in table.Rows)
                         {
                             string jsonStr = convertToJsonStr(maps, row);
-                            strbuilder.Append(jsonStr).Append("\n\r");
+                            strbuilder.Append(jsonStr).Append("\r\n");
                             /////////////
                             if (++count % 100 == 0)
                             {

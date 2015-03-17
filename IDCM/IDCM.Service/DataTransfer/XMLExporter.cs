@@ -38,8 +38,8 @@ namespace IDCM.Service.DataTransfer
                 using (FileStream fs = new FileStream(filepath, FileMode.Create))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
-                    strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
-                    strbuilder.Append("<strains>\n\r");
+                    strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+                    strbuilder.Append("<strains>\r\n");
                     Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
                     ///////////////////
                     int offset = 0;
@@ -51,7 +51,7 @@ namespace IDCM.Service.DataTransfer
                         foreach (DataRow row in table.Rows)
                         {
                             XmlElement xmlEle = convertToXML(xmlDoc, maps, row);
-                            strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
+                            strbuilder.Append(xmlEle.OuterXml).Append("\r\n");
                             /////////////
                             if (++count % 100 == 0)
                             {
@@ -98,8 +98,8 @@ namespace IDCM.Service.DataTransfer
                 using (FileStream fs = new FileStream(filepath, FileMode.Create))
                 {
                     XmlDocument xmlDoc = new XmlDocument();
-                    strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
-                    strbuilder.Append("<strains>\n\r");
+                    strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+                    strbuilder.Append("<strains>\r\n");
                     Dictionary<string, int> maps = LocalRecordMHub.getCustomAttrDBMapping(datasource);
                     ///////////////////
                     for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
@@ -110,7 +110,7 @@ namespace IDCM.Service.DataTransfer
                         foreach (DataRow row in table.Rows)
                         {
                             XmlElement xmlEle = convertToXML(xmlDoc, maps, row);
-                            strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
+                            strbuilder.Append(xmlEle.OuterXml).Append("\r\n");
                         }
                         if (++count % 100 == 0)
                         {

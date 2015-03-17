@@ -34,7 +34,7 @@ namespace IDCM.Test
             httpWebRequest.Credentials = System.Net.CredentialCache.DefaultCredentials;
             Stream memStream = new System.IO.MemoryStream();
             byte[] boundarybytes = System.Text.Encoding.ASCII.GetBytes("\r\n--" +boundary + "\r\n");
-            string formdataTemplate = "\r\n--" + boundary +"\r\nContent-Disposition: form-data; name=\"{0}\";\r\n\r\n{1}";
+            string formdataTemplate = "\r\n--" + boundary +"\r\nContent-Disposition: form-data; name=\"{0}\";\r\r\n\n{1}";
             foreach (string key in nvc.Keys)
             {
                 string formitem = string.Format(formdataTemplate, key, nvc[key]);
@@ -42,7 +42,7 @@ namespace IDCM.Test
                 memStream.Write(formitembytes, 0, formitembytes.Length);
             }
             memStream.Write(boundarybytes, 0, boundarybytes.Length);
-            string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\n Content-Type: application/octet-stream\r\n\r\n";
+            string headerTemplate = "Content-Disposition: form-data; name=\"{0}\"; filename=\"{1}\"\r\n Content-Type: application/octet-stream\r\r\n\n";
 
             for (int i = 0; i < files.Length; i++)
             {

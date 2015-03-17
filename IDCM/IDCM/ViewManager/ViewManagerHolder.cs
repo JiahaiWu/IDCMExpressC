@@ -35,7 +35,7 @@ namespace IDCM.ViewManager
                 subManagers[manager] = obj;
                 if (obj.initView(false) && IDCMFormManger.getInstance()!=null)
                 {
-                    obj.setMdiParent(IDCMFormManger.getInstance().mainForm);
+                    obj.setMdiParent(IDCMFormManger.getInstance().MainForm);
                 }
             }
             return obj;

@@ -14,22 +14,45 @@ namespace IDCM.Service.DataTransfer
     public class LocalDataUploadExporter
     {
         /// <summary>
-        /// 以Excle导出数据，数据源DataGridViewSelectedRowCollection
+        /// 从DataGridViewSelectedRowCollection中选取的行数据，到处XML形式文档数据
         /// </summary>
-        /// <param name="datasource">DataSourceMHub句柄，主要封装WorkSpaceManager</param>
-        /// <param name="filepath">导出路径</param>
-        /// <param name="selectedRows">数据源</param>
+        /// <param name="datasource"></param>
+        /// <param name="selectedRows"></param>
+        /// <param name="dbLinkMaps"></param>
+        /// <param name="xmldata"></param>
         /// <returns></returns>
-        internal bool exportGCMXML(DataSourceMHub datasource, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, int> dbLinkMaps, MemoryStream ms)
+        internal bool exportGCMXML(DataSourceMHub datasource, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, int> dbLinkMaps, out string xmldata)
+        {
+            bool res = false;
+            using (MemoryStream xmlStream = new MemoryStream())
+            {
+                res = exportGCMXML(datasource, selectedRows, dbLinkMaps, xmlStream);
+                if (res)
+                {
+                    xmldata = SysConstants.defaultEncoding.GetString(xmlStream.ToArray());
+                }
+                else
+                    xmldata = null;
+            }
+            return res;
+        }
+        /// <summary>
+        /// 从DataGridViewSelectedRowCollection中选取的行数据，到处XML形式文档数据
+        /// </summary>
+        /// <param name="datasource"></param>
+        /// <param name="selectedRows"></param>
+        /// <param name="dbLinkMaps"></param>
+        /// <param name="ms"></param>
+        /// <returns></returns>
+        internal bool exportGCMXML(DataSourceMHub datasource, DataGridViewSelectedRowCollection selectedRows, Dictionary<string, int> dbLinkMaps, MemoryStream xmlStream)
         {
             try
             {
-                Encoding encoding = new UTF8Encoding(true);
                 StringBuilder strbuilder = new StringBuilder();
                 int count = 0;
                 XmlDocument xmlDoc = new XmlDocument();
-                strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r");
-                strbuilder.Append("<strains>\n\r");
+                strbuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+                strbuilder.Append("<strains>\r\n");
                 ///////////////////
                 for (int ridx = selectedRows.Count - 1; ridx >= 0; ridx--)
                 {
@@ -39,23 +62,23 @@ namespace IDCM.Service.DataTransfer
                     foreach (DataRow row in table.Rows)
                     {
                         XmlElement xmlEle = convertToXML(xmlDoc, dbLinkMaps, row);
-                        strbuilder.Append(xmlEle.OuterXml).Append("\n\r");
+                        strbuilder.Append(xmlEle.OuterXml).Append("\r\n");
                     }
                     if (++count % 100 == 0)
                     {
-                        byte[] info = encoding.GetBytes(strbuilder.ToString());
-                        ms.Write(info, 0, info.Length);
+                        byte[] info = SysConstants.defaultEncoding.GetBytes(strbuilder.ToString());
+                        xmlStream.Write(info, 0, info.Length);
                         strbuilder.Length = 0;
                     }
                 }
                 strbuilder.Append("</strains>");
                 if (strbuilder.Length > 0)
                 {
-                    byte[] info = encoding.GetBytes(strbuilder.ToString());
-                    ms.Write(info, 0, info.Length);
+                    byte[] info = SysConstants.defaultEncoding.GetBytes(strbuilder.ToString());
+                    xmlStream.Write(info, 0, info.Length);
                     strbuilder.Length = 0;
                 }
-                ms.Position = 0;
+                xmlStream.Position = 0;
             }
             catch (Exception ex)
             {
@@ -83,6 +106,7 @@ namespace IDCM.Service.DataTransfer
             }
             return strainEle;
         }
+        
         private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();  
     }
 }

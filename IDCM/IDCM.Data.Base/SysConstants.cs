@@ -81,5 +81,9 @@ namespace IDCM.Data.Base
         /// 菌种号字段标识
         /// </summary>
         public static string StrainNumber = "StrainNumber";
+        /// <summary>
+        /// 内部默认的字符编码
+        /// </summary>
+        public static Encoding defaultEncoding = new UTF8Encoding(true);
     }
 }

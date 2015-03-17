@@ -79,10 +79,18 @@ namespace IDCM.ViewManager
             }
             ViewManagerHolder.Dispose();
         }
+        public IDCMForm MainForm
+        {
+            get
+            {
+                mainForm.IsMdiContainer = true;
+                return mainForm;
+            }
+        }
         #endregion
         #region 实例对象保持部分
         //声明释放主窗口界面实例
-        internal IDCMForm mainForm = null;
+        private IDCMForm mainForm = null;
         #endregion
 
         /// <summary>

@@ -43,16 +43,24 @@ namespace IDCM.Service.Common
         /// <returns></returns>
         public bool connect(int timeout = 10000)
         {
-            AuthInfo auth = SignExecutor.SignIn(authInfo.Username, authInfo.Password, authInfo.autoLogin, timeout);
-            if (auth != null && auth.autoLogin)
+            try
             {
-                signMonitor = new System.Windows.Forms.Timer();
-                signMonitor.Interval = 600000;
-                signMonitor.Tick += OnSignInHold;
-                signMonitor.Start();
-                new System.Threading.Thread(delegate() { OnSignInHold(null, null); }).Start();
+                AuthInfo auth = SignExecutor.SignIn(authInfo.Username, authInfo.Password, authInfo.autoLogin, timeout);
+                if (auth != null && auth.autoLogin)
+                {
+                    signMonitor = new System.Windows.Forms.Timer();
+                    signMonitor.Interval = 600000;
+                    signMonitor.Tick += OnSignInHold;
+                    signMonitor.Start();
+                    new System.Threading.Thread(delegate() { OnSignInHold(null, null); }).Start();
+                }
+                return auth != null && auth.LoginFlag;
             }
-            return auth != null && auth.LoginFlag;
+            catch (Exception ex)
+            {
+                log.Warn(ex);
+                return false;
+            }
         }
         /// <summary>
         /// 登录状态验证与保持
@@ -62,7 +70,7 @@ namespace IDCM.Service.Common
         private void OnSignInHold(object sender, EventArgs e)
         {
 #if DEBUG
-            Console.WriteLine("* Sign in hold For Login()");
+            log.Info("* Sign in hold For Login()");
 #endif
             if (authInfo != null && authInfo.autoLogin && authInfo.Username != null && authInfo.Password != null)
             {
@@ -80,23 +88,29 @@ namespace IDCM.Service.Common
         /// <returns></returns>
         public AuthInfo getSignedAuthInfo()
         {
-            if (authInfo != null)
-            {
-                long elapsedTicks = DateTime.Now.Ticks - authInfo.Timestamp;
-                TimeSpan elapsedSpan = new TimeSpan(elapsedTicks);
-                if (elapsedSpan.TotalMinutes > 15)
+            try{
+                if (authInfo != null)
                 {
-                    if (authInfo.Username != null && authInfo.Password != null)
+                    long elapsedTicks = DateTime.Now.Ticks - authInfo.Timestamp;
+                    TimeSpan elapsedSpan = new TimeSpan(elapsedTicks);
+                    if (elapsedSpan.TotalMinutes > 15)
                     {
-                        AuthInfo auth = SignExecutor.SignIn(authInfo.Username, authInfo.Password, authInfo.autoLogin, 3000);
-                        authInfo.LoginFlag = auth.LoginFlag;
-                        authInfo.Jsessionid = auth.Jsessionid;
-                        authInfo.Timestamp = auth.Timestamp;
-                        string tip = authInfo.LoginFlag ? authInfo.Username : null;
-                        DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip, tip == null ? null : new string[] { tip }));
+                        if (authInfo.Username != null && authInfo.Password != null)
+                        {
+                            AuthInfo auth = SignExecutor.SignIn(authInfo.Username, authInfo.Password, authInfo.autoLogin, 3000);
+                            authInfo.LoginFlag = auth.LoginFlag;
+                            authInfo.Jsessionid = auth.Jsessionid;
+                            authInfo.Timestamp = auth.Timestamp;
+                            string tip = authInfo.LoginFlag ? authInfo.Username : null;
+                            DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMSignTip, tip == null ? null : new string[] { tip }));
+                        }
                     }
+                    return (authInfo != null && authInfo.LoginFlag) ? authInfo : null;
                 }
-                return (authInfo != null && authInfo.LoginFlag) ? authInfo : null;
+            }
+            catch (Exception ex)
+            {
+                log.Warn(ex);
             }
             return null;
         }
@@ -153,5 +167,6 @@ namespace IDCM.Service.Common
         /// </summary>
         private System.Windows.Forms.Timer signMonitor = null;
         private readonly AuthInfo authInfo = null;
+        private static NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
     }
 }

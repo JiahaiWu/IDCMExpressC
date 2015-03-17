@@ -11,6 +11,7 @@ using System.IO;
 using IDCM.Data.Base.Utils;
 using System.Configuration;
 using IDCM.Service.Utils;
+using IDCM.Service.Validator;
 
 namespace IDCM.Service.BGHandler
 {
@@ -83,17 +84,20 @@ namespace IDCM.Service.BGHandler
                         }
                         ///////////////////////////////////////////////////////
                         //导出XML文档数据
-                        using (MemoryStream ms = new MemoryStream())
+                        string xmldata=null;
+                        res=exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, out xmldata);
+                        if(res)
                         {
-                            res = exporter.exportGCMXML(datasource, selectedRows, dbLinkMaps, ms);
-                            if (res)
+                            //提交前数据检验
+                            if (GCMDataChecker.checkForPublish(ref xmldata))
                             {
                                 //提交至GCM站点
-                                importRes = GCMDataMHub.xmlImportStrains(gcmSite, ms);
+                                importRes = GCMDataMHub.xmlImportStrains(gcmSite, xmldata);
                                 if (importRes.msg_num.Equals("2"))
                                 {
                                     //更新本地软连接记录信息
                                     DWorkMHub.note(new AsyncMessage(AsyncMessage.UpdateGCMLinkStrains, linkIds));
+                                    MessageBox.Show("The selected data was uploaded into GCM Service.", "Publish Notice", MessageBoxButtons.OK);
                                 }
                             }
                         }

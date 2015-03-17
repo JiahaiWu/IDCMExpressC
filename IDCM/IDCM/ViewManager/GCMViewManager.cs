@@ -39,7 +39,7 @@ namespace IDCM.ViewManager
             gcmView.OnFrontDataSearch += OnGCMViewFrontDataSearch;
             gcmView.OnFrontSearchNext += OnGCMViewFrontSearchNext;
             gcmView.OnFrontSearchPrev += OnGCMViewFrontSearchPrev;
-            gcmView.OnActiveHomeView += OnGCMViewQuickSearch;
+            gcmView.OnQuickSearch += OnGCMViewQuickSearch;
 
             frontFindDlg = new GCMFrontFindDlg(gcmView.getItemGridView());
             frontFindDlg.setCellHit += new GCMFrontFindDlg.SetHit<DataGridViewCell>(DGVUtil.setDGVCellHit);

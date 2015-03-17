@@ -119,6 +119,7 @@
     <Compile Include="Utils\RecordControlTypeConverter.cs" />
     <Compile Include="Utils\ToolStripItemAsyncUtil.cs" />
     <Compile Include="Utils\TreeViewAsyncUtil.cs" />
+    <Compile Include="Validator\GCMDataChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IDCM.Data.Base\IDCM.Data.Base.csproj">

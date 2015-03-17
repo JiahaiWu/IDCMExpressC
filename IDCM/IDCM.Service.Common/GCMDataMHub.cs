@@ -52,12 +52,32 @@ namespace IDCM.Service.Common
         /// loginflag:"false" 没有登录 JSESSIONID失效
         /// </summary>
         /// <param name="gcmSite"></param>
-        /// <param name="ms"></param>
+        /// <param name="xmlStream"></param>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public static XMLImportStrainsRes xmlImportStrains(GCMSiteMHub gcmSite, MemoryStream ms, int timeout = 10000)
+        public static XMLImportStrainsRes xmlImportStrains(GCMSiteMHub gcmSite, MemoryStream xmlStream, int timeout = 10000)
         {
-            return XMLImportExecutor.xmlImportStrains(ms, gcmSite.getSignedAuthInfo(), timeout);
+            return XMLImportExecutor.xmlImportStrains(xmlStream, gcmSite.getSignedAuthInfo(), timeout);
+        }
+        /// <summary>
+        /// XML上传，批量导入（如果菌号相同，则更新均中信息）
+        /// 说明：
+        /// 返回结果	例：{"msg_num":"2"}
+        /// 返回结果代码参考:
+        /// 0:文件类型错误
+        /// 1:xml文件内容错误并返回错误行数据
+        /// 2:导入成功
+        /// 3:xml解析异常，xml文件格式不正确
+        /// 4:导入失败，请与管理员联系
+        /// loginflag:"false" 没有登录 JSESSIONID失效
+        /// </summary>
+        /// <param name="gcmSite"></param>
+        /// <param name="xmlData"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public static XMLImportStrainsRes xmlImportStrains(GCMSiteMHub gcmSite, string xmlData, int timeout = 10000)
+        {
+            return XMLImportExecutor.xmlImportStrains(xmlData, gcmSite.getSignedAuthInfo(), timeout);
         }
     }
 }
