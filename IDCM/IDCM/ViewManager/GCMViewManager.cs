@@ -367,10 +367,6 @@ namespace IDCM.ViewManager
             if (handler != null)
                 DWorkMHub.callAsyncHandle(handler);
         }
-        internal void exportData(ExportType etype, string fpath,bool exportStrainTree)
-        {
-            
-        }
 
         //复制
         private void OnGCMViewCopyClipboard(object sender, IDCMViewEventArgs e)

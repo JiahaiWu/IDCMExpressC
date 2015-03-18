@@ -146,7 +146,7 @@ namespace IDCM.Service.Common.Core
         public long getRunningTime()
         {
             TimeSpan span = DateTime.Now - doWorkTime;
-            return span.Milliseconds;
+            return span.Ticks;
         }
         /// <summary>
         /// 任务代理包装的元处理器实例对象

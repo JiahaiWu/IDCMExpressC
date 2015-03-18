@@ -71,6 +71,10 @@ namespace IDCM.Service.UIM
                     DGVAsyncUtil.syncAddRow(itemDGV, null, dgvrIdx);
                     loadedNoter.Add(valMap["id"], dgvrIdx);
                 }
+                else if(dgvrIdx >= itemDGV.RowCount)
+                {
+                    DGVAsyncUtil.syncAddRow(itemDGV, null, dgvrIdx);
+                }
                 foreach (KeyValuePair<string, string> entry in valMap)
                 {
                     //if itemDGV not contains Column of entry.key

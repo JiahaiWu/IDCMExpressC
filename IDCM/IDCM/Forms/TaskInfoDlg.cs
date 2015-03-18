@@ -1,5 +1,6 @@
 ﻿using IDCM.Data.Base;
 using IDCM.Service.Common;
+using IDCM.Service.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,48 +18,40 @@ namespace IDCM.Forms
         public TaskInfoDlg()
         {
             taskInfoMonitor.Interval = 1000;
-            taskInfoMonitor.Tick += OnLoadDataSet;
+            taskInfoMonitor.Tick += OnLoadTaskInfo;
             taskInfoMonitor.Start();
             InitializeComponent();
         }
-        private void loadDataSet()
+        /// <summary>
+        /// 加载任务信息
+        /// </summary>
+        private void loadTaskInfo()
         {
-            dataGridView1.Columns.Clear();
-            HandleRunInfo[] handRunInfoArray = DWorkMHub.getRunInfoList();
-            DataTable dataTable = new DataTable();
-            DataColumn firstColumn = new DataColumn("Name", typeof(string));
-            DataColumn secondColumn = new DataColumn("Status", typeof(string));
-            DataColumn thirdColumn = new DataColumn("RunTime", typeof(string));
-            DataColumn fourthColumn = new DataColumn("Description", typeof(string));
-            dataTable.Columns.Add(firstColumn);
-            dataTable.Columns.Add(secondColumn);
-            dataTable.Columns.Add(thirdColumn);
-            dataTable.Columns.Add(fourthColumn);
+            this.dataGridView1.Rows.Clear();
+            HandleRunInfo[] handRunInfoArray = DWorkMHub.getRunInfoList();           
             foreach (HandleRunInfo handRunInfo in handRunInfoArray)
             {
-                if (true)//handRunInfo.handleType.Equals(typeof(Thread).Name) || handRunInfo.handleType.Equals(typeof(BackgroundWorker).Name)
-                {
-                    DataRow dataRow = dataTable.NewRow();
-                    dataRow[0] = handRunInfo.HName;
-                    dataRow[1] = handRunInfo.Status;
-                    TimeSpan tspan = new TimeSpan(handRunInfo.RunTime);
-                    string tspanDesc = String.Format("{0}h {1}min {2}sec",tspan.TotalHours.ToString("0"), tspan.Minutes, tspan.Seconds);
-                    dataRow[2] = tspanDesc;
-                    dataRow[3] = handRunInfo.Description;
-                    dataTable.Rows.Add(dataRow);
-                }
-
+                TimeSpan tspan = new TimeSpan(handRunInfo.RunTime);
+                string tspanDesc = String.Format("{0}h {1}min {2}sec", tspan.TotalHours.ToString("0"), tspan.Minutes, tspan.Seconds);
+                string[] values = new string[] { handRunInfo.HName, handRunInfo.Status, tspanDesc, handRunInfo.Description };
+                if (isShowFrom)
+                    DGVAsyncUtil.syncAddRow(this.dataGridView1, values, this.dataGridView1.RowCount);
+                else
+                { 
+                    if(!handRunInfo.handleType.Equals(typeof(Form).Name))
+                        DGVAsyncUtil.syncAddRow(this.dataGridView1, values, this.dataGridView1.RowCount);
+                }         
             }
-            dataGridView1.DataSource = dataTable;
-            label1.Text = "Task Count：" + dataTable.Rows.Count;
+            label1.Text = "Task Count：" + this.dataGridView1.Rows.Count;
         }
-        private void TaskInfoDlg_Shown(object sender, EventArgs e)
+        /// <summary>
+        /// 定时刷新任务信息事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnLoadTaskInfo(object sender, EventArgs e)
         {
-            loadDataSet();
-        }
-        private void OnLoadDataSet(object sender, EventArgs e)
-        {
-            loadDataSet();
+            loadTaskInfo();
         }
 
         /// <summary>
@@ -83,7 +76,18 @@ namespace IDCM.Forms
             TextRenderer.DrawText(e.Graphics, (e.RowIndex + 1).ToString(), this.dataGridView1.RowHeadersDefaultCellStyle.Font, rectangle,
                 this.dataGridView1.RowHeadersDefaultCellStyle.ForeColor, TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
             this.dataGridView1.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
+        }       
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            this.isShowFrom = this.checkBox1.Checked;
         }
 
+        private bool isShowFrom = false;
+
+        private void TaskInfoDlg_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            taskInfoMonitor.Stop();
+        }
     }
 }

@@ -35,6 +35,7 @@
             this.button_singout = new System.Windows.Forms.Button();
             this.label_noteSite = new System.Windows.Forms.Label();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.ok = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // linkLabel_uname
@@ -72,7 +73,7 @@
             // button_singout
             // 
             this.button_singout.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_singout.Location = new System.Drawing.Point(232, 218);
+            this.button_singout.Location = new System.Drawing.Point(176, 218);
             this.button_singout.Name = "button_singout";
             this.button_singout.Size = new System.Drawing.Size(82, 32);
             this.button_singout.TabIndex = 3;
@@ -101,11 +102,23 @@
             this.linkLabel2.TabStop = true;
             this.linkLabel2.Text = "http://gcm.wfcc.info/";
             // 
+            // ok
+            // 
+            this.ok.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.ok.Location = new System.Drawing.Point(279, 218);
+            this.ok.Name = "ok";
+            this.ok.Size = new System.Drawing.Size(82, 32);
+            this.ok.TabIndex = 6;
+            this.ok.Text = "OK";
+            this.ok.UseVisualStyleBackColor = true;
+            this.ok.Click += new System.EventHandler(this.ok_Click);
+            // 
             // LoginStatusDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 278);
+            this.Controls.Add(this.ok);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.label_noteSite);
             this.Controls.Add(this.button_singout);
@@ -130,5 +143,6 @@
         private System.Windows.Forms.Button button_singout;
         private System.Windows.Forms.Label label_noteSite;
         private System.Windows.Forms.LinkLabel linkLabel2;
+        private System.Windows.Forms.Button ok;
     }
 }

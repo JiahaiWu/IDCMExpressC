@@ -69,6 +69,7 @@ namespace IDCM.Service.Common.GCMDAM
                     auth.Username = username;
                     auth.Password = password;
                     auth.autoLogin = autoLogin;
+                    auth.Timestamp = DateTime.Now.Ticks;
                 }
                 return auth;
             }

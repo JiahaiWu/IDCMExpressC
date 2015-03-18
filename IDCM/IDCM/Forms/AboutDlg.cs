@@ -14,12 +14,21 @@ namespace IDCM.Forms
         public AboutDlg()
         {
             InitializeComponent();
+            setAboutText();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if(!this.IsDisposed)
             this.Dispose();
+        }
+
+        public void setAboutText()
+        {
+            this.version.Text = "IDCM v1.0(110)\n\nCopyright © All Rights Reserved";
+            this.contact.Text = "Contact: jiahaiWu \n\n ";
+            this.email.Text = "Email:jiahaiwu@im.ac.cn\n\n";
+            this.address.Text = "Address:Beijing Chaoyang District";
         }
     }
 }

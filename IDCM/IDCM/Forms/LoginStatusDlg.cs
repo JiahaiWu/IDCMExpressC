@@ -30,5 +30,10 @@ namespace IDCM.Forms
             this.Close();
         }
 
+        private void ok_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }
