@@ -61,7 +61,7 @@
   <ItemGroup>
     <Compile Include="Core\CTableSetting.cs" />
     <Compile Include="Core\HandleRunStatus.cs" />
-    <Compile Include="Core\LocalHandlerProxy.cs" />
+    <Compile Include="Core\LocalHandlerFacade.cs" />
     <Compile Include="Core\QueryCmdCache.cs" />
     <Compile Include="DAM\CustomTColMapDAM.cs" />
     <Compile Include="Core\AsyncMessageNoter.cs" />

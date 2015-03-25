@@ -20,7 +20,7 @@ namespace IDCM.Service.Common.Core
         {
             if (handler == null)
                 return;
-            LocalHandlerProxy proxy = new LocalHandlerProxy(handler, cascadeHandlers);
+            LocalHandlerFacade proxy = new LocalHandlerFacade(handler, cascadeHandlers);
             BackgroundWorker bgworker = new BackgroundWorker();
             bgworker.WorkerReportsProgress = true;
             bgworker.WorkerSupportsCancellation = true;
@@ -53,8 +53,8 @@ namespace IDCM.Service.Common.Core
         /// <param name="handlerType"></param>
         public static void abortHandlerByType(Type handlerType)
         {
-            KeyValuePair<BackgroundWorker, LocalHandlerProxy>[] worker = LongTermHandleNoter.getActiveWorkers();
-            foreach (KeyValuePair<BackgroundWorker, LocalHandlerProxy> kvpair in worker)
+            KeyValuePair<BackgroundWorker, LocalHandlerFacade>[] worker = LongTermHandleNoter.getActiveWorkers();
+            foreach (KeyValuePair<BackgroundWorker, LocalHandlerFacade> kvpair in worker)
             {
                 if (kvpair.Value.getHandler().GetType().Equals(handlerType))
                 {

@@ -11,13 +11,13 @@ namespace IDCM.Service.Common.Core
     /// <summary>
     /// 后台处理方法的任务包装代理实现
     /// </summary>
-    class LocalHandlerProxy
+    class LocalHandlerFacade
     {
         /// <summary>
         /// 构造方法
         /// </summary>
         /// <param name="handler"></param>
-        public LocalHandlerProxy(AbsHandler _handler, Queue<AbsHandler> cascadeHandlers = null)
+        public LocalHandlerFacade(AbsHandler _handler, Queue<AbsHandler> cascadeHandlers = null)
         {
             this.handler = _handler;
             this.cascadeHandlers = cascadeHandlers;

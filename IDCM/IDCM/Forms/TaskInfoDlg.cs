@@ -17,10 +17,10 @@ namespace IDCM.Forms
     {
         public TaskInfoDlg()
         {
+            InitializeComponent();
             taskInfoMonitor.Interval = 1000;
             taskInfoMonitor.Tick += OnLoadTaskInfo;
             taskInfoMonitor.Start();
-            InitializeComponent();
         }
         /// <summary>
         /// 加载任务信息
@@ -67,7 +67,6 @@ namespace IDCM.Forms
                 this.dataGridView1.RowHeadersDefaultCellStyle.ForeColor, TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
             this.dataGridView1.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders);
         }   
-        private static System.Windows.Forms.Timer taskInfoMonitor = new System.Windows.Forms.Timer();
 
         private void dataGridView1_RowPostPaint_1(object sender, DataGridViewRowPostPaintEventArgs e)
         {
@@ -89,5 +88,7 @@ namespace IDCM.Forms
         {
             taskInfoMonitor.Stop();
         }
+
+        private System.Windows.Forms.Timer taskInfoMonitor = new System.Windows.Forms.Timer();
     }
 }

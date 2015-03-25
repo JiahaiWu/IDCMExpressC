@@ -74,9 +74,9 @@ namespace IDCM.Service.Common.Core
         /// <param name="tname"></param>
         /// <param name="maxStackSize"></param>
         /// <returns></returns>
-        internal static KeyValuePair<BackgroundWorker, LocalHandlerProxy>[] getActiveWorkers()
+        internal static KeyValuePair<BackgroundWorker, LocalHandlerFacade>[] getActiveWorkers()
         {
-            List<KeyValuePair<BackgroundWorker, LocalHandlerProxy>> res = new List<KeyValuePair<BackgroundWorker, LocalHandlerProxy>>();
+            List<KeyValuePair<BackgroundWorker, LocalHandlerFacade>> res = new List<KeyValuePair<BackgroundWorker, LocalHandlerFacade>>();
             lock (BackendHandleMonitor_Lock)
             {
                 int count = handleList.Count;
@@ -155,7 +155,7 @@ namespace IDCM.Service.Common.Core
         /// 记录异步线程句柄对象
         /// </summary>
         /// <returns></returns>
-        public static BackgroundWorker note(BackgroundWorker worker,LocalHandlerProxy proxy)
+        public static BackgroundWorker note(BackgroundWorker worker,LocalHandlerFacade proxy)
         {
             if (worker != null)
             {
@@ -269,7 +269,7 @@ namespace IDCM.Service.Common.Core
         /// </summary>
         class BackgroundWorkerHolder : HandleHolderI
         {
-            public BackgroundWorkerHolder(BackgroundWorker backWorker, LocalHandlerProxy handlerProxy, string description = null)
+            public BackgroundWorkerHolder(BackgroundWorker backWorker, LocalHandlerFacade handlerProxy, string description = null)
             {
 #if DEBUG
                 System.Diagnostics.Debug.Assert(backWorker != null && handlerProxy != null);
@@ -280,7 +280,7 @@ namespace IDCM.Service.Common.Core
                 backWorker.Disposed += LongTermHandleNoter.OnHandleDisposed;
             }
             private readonly BackgroundWorker backWorker;
-            private readonly LocalHandlerProxy proxy;
+            private readonly LocalHandlerFacade proxy;
             private readonly string desc;
             /// <summary>
             /// 转换生成线程对象的存活状态快照
@@ -317,7 +317,7 @@ namespace IDCM.Service.Common.Core
             {
                 get
                 {
-                    return new KeyValuePair<BackgroundWorker, LocalHandlerProxy>(backWorker, proxy);
+                    return new KeyValuePair<BackgroundWorker, LocalHandlerFacade>(backWorker, proxy);
                 }
             }
             /// <summary>
